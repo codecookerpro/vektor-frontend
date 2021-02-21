@@ -1,4 +1,4 @@
-import * as types from "../../constants";
+import * as types from "redux/types";
 
 export default function reducer(state = {}, actions) {
   switch (actions.type) {

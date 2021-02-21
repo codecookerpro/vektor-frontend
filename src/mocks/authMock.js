@@ -1,4 +1,4 @@
-import mock from "../utils/mock";
+import mock from "./mock";
 
 const userData = {
   id: "12345",

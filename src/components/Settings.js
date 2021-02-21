@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styled, { css } from "styled-components/macro";
 import { useDispatch, useSelector } from "react-redux";
 import { setTheme } from "../redux/actions/themeActions";
-import { THEMES } from "../constants";
+import THEMES from "utils/constants/theme";
 import { green, grey, indigo } from "@material-ui/core/colors";
 import { Link } from "react-router-dom";
 

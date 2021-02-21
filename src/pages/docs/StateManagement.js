@@ -107,7 +107,7 @@ function ReduxActions() {
       <Typography variant="subtitle1" gutterBottom my={4}>
         <code>redux/actions/todoActions.js</code> (or{" "}
         <code>redux/actions/todoActions.ts</code>)
-        <Code>{`import * as types from '../constants';
+        <Code>{`import * as types from 'constants';
 
 export function addTodo(value) {
   return {
@@ -149,7 +149,7 @@ function ReduxReducers() {
       <Typography variant="subtitle1" gutterBottom my={4}>
         <code>redux/reducers/todoReducer.js</code> (or{" "}
         <code>redux/reducers/todoReducer.ts</code>)
-        <Code>{`import * as types from '../constants';
+        <Code>{`import * as types from 'constants';
 
 const initialState = [
   {

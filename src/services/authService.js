@@ -1,4 +1,4 @@
-import axios from "../utils/axios";
+import axios from "./axios";
 
 export function signIn(credentials) {
   return new Promise((resolve, reject) => {

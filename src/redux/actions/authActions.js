@@ -1,9 +1,9 @@
-import * as types from "../../constants";
+import * as types from "redux/types";
 import {
   signIn as authSignIn,
   signUp as authSignUp,
   resetPassword as authResetPassword,
-} from "../../services/authService";
+} from "services/authService";
 
 export function signIn(credentials) {
   return async (dispatch) => {
