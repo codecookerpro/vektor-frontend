@@ -2,16 +2,12 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components/macro";
-import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import * as Yup from "yup";
 import { Formik } from "formik";
-import { signIn } from "../../redux/actions/authActions";
+import { signUp } from "redux/actions/authActions";
 
 import {
-  Avatar,
-  Checkbox,
-  FormControlLabel,
   Button,
   Paper,
   TextField as MuiTextField,
@@ -26,53 +22,65 @@ const TextField = styled(MuiTextField)(spacing);
 
 const Wrapper = styled(Paper)`
   padding: ${(props) => props.theme.spacing(6)}px;
+
   ${(props) => props.theme.breakpoints.up("md")} {
     padding: ${(props) => props.theme.spacing(10)}px;
   }
 `;
 
-const BigAvatar = styled(Avatar)`
-  width: 92px;
-  height: 92px;
-  text-align: center;
-  margin: 0 auto ${(props) => props.theme.spacing(5)}px;
-`;
-
-function SignIn() {
+function SignUp() {
   const dispatch = useDispatch();
   const history = useHistory();
 
   return (
     <Wrapper>
-      <Helmet title="Sign In" />
-      <BigAvatar alt="Lucy" src="/static/img/avatars/avatar-1.jpg" />
+      <Helmet title="Sign Up" />
 
       <Typography component="h1" variant="h4" align="center" gutterBottom>
-        Welcome back, Lucy!
+        Get started
       </Typography>
       <Typography component="h2" variant="body1" align="center">
-        Sign in to your account to continue
+        Start creating the best possible user experience for you customers
       </Typography>
 
       <Formik
         initialValues={{
-          email: "demo@bootlab.io",
-          password: "unsafepassword",
+          name: "",
+          company: "",
+          email: "",
+          password: "",
+          confirmPassword: "",
           submit: false,
         }}
         validationSchema={Yup.object().shape({
+          name: Yup.string().max(255).required("Name is required"),
           email: Yup.string()
             .email("Must be a valid email")
             .max(255)
             .required("Email is required"),
-          password: Yup.string().max(255).required("Password is required"),
+          password: Yup.string()
+            .min(12, "Must be at least 12 characters")
+            .max(255)
+            .required("Required"),
+          confirmPassword: Yup.string().when("password", {
+            is: (val) => (val && val.length > 0 ? true : false),
+            then: Yup.string().oneOf(
+              [Yup.ref("password")],
+              "Both password need to be the same"
+            ),
+          }),
         })}
         onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
           try {
             await dispatch(
-              signIn({ email: values.email, password: values.password })
+              signUp({
+                name: "test",
+                company: "test",
+                email: values.email,
+                password: values.password,
+              })
             );
-            history.push("/private");
+            history.push("/auth/sign-in");
           } catch (error) {
             const message = error.message || "Something went wrong";
 
@@ -92,15 +100,35 @@ function SignIn() {
           values,
         }) => (
           <form noValidate onSubmit={handleSubmit}>
-            <Alert mt={3} mb={1} severity="info">
-              Use <strong>demo@bootlab.io</strong> and{" "}
-              <strong>unsafepassword</strong> to sign in
-            </Alert>
             {errors.submit && (
               <Alert mt={2} mb={1} severity="warning">
                 {errors.submit}
               </Alert>
             )}
+            <TextField
+              type="text"
+              name="name"
+              label="Name"
+              value={values.name}
+              error={Boolean(touched.name && errors.name)}
+              fullWidth
+              helperText={touched.name && errors.name}
+              onBlur={handleBlur}
+              onChange={handleChange}
+              my={3}
+            />
+            <TextField
+              type="text"
+              name="company"
+              label="Company"
+              value={values.company}
+              error={Boolean(touched.company && errors.company)}
+              fullWidth
+              helperText={touched.company && errors.company}
+              onBlur={handleBlur}
+              onChange={handleChange}
+              my={3}
+            />
             <TextField
               type="email"
               name="email"
@@ -111,7 +139,7 @@ function SignIn() {
               helperText={touched.email && errors.email}
               onBlur={handleBlur}
               onChange={handleChange}
-              my={2}
+              my={3}
             />
             <TextField
               type="password"
@@ -123,11 +151,19 @@ function SignIn() {
               helperText={touched.password && errors.password}
               onBlur={handleBlur}
               onChange={handleChange}
-              my={2}
+              my={3}
             />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
+            <TextField
+              type="password"
+              name="confirmPassword"
+              label="Confirm Password"
+              value={values.confirmPassword}
+              error={Boolean(touched.confirmPassword && errors.confirmPassword)}
+              fullWidth
+              helperText={touched.confirmPassword && errors.confirmPassword}
+              onBlur={handleBlur}
+              onChange={handleChange}
+              my={3}
             />
             <Button
               type="submit"
@@ -136,15 +172,7 @@ function SignIn() {
               color="primary"
               disabled={isSubmitting}
             >
-              Sign in
-            </Button>
-            <Button
-              component={Link}
-              to="/auth/reset-password"
-              fullWidth
-              color="primary"
-            >
-              Forgot password
+              Sign up
             </Button>
           </form>
         )}
@@ -153,4 +181,4 @@ function SignIn() {
   );
 }
 
-export default SignIn;
+export default SignUp;

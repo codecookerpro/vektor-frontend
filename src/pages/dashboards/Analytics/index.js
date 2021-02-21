@@ -25,7 +25,7 @@ const Divider = styled(MuiDivider)(spacing);
 
 const Typography = styled(MuiTypography)(spacing);
 
-function Analytics({ theme }) {
+function Analytics() {
   return (
     <React.Fragment>
       <Helmet title="Analytics Dashboard" />
@@ -35,7 +35,7 @@ function Analytics({ theme }) {
             Analytics Dashboard
           </Typography>
           <Typography variant="subtitle1">
-            Welcome back, Lucy! We've missed you.{" "}
+            {"Welcome back, Lucy! We've missed you. "}
             <span role="img" aria-label="Waving Hand Sign">
               👋
             </span>

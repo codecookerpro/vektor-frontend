@@ -56,7 +56,7 @@ function SimpleSnackbar() {
           Simple Snackbar
         </Typography>
         <Typography variant="body2" gutterBottom>
-          A basic snackbar that aims to reproduce Google Keep's snackbar
+          A basic snackbar that aims to reproduce Google Keep{"'"}s snackbar
           behavior.
         </Typography>
         <Paper mt={3}>
@@ -233,7 +233,7 @@ function ConsecutiveSnackbars() {
           Consecutive Snackbar
         </Typography>
         <Typography variant="body2" gutterBottom>
-          Per Google's guidelines, when multiple snackbar updates are necessary,
+          Per Google{"'"}s guidelines, when multiple snackbar updates are necessary,
           they should appear one at a time.
         </Typography>
         <Paper mt={3}>

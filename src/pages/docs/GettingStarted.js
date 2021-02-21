@@ -30,7 +30,7 @@ function Contents() {
         Contents
       </Typography>
       <Typography variant="subtitle1" gutterBottom my={4}>
-        Inside the zip-file you'll find the following directories and files.
+        Inside the zip-file you{"'"}ll find the following directories and files.
         Both compiled and minified distrubution files, as well as the source
         files are included in the package.
       </Typography>
@@ -72,7 +72,7 @@ function QuickStart() {
         >
           Create React App
         </Link>
-        . You'll need to install Node.js (v12 or up) before using Material App.
+        . You{"'"}ll need to install Node.js (v12 or up) before using Material App.
       </Typography>
 
       <Typography variant="subtitle1" gutterBottom my={4}>
@@ -81,14 +81,14 @@ function QuickStart() {
           Node.js
         </Link>{" "}
         is installed, run <code>npm install</code> to install the rest of
-        Material App's dependencies. All dependencies will be downloaded to the{" "}
+        Material App{"'"}s dependencies. All dependencies will be downloaded to the{" "}
         <code>node_modules</code> directory.
         <br />
         <Code>npm install</Code>
       </Typography>
 
       <Typography variant="subtitle1" gutterBottom my={4}>
-        Now you're ready to modify the source files and generate new{" "}
+        Now you{"'"}re ready to modify the source files and generate new{" "}
         <code>build/</code>
         files. Material App is using webpack and webpack-serve to automatically
         detect file changes and start a local webserver at{" "}

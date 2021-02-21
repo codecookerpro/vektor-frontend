@@ -1,13 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, memo } from "react";
 import styled from "styled-components/macro";
 import { rgba } from "polished";
 import { NavLink, withRouter } from "react-router-dom";
 import { darken } from "polished";
 import PerfectScrollbar from "react-perfect-scrollbar";
-import "../vendor/perfect-scrollbar.css";
-
 import { spacing } from "@material-ui/system";
-
 import {
   Badge,
   Box as MuiBox,
@@ -21,14 +18,12 @@ import {
   ListItemText,
   Typography,
 } from "@material-ui/core";
-
 import { ExpandLess, ExpandMore } from "@material-ui/icons";
-
 import { green } from "@material-ui/core/colors";
 
-import { sidebarRoutes as routes } from "../routes/index";
-
-import { ReactComponent as Logo } from "../vendor/logo.svg";
+import { sidebarRoutes as routes } from "routes/index";
+import { ReactComponent as Logo } from "vendor/logo.svg";
+import "vendor/perfect-scrollbar.css";
 
 const Box = styled(MuiBox)(spacing);
 
@@ -120,7 +115,7 @@ const Category = styled(ListItem)`
 
   &.${(props) => props.activeClassName} {
     background-color: ${(props) =>
-      darken(0.03, props.theme.sidebar.background)};
+    darken(0.03, props.theme.sidebar.background)};
 
     span {
       color: ${(props) => props.theme.sidebar.color};
@@ -160,12 +155,12 @@ const Link = styled(ListItem)`
 
   &:hover {
     background-color: ${(props) =>
-      darken(0.015, props.theme.sidebar.background)};
+    darken(0.015, props.theme.sidebar.background)};
   }
 
   &.${(props) => props.activeClassName} {
     background-color: ${(props) =>
-      darken(0.03, props.theme.sidebar.background)};
+    darken(0.03, props.theme.sidebar.background)};
 
     span {
       color: ${(props) => props.theme.sidebar.color};
@@ -236,7 +231,7 @@ const SidebarFooterBadge = styled(Badge)`
   margin-right: ${(props) => props.theme.spacing(1)}px;
   span {
     background-color: ${(props) =>
-      props.theme.sidebar.footer.online.background};
+    props.theme.sidebar.footer.online.background};
     border: 1.5px solid ${(props) => props.theme.palette.common.white};
     height: 12px;
     width: 12px;
@@ -247,7 +242,6 @@ const SidebarFooterBadge = styled(Badge)`
 const SidebarCategory = ({
   name,
   icon,
-  classes,
   isOpen,
   isCollapsable,
   badge,
@@ -261,15 +255,15 @@ const SidebarCategory = ({
         isOpen ? (
           <CategoryIconMore />
         ) : (
-          <CategoryIconLess />
-        )
+            <CategoryIconLess />
+          )
       ) : null}
       {badge ? <CategoryBadge label={badge} /> : ""}
     </Category>
   );
 };
 
-const SidebarLink = ({ name, to, badge, icon }) => {
+const SidebarLink = ({ name, to, badge }) => {
   return (
     <Link
       button
@@ -285,7 +279,7 @@ const SidebarLink = ({ name, to, badge, icon }) => {
   );
 };
 
-const Sidebar = ({ classes, staticContext, location, ...rest }) => {
+const Sidebar = ({ location, ...rest }) => {
   const initOpenRoutes = () => {
     /* Open collapse element that matches current url */
     const pathName = location.pathname;
@@ -414,4 +408,4 @@ const Sidebar = ({ classes, staticContext, location, ...rest }) => {
   );
 };
 
-export default withRouter(Sidebar);
+export default memo(withRouter(Sidebar));

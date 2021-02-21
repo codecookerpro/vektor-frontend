@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import {
   dashboardLayoutRoutes,
@@ -7,10 +7,10 @@ import {
   protectedRoutes,
 } from "./index";
 
-import DashboardLayout from "../layouts/Dashboard";
-import AuthLayout from "../layouts/Auth";
-import PresentationLayout from "../layouts/Presentation";
-import Page404 from "../pages/auth/Page404";
+import DashboardLayout from "layouts/Dashboard";
+import AuthLayout from "layouts/Auth";
+import PresentationLayout from "layouts/Presentation";
+import Page404 from "pages/auth/Page404";
 
 const childRoutes = (Layout, routes) =>
   routes.map(({ component: Component, guard, children, path }, index) => {
@@ -69,4 +69,4 @@ const Routes = () => (
   </Router>
 );
 
-export default Routes;
+export default memo(Routes);

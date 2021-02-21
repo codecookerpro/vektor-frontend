@@ -36,7 +36,7 @@ function DatePickers() {
           Date pickers
         </Typography>
         <Typography variant="body2" gutterBottom>
-          A native date picker example with <code>type="date"</code>, it can be
+          A native date picker example with <code>{'type="date"'}</code>, it can be
           used as a calendar too.
         </Typography>
         <Paper mt={3}>
@@ -66,7 +66,7 @@ function DateAndTimePickers() {
         </Typography>
         <Typography variant="body2" gutterBottom>
           A native date & time picker example with{" "}
-          <code>type="datetime-local"</code>.
+          <code>{'type="datetime-local"'}</code>.
         </Typography>
         <Paper mt={3}>
           <form noValidate>
@@ -94,7 +94,7 @@ function TimePickers() {
           Time pickers
         </Typography>
         <Typography variant="body2" gutterBottom>
-          A native time picker example with <code>type="time"</code>.
+          A native time picker example with <code>{'type="time"'}</code>.
         </Typography>
         <Paper mt={3}>
           <form noValidate>

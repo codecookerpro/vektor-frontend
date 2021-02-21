@@ -1,8 +1,7 @@
-import React from "react";
+import React, { memo } from "react";
 import styled, { withTheme } from "styled-components/macro";
 import { darken } from "polished";
 import { Search as SearchIcon } from "react-feather";
-
 import {
   Grid,
   Hidden,
@@ -11,13 +10,12 @@ import {
   IconButton as MuiIconButton,
   Toolbar,
 } from "@material-ui/core";
-
 import { Menu as MenuIcon } from "@material-ui/icons";
 
-import NotificationsDropdown from "./NotificationsDropdown";
-import MessagesDropdown from "./MessagesDropdown";
-import LanguagesDropdown from "./LanguagesDropdown";
-import UserDropdown from "./UserDropdown";
+import NotificationsDropdown from "components/NotificationsDropdown";
+import MessagesDropdown from "components/MessagesDropdown";
+import LanguagesDropdown from "components/LanguagesDropdown";
+import UserDropdown from "components/UserDropdown";
 
 const AppBar = styled(MuiAppBar)`
   background: ${(props) => props.theme.header.background};
@@ -109,4 +107,4 @@ const AppBarComponent = ({ onDrawerToggle }) => (
   </React.Fragment>
 );
 
-export default withTheme(AppBarComponent);
+export default memo(withTheme(AppBarComponent));

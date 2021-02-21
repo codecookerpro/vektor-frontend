@@ -96,12 +96,12 @@ function ReduxActions() {
       <Typography variant="subtitle1" gutterBottom my={4}>
         Actions are payloads of information that send data from your application
         to your store. They are the only source of information for the store.
-        Here's an example action which represents adding a new todo item:
+        Here{"'"}s an example action which represents adding a new todo item:
       </Typography>
 
       <Typography variant="subtitle1" gutterBottom my={4}>
         <code>redux/constants.js</code> (or <code>redux/constants.ts</code>)
-        <Code>const ADD_TODO = 'ADD_TODO'</Code>
+        <Code>{"const ADD_TODO = 'ADD_TODO'"}</Code>
       </Typography>
 
       <Typography variant="subtitle1" gutterBottom my={4}>
@@ -141,9 +141,9 @@ function ReduxReducers() {
         Reducers
       </Typography>
       <Typography variant="subtitle1" gutterBottom my={4}>
-        Reducers specify how the application's state changes in response to
+        Reducers specify how the application{"'"}s state changes in response to
         actions sent to the store. Remember that actions only describe what
-        happened, but don't describe how the application's state changes.
+        happened, but don{"'"}t describe how the application{"'"}s state changes.
       </Typography>
 
       <Typography variant="subtitle1" gutterBottom my={4}>
@@ -195,8 +195,8 @@ function ReduxStore() {
         together.
         <br />
         <br />
-        It's important to note that you'll only have a single store in a Redux
-        application. When you want to split your data handling logic, you'll use{" "}
+        It{"'"}s important to note that you{"'"}ll only have a single store in a Redux
+        application. When you want to split your data handling logic, you{"'"}ll use{" "}
         <Link
           href="https://redux.js.org/basics/reducers#splitting-reducers"
           target="_blank"

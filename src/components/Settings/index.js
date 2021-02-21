@@ -1,11 +1,8 @@
-import React, { useState } from "react";
-import styled, { css } from "styled-components/macro";
-import { useDispatch, useSelector } from "react-redux";
-import { setTheme } from "../redux/actions/themeActions";
-import THEMES from "utils/constants/theme";
-import { green, grey, indigo } from "@material-ui/core/colors";
+import React, { useState, memo } from "react";
 import { Link } from "react-router-dom";
-
+import { useDispatch, useSelector } from "react-redux";
+import styled, { css } from "styled-components/macro";
+import { green, grey, indigo } from "@material-ui/core/colors";
 import {
   Box,
   Button,
@@ -15,10 +12,11 @@ import {
   ListItem,
   Typography,
 } from "@material-ui/core";
-
 import { Alert } from "@material-ui/lab";
-
 import { Palette as PaletteIcon } from "@material-ui/icons";
+
+import { setTheme } from "redux/actions/themeActions";
+import THEMES from "utils/constants/theme";
 
 const DemoButton = styled.div`
   cursor: pointer;
@@ -33,9 +31,9 @@ const DemoButton = styled.div`
   position: relative;
   border: 1px solid
     ${(props) =>
-      !props.active
-        ? props.theme.palette.action.selected
-        : props.theme.palette.action.active};
+    !props.active
+      ? props.theme.palette.action.selected
+      : props.theme.palette.action.active};
 `;
 
 const DemoButtonInner = styled.div`
@@ -196,4 +194,4 @@ function Settings() {
   );
 }
 
-export default Settings;
+export default memo(Settings);

@@ -3,7 +3,6 @@ import * as Yup from "yup";
 import styled from "styled-components/macro";
 import { NavLink } from "react-router-dom";
 import { Formik } from "formik";
-
 import {
   Box,
   Breadcrumbs as MuiBreadcrumbs,
@@ -17,12 +16,11 @@ import {
   TextField as MuiTextField,
   Typography,
 } from "@material-ui/core";
-
 import { Alert as MuiAlert } from "@material-ui/lab";
-
 import { spacing } from "@material-ui/system";
-
 import { Helmet } from "react-helmet";
+
+import delay from "utils/helpers/delay";
 
 const Divider = styled(MuiDivider)(spacing);
 
@@ -35,8 +33,6 @@ const Alert = styled(MuiAlert)(spacing);
 const TextField = styled(MuiTextField)(spacing);
 
 const Button = styled(MuiButton)(spacing);
-
-const timeOut = (time) => new Promise((res) => setTimeout(res, time));
 
 const initialValues = {
   firstName: "Lucy",
@@ -69,7 +65,7 @@ function BasicForm() {
     { resetForm, setErrors, setStatus, setSubmitting }
   ) => {
     try {
-      await timeOut(1500);
+      await delay(1500);
       resetForm();
       setStatus({ sent: true });
       setSubmitting(false);
@@ -116,92 +112,92 @@ function BasicForm() {
                 <CircularProgress />
               </Box>
             ) : (
-              <form onSubmit={handleSubmit}>
-                <Grid container spacing={6}>
-                  <Grid item md={6}>
-                    <TextField
-                      name="firstName"
-                      label="First Name"
-                      value={values.firstName}
-                      error={Boolean(touched.firstName && errors.firstName)}
-                      fullWidth
-                      helperText={touched.firstName && errors.firstName}
-                      onBlur={handleBlur}
-                      onChange={handleChange}
-                      variant="outlined"
-                      my={2}
-                    />
+                <form onSubmit={handleSubmit}>
+                  <Grid container spacing={6}>
+                    <Grid item md={6}>
+                      <TextField
+                        name="firstName"
+                        label="First Name"
+                        value={values.firstName}
+                        error={Boolean(touched.firstName && errors.firstName)}
+                        fullWidth
+                        helperText={touched.firstName && errors.firstName}
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        variant="outlined"
+                        my={2}
+                      />
+                    </Grid>
+                    <Grid item md={6}>
+                      <TextField
+                        name="lastName"
+                        label="Last Name"
+                        value={values.lastName}
+                        error={Boolean(touched.lastName && errors.lastName)}
+                        fullWidth
+                        helperText={touched.lastName && errors.lastName}
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        variant="outlined"
+                        my={2}
+                      />
+                    </Grid>
                   </Grid>
-                  <Grid item md={6}>
-                    <TextField
-                      name="lastName"
-                      label="Last Name"
-                      value={values.lastName}
-                      error={Boolean(touched.lastName && errors.lastName)}
-                      fullWidth
-                      helperText={touched.lastName && errors.lastName}
-                      onBlur={handleBlur}
-                      onChange={handleChange}
-                      variant="outlined"
-                      my={2}
-                    />
-                  </Grid>
-                </Grid>
 
-                <TextField
-                  name="email"
-                  label="Email"
-                  value={values.email}
-                  error={Boolean(touched.email && errors.email)}
-                  fullWidth
-                  helperText={touched.email && errors.email}
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  type="email"
-                  variant="outlined"
-                  my={2}
-                />
+                  <TextField
+                    name="email"
+                    label="Email"
+                    value={values.email}
+                    error={Boolean(touched.email && errors.email)}
+                    fullWidth
+                    helperText={touched.email && errors.email}
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    type="email"
+                    variant="outlined"
+                    my={2}
+                  />
 
-                <TextField
-                  name="password"
-                  label="Password"
-                  value={values.password}
-                  error={Boolean(touched.password && errors.password)}
-                  fullWidth
-                  helperText={touched.password && errors.password}
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  type="password"
-                  variant="outlined"
-                  my={2}
-                />
+                  <TextField
+                    name="password"
+                    label="Password"
+                    value={values.password}
+                    error={Boolean(touched.password && errors.password)}
+                    fullWidth
+                    helperText={touched.password && errors.password}
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    type="password"
+                    variant="outlined"
+                    my={2}
+                  />
 
-                <TextField
-                  name="confirmPassword"
-                  label="Confirm password"
-                  value={values.confirmPassword}
-                  error={Boolean(
-                    touched.confirmPassword && errors.confirmPassword
-                  )}
-                  fullWidth
-                  helperText={touched.confirmPassword && errors.confirmPassword}
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  type="password"
-                  variant="outlined"
-                  my={2}
-                />
+                  <TextField
+                    name="confirmPassword"
+                    label="Confirm password"
+                    value={values.confirmPassword}
+                    error={Boolean(
+                      touched.confirmPassword && errors.confirmPassword
+                    )}
+                    fullWidth
+                    helperText={touched.confirmPassword && errors.confirmPassword}
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    type="password"
+                    variant="outlined"
+                    my={2}
+                  />
 
-                <Button
-                  type="submit"
-                  variant="contained"
-                  color="primary"
-                  mt={3}
-                >
-                  Save changes
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    color="primary"
+                    mt={3}
+                  >
+                    Save changes
                 </Button>
-              </form>
-            )}
+                </form>
+              )}
           </CardContent>
         </Card>
       )}

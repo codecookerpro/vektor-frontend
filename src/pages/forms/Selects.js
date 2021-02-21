@@ -312,7 +312,7 @@ function MultipleSelect() {
           Multiple Select
         </Typography>
         <Typography variant="body2" gutterBottom>
-          The <code>Select</code> component can handle multiple selections. It's
+          The <code>Select</code> component can handle multiple selections. It{"'"}s
           enabled with the <code>multiple</code> property.
         </Typography>
         <Paper mt={3}>
@@ -468,7 +468,7 @@ function DialogSelect() {
           With a Dialog
         </Typography>
         <Typography variant="body2" gutterBottom>
-          While it's discouraged by the Material Design specification, you can
+          While it{"'"}s discouraged by the Material Design specification, you can
           use a select inside a dialog.
         </Typography>
         <Paper mt={3}>

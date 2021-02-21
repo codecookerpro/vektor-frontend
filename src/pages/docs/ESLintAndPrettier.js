@@ -30,7 +30,7 @@ function Introduction() {
         Introduction
       </Typography>
       <Typography variant="subtitle1" gutterBottom my={4}>
-        To format code automatically, we've included a basic ESLint & Prettier
+        To format code automatically, we{"'"}ve included a basic ESLint & Prettier
         configuration. ESLint statically analyzes your code to quickly find
         problems. Prettier is used to automatically format the code you write to
         ensure a consistent code style withing your projects.

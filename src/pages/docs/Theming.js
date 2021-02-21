@@ -45,7 +45,7 @@ function HowItWorks() {
         How it works
       </Typography>
       <Typography variant="subtitle1" gutterBottom my={4}>
-        Material-UI's{" "}
+        {"Material-UI's "}
         <Link
           href="https://material-ui.com/customization/theming/#createmuitheme-options-args-theme"
           target="_blank"
@@ -53,9 +53,9 @@ function HowItWorks() {
         >
           createMuiTheme
         </Link>{" "}
-        is used to extend Material-UI's default styling. Material App is using
+        is used to extend Material-UI{"'"}s default styling. Material App is using
         both the Material-UI ThemeProvider as Styled-Components ThemeProvider.
-        This way, global theme variables will be applied to both Material-UI's
+        This way, global theme variables will be applied to both Material-UI{"'"}s
         components as custom Styled-Components.
       </Typography>
       <Typography variant="subtitle1" gutterBottom my={4}>
