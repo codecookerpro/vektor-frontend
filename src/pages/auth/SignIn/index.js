@@ -1,13 +1,15 @@
-import React from "react";
+import React, { memo } from "react";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components/macro";
+import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
-import * as Yup from "yup";
+import * as yup from "yup";
 import { Formik } from "formik";
-import { resetPassword } from "../../redux/actions/authActions";
-
 import {
+  Avatar,
+  Checkbox,
+  FormControlLabel,
   Button,
   Paper,
   TextField as MuiTextField,
@@ -16,52 +18,64 @@ import {
 import { spacing } from "@material-ui/system";
 import { Alert as MuiAlert } from "@material-ui/lab";
 
+import { signIn } from "redux/actions/authActions";
+import {
+  EMAIL_VALID,
+  PASSWORD_VALID
+} from 'utils/constants/validations';
+
 const Alert = styled(MuiAlert)(spacing);
 
 const TextField = styled(MuiTextField)(spacing);
 
 const Wrapper = styled(Paper)`
   padding: ${(props) => props.theme.spacing(6)}px;
-
   ${(props) => props.theme.breakpoints.up("md")} {
     padding: ${(props) => props.theme.spacing(10)}px;
   }
 `;
 
-function ResetPassword() {
+const BigAvatar = styled(Avatar)`
+  width: 92px;
+  height: 92px;
+  text-align: center;
+  margin: 0 auto ${(props) => props.theme.spacing(5)}px;
+`;
+
+const schema = yup.object().shape({
+  email: EMAIL_VALID,
+  password: PASSWORD_VALID
+});
+
+function SignIn() {
   const dispatch = useDispatch();
   const history = useHistory();
 
   return (
     <Wrapper>
-      <Helmet title="Reset Password" />
+      <Helmet title="Sign In" />
+      <BigAvatar alt="Lucy" src="/static/img/avatars/avatar-1.jpg" />
 
       <Typography component="h1" variant="h4" align="center" gutterBottom>
-        Reset Password
+        Welcome back, Lucy!
       </Typography>
       <Typography component="h2" variant="body1" align="center">
-        Enter your email to reset your password
+        Sign in to your account to continue
       </Typography>
 
       <Formik
         initialValues={{
-          email: "",
+          email: "demo@bootlab.io",
+          password: "unsafepassword",
           submit: false,
         }}
-        validationSchema={Yup.object().shape({
-          email: Yup.string()
-            .email("Must be a valid email")
-            .max(255)
-            .required("Email is required"),
-        })}
+        validationSchema={schema}
         onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
           try {
             await dispatch(
-              resetPassword({
-                email: values.email,
-              })
+              signIn({ email: values.email, password: values.password })
             );
-            history.push("/auth/sign-in");
+            history.push("/private");
           } catch (error) {
             const message = error.message || "Something went wrong";
 
@@ -81,6 +95,10 @@ function ResetPassword() {
           values,
         }) => (
           <form noValidate onSubmit={handleSubmit}>
+            <Alert mt={3} mb={1} severity="info">
+              Use <strong>demo@bootlab.io</strong> and{" "}
+              <strong>unsafepassword</strong> to sign in
+            </Alert>
             {errors.submit && (
               <Alert mt={2} mb={1} severity="warning">
                 {errors.submit}
@@ -96,7 +114,23 @@ function ResetPassword() {
               helperText={touched.email && errors.email}
               onBlur={handleBlur}
               onChange={handleChange}
-              my={3}
+              my={2}
+            />
+            <TextField
+              type="password"
+              name="password"
+              label="Password"
+              value={values.password}
+              error={Boolean(touched.password && errors.password)}
+              fullWidth
+              helperText={touched.password && errors.password}
+              onBlur={handleBlur}
+              onChange={handleChange}
+              my={2}
+            />
+            <FormControlLabel
+              control={<Checkbox value="remember" color="primary" />}
+              label="Remember me"
             />
             <Button
               type="submit"
@@ -105,7 +139,15 @@ function ResetPassword() {
               color="primary"
               disabled={isSubmitting}
             >
-              Reset password
+              Sign in
+            </Button>
+            <Button
+              component={Link}
+              to="/auth/reset-password"
+              fullWidth
+              color="primary"
+            >
+              Forgot password
             </Button>
           </form>
         )}
@@ -114,4 +156,4 @@ function ResetPassword() {
   );
 }
 
-export default ResetPassword;
+export default memo(SignIn);
