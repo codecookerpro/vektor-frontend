@@ -12,7 +12,7 @@ import {
   Toolbar,
 } from "@material-ui/core";
 
-import { ReactComponent as Logo } from "../../../vendor/logo.svg";
+import { ReactComponent as Logo } from "vendor/logo.svg";
 
 const Button = styled(MuiButton)(spacing);
 
