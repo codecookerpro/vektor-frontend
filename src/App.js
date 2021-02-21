@@ -2,19 +2,17 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { Helmet } from "react-helmet";
 import DateFnsUtils from "@date-io/date-fns";
-
-import { ThemeProvider } from "styled-components/macro";
-import { create } from "jss";
-
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import {
   StylesProvider,
   ThemeProvider as MuiThemeProvider,
   jssPreset,
 } from "@material-ui/core/styles";
+import { ThemeProvider } from "styled-components/macro";
+import { create } from "jss";
 
-import createTheme from "./theme";
-import Routes from "./routes/Routes";
+import createTheme from "theme";
+import Routes from "routes/Routes";
 
 const jss = create({
   ...jssPreset(),

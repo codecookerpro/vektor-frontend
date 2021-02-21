@@ -7,7 +7,7 @@ import { Box, Chip, Container, Grid, Typography } from "@material-ui/core";
 import { spacing } from "@material-ui/system";
 
 import { setTheme } from "../../../redux/actions/themeActions";
-import { THEMES } from "../../../constants";
+import THEMES from "utils/constants/theme";
 
 const Wrapper = styled.div`
   ${spacing};

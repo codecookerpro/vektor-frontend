@@ -6,7 +6,7 @@ import styled, {
 
 import { CssBaseline, MuiThemeProvider } from "@material-ui/core";
 
-import { THEMES } from "../constants";
+import THEMES from "utils/constants/theme";
 import createTheme from "../theme";
 
 const GlobalStyle = createGlobalStyle`

@@ -1,5 +1,5 @@
-import * as types from "../../constants";
-import { THEMES } from "../../constants";
+import * as types from "redux/types";
+import THEMES from "utils/constants/theme";
 
 const initialState = {
   currentTheme: THEMES.DEFAULT,
