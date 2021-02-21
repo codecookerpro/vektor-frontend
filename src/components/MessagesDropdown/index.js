@@ -1,7 +1,6 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, memo } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-
 import {
   Avatar as MuiAvatar,
   Badge,
@@ -13,11 +12,10 @@ import {
   ListItemAvatar,
   ListItemText,
   Popover as MuiPopover,
-  SvgIcon,
   Tooltip,
   Typography,
 } from "@material-ui/core";
-import { Bell, Home, UserPlus, Server } from "react-feather";
+import { MessageSquare } from "react-feather";
 
 const Popover = styled(MuiPopover)`
   .MuiPaper-root {
@@ -38,20 +36,16 @@ const Avatar = styled(MuiAvatar)`
   background: ${(props) => props.theme.palette.primary.main};
 `;
 
-const NotificationHeader = styled(Box)`
+const MessageHeader = styled(Box)`
   text-align: center;
   border-bottom: 1px solid ${(props) => props.theme.palette.divider};
 `;
 
-function Notification({ title, description, Icon }) {
+function Message({ title, description, image }) {
   return (
     <ListItem divider component={Link} to="#">
       <ListItemAvatar>
-        <Avatar>
-          <SvgIcon fontSize="small">
-            <Icon />
-          </SvgIcon>
-        </Avatar>
+        <Avatar src={image} alt="Avatar" />
       </ListItemAvatar>
       <ListItemText
         primary={title}
@@ -65,7 +59,7 @@ function Notification({ title, description, Icon }) {
   );
 }
 
-function NotificationsDropdown() {
+function MessagesDropdown() {
   const ref = useRef(null);
   const [isOpen, setOpen] = useState(false);
 
@@ -79,10 +73,10 @@ function NotificationsDropdown() {
 
   return (
     <React.Fragment>
-      <Tooltip title="Notifications">
+      <Tooltip title="Messages">
         <IconButton color="inherit" ref={ref} onClick={handleOpen}>
-          <Indicator badgeContent={7}>
-            <Bell />
+          <Indicator badgeContent={3}>
+            <MessageSquare />
           </Indicator>
         </IconButton>
       </Tooltip>
@@ -95,37 +89,32 @@ function NotificationsDropdown() {
         onClose={handleClose}
         open={isOpen}
       >
-        <NotificationHeader p={2}>
+        <MessageHeader p={2}>
           <Typography variant="subtitle1" color="textPrimary">
-            7 New Notifications
+            3 New Messages
           </Typography>
-        </NotificationHeader>
+        </MessageHeader>
         <React.Fragment>
           <List disablePadding>
-            <Notification
-              title="Update complete"
-              description="Restart server to complete update."
-              Icon={Server}
+            <Message
+              title="Lucy Lavender"
+              description="Nam pretium turpis et arcu. Duis arcu tortor."
+              image="/static/img/avatars/avatar-1.jpg"
             />
-            <Notification
-              title="New connection"
-              description="Anna accepted your request."
-              Icon={UserPlus}
+            <Message
+              title="Remy Sharp"
+              description="Curabitur ligula sapien euismod vitae."
+              image="/static/img/avatars/avatar-2.jpg"
             />
-            <Notification
-              title="Lorem ipsum"
-              description="Aliquam ex eros, imperdiet vulputate hendrerit et"
-              Icon={Bell}
-            />
-            <Notification
-              title="New login"
-              description="Login from 192.186.1.1."
-              Icon={Home}
+            <Message
+              title="Cassandra Mixon"
+              description="Pellentesque auctor neque nec urna."
+              image="/static/img/avatars/avatar-3.jpg"
             />
           </List>
           <Box p={1} display="flex" justifyContent="center">
             <Button size="small" component={Link} to="#">
-              Show all notifications
+              Show all messages
             </Button>
           </Box>
         </React.Fragment>
@@ -134,4 +123,4 @@ function NotificationsDropdown() {
   );
 }
 
-export default NotificationsDropdown;
+export default memo(MessagesDropdown);

@@ -1,6 +1,5 @@
-import React from "react";
+import React, { memo } from "react";
 import styled from "styled-components/macro";
-
 import {
   Tooltip,
   Menu,
@@ -59,4 +58,4 @@ function LanguagesDropdown() {
   );
 }
 
-export default LanguagesDropdown;
+export default memo(LanguagesDropdown);

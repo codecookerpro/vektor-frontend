@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import { useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
 
@@ -13,4 +13,4 @@ function AuthGuard({ children }) {
   return children;
 }
 
-export default AuthGuard;
+export default memo(AuthGuard);

@@ -1,9 +1,8 @@
-import React from "react";
+import React, { memo } from "react";
 import styled from "styled-components/macro";
 import { Power } from "react-feather";
 import { useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
-
 import {
   Tooltip,
   Menu,
@@ -11,7 +10,7 @@ import {
   IconButton as MuiIconButton,
 } from "@material-ui/core";
 
-import { signOut } from "../redux/actions/authActions";
+import { signOut } from "redux/actions/authActions";
 
 const IconButton = styled(MuiIconButton)`
   svg {
@@ -63,4 +62,4 @@ function UserDropdown() {
   );
 }
 
-export default UserDropdown;
+export default memo(UserDropdown);

@@ -34,7 +34,7 @@ function Default() {
             Default Dashboard
           </Typography>
           <Typography variant="subtitle1">
-            Welcome back, Lucy! We've missed you.{" "}
+            {"Welcome back, Lucy! We've missed you. "}
             <span role="img" aria-label="Waving Hand Sign">
               👋
             </span>

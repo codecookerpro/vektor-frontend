@@ -48,7 +48,7 @@ const DefaultChips = () => {
           Default Chips
         </Typography>
         <Typography variant="body2" gutterBottom>
-          Examples of Chips, using an image Avatar, SVG Icon Avatar, "Letter"
+          Examples of Chips, using an image Avatar, SVG Icon Avatar, {'"Letter"'}
           and (string) Avatar.
         </Typography>
         <div>

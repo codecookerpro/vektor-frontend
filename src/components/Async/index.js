@@ -1,8 +1,7 @@
 import React from "react";
 
-import Loader from "./Loader";
-
-const sleep = (m) => new Promise((r) => setTimeout(r, m));
+import Loader from "components/Loader";
+import delay from "utils/helpers/delay";
 
 export default function asyncComponent(importComponent) {
   class AsyncComponent extends React.Component {
@@ -15,7 +14,7 @@ export default function asyncComponent(importComponent) {
     }
 
     async componentDidMount() {
-      await sleep(process.env.NODE_ENV === "development" ? 150 : 0);
+      await delay(process.env.NODE_ENV === "development" ? 150 : 0);
 
       const { default: component } = await importComponent();
 

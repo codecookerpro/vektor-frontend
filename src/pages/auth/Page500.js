@@ -30,7 +30,7 @@ function Page500() {
         Internal server error.
       </Typography>
       <Typography component="h2" variant="body1" align="center" gutterBottom>
-        The server encountered something unexpected that didn't allow it to
+        The server encountered something unexpected that didn{"'"}t allow it to
         complete the request.
       </Typography>
 

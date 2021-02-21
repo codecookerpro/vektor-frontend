@@ -64,7 +64,7 @@ function Pricing() {
         </Typography>
 
         <Typography variant="subtitle1" gutterBottom align="center">
-          Whether you're a business or an individual, 14-day trial no credit
+          Whether you{"'"}re a business or an individual, 14-day trial no credit
           card required.
         </Typography>
       </Header>

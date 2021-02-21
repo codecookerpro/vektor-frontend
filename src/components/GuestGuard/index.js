@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import { useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
 
@@ -13,4 +13,4 @@ function GuestGuard({ children }) {
   return children;
 }
 
-export default GuestGuard;
+export default memo(GuestGuard);
