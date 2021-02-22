@@ -12,8 +12,6 @@ import tablesRoutes from 'routes/tablesRoutes';
 import tasksRoutes from 'routes/tasksRoutes';
 import chartRoutes from 'routes/chartRoutes';
 import mapsRoutes from 'routes/mapsRoutes';
-import documentationRoutes from 'routes/documentationRoutes';
-import changelogRoutes from 'routes/changelogRoutes';
 import protectedPageRoutes from 'routes/protectedPageRoutes';
 
 export const dashboardLayoutRoutes = [
@@ -30,8 +28,6 @@ export const dashboardLayoutRoutes = [
   tablesRoutes,
   iconsRoutes,
   mapsRoutes,
-  documentationRoutes,
-  changelogRoutes,
 ];
 
 export const authLayoutRoutes = [authRoutes];
@@ -53,6 +49,4 @@ export const sidebarRoutes = [
   tablesRoutes,
   iconsRoutes,
   mapsRoutes,
-  documentationRoutes,
-  changelogRoutes,
 ];
