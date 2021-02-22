@@ -1,61 +1,65 @@
-import authRoutes from 'routes/authRoutes';
-import calendarRoutes from 'routes/calendarRoutes';
-import componentsRoutes from 'routes/componentsRoutes';
-import dashboardsRoutes from 'routes/dashboardsRoutes';
-import formsRoutes from 'routes/formsRoutes';
-import iconsRoutes from 'routes/iconsRoutes';
-import invoiceRoutes from 'routes/invoiceRoutes';
-import orderRoutes from 'routes/orderRoutes';
-import pagesRoutes from 'routes/pagesRoutes';
-import projectsRoutes from 'routes/projectsRoutes';
-import tablesRoutes from 'routes/tablesRoutes';
-import tasksRoutes from 'routes/tasksRoutes';
-import chartRoutes from 'routes/chartRoutes';
-import mapsRoutes from 'routes/mapsRoutes';
-import landingRoutes from 'routes/landingRoutes';
-import documentationRoutes from 'routes/documentationRoutes';
-import changelogRoutes from 'routes/changelogRoutes';
-import protectedPageRoutes from 'routes/protectedPageRoutes';
+import React, { memo } from 'react';
+import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
 
-export const dashboardLayoutRoutes = [
-  dashboardsRoutes,
-  pagesRoutes,
-  projectsRoutes,
-  orderRoutes,
-  invoiceRoutes,
-  tasksRoutes,
-  calendarRoutes,
-  componentsRoutes,
-  chartRoutes,
-  formsRoutes,
-  tablesRoutes,
-  iconsRoutes,
-  mapsRoutes,
-  documentationRoutes,
-  changelogRoutes,
-];
+import DashboardLayout from 'layouts/Dashboard';
+import AuthLayout from 'layouts/Auth';
+import Page404 from 'pages/auth/Page404';
+import AuthGuard from 'components/AuthGuard';
+import {
+  dashboardLayoutRoutes,
+  authLayoutRoutes
+} from 'utils/constants/routes';
 
-export const authLayoutRoutes = [authRoutes];
+const childRoutes = (Layout, routes, isAuthGuard) =>
+  routes.map(({ component: Component, children, path }, index) => {
+    const Guard = isAuthGuard ? AuthGuard : React.Fragment;
 
-export const presentationLayoutRoutes = [landingRoutes];
+    return children ? (
+      children.map((element, index) => (
+        <Route
+          key={index}
+          path={element.path}
+          exact
+          render={(props) => (
+            <Guard>
+              <Layout>
+                <element.component {...props} />
+              </Layout>
+            </Guard>
+          )}
+        />
+      ))
+    ) : Component ? (
+      <Route
+        key={index}
+        path={path}
+        exact
+        render={(props) => (
+          <Guard>
+            <Layout>
+              <Component {...props} />
+            </Layout>
+          </Guard>
+        )}
+      />
+    ) : null;
+  });
 
-export const protectedRoutes = [protectedPageRoutes];
+const Routes = () => (
+  <Router>
+    <Switch>
+      {childRoutes(DashboardLayout, dashboardLayoutRoutes, true)}
+      {childRoutes(AuthLayout, authLayoutRoutes, false)}
+      <Redirect to='/auth/sign-in' />
+      <Route
+        render={() => (
+          <AuthLayout>
+            <Page404 />
+          </AuthLayout>
+        )}
+      />
+    </Switch>
+  </Router>
+);
 
-export const sidebarRoutes = [
-  dashboardsRoutes,
-  pagesRoutes,
-  projectsRoutes,
-  orderRoutes,
-  invoiceRoutes,
-  tasksRoutes,
-  calendarRoutes,
-  authRoutes,
-  componentsRoutes,
-  chartRoutes,
-  formsRoutes,
-  tablesRoutes,
-  iconsRoutes,
-  mapsRoutes,
-  documentationRoutes,
-  changelogRoutes,
-];
+export default memo(Routes);
