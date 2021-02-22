@@ -12,7 +12,6 @@ import { isWidthUp } from "@material-ui/core/withWidth";
 import Sidebar from "components/Sidebar";
 import Header from "components/AppBar";
 import Footer from "components/Footer";
-import Settings from "components/Settings";
 
 const drawerWidth = 258;
 
@@ -102,7 +101,6 @@ const Dashboard = ({ children, routes, width }) => {
         </MainContent>
         <Footer />
       </AppContent>
-      <Settings />
     </Root>
   );
 };

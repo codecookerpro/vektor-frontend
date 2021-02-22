@@ -1,5 +1,4 @@
 import React from "react";
-import { useSelector } from "react-redux";
 import { Helmet } from "react-helmet";
 import DateFnsUtils from "@date-io/date-fns";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
@@ -11,7 +10,7 @@ import {
 import { ThemeProvider } from "styled-components/macro";
 import { create } from "jss";
 
-import createTheme from "theme";
+import theme from "theme";
 import Routes from "routes/Routes";
 
 const jss = create({
@@ -20,8 +19,6 @@ const jss = create({
 });
 
 function App() {
-  const theme = useSelector((state) => state.themeReducer);
-
   return (
     <React.Fragment>
       <Helmet
@@ -30,8 +27,8 @@ function App() {
       />
       <StylesProvider jss={jss}>
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
-          <MuiThemeProvider theme={createTheme(theme.currentTheme)}>
-            <ThemeProvider theme={createTheme(theme.currentTheme)}>
+          <MuiThemeProvider theme={theme}>
+            <ThemeProvider theme={theme}>
               <Routes />
             </ThemeProvider>
           </MuiThemeProvider>

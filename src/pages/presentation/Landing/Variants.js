@@ -1,13 +1,9 @@
 import React from "react";
 import styled from "styled-components/macro";
 import { useHistory } from "react-router-dom";
-import { useDispatch } from "react-redux";
 
 import { Box, Chip, Container, Grid, Typography } from "@material-ui/core";
 import { spacing } from "@material-ui/system";
-
-import { setTheme } from "../../../redux/actions/themeActions";
-import THEMES from "utils/constants/theme";
 
 const Wrapper = styled.div`
   ${spacing};
@@ -54,33 +50,6 @@ const TypographyOverline = styled(Typography)`
   font-weight: ${(props) => props.theme.typography.fontWeightMedium};
 `;
 
-const Demo = ({ theme, title, img, newDemo = false }) => {
-  const history = useHistory();
-  const dispatch = useDispatch();
-
-  const toggleDemo = (theme) => {
-    dispatch(setTheme(theme));
-    history.push("/dashboard/analytics");
-  };
-
-  return (
-    <Grid item xs={12} sm={6} md={4} lg={4}>
-      <DemoContent px={4}>
-        <DemoLink onClick={() => toggleDemo(theme)}>
-          <DemoImage
-            alt={`${title} - React Admin Template`}
-            src={`/static/img/screenshots/${img}.jpg`}
-          />
-        </DemoLink>
-        <Box mb={3} />
-        <Typography variant="h6">
-          {title} {newDemo && <DemoChip label="New" />}
-        </Typography>
-      </DemoContent>
-    </Grid>
-  );
-};
-
 function Variants() {
   return (
     <Wrapper pt={16} pb={20}>
@@ -97,14 +66,6 @@ function Variants() {
         </Typography>
         <Box mb={8} />
 
-        <Grid container spacing={6}>
-          <Demo theme={THEMES.DEFAULT} title="Default variant" img="default" />
-          <Demo theme={THEMES.BLUE} title="Blue variant" img="blue" />
-          <Demo theme={THEMES.DARK} title="Dark variant" img="dark" newDemo />
-          <Demo theme={THEMES.GREEN} title="Green variant" img="green" />
-          <Demo theme={THEMES.INDIGO} title="Indigo variant" img="indigo" />
-          <Demo theme={THEMES.LIGHT} title="Light variant" img="light" />
-        </Grid>
       </Container>
     </Wrapper>
   );

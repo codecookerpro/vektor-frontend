@@ -5,8 +5,7 @@ import styled, {
 } from "styled-components/macro";
 import { CssBaseline, MuiThemeProvider } from "@material-ui/core";
 
-import THEMES from "utils/constants/theme";
-import createTheme from "theme";
+import theme from "theme";
 
 const GlobalStyle = createGlobalStyle`
   html,
@@ -34,8 +33,8 @@ const AppContent = styled.div`
 
 const Presentation = ({ children }) => {
   return (
-    <MuiThemeProvider theme={createTheme(THEMES.DEFAULT)}>
-      <ThemeProvider theme={createTheme(THEMES.DEFAULT)}>
+    <MuiThemeProvider theme={theme}>
+      <ThemeProvider theme={theme}>
         <Root>
           <CssBaseline />
           <GlobalStyle />
