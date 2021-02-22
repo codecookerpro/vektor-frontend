@@ -11,7 +11,7 @@ import { ThemeProvider } from "styled-components/macro";
 import { create } from "jss";
 
 import theme from "theme";
-import Routes from "routes/Routes";
+import Routes from "routes";
 
 const jss = create({
   ...jssPreset(),

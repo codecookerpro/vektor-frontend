@@ -21,7 +21,7 @@ import {
 import { ExpandLess, ExpandMore } from "@material-ui/icons";
 import { green } from "@material-ui/core/colors";
 
-import { sidebarRoutes as routes } from "routes/index";
+import { sidebarRoutes as routes } from 'utils/constants/routes';
 import { ReactComponent as Logo } from "vendor/logo.svg";
 import "vendor/perfect-scrollbar.css";
 
