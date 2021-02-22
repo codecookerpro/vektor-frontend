@@ -1,15 +1,13 @@
 import React, { memo } from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Redirect, Route, Switch } from "react-router-dom";
 import {
   dashboardLayoutRoutes,
   authLayoutRoutes,
-  presentationLayoutRoutes,
   protectedRoutes,
 } from "./index";
 
 import DashboardLayout from "layouts/Dashboard";
 import AuthLayout from "layouts/Auth";
-import PresentationLayout from "layouts/Presentation";
 import Page404 from "pages/auth/Page404";
 
 const childRoutes = (Layout, routes) =>
@@ -57,7 +55,7 @@ const Routes = () => (
       {childRoutes(DashboardLayout, dashboardLayoutRoutes)}
       {childRoutes(DashboardLayout, protectedRoutes)}
       {childRoutes(AuthLayout, authLayoutRoutes)}
-      {childRoutes(PresentationLayout, presentationLayoutRoutes)}
+      <Redirect to='/auth/sign-in' />
       <Route
         render={() => (
           <AuthLayout>

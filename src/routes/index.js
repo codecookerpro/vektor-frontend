@@ -12,7 +12,6 @@ import tablesRoutes from 'routes/tablesRoutes';
 import tasksRoutes from 'routes/tasksRoutes';
 import chartRoutes from 'routes/chartRoutes';
 import mapsRoutes from 'routes/mapsRoutes';
-import landingRoutes from 'routes/landingRoutes';
 import documentationRoutes from 'routes/documentationRoutes';
 import changelogRoutes from 'routes/changelogRoutes';
 import protectedPageRoutes from 'routes/protectedPageRoutes';
@@ -36,8 +35,6 @@ export const dashboardLayoutRoutes = [
 ];
 
 export const authLayoutRoutes = [authRoutes];
-
-export const presentationLayoutRoutes = [landingRoutes];
 
 export const protectedRoutes = [protectedPageRoutes];
 
