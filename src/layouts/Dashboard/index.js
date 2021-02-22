@@ -1,10 +1,5 @@
-import React, { useState } from "react";
+import React, { memo, useState } from "react";
 import styled, { createGlobalStyle } from "styled-components/macro";
-import Sidebar from "../components/Sidebar";
-import Header from "../components/AppBar";
-import Footer from "../components/Footer";
-import Settings from "../components/Settings";
-
 import { spacing } from "@material-ui/system";
 import {
   Hidden,
@@ -12,8 +7,12 @@ import {
   Paper as MuiPaper,
   withWidth,
 } from "@material-ui/core";
-
 import { isWidthUp } from "@material-ui/core/withWidth";
+
+import Sidebar from "components/Sidebar";
+import Header from "components/AppBar";
+import Footer from "components/Footer";
+import Settings from "components/Settings";
 
 const drawerWidth = 258;
 
@@ -108,4 +107,4 @@ const Dashboard = ({ children, routes, width }) => {
   );
 };
 
-export default withWidth()(Dashboard);
+export default memo(withWidth()(Dashboard));

@@ -1,13 +1,12 @@
-import React from "react";
+import React, { memo } from "react";
 import styled, {
   createGlobalStyle,
   ThemeProvider,
 } from "styled-components/macro";
-
 import { CssBaseline, MuiThemeProvider } from "@material-ui/core";
 
 import THEMES from "utils/constants/theme";
-import createTheme from "../theme";
+import createTheme from "theme";
 
 const GlobalStyle = createGlobalStyle`
   html,
@@ -47,4 +46,4 @@ const Presentation = ({ children }) => {
   );
 };
 
-export default Presentation;
+export default memo(Presentation);

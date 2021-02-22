@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import styled, { createGlobalStyle } from "styled-components/macro";
 import { CssBaseline } from "@material-ui/core";
 
@@ -32,4 +32,4 @@ const Auth = ({ children }) => {
   );
 };
 
-export default Auth;
+export default memo(Auth);
