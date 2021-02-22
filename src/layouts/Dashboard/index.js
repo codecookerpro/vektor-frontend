@@ -9,8 +9,8 @@ import {
 } from '@material-ui/core';
 import { isWidthUp } from '@material-ui/core/withWidth';
 
-import Header from 'components/AppBar';
-import Footer from 'components/Footer';
+import Header from './Header';
+import Footer from './Footer';
 import Sidebar from './Sidebar';
 
 const drawerWidth = 258;

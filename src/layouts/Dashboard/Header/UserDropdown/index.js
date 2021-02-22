@@ -1,16 +1,16 @@
-import React, { memo } from "react";
-import styled from "styled-components/macro";
-import { Power } from "react-feather";
-import { useHistory } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import React, { memo } from 'react';
+import styled from 'styled-components/macro';
+import { Power } from 'react-feather';
+import { useHistory } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import {
   Tooltip,
   Menu,
   MenuItem,
   IconButton as MuiIconButton,
-} from "@material-ui/core";
+} from '@material-ui/core';
 
-import { signOut } from "redux/actions/authActions";
+import { signOut } from 'redux/actions/authActions';
 
 const IconButton = styled(MuiIconButton)`
   svg {
@@ -34,23 +34,23 @@ function UserDropdown() {
 
   const handleSignOut = async () => {
     await dispatch(signOut());
-    history.push("/auth/sign-in");
+    history.push('/auth/sign-in');
   };
 
   return (
     <React.Fragment>
-      <Tooltip title="Account">
+      <Tooltip title='Account'>
         <IconButton
-          aria-owns={Boolean(anchorMenu) ? "menu-appbar" : undefined}
-          aria-haspopup="true"
+          aria-owns={Boolean(anchorMenu) ? 'menu-appbar' : undefined}
+          aria-haspopup='true'
           onClick={toggleMenu}
-          color="inherit"
+          color='inherit'
         >
           <Power />
         </IconButton>
       </Tooltip>
       <Menu
-        id="menu-appbar"
+        id='menu-appbar'
         anchorEl={anchorMenu}
         open={Boolean(anchorMenu)}
         onClose={closeMenu}

@@ -1,69 +1,5 @@
 
 const LINKS = Object.freeze({
-  DASHBOARD: {
-    TITLE: 'Dashboard',
-    HREF: '/dashboard',
-  },
-  DASHBOARD_DEFAULT: {
-    TITLE: 'Default',
-    HREF: '/dashboard/default'
-  },
-  DASHBOARD_ANALYTICS: {
-    TITLE: 'Analytics',
-    HREF: '/dashboard/analytics',
-  },
-  DASHBOARD_SAAS: {
-    TITLE: 'SaaS',
-    HREF: '/dashboard/saas',
-  },
-  PAGES: {
-    TITLE: 'Pages',
-    HREF: '/pages'
-  },
-  PAGES_PROFILE: {
-    TITLE: 'Profile',
-    HREF: '/pages/profile'
-  },
-  PAGES_SETTINGS: {
-    TITLE: 'Settings',
-    HREF: '/pages/settings'
-  },
-  PAGES_PRICING: {
-    TITLE: 'Pricing',
-    HREF: '/pages/pricing'
-  },
-  PAGES_CHAT: {
-    TITLE: 'Chat',
-    HREF: '/pages/chat'
-  },
-  PAGES_BLANK: {
-    TITLE: 'Pages',
-    HREF: '/pages/blank'
-  },
-  PROJECTS: {
-    TITLE: 'Projects',
-    HREF: '/projects'
-  },
-  INVOICES: {
-    TITLE: 'Invoices',
-    HREF: '/invoices'
-  },
-  INVOICES_DETAIL: {
-    TITLE: 'Invoices Detail',
-    HREF: '/invoices/detail'
-  },
-  ORDERS: {
-    TITLE: 'Orders',
-    HREF: '/orders'
-  },
-  TASKS: {
-    TITLE: 'Tasks',
-    HREF: '/tasks'
-  },
-  CALENDAR: {
-    TITLE: 'Calendar',
-    HREF: '/calendar'
-  },
   AUTH: {
     TITLE: 'Auth',
     HREF: '/auth'
@@ -88,29 +24,29 @@ const LINKS = Object.freeze({
     TITLE: '500 Page',
     HREF: '/auth/500'
   },
-  COMPONENTS: {
-    TITLE: 'Components',
-    HREF: '/components'
+  ADD_PROJECT: {
+    TITLE: 'Add Project',
+    HREF: '/project/add'
   },
-  COMPONENTS_ALERTS: {
-    TITLE: 'Alerts',
-    HREF: '/components/alerts'
+  ADD_SYSTEM: {
+    TITLE: 'Add System',
+    HREF: '/system/add'
   },
-  COMPONENTS_ALERTS: {
-    TITLE: 'Avatars',
-    HREF: '/components/avatars'
+  ADD_USER: {
+    TITLE: 'New User',
+    HREF: '/user/add'
   },
-  COMPONENTS_BADGES: {
-    TITLE: 'Badges',
-    HREF: '/components/badges'
+  ADD_SOW: {
+    TITLE: 'Add SOW',
+    HREF: '/sow/add'
   },
-  COMPONENTS_BUTTONS: {
-    TITLE: 'Buttons',
-    HREF: '/components/buttons'
+  ADD_WORKFLOW_TEMPLATE: {
+    TITLE: 'Add Workflow Template',
+    HREF: '/workflow-template/add'
   },
-  COMPONENTS_CARDS: {
-    TITLE: 'Cards',
-    HREF: '/components/cards'
+  ADD_PHASE_TEMPLATE: {
+    TITLE: 'Add Phase Template',
+    HREF: '/phase-template/add'
   }
 });
 
