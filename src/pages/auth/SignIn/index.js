@@ -18,7 +18,7 @@ import {
 import { spacing } from '@material-ui/system';
 import { Alert as MuiAlert } from '@material-ui/lab';
 
-import { signIn } from 'redux/actions/authActions';
+import { setUserToken } from 'redux/actions/authActions';
 import {
   EMAIL_VALID,
   PASSWORD_VALID
@@ -72,8 +72,17 @@ function SignIn() {
         validationSchema={schema}
         onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
           try {
+            const accessToken = 'Bearer dfasdfafeoeifjeofjeofjeofjeofjoejfoejfoefjoeif'
+            const user = {
+              email: values.email,
+              name: 'Admin',
+              password: values.password
+            }
             await dispatch(
-              signIn({ email: values.email, password: values.password })
+              setUserToken({
+                accessToken,
+                user
+              })
             );
             history.push('/dashboard/default');
           } catch (error) {

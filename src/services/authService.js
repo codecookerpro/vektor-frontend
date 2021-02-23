@@ -1,49 +1,15 @@
-import axios from "./axios";
+import axios from 'services/axios';
 
-export function signIn(credentials) {
-  return new Promise((resolve, reject) => {
-    axios
-      .post("/api/auth/sign-in", credentials)
-      .then((response) => {
-        if (response.status === 200) {
-          resolve(response.data);
-        }
-        reject(response.data);
-      })
-      .catch((error) => {
-        reject(error);
-      });
-  });
-}
+const login = async params => {
+  return await axios.post('/api/login', params);
+};
 
-export function signUp(credentials) {
-  return new Promise((resolve, reject) => {
-    axios
-      .post("/api/auth/sign-up", credentials)
-      .then((response) => {
-        if (response.status === 200) {
-          resolve(response.data);
-        }
-        reject(response.data);
-      })
-      .catch((error) => {
-        reject(error);
-      });
-  });
-}
+const register = async params => {
+  return await axios.post('/api/register', params);
+};
 
-export function resetPassword(credentials) {
-  return new Promise((resolve, reject) => {
-    axios
-      .post("/api/auth/reset-password", credentials)
-      .then((response) => {
-        if (response.status === 200) {
-          resolve(response.data);
-        }
-        reject(response.data);
-      })
-      .catch((error) => {
-        reject(error);
-      });
-  });
-}
+export {
+  login,
+  register
+};
+

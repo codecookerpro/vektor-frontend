@@ -6,6 +6,7 @@ import DashboardLayout from 'layouts/Dashboard';
 import AuthLayout from 'layouts/Auth';
 import Page404 from 'pages/auth/Page404';
 import AuthGuard from 'utils/hocs/AuthGuard';
+import GuestGuard from 'utils/hocs/GuestGuard';
 import {
   dashboardLayoutRoutes,
   authLayoutRoutes
@@ -13,7 +14,7 @@ import {
 
 const childRoutes = (Layout, routes, isAuthGuard) =>
   routes.map(({ component: Component, children, path }, index) => {
-    const Guard = isAuthGuard ? AuthGuard : React.Fragment;
+    const Guard = isAuthGuard ? AuthGuard : GuestGuard;
 
     return children ? (
       children.map((element, index) => (

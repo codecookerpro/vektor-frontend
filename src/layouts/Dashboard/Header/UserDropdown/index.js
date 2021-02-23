@@ -10,7 +10,7 @@ import {
   IconButton as MuiIconButton,
 } from '@material-ui/core';
 
-import { signOut } from 'redux/actions/authActions';
+import { logoutUser } from 'redux/actions/authActions';
 
 const IconButton = styled(MuiIconButton)`
   svg {
@@ -33,7 +33,7 @@ function UserDropdown() {
   };
 
   const handleSignOut = async () => {
-    await dispatch(signOut());
+    await dispatch(logoutUser());
     history.push('/auth/sign-in');
   };
 
