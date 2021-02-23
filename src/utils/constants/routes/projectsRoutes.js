@@ -1,14 +1,13 @@
-import React from "react";
-import { Briefcase } from "react-feather";
+import { lazy } from 'react';
+import { Briefcase } from 'react-feather';
 
-import async from "components/Async";
-const Projects = async(() => import("pages/pages/Projects"));
+const Projects = lazy(() => import(/* webpackChunkName: 'Projects' */ 'pages/pages/Projects'));
 
 const projectsRoutes = Object.freeze({
-  id: "Projects",
-  path: "/projects",
+  id: 'Projects',
+  path: '/projects',
   icon: <Briefcase />,
-  badge: "8",
+  badge: '8',
   component: Projects,
   children: null,
 });

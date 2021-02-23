@@ -1,31 +1,30 @@
-import React from "react";
-import { Sliders } from "react-feather";
+import { lazy } from 'react';
+import { Sliders } from 'react-feather';
 
-import async from "components/Async";
-const Default = async(() => import("pages/dashboards/Default"));
-const Analytics = async(() => import("pages/dashboards/Analytics"));
-const SaaS = async(() => import("pages/dashboards/SaaS"));
+const Default = lazy(() => import(/* webpackChunkName: 'Default' */ 'pages/dashboards/Default'));
+const Analytics = lazy(() => import(/* webpackChunkName: 'Analytics' */ 'pages/dashboards/Analytics'));
+const SaaS = lazy(() => import(/* webpackChunkName: 'SaaS' */ 'pages/dashboards/SaaS'));
 
 const dashboardsRoutes =  Object.freeze({
-  id: "Dashboard",
-  path: "/dashboard",
-  header: "Pages",
+  id: 'Dashboard',
+  path: '/dashboard',
+  header: 'Pages',
   icon: <Sliders />,
   containsHome: true,
   children: [
     {
-      path: "/dashboard/default",
-      name: "Default",
+      path: '/dashboard/default',
+      name: 'Default',
       component: Default,
     },
     {
-      path: "/dashboard/analytics",
-      name: "Analytics",
+      path: '/dashboard/analytics',
+      name: 'Analytics',
       component: Analytics,
     },
     {
-      path: "/dashboard/saas",
-      name: "SaaS",
+      path: '/dashboard/saas',
+      name: 'SaaS',
       component: SaaS,
     },
   ],

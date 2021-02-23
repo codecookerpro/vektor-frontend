@@ -1,12 +1,11 @@
-import React from "react";
-import { Calendar as CalendarIcon } from "react-feather";
+import { lazy } from 'react';
+import { Calendar as CalendarIcon } from 'react-feather';
 
-import async from "components/Async";
-const Calendar = async(() => import("pages/pages/Calendar"));
+const Calendar = lazy(() => import(/* webpackChunkName: 'SignIn' */ 'pages/pages/Calendar'));
 
 const calendarRoutes = Object.freeze({
-  id: "Calendar",
-  path: "/calendar",
+  id: 'Calendar',
+  path: '/calendar',
   icon: <CalendarIcon />,
   component: Calendar,
   children: null,

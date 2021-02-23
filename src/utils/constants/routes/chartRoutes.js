@@ -1,12 +1,11 @@
-import React from "react";
-import { PieChart } from "react-feather";
+import { lazy } from 'react';
+import { PieChart } from 'react-feather';
 
-import async from "components/Async";
-const Chartjs = async(() => import("pages/charts/Chartjs"));
+const Chartjs = lazy(() => import(/* webpackChunkName: 'Page500' */ 'pages/charts/Chartjs'));
 
 const chartRoutes = Object.freeze({
-  id: "Charts",
-  path: "/charts",
+  id: 'Charts',
+  path: '/charts',
   icon: <PieChart />,
   component: Chartjs,
   children: null,

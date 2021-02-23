@@ -1,12 +1,11 @@
-import React from "react";
-import { ShoppingCart } from "react-feather";
+import { lazy } from 'react';
+import { ShoppingCart } from 'react-feather';
 
-import async from "components/Async";
-const Orders = async(() => import("pages/pages/Orders"));
+const Orders = lazy(() => import(/* webpackChunkName: 'Orders' */ 'pages/pages/Orders'));
 
 const orderRoutes = Object.freeze({
-  id: "Orders",
-  path: "/orders",
+  id: 'Orders',
+  path: '/orders',
   icon: <ShoppingCart />,
   component: Orders,
   children: null,
