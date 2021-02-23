@@ -66,6 +66,12 @@ const variant = {
       background: "#FFF",
     },
   },
+  custom: {
+    palette: {
+      lightGreen: '#a6b884',
+      border: '#f1f0f2'
+    },
+  }
 };
 
 export default variant;
