@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-d
 import DashboardLayout from 'layouts/Dashboard';
 import AuthLayout from 'layouts/Auth';
 import Page404 from 'pages/auth/Page404';
-import AuthGuard from 'components/AuthGuard';
+import AuthGuard from 'utils/hocs/AuthGuard';
 import {
   dashboardLayoutRoutes,
   authLayoutRoutes
