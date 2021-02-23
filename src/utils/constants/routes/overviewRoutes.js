@@ -6,7 +6,7 @@ import LINKS from 'utils/constants/links';
 
 const overviewRoutes = Object.freeze({
   id: 'Overview',
-  path: LINKS.HOME.HREF,
+  path: LINKS.OVERVIEW.HREF,
   header: 'Navigation',
   icon: <Home />,
   containsHome: true,

@@ -26,7 +26,7 @@ const Logo = ({
   const classes = useStyles();
 
   return (
-    <Link component={NavLink} exact to={LINKS.HOME.HREF}>
+    <Link component={NavLink} exact to={LINKS.OVERVIEW.HREF}>
       <picture className={clsx(classes.picture, className)} {...rest}>
         <source srcSet={LOGO_IMAGE_PATH} />
         <img

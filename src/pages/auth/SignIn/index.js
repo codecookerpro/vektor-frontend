@@ -23,6 +23,7 @@ import {
   EMAIL_VALID,
   PASSWORD_VALID
 } from 'utils/constants/validations';
+import LINKS from 'utils/constants/links';
 
 const useStyles = makeStyles((theme) => ({
   input: {
@@ -89,7 +90,7 @@ function SignIn() {
           user
         })
       );
-      history.push('/dashboard/default');
+      history.push(LINKS.OVERVIEW.HREF);
     } catch (error) {
       if (error.response) {
         const { data: { message } } = error.response;
