@@ -1,4 +1,11 @@
 import authRoutes from './authRoutes';
+import overviewRoutes from './overviewRoutes';
+import projectManagementRoutes from './projectManagementRoutes';
+import sowTrackerRoutes from './sowTrackerRoutes';
+import projectTemplateRoutes from './projectTemplateRoutes';
+import userManagementRoutes from './userManagementRoutes';
+import recentActionRoutes from './recentActionRoutes';
+
 import calendarRoutes from './calendarRoutes';
 import componentsRoutes from './componentsRoutes';
 import dashboardsRoutes from './dashboardsRoutes';
@@ -14,6 +21,13 @@ import chartRoutes from './chartRoutes';
 import mapsRoutes from './mapsRoutes';
 
 export const dashboardLayoutRoutes = [
+  overviewRoutes,
+  projectManagementRoutes,
+  sowTrackerRoutes,
+  projectTemplateRoutes,
+  userManagementRoutes,
+  recentActionRoutes,
+
   dashboardsRoutes,
   pagesRoutes,
   projectsRoutes,
@@ -32,6 +46,13 @@ export const dashboardLayoutRoutes = [
 export const authLayoutRoutes = [authRoutes];
 
 export const sidebarRoutes = [
+  overviewRoutes,
+  projectManagementRoutes,
+  sowTrackerRoutes,
+  projectTemplateRoutes,
+  userManagementRoutes,
+  recentActionRoutes,
+
   dashboardsRoutes,
   pagesRoutes,
   projectsRoutes,

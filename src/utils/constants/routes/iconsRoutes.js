@@ -1,23 +1,22 @@
-import React from "react";
-import { Heart } from "react-feather";
+import { lazy } from 'react';
+import { Heart } from 'react-feather';
 
-import async from "components/Async";
-const MaterialIcons = async(() => import("pages/icons/MaterialIcons"));
-const FeatherIcons = async(() => import("pages/icons/FeatherIcons"));
+const MaterialIcons = lazy(() => import(/* webpackChunkName: 'MaterialIcons' */ 'pages/icons/MaterialIcons'));
+const FeatherIcons = lazy(() => import(/* webpackChunkName: 'MaterialIcons' */ 'pages/icons/FeatherIcons'));
 
 const iconsRoutes = Object.freeze({
-  id: "Icons",
-  path: "/icons",
+  id: 'Icons',
+  path: '/icons',
   icon: <Heart />,
   children: [
     {
-      path: "/icons/material-icons",
-      name: "Material Icons",
+      path: '/icons/material-icons',
+      name: 'Material Icons',
       component: MaterialIcons,
     },
     {
-      path: "/icons/feather-icons",
-      name: "Feather Icons",
+      path: '/icons/feather-icons',
+      name: 'Feather Icons',
       component: FeatherIcons,
     },
   ],

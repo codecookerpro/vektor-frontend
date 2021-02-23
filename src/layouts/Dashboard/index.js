@@ -13,7 +13,7 @@ import Header from './Header';
 import Footer from './Footer';
 import Sidebar from './Sidebar';
 
-const drawerWidth = 258;
+const drawerWidth = 268;
 
 const GlobalStyle = createGlobalStyle`
   html,

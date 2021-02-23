@@ -1,15 +1,14 @@
 import { lazy } from 'react';
-import { Sliders } from 'react-feather';
+import { User } from 'react-feather';
 
 const Default = lazy(() => import(/* webpackChunkName: 'Default' */ 'pages/dashboards/Default'));
 const Analytics = lazy(() => import(/* webpackChunkName: 'Analytics' */ 'pages/dashboards/Analytics'));
 const SaaS = lazy(() => import(/* webpackChunkName: 'SaaS' */ 'pages/dashboards/SaaS'));
 
-const dashboardsRoutes =  Object.freeze({
-  id: 'Dashboard',
+const userManagementRoutes =  Object.freeze({
+  id: 'User Management',
   path: '/dashboard',
-  header: 'Pages',
-  icon: <Sliders />,
+  icon: <User />,
   containsHome: true,
   children: [
     {
@@ -31,4 +30,4 @@ const dashboardsRoutes =  Object.freeze({
   component: null,
 });
 
-export default dashboardsRoutes;
+export default userManagementRoutes;

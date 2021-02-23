@@ -5,10 +5,9 @@ const Default = lazy(() => import(/* webpackChunkName: 'Default' */ 'pages/dashb
 const Analytics = lazy(() => import(/* webpackChunkName: 'Analytics' */ 'pages/dashboards/Analytics'));
 const SaaS = lazy(() => import(/* webpackChunkName: 'SaaS' */ 'pages/dashboards/SaaS'));
 
-const dashboardsRoutes =  Object.freeze({
-  id: 'Dashboard',
+const projectManagementRoutes =  Object.freeze({
+  id: 'Project Management',
   path: '/dashboard',
-  header: 'Pages',
   icon: <Sliders />,
   containsHome: true,
   children: [
@@ -31,4 +30,4 @@ const dashboardsRoutes =  Object.freeze({
   component: null,
 });
 
-export default dashboardsRoutes;
+export default projectManagementRoutes;

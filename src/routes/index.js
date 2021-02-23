@@ -1,10 +1,11 @@
-import React, { memo } from 'react';
+import React, { memo, Suspense } from 'react';
 import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
 
+import Loader from 'components/Loader'
 import DashboardLayout from 'layouts/Dashboard';
 import AuthLayout from 'layouts/Auth';
 import Page404 from 'pages/auth/Page404';
-import AuthGuard from 'components/AuthGuard';
+import AuthGuard from 'utils/hocs/AuthGuard';
 import {
   dashboardLayoutRoutes,
   authLayoutRoutes
@@ -46,20 +47,22 @@ const childRoutes = (Layout, routes, isAuthGuard) =>
   });
 
 const Routes = () => (
-  <Router>
-    <Switch>
-      {childRoutes(DashboardLayout, dashboardLayoutRoutes, true)}
-      {childRoutes(AuthLayout, authLayoutRoutes, false)}
-      <Redirect to='/auth/sign-in' />
-      <Route
-        render={() => (
-          <AuthLayout>
-            <Page404 />
-          </AuthLayout>
-        )}
-      />
-    </Switch>
-  </Router>
+  <Suspense fallback={<Loader />}>
+    <Router>
+      <Switch>
+        {childRoutes(DashboardLayout, dashboardLayoutRoutes, true)}
+        {childRoutes(AuthLayout, authLayoutRoutes, false)}
+        <Redirect to='/auth/sign-in' />
+        <Route
+          render={() => (
+            <AuthLayout>
+              <Page404 />
+            </AuthLayout>
+          )}
+        />
+      </Switch>
+    </Router>
+  </Suspense>
 );
 
 export default memo(Routes);

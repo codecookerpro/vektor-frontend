@@ -24,6 +24,10 @@ const LINKS = Object.freeze({
     TITLE: '500 Page',
     HREF: '/auth/500'
   },
+  HOME: {
+    TITLE: 'Home',
+    HREF: '/'
+  },
   ADD_PROJECT: {
     TITLE: 'Add Project',
     HREF: '/project/add'

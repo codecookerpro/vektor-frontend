@@ -1,23 +1,22 @@
-import React from "react";
-import { CreditCard } from "react-feather";
+import { lazy } from 'react';
+import { CreditCard } from 'react-feather';
 
-import async from "components/Async";
-const InvoiceDetails = async(() => import("pages/pages/InvoiceDetails"));
-const InvoiceList = async(() => import("pages/pages/InvoiceList"));
+const InvoiceDetails = lazy(() => import(/* webpackChunkName: 'InvoiceDetails' */ 'pages/pages/InvoiceDetails'));
+const InvoiceList = lazy(() => import(/* webpackChunkName: 'InvoiceList' */ 'pages/pages/InvoiceList'));
 
 const invoiceRoutes = Object.freeze({
-  id: "Invoices",
-  path: "/invoices",
+  id: 'Invoices',
+  path: '/invoices',
   icon: <CreditCard />,
   children: [
     {
-      path: "/invoices",
-      name: "List",
+      path: '/invoices',
+      name: 'List',
       component: InvoiceList,
     },
     {
-      path: "/invoices/detail",
-      name: "Details",
+      path: '/invoices/detail',
+      name: 'Details',
       component: InvoiceDetails,
     },
   ],

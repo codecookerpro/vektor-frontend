@@ -1,14 +1,14 @@
 import { lazy } from 'react';
-import { PieChart } from 'react-feather';
+import { Clock } from 'react-feather';
 
 const Chartjs = lazy(() => import(/* webpackChunkName: 'Page500' */ 'pages/charts/Chartjs'));
 
-const chartRoutes = Object.freeze({
-  id: 'Charts',
+const recentActionRoutes = Object.freeze({
+  id: 'SOW Tracker',
   path: '/charts',
-  icon: <PieChart />,
+  icon: <Clock />,
   component: Chartjs,
   children: null,
 });
 
-export default chartRoutes;
+export default recentActionRoutes;

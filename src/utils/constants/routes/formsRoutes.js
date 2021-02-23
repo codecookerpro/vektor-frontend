@@ -1,53 +1,52 @@
-import React from "react";
-import { CheckSquare } from "react-feather";
+import { lazy } from 'react';
+import { CheckSquare } from 'react-feather';
 
-import async from "components/Async";
-const Pickers = async(() => import("pages/forms/Pickers"));
-const SelectionCtrls = async(() => import("pages/forms/SelectionControls"));
-const Selects = async(() => import("pages/forms/Selects"));
-const TextFields = async(() => import("pages/forms/TextFields"));
-const Dropzone = async(() => import("pages/forms/Dropzone"));
-const Editors = async(() => import("pages/forms/Editors"));
-const Formik = async(() => import("pages/forms/Formik"));
+const Pickers = lazy(() => import(/* webpackChunkName: 'Pickers' */ 'pages/forms/Pickers'));
+const SelectionCtrls = lazy(() => import(/* webpackChunkName: 'SelectionCtrls' */ 'pages/forms/SelectionControls'));
+const Selects = lazy(() => import(/* webpackChunkName: 'Selects' */ 'pages/forms/Selects'));
+const TextFields = lazy(() => import(/* webpackChunkName: 'TextFields' */ 'pages/forms/TextFields'));
+const Dropzone = lazy(() => import(/* webpackChunkName: 'Dropzone' */ 'pages/forms/Dropzone'));
+const Editors = lazy(() => import(/* webpackChunkName: 'Editors' */ 'pages/forms/Editors'));
+const Formik = lazy(() => import(/* webpackChunkName: 'Formik' */ 'pages/forms/Formik'));
 
-const formsRoutes =  Object.freeze({
-  id: "Forms",
-  path: "/forms",
+const formsRoutes = Object.freeze({
+  id: 'Forms',
+  path: '/forms',
   icon: <CheckSquare />,
   children: [
     {
-      path: "/forms/pickers",
-      name: "Pickers",
+      path: '/forms/pickers',
+      name: 'Pickers',
       component: Pickers,
     },
     {
-      path: "/forms/selection-controls",
-      name: "Selection Controls",
+      path: '/forms/selection-controls',
+      name: 'Selection Controls',
       component: SelectionCtrls,
     },
     {
-      path: "/forms/selects",
-      name: "Selects",
+      path: '/forms/selects',
+      name: 'Selects',
       component: Selects,
     },
     {
-      path: "/forms/text-fields",
-      name: "Text Fields",
+      path: '/forms/text-fields',
+      name: 'Text Fields',
       component: TextFields,
     },
     {
-      path: "/forms/dropzone",
-      name: "Dropzone",
+      path: '/forms/dropzone',
+      name: 'Dropzone',
       component: Dropzone,
     },
     {
-      path: "/forms/editors",
-      name: "Editors",
+      path: '/forms/editors',
+      name: 'Editors',
       component: Editors,
     },
     {
-      path: "/forms/formik",
-      name: "Formik",
+      path: '/forms/formik',
+      name: 'Formik',
       component: Formik,
     },
   ],

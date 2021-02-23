@@ -1,14 +1,13 @@
-import React from "react";
-import { CheckSquare } from "react-feather";
+import { lazy } from 'react';
+import { CheckSquare } from 'react-feather';
 
-import async from "components/Async";
-const Tasks = async(() => import("pages/pages/Tasks"));
+const Tasks = lazy(() => import(/* webpackChunkName: 'Tasks' */ 'pages/pages/Tasks'));
 
 const tasksRoutes = {
-  id: "Tasks",
-  path: "/tasks",
+  id: 'Tasks',
+  path: '/tasks',
   icon: <CheckSquare />,
-  badge: "17",
+  badge: '17',
   component: Tasks,
   children: null,
 };
