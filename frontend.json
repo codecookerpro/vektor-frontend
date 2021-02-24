@@ -1,0 +1,16 @@
+{
+  "deploy": {
+    "dev": {
+      "key": "~/.ssh/vektor",
+      "user": "vektor",
+      "host": [
+        "34.121.187.234"
+      ],
+      "ref": "origin/master",
+      "repo": "git@bitbucket.org:voxsyncteam/vektor-frontend.git",
+      "path": "/home/vektor/frontend",
+      "post-setup": "git status; ls -la",
+      "post-deploy": "npm install; npm run build"
+    }
+  }
+}
