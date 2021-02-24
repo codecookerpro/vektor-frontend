@@ -1,13 +1,14 @@
 import { lazy } from 'react';
 import { FileText } from 'react-feather';
 
-const Chartjs = lazy(() => import(/* webpackChunkName: 'Page500' */ 'pages/charts/Chartjs'));
+const SowList = lazy(() => import(/* webpackChunkName: 'SowList' */ 'pages/Sows/SowList'));
+import LINKS from 'utils/constants/links';
 
 const sowTrackerRoutes = Object.freeze({
-  id: 'SOW Tracker',
-  path: '/charts',
+  id: LINKS.SOWS.TITLE,
+  path: LINKS.SOWS.HREF,
   icon: <FileText />,
-  component: Chartjs,
+  component: SowList,
   children: null,
 });
 

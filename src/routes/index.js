@@ -11,6 +11,7 @@ import {
   dashboardLayoutRoutes,
   authLayoutRoutes
 } from 'utils/constants/routes';
+import LINKS from 'utils/constants/links'
 
 const childRoutes = (Layout, routes, isAuthGuard) =>
   routes.map(({ component: Component, children, path }, index) => {
@@ -53,7 +54,7 @@ const Routes = () => (
       <Switch>
         {childRoutes(DashboardLayout, dashboardLayoutRoutes, true)}
         {childRoutes(AuthLayout, authLayoutRoutes, false)}
-        <Redirect to='/auth/sign-in' />
+        <Redirect to={LINKS.OVERVIEW.HREF} />
         <Route
           render={() => (
             <AuthLayout>

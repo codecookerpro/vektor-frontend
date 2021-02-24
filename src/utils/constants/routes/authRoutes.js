@@ -6,35 +6,36 @@ const SignUp = lazy(() => import(/* webpackChunkName: 'SignUp' */ 'pages/auth/Si
 const ResetPassword = lazy(() => import(/* webpackChunkName: 'ResetPassword' */ 'pages/auth/ResetPassword'));
 const Page404 = lazy(() => import(/* webpackChunkName: 'Page404' */ 'pages/auth/Page404'));
 const Page500 = lazy(() => import(/* webpackChunkName: 'Page500' */ 'pages/auth/Page500'));
+import LINKS from 'utils/constants/links'
 
 const authRoutes = Object.freeze({
-  id: 'Auth',
-  path: '/auth',
+  id: LINKS.AUTH.TITLE,
+  path: LINKS.AUTH.HREF,
   icon: <Users />,
   children: [
     {
-      path: '/auth/sign-in',
-      name: 'Sign In',
+      path: LINKS.SIGN_IN.HREF,
+      name: LINKS.SIGN_IN.TITLE,
       component: SignIn,
     },
     {
-      path: '/auth/sign-up',
-      name: 'Sign Up',
+      path: LINKS.SIGN_UP.HREF,
+      name: LINKS.SIGN_UP.TITLE,
       component: SignUp,
     },
     {
-      path: '/auth/reset-password',
-      name: 'Reset Password',
+      path: LINKS.RESET_PASSWORD.HREF,
+      name: LINKS.RESET_PASSWORD.TITLE,
       component: ResetPassword,
     },
     {
-      path: '/auth/404',
-      name: '404 Page',
+      path: LINKS.NOT_FOUND.HREF,
+      name: LINKS.NOT_FOUND.TITLE,
       component: Page404,
     },
     {
-      path: '/auth/500',
-      name: '500 Page',
+      path: LINKS.ERROR_PAGE.HREF,
+      name: LINKS.ERROR_PAGE.TITLE,
       component: Page500,
     },
   ],

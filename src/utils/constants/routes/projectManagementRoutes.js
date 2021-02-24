@@ -1,30 +1,37 @@
 import { lazy } from 'react';
 import { Sliders } from 'react-feather';
 
-const Default = lazy(() => import(/* webpackChunkName: 'Default' */ 'pages/dashboards/Default'));
-const Analytics = lazy(() => import(/* webpackChunkName: 'Analytics' */ 'pages/dashboards/Analytics'));
-const SaaS = lazy(() => import(/* webpackChunkName: 'SaaS' */ 'pages/dashboards/SaaS'));
+const Dashboard = lazy(() => import(/* webpackChunkName: 'Dashboard' */ 'pages/Dashboard'));
+const ProjectList = lazy(() => import(/* webpackChunkName: 'ProjectList' */ 'pages/Projects/ProjectList'));
+const SystemList = lazy(() => import(/* webpackChunkName: 'SystemList' */ 'pages/Systems/SystemList'));
+const ReportList = lazy(() => import(/* webpackChunkName: 'ReportList' */ 'pages/Reports/ReportList'));
+import LINKS from 'utils/constants/links';
 
-const projectManagementRoutes =  Object.freeze({
-  id: 'Project Management',
-  path: '/dashboard',
+const projectManagementRoutes = Object.freeze({
+  id: LINKS.PROJECT_MANAGEMENT.TITLE,
+  path: LINKS.PROJECT_MANAGEMENT.HREF,
   icon: <Sliders />,
   containsHome: true,
   children: [
     {
-      path: '/dashboard/default',
-      name: 'Default',
-      component: Default,
+      path: LINKS.DASHBOARD.HREF,
+      name: LINKS.DASHBOARD.TITLE,
+      component: Dashboard,
     },
     {
-      path: '/dashboard/analytics',
-      name: 'Analytics',
-      component: Analytics,
+      path: LINKS.PROJECTS.HREF,
+      name: LINKS.PROJECTS.TITLE,
+      component: ProjectList,
     },
     {
-      path: '/dashboard/saas',
-      name: 'SaaS',
-      component: SaaS,
+      path: LINKS.SYSTEMS.HREF,
+      name: LINKS.SYSTEMS.TITLE,
+      component: SystemList,
+    },
+    {
+      path: LINKS.REPORTS.HREF,
+      name: LINKS.REPORTS.TITLE,
+      component: ReportList,
     },
   ],
   component: null,

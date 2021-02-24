@@ -1,13 +1,14 @@
 import { lazy } from 'react';
 import { Clock } from 'react-feather';
 
-const Chartjs = lazy(() => import(/* webpackChunkName: 'Page500' */ 'pages/charts/Chartjs'));
+const RecentActions = lazy(() => import(/* webpackChunkName: 'RecentActions' */ 'pages/RecentActions'));
+import LINKS from 'utils/constants/links';
 
 const recentActionRoutes = Object.freeze({
-  id: 'SOW Tracker',
-  path: '/charts',
+  id: LINKS.RECENT_ACTIONS.TITLE,
+  path: LINKS.RECENT_ACTIONS.HREF,
   icon: <Clock />,
-  component: Chartjs,
+  component: RecentActions,
   children: null,
 });
 
