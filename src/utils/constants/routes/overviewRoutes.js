@@ -5,8 +5,8 @@ const Overview = lazy(() => import(/* webpackChunkName: 'Overview' */ 'pages/Ove
 import LINKS from 'utils/constants/links';
 
 const overviewRoutes = Object.freeze({
-  id: 'Overview',
-  path: LINKS.HOME.HREF,
+  id: LINKS.OVERVIEW.TITLE,
+  path: LINKS.OVERVIEW.HREF,
   header: 'Navigation',
   icon: <Home />,
   containsHome: true,

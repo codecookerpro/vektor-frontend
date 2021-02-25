@@ -1,72 +1,35 @@
-import * as types from "redux/types";
-import {
-  signIn as authSignIn,
-  signUp as authSignUp,
-  resetPassword as authResetPassword,
-} from "services/authService";
+import * as TYPES from "redux/types";
 
-export function signIn(credentials) {
-  return async (dispatch) => {
-    dispatch({ type: types.AUTH_SIGN_IN_REQUEST });
+const setUserToken = ({ accessToken, user }) => dispatch => {
+  dispatch(setAccessToken(accessToken));
+  dispatch(setCurrentUser(user));
+};
 
-    return authSignIn(credentials)
-      .then((response) => {
-        dispatch({
-          type: types.AUTH_SIGN_IN_SUCCESS,
-          id: response.id,
-          email: response.email,
-          name: response.name,
-        });
-      })
-      .catch((error) => {
-        dispatch({ type: types.AUTH_SIGN_IN_FAILURE });
-        throw error;
-      });
+const setAccessToken = accessToken => {
+  localStorage.setItem('accessToken', accessToken);
+  return {
+    type: TYPES.SET_ACCESS_TOKEN,
+    payload: accessToken
   };
-}
+};
 
-export function signUp(credentials) {
-  return async (dispatch) => {
-    dispatch({ type: types.AUTH_SIGN_UP_REQUEST });
-
-    return authSignUp(credentials)
-      .then((response) => {
-        dispatch({
-          type: types.AUTH_SIGN_UP_SUCCESS,
-          id: response.id,
-          email: response.email,
-          name: response.name,
-        });
-      })
-      .catch((error) => {
-        dispatch({ type: types.AUTH_SIGN_UP_FAILURE });
-        throw error;
-      });
+const setCurrentUser = currentUser => {
+  localStorage.setItem('currentUser', JSON.stringify(currentUser));
+  return {
+    type: TYPES.SET_CURRENT_USER,
+    payload: currentUser
   };
-}
+};
 
-export function signOut() {
-  return async (dispatch) => {
-    dispatch({
-      type: types.AUTH_SIGN_OUT,
-    });
-  };
-}
+const logoutUser = () => dispatch => {
+  localStorage.clear();
+  dispatch(setAccessToken(''));
+  dispatch(setCurrentUser({}));
+};
 
-export function resetPassword(credentials) {
-  return async (dispatch) => {
-    dispatch({ type: types.AUTH_RESET_PASSWORD_REQUEST });
-
-    return authResetPassword(credentials)
-      .then((response) => {
-        dispatch({
-          type: types.AUTH_RESET_PASSWORD_SUCCESS,
-          email: response.email,
-        });
-      })
-      .catch((error) => {
-        dispatch({ type: types.AUTH_RESET_PASSWORD_FAILURE });
-        throw error;
-      });
-  };
+export {
+  setUserToken,
+  setAccessToken,
+  setCurrentUser,
+  logoutUser
 }

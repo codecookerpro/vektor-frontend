@@ -3,9 +3,9 @@ import { useSelector } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 
 function AuthGuard({ children }) {
-  const auth = useSelector((state) => state.authReducer);
+  const { accessToken } = useSelector((state) => state.auth);
 
-  if (!auth.user) {
+  if (!accessToken) {
     return <Redirect to='/auth/sign-in' />;
   }
 

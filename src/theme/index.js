@@ -16,6 +16,7 @@ const theme = createMuiTheme(
     typography: typography,
     shadows: shadows,
     palette: variant.palette,
+    custom: variant.custom,
   },
   {
     name: variant.name,

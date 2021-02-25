@@ -1,6 +1,9 @@
-import React, { memo } from "react";
-import styled, { createGlobalStyle } from "styled-components/macro";
-import { CssBaseline } from "@material-ui/core";
+import React, { memo } from 'react';
+import { createGlobalStyle } from 'styled-components/macro';
+import { CssBaseline } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles'
+
+import { AUTH_BACKGROUND_IMAGE_PATH } from 'utils/constants/image-paths';
 
 const GlobalStyle = createGlobalStyle`
   html,
@@ -13,22 +16,41 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 
-const Root = styled.div`
-  max-width: 520px;
-  margin: 0 auto;
-  justify-content: center;
-  align-items: center;
-  display: flex;
-  min-height: 100%;
-`;
+const useStyles = makeStyles((theme) => ({
+  root: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    minHeight: '100vh',
+    backgroundImage: `url(${AUTH_BACKGROUND_IMAGE_PATH})`,
+    backgroundRepeat: 'no-repeat',
+    backgroundSize: 'contain',
+    backgroundPosition: 'center',
+    backgroundColor: theme.palette.background.default,
+    backgroundPositionY: 'top'
+  },
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    width: '100%',
+    maxWidth: 520,
+  }
+}));
 
 const Auth = ({ children }) => {
+  const classes = useStyles();
+
   return (
-    <Root>
+    <>
       <CssBaseline />
       <GlobalStyle />
-      {children}
-    </Root>
+      <div className={classes.root}>
+        <div className={classes.container}>
+          {children}
+        </div>
+      </div>
+    </>
   );
 };
 

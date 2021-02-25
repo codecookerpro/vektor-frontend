@@ -119,6 +119,7 @@ const Sidebar = ({ location, ...rest }) => {
                           unmountOnExit
                         >
                           {category.children.map((route, index) => (
+                            !route?.isNotSlide &&
                             <SidebarLink
                               key={index}
                               name={route.name}

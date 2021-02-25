@@ -1,23 +1,22 @@
-import * as types from "redux/types";
+import * as TYPES from 'redux/types';
 
-export default function reducer(state = {}, actions) {
-  switch (actions.type) {
-    case types.AUTH_SIGN_IN_SUCCESS:
+const initialState = {
+  accessToken: '',
+  currentUser: {}
+};
+
+export default function authReducer(state = initialState, action) {
+  switch (action.type) {
+    case TYPES.SET_ACCESS_TOKEN:
       return {
         ...state,
-        user: {
-          id: actions.id,
-          email: actions.email,
-          name: actions.name,
-        },
+        accessToken: action.payload
       };
-
-    case types.AUTH_SIGN_OUT:
+    case TYPES.SET_CURRENT_USER:
       return {
         ...state,
-        user: undefined,
+        currentUser: action.payload
       };
-
     default:
       return state;
   }

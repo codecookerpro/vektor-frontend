@@ -1,30 +1,39 @@
 import { lazy } from 'react';
 import { Activity } from 'react-feather';
 
-const Default = lazy(() => import(/* webpackChunkName: 'Default' */ 'pages/dashboards/Default'));
-const Analytics = lazy(() => import(/* webpackChunkName: 'Analytics' */ 'pages/dashboards/Analytics'));
-const SaaS = lazy(() => import(/* webpackChunkName: 'SaaS' */ 'pages/dashboards/SaaS'));
+const WorkflowTemplateList = lazy(() => import(/* webpackChunkName: 'WorkflowTemplateList' */ 'pages/WorkflowTemplates/WorkflowTemplateList'));
+const AddEditWorkflowTemplate = lazy(() => import(/* webpackChunkName: 'AddEditWorkflowTemplate' */ 'pages/WorkflowTemplates/AddEditWorkflowTemplate'));
+const PhaseTemplateList = lazy(() => import(/* webpackChunkName: 'PhaseTemplateList' */ 'pages/PhaseTemplates/PhaseTemplateList'));
+const AddEditPhaseTemplate = lazy(() => import(/* webpackChunkName: 'AddEditPhaseTemplate' */ 'pages/PhaseTemplates/AddEditPhaseTemplate'));
+import LINKS from 'utils/constants/links';
 
 const projectTemplateRoutes = Object.freeze({
-  id: 'Project Template',
-  path: '/dashboard',
+  id: LINKS.PROJECT_TEMPLATE.TITLE,
+  path: LINKS.PROJECT_TEMPLATE.HREF,
   icon: <Activity />,
   containsHome: true,
   children: [
     {
-      path: '/dashboard/default',
-      name: 'Default',
-      component: Default,
+      path: LINKS.WORKFLOW_TEMPLATES.HREF,
+      name: LINKS.WORKFLOW_TEMPLATES.TITLE,
+      component: WorkflowTemplateList,
     },
     {
-      path: '/dashboard/analytics',
-      name: 'Analytics',
-      component: Analytics,
+      path: LINKS.ADD_WORKFLOW_TEMPLATE.HREF,
+      name: LINKS.ADD_WORKFLOW_TEMPLATE.TITLE,
+      component: AddEditWorkflowTemplate,
+      isNotSlide: true,
     },
     {
-      path: '/dashboard/saas',
-      name: 'SaaS',
-      component: SaaS,
+      path: LINKS.PHASE_TEMPLATES.HREF,
+      name: LINKS.PHASE_TEMPLATES.TITLE,
+      component: PhaseTemplateList,
+    },
+    {
+      path: LINKS.ADD_PHASE_TEMPLATE.HREF,
+      name: LINKS.ADD_PHASE_TEMPLATE.TITLE,
+      component: AddEditPhaseTemplate,
+      isNotSlide: true,
     },
   ],
   component: null,

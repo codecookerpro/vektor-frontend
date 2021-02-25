@@ -1,11 +1,9 @@
 import React from "react";
-import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components/macro";
 import { Helmet } from "react-helmet";
 import * as Yup from "yup";
 import { Formik } from "formik";
-import { signUp } from "redux/actions/authActions";
 
 import {
   Button,
@@ -29,7 +27,6 @@ const Wrapper = styled(Paper)`
 `;
 
 function SignUp() {
-  const dispatch = useDispatch();
   const history = useHistory();
 
   return (
@@ -72,14 +69,6 @@ function SignUp() {
         })}
         onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
           try {
-            await dispatch(
-              signUp({
-                name: "test",
-                company: "test",
-                email: values.email,
-                password: values.password,
-              })
-            );
             history.push("/auth/sign-in");
           } catch (error) {
             const message = error.message || "Something went wrong";

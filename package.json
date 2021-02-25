@@ -27,7 +27,6 @@
     "@material-ui/styles": "4.11.2",
     "@material-ui/system": "4.11.2",
     "axios": "0.21.1",
-    "axios-mock-adapter": "1.19.0",
     "chart.js": "2.9.4",
     "clsx": "^1.1.1",
     "css-vendor": "2.0.8",

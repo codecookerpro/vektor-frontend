@@ -1,30 +1,37 @@
 import { lazy } from 'react';
 import { User } from 'react-feather';
 
-const Default = lazy(() => import(/* webpackChunkName: 'Default' */ 'pages/dashboards/Default'));
-const Analytics = lazy(() => import(/* webpackChunkName: 'Analytics' */ 'pages/dashboards/Analytics'));
-const SaaS = lazy(() => import(/* webpackChunkName: 'SaaS' */ 'pages/dashboards/SaaS'));
+const UserList = lazy(() => import(/* webpackChunkName: 'UserList' */ 'pages/Users/UserList'));
+const OrganizationList = lazy(() => import(/* webpackChunkName: 'OrganizationList' */ 'pages/Organizations/OrganizationList'));
+const GroupList = lazy(() => import(/* webpackChunkName: 'GroupList' */ 'pages/Groups/GroupList'));
+const AuditTrailLogList = lazy(() => import(/* webpackChunkName: 'AuditTrailLogList' */ 'pages/AuditTrailLogs/AuditTrailLogList'));
+import LINKS from 'utils/constants/links';
 
 const userManagementRoutes =  Object.freeze({
-  id: 'User Management',
-  path: '/dashboard',
+  id: LINKS.USER_MANAGEMENT.TITLE,
+  path: LINKS.USER_MANAGEMENT.HREF,
   icon: <User />,
   containsHome: true,
   children: [
     {
-      path: '/dashboard/default',
-      name: 'Default',
-      component: Default,
+      path: LINKS.USERS.HREF,
+      name: LINKS.USERS.TITLE,
+      component: UserList,
     },
     {
-      path: '/dashboard/analytics',
-      name: 'Analytics',
-      component: Analytics,
+      path: LINKS.ORGANIZATIONS.HREF,
+      name: LINKS.ORGANIZATIONS.TITLE,
+      component: OrganizationList,
     },
     {
-      path: '/dashboard/saas',
-      name: 'SaaS',
-      component: SaaS,
+      path: LINKS.GROUPS.HREF,
+      name: LINKS.GROUPS.TITLE,
+      component: GroupList,
+    },
+    {
+      path: LINKS.AUDIT_TRAIL_LOGS.HREF,
+      name: LINKS.AUDIT_TRAIL_LOGS.TITLE,
+      component: AuditTrailLogList,
     },
   ],
   component: null,

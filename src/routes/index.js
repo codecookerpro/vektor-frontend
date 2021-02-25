@@ -6,14 +6,16 @@ import DashboardLayout from 'layouts/Dashboard';
 import AuthLayout from 'layouts/Auth';
 import Page404 from 'pages/auth/Page404';
 import AuthGuard from 'utils/hocs/AuthGuard';
+import GuestGuard from 'utils/hocs/GuestGuard';
 import {
   dashboardLayoutRoutes,
   authLayoutRoutes
 } from 'utils/constants/routes';
+import LINKS from 'utils/constants/links'
 
 const childRoutes = (Layout, routes, isAuthGuard) =>
   routes.map(({ component: Component, children, path }, index) => {
-    const Guard = isAuthGuard ? AuthGuard : React.Fragment;
+    const Guard = isAuthGuard ? AuthGuard : GuestGuard;
 
     return children ? (
       children.map((element, index) => (
@@ -52,7 +54,7 @@ const Routes = () => (
       <Switch>
         {childRoutes(DashboardLayout, dashboardLayoutRoutes, true)}
         {childRoutes(AuthLayout, authLayoutRoutes, false)}
-        <Redirect to='/auth/sign-in' />
+        <Redirect to={LINKS.OVERVIEW.HREF} />
         <Route
           render={() => (
             <AuthLayout>

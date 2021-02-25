@@ -1,117 +1,53 @@
-import React from "react";
-import styled, { withTheme } from "styled-components/macro";
+import React, { memo } from 'react';
+import { Grid } from '@material-ui/core';
 
-import { Helmet } from "react-helmet";
-
-import {
-  Grid,
-  Divider as MuiDivider,
-  Typography as MuiTypography,
-} from "@material-ui/core";
-
-import { green, red } from "@material-ui/core/colors";
-
-import { spacing } from "@material-ui/system";
-
-import Actions from "./Actions";
-import BarChart from "./BarChart";
-import DoughnutChart from "./DoughnutChart";
-import LanguagesTable from "./LanguagesTable";
-import Stats from "./Stats";
-import TrafficTable from "./TrafficTable";
-
-const Divider = styled(MuiDivider)(spacing);
-
-const Typography = styled(MuiTypography)(spacing);
+import OverviewHeader from './OverviewHeader'
+import OverviewDashboardCard from './OverviewDashboardCard'
+import OverviewWorkflowTemplateCard from './OverviewWorkflowTemplateCard'
+import OverviewPhaseTemplateCard from './OverviewPhaseTemplateCard'
+import OverviewLatestProjectCard from './OverviewLatestProjectCard'
+import OverviewUserCard from './OverviewUserCard'
+import OverviewRecentActions from './OverviewRecentActions'
 
 function Analytics() {
   return (
-    <React.Fragment>
-      <Helmet title="Analytics Dashboard" />
-      <Grid justify="space-between" container spacing={6}>
-        <Grid item>
-          <Typography variant="h3" gutterBottom>
-            Analytics Dashboard
-          </Typography>
-          <Typography variant="subtitle1">
-            {"Welcome back, Lucy! We've missed you. "}
-            <span role="img" aria-label="Waving Hand Sign">
-              👋
-            </span>
-          </Typography>
-        </Grid>
-
-        <Grid item>
-          <Actions />
-        </Grid>
-      </Grid>
-
-      <Divider my={6} />
+    <>
+      <OverviewHeader />
 
       <Grid container spacing={6}>
-        <Grid item xs={12} lg={5}>
+        <Grid item xs={12} md={6} lg={3}>
           <Grid container spacing={6}>
-            <Grid item xs={12} sm={12} md={6}>
-              <Stats
-                title="Visitors"
-                amount="24.532"
-                chip="Today"
-                percentageText="+14%"
-                percentagecolor={green[500]}
-              />
+            <Grid item xs={12}>
+              <OverviewDashboardCard />
             </Grid>
-            <Grid item xs={12} sm={12} md={6}>
-              <Stats
-                title="Activity"
-                amount="63.200"
-                chip="Annual"
-                percentageText="-12%"
-                percentagecolor={red[500]}
-              />
-            </Grid>
-            <Grid item xs={12} sm={12} md={6}>
-              <Stats
-                title="Real-Time"
-                amount="1.320"
-                chip="Monthly"
-                percentageText="-18%"
-                percentagecolor={red[500]}
-              />
-            </Grid>
-            <Grid item xs={12} sm={12} md={6}>
-              <Stats
-                title="Bounce"
-                amount="12.364"
-                chip="Yearly"
-                percentageText="+27%"
-                percentagecolor={green[500]}
-              />
+            <Grid item xs={12}>
+              <OverviewLatestProjectCard />
             </Grid>
           </Grid>
         </Grid>
-        <Grid item xs={12} lg={7}>
-          <BarChart />
+        <Grid item xs={12} md={6} lg={5}>
+          <Grid container spacing={6}>
+            <Grid item xs={12}>
+              <OverviewRecentActions />
+            </Grid>
+          </Grid>
+        </Grid>
+        <Grid item xs={12} md={6} lg={4}>
+          <Grid container spacing={6}>
+            <Grid item xs={12}>
+              <OverviewWorkflowTemplateCard />
+            </Grid>
+            <Grid item xs={12}>
+              <OverviewPhaseTemplateCard />
+            </Grid>
+            <Grid item xs={12}>
+              <OverviewUserCard />
+            </Grid>
+          </Grid>
         </Grid>
       </Grid>
-
-      <Grid container spacing={6}>
-        <Grid item xs={12} lg={8}>
-          <DoughnutChart />
-        </Grid>
-        <Grid item xs={12} lg={4}>
-          <DoughnutChart />
-        </Grid>
-      </Grid>
-      <Grid container spacing={6}>
-        <Grid item xs={12} lg={4}>
-          <LanguagesTable />
-        </Grid>
-        <Grid item xs={12} lg={8}>
-          <TrafficTable />
-        </Grid>
-      </Grid>
-    </React.Fragment>
+    </>
   );
 }
 
-export default withTheme(Analytics);
+export default memo(Analytics);
