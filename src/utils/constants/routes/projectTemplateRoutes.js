@@ -2,7 +2,9 @@ import { lazy } from 'react';
 import { Activity } from 'react-feather';
 
 const WorkflowTemplateList = lazy(() => import(/* webpackChunkName: 'WorkflowTemplateList' */ 'pages/WorkflowTemplates/WorkflowTemplateList'));
+const AddEditWorkflowTemplate = lazy(() => import(/* webpackChunkName: 'AddEditWorkflowTemplate' */ 'pages/WorkflowTemplates/AddEditWorkflowTemplate'));
 const PhaseTemplateList = lazy(() => import(/* webpackChunkName: 'PhaseTemplateList' */ 'pages/PhaseTemplates/PhaseTemplateList'));
+const AddEditPhaseTemplate = lazy(() => import(/* webpackChunkName: 'AddEditPhaseTemplate' */ 'pages/PhaseTemplates/AddEditPhaseTemplate'));
 import LINKS from 'utils/constants/links';
 
 const projectTemplateRoutes = Object.freeze({
@@ -17,9 +19,21 @@ const projectTemplateRoutes = Object.freeze({
       component: WorkflowTemplateList,
     },
     {
+      path: LINKS.ADD_WORKFLOW_TEMPLATE.HREF,
+      name: LINKS.ADD_WORKFLOW_TEMPLATE.TITLE,
+      component: AddEditWorkflowTemplate,
+      isNotSlide: true,
+    },
+    {
       path: LINKS.PHASE_TEMPLATES.HREF,
       name: LINKS.PHASE_TEMPLATES.TITLE,
       component: PhaseTemplateList,
+    },
+    {
+      path: LINKS.ADD_PHASE_TEMPLATE.HREF,
+      name: LINKS.ADD_PHASE_TEMPLATE.TITLE,
+      component: AddEditPhaseTemplate,
+      isNotSlide: true,
     },
   ],
   component: null,

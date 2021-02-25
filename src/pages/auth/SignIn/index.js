@@ -1,7 +1,6 @@
 import React, { memo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { useForm, Controller } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -9,7 +8,6 @@ import * as yup from 'yup';
 import {
   Checkbox,
   FormControlLabel,
-  Button,
   Paper,
   TextField,
   Typography,
@@ -17,8 +15,10 @@ import {
 import { Alert } from '@material-ui/lab';
 import { makeStyles } from '@material-ui/core/styles'
 
-import Logo from 'components/Logo';
 import { setUserToken } from 'redux/actions/authActions';
+import Logo from 'components/Logo';
+import ContainedButton from 'components/UI/Buttons/ContainedButton'
+import LinkButton from 'components/UI/Buttons/LinkButton'
 import {
   EMAIL_VALID,
   PASSWORD_VALID
@@ -44,9 +44,6 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down('xs')]: {
       padding: theme.spacing(6)
     }
-  },
-  submit: {
-    backgroundColor: theme.custom.palette.lightGreen
   },
   forget: {
     color: theme.custom.palette.lightGreen
@@ -158,24 +155,19 @@ function SignIn() {
             label='Remember me'
             className={classes.input}
           />
-          <Button
+          <ContainedButton
             fullWidth
             type='submit'
-            variant='contained'
-            color='primary'
-            className={classes.submit}
           >
             Sign in
-          </Button>
-          <Button
+          </ContainedButton>
+          <LinkButton
             fullWidth
-            component={Link}
             to='/auth/reset-password'
-            color='primary'
             className={classes.forget}
           >
             Forgot password
-          </Button>
+          </LinkButton>
         </form>
       </div>
     </Paper>

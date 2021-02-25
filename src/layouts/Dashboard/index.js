@@ -96,7 +96,7 @@ const Dashboard = ({ children, routes, width }) => {
       </Drawer>
       <AppContent>
         <Header onDrawerToggle={handleDrawerToggle} />
-        <MainContent p={isWidthUp('lg', width) ? 12 : 5}>
+        <MainContent p={isWidthUp('lg', width) ? 6 : 4}>
           {children}
         </MainContent>
         <Footer />

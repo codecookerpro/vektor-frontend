@@ -36,6 +36,10 @@ const LINKS = Object.freeze({
     TITLE: 'Dashboard',
     HREF: '/project-management/dashboard'
   },
+  DASHBOARD_DETAIL: {
+    TITLE: 'Dashboard Detail',
+    HREF: '/project-management/dashboard/:id'
+  },
   PROJECTS: {
     TITLE: 'Projects',
     HREF: '/project-management/projects'
