@@ -4,7 +4,8 @@ import { Sliders } from 'react-feather';
 const DashboardList = lazy(() => import(/* webpackChunkName: 'DashboardList' */ 'pages/Dashboard/DashboardList'));
 const DashboardDetail = lazy(() => import(/* webpackChunkName: 'DashboardDetail' */ 'pages/Dashboard/DashboardDetail'));
 const ProjectList = lazy(() => import(/* webpackChunkName: 'ProjectList' */ 'pages/Projects/ProjectList'));
-const AddEditProject = lazy(() => import(/* webpackChunkName: 'AddEditProject' */ 'pages/Projects/AddEditProject'));
+const AddProject = lazy(() => import(/* webpackChunkName: 'AddProject' */ 'pages/Projects/AddProject'));
+const EditProject = lazy(() => import(/* webpackChunkName: 'EditProject' */ 'pages/Projects/EditProject'));
 const SystemList = lazy(() => import(/* webpackChunkName: 'SystemList' */ 'pages/Systems/SystemList'));
 const ReportList = lazy(() => import(/* webpackChunkName: 'ReportList' */ 'pages/Reports/ReportList'));
 import LINKS from 'utils/constants/links';
@@ -34,7 +35,13 @@ const projectManagementRoutes = Object.freeze({
     {
       path: LINKS.ADD_PROJECT.HREF,
       name: LINKS.ADD_PROJECT.TITLE,
-      component: AddEditProject,
+      component: AddProject,
+      isNotSlide: true,
+    },
+    {
+      path: LINKS.EDIT_PROJECT.HREF,
+      name: LINKS.EDIT_PROJECT.TITLE,
+      component: EditProject,
       isNotSlide: true,
     },
     {

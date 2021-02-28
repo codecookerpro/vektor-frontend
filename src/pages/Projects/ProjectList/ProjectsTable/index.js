@@ -50,7 +50,7 @@ const ProjectsTable = () => {
                   component='th'
                   scope='row'
                 >
-                  <LinkButton to={LINKS.ADD_PROJECT.HREF}>
+                  <LinkButton to={LINKS.EDIT_PROJECT.HREF.replace(':id', row.id)}>
                     {row.name}
                   </LinkButton>
                 </TableCell>
@@ -63,8 +63,8 @@ const ProjectsTable = () => {
                 <TableCell>
                   {
                     row.finished
-                    ? <VektorChip label='Finished' color='success' />
-                    : <VektorChip label='Not Finished' color='error' />
+                      ? <VektorChip label='Finished' color='success' />
+                      : <VektorChip label='Not Finished' color='error' />
                   }
                 </TableCell>
                 <TableCell>

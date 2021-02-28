@@ -10,14 +10,14 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-const AddEditProject = () => {
+const AddProject = () => {
   const classes = useStyles();
 
   return (
     <main className={classes.root}>
-      Add Edit Project Page
+      Add Project Page
     </main>
   )
 }
 
-export default memo(AddEditProject)
+export default memo(AddProject)

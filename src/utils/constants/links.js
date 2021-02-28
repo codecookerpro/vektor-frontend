@@ -48,6 +48,10 @@ const LINKS = Object.freeze({
     TITLE: 'Add Project',
     HREF: '/project-management/projects/add'
   },
+  EDIT_PROJECT: {
+    TITLE: 'Edit Project',
+    HREF: '/project-management/projects/edit/:id'
+  },
   SYSTEMS: {
     TITLE: 'Systems',
     HREF: '/project-management/systems'

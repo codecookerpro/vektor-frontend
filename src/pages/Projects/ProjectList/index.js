@@ -1,5 +1,6 @@
 
-import React, { memo } from 'react'
+import React, { memo, useCallback } from 'react'
+import { useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles'
 import { Plus } from 'react-feather';
 
@@ -22,6 +23,11 @@ const NAV_LINKS = [
 
 const ProjectList = () => {
   const classes = useStyles();
+  const history = useHistory();
+
+  const addProjectHandler = useCallback(() => {
+    history.push(LINKS.ADD_PROJECT.HREF)
+  }, [history]);
 
   return (
     <main className={classes.root}>
@@ -29,7 +35,7 @@ const ProjectList = () => {
         title={LINKS.PROJECTS.TITLE}
         links={NAV_LINKS}
         leftElement={
-          <ContainedButton>
+          <ContainedButton onClick={addProjectHandler}>
             <Plus /> Add Project
           </ContainedButton>
         }
