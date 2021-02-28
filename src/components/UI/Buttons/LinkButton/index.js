@@ -6,7 +6,10 @@ import { makeStyles } from '@material-ui/core/styles'
 import clsx from 'clsx';
 
 const useStyles = makeStyles(() => ({
-  root: {}
+  root: {
+    padding: 0,
+    minWidth: 'unset'
+  }
 }));
 
 const LinkButton = ({
