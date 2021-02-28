@@ -71,8 +71,9 @@ const variant = {
       white: '#ffffff',
       greyWhite: '#f7f9fc',
       grey: '#e0e0e0',
-      black: '#000000',
       lightGreen: '#a6b884',
+      red: '#d32f2f',
+      black: '#000000',
       border: '#f1f0f2'
     },
   }

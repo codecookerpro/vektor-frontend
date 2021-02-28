@@ -6,6 +6,7 @@ import LinkButton from 'components/UI/Buttons/LinkButton'
 
 const useStyles = makeStyles((theme) => ({
   mainLink: {
+    padding: theme.spacing(1.5, 4),
     color: theme.custom.palette.black,
     backgroundColor: theme.custom.palette.grey
   },

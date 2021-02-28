@@ -4,10 +4,11 @@ import {
   Box,
   Card,
   CardContent as MuiCardContent,
-  Chip as MuiChip,
   Typography as MuiTypography,
 } from '@material-ui/core';
 import { spacing } from '@material-ui/system';
+
+import VektorChip from 'components/VektorChip'
 
 const Typography = styled(MuiTypography)(spacing);
 
@@ -19,22 +20,12 @@ const CardContent = styled(MuiCardContent)`
   }
 `;
 
-const Chip = styled(MuiChip)`
+const Chip = styled(VektorChip)`
   position: absolute;
   top: 16px;
   right: 16px;
-  height: 20px;
-  padding: 4px 0;
   font-size: 85%;
-  border-radius: 10px;
-  background-color: ${(props) => props.theme.custom.palette.lightGreen};
-  color: ${(props) => props.theme.palette.common.white};
   margin-bottom: ${(props) => props.theme.spacing(4)}px;
-
-  span {
-    padding-left: ${(props) => props.theme.spacing(2)}px;
-    padding-right: ${(props) => props.theme.spacing(2)}px;
-  }
 `;
 
 const OverviewProjectCard = ({
