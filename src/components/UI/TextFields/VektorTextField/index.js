@@ -1,7 +1,6 @@
 import React, { memo } from 'react';
 import {
-  MenuItem,
-  Select,
+  TextField,
   Typography
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles'
@@ -11,7 +10,7 @@ const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
     flexDirection: 'column',
-    minWidth: 148
+    minWidth: 148,
   },
   label: {
     fontSize: 12,
@@ -23,19 +22,16 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const FilterSelect = React.forwardRef(({
+const VektorTextField = React.forwardRef(({
   label,
-  placeholder,
-  items,
   error,
-  fullWidth = false,
   className,
   ...rest
 }, ref) => {
   const classes = useStyles();
 
   return (
-    <div className={clsx(classes.root, className, { [classes.fullWidth]: fullWidth })}>
+    <div m={2} className={clsx(classes.root, className)}>
       {
         !!label &&
         <Typography
@@ -45,33 +41,12 @@ const FilterSelect = React.forwardRef(({
           {label}
         </Typography>
       }
-      <Select
+      <TextField
         ref={ref}
-        labelId='demo-simple-select-placeholder-label-label-1'
-        id='demo-simple-select-placeholder-label'
-        displayEmpty
+        id='standard-helperText'
         error={!!error}
         {...rest}
-      >
-        {
-          placeholder &&
-          <MenuItem value='' disabled>
-            {placeholder}
-          </MenuItem>
-        }
-
-        {
-          items.map((item, index) => (
-            <MenuItem
-              key={index}
-              value={item.VALUE}
-            >
-              {item.LABEL}
-            </MenuItem>
-          ))
-        }
-      </Select>
-
+      />
       {
         !!error &&
         <Typography
@@ -86,4 +61,4 @@ const FilterSelect = React.forwardRef(({
   );
 })
 
-export default memo(FilterSelect);
+export default memo(VektorTextField);

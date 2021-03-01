@@ -59,7 +59,6 @@ const PageHeader = ({
         {leftElement}
       </div>
 
-
       <Divider my={6} />
     </React.Fragment>
   );
