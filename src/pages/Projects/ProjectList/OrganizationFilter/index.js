@@ -8,6 +8,7 @@ import {
 import { makeStyles } from '@material-ui/core/styles'
 
 import FilterSelect from 'components/UI/Selects/FilterSelect'
+import ORGANIZATIONS from 'utils/temp/organizations'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -21,16 +22,6 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const organizations = [
-  {
-    LABEL: 'Falcon',
-    VALUE: 'Falcon'
-  },
-  {
-    LABEL: 'Voxsync',
-    VALUE: 'Voxsync'
-  }
-]
 const OrganizationFilter = () => {
   const classes = useStyles();
 
@@ -44,7 +35,7 @@ const OrganizationFilter = () => {
         <FilterSelect
           label='By organization'
           placeholder='All organizations'
-          items={organizations}
+          items={ORGANIZATIONS}
           value=''
         />
       </CardContent>

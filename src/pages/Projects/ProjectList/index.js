@@ -1,7 +1,6 @@
 
 import React, { memo, useCallback } from 'react'
 import { useHistory } from 'react-router-dom';
-import { makeStyles } from '@material-ui/core/styles'
 import { Plus } from 'react-feather';
 
 import ContainedButton from 'components/UI/Buttons/ContainedButton'
@@ -10,19 +9,11 @@ import OrganizationFilter from './OrganizationFilter';
 import ProjectsTable from './ProjectsTable';
 import LINKS from 'utils/constants/links';
 
-const useStyles = makeStyles(() => ({
-  root: {
-    display: 'flex',
-    flexDirection: 'column',
-  }
-}));
-
 const NAV_LINKS = [
   LINKS.PROJECT_MANAGEMENT
 ]
 
 const ProjectList = () => {
-  const classes = useStyles();
   const history = useHistory();
 
   const addProjectHandler = useCallback(() => {
@@ -30,7 +21,7 @@ const ProjectList = () => {
   }, [history]);
 
   return (
-    <main className={classes.root}>
+    <>
       <PageHeader
         title={LINKS.PROJECTS.TITLE}
         links={NAV_LINKS}
@@ -43,7 +34,7 @@ const ProjectList = () => {
       <OrganizationFilter />
 
       <ProjectsTable />
-    </main>
+    </>
   )
 }
 

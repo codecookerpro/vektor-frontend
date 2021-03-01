@@ -1,22 +1,38 @@
 
-import React, { memo } from 'react'
-import { makeStyles } from '@material-ui/core/styles'
+import React, { memo, useState, useMemo } from 'react'
 
-const useStyles = makeStyles(() => ({
-  root: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center'
-  }
-}));
+import PageHeader from 'parts/PageHeader';
+import UserTransfer from 'parts/UserTransfer';
+import AddProjectForm from './AddProjectForm'
+import LINKS from 'utils/constants/links';
+import users from 'utils/temp/users';
+
+const NAV_LINKS = [
+  LINKS.PROJECT_MANAGEMENT,
+  LINKS.PROJECTS
+]
 
 const AddProject = () => {
-  const classes = useStyles();
+
+  const [selectedOrganization, setSelectedOrganization] = useState('');
+
+  const userList = useMemo(() => users.filter(user => user?.organization.id === selectedOrganization), [selectedOrganization]);
 
   return (
-    <main className={classes.root}>
-      Add Project Page
-    </main>
+    <>
+      <PageHeader
+        title={LINKS.ADD_PROJECT.TITLE}
+        links={NAV_LINKS}
+      />
+
+      <AddProjectForm
+        setSelectedOrganization={setSelectedOrganization}
+      />
+
+      <UserTransfer
+        users={userList}
+      />
+    </>
   )
 }
 
