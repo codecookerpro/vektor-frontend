@@ -2,8 +2,7 @@ const overrides = {
   MuiCard: {
     root: {
       borderRadius: "6px",
-      boxShadow:
-        "rgba(50, 50, 93, 0.025) 0px 2px 5px -1px, rgba(0, 0, 0, 0.05) 0px 1px 3px -1px",
+      boxShadow: "0 0 14px 0 rgba(53, 64, 82, 0.2)",
     },
   },
   MuiCardHeader: {

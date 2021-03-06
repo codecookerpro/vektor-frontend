@@ -38,7 +38,12 @@ const schema = yup.object().shape({
   template: SELECT_VALID,
 });
 
-const ProjectForm = ({ users = [], project = {}, setSelectedOrganization }) => {
+const ProjectForm = ({
+  users = [],
+  project = {},
+  setSelectedOrganization,
+  className,
+}) => {
   const classes = useStyles();
   const history = useHistory();
 
@@ -102,7 +107,8 @@ const ProjectForm = ({ users = [], project = {}, setSelectedOrganization }) => {
           {project?.name}
         </Typography>
       )}
-      <form noValidate className={classes.form}>
+
+      <form noValidate className={className}>
         <Grid container spacing={6}>
           <Grid item xs={12} sm={6}>
             <Controller
