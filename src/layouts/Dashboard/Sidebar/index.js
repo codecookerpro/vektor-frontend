@@ -1,20 +1,20 @@
-import React, { useState, memo } from 'react';
-import styled from 'styled-components/macro';
-import { NavLink, withRouter } from 'react-router-dom';
-import PerfectScrollbar from 'react-perfect-scrollbar';
+import React, { useState, memo } from "react";
+import styled from "styled-components/macro";
+import { NavLink, withRouter } from "react-router-dom";
+import PerfectScrollbar from "react-perfect-scrollbar";
 import {
   Collapse,
   Drawer as MuiDrawer,
   List as MuiList,
   Typography,
-} from '@material-ui/core';
+} from "@material-ui/core";
 
-import SidebarHeader from './SidebarHeader';
-import SidebarLink from './SidebarLink';
-import SidebarCategory from './SidebarCategory';
-import SidebarFooter from './SidebarFooter'
-import { sidebarRoutes as routes } from 'utils/constants/routes';
-import 'vendor/perfect-scrollbar.css';
+import SidebarHeader from "./SidebarHeader";
+import SidebarLink from "./SidebarLink";
+import SidebarCategory from "./SidebarCategory";
+import SidebarFooter from "./SidebarFooter";
+import { sidebarRoutes as routes } from "utils/constants/routes";
+import "vendor/perfect-scrollbar.css";
 
 const Drawer = styled(MuiDrawer)`
   border-right: 0;
@@ -57,7 +57,7 @@ const Sidebar = ({ location, ...rest }) => {
     routes.forEach((route, index) => {
       const isActive = pathName.indexOf(route.path) === 0;
       const isOpen = route.open;
-      const isHome = route.containsHome && pathName === '/';
+      const isHome = route.containsHome && pathName === "/";
 
       _routes = Object.assign({}, _routes, {
         [index]: isActive || isOpen || isHome,
@@ -86,40 +86,36 @@ const Sidebar = ({ location, ...rest }) => {
   };
 
   return (
-    <Drawer variant='permanent' {...rest}>
+    <Drawer variant="permanent" {...rest}>
       <SidebarHeader />
       <Scrollbar>
         <List disablePadding>
           <Items>
             {routes.map((category, index) => (
               <React.Fragment key={index}>
-                {
-                  category.header &&
-                  <SidebarSection>
-                    {category.header}
-                  </SidebarSection>
-                }
+                {category.header && (
+                  <SidebarSection>{category.header}</SidebarSection>
+                )}
 
-                {
-                  category.children && category.icon
-                    ? (
-                      <React.Fragment key={index}>
-                        <SidebarCategory
-                          isOpen={!openRoutes[index]}
-                          isCollapsable={true}
-                          name={category.id}
-                          icon={category.icon}
-                          button={true}
-                          onClick={() => toggle(index)}
-                        />
+                {category.children && category.icon ? (
+                  <React.Fragment key={index}>
+                    <SidebarCategory
+                      isOpen={!openRoutes[index]}
+                      isCollapsable={true}
+                      name={category.id}
+                      icon={category.icon}
+                      button={true}
+                      onClick={() => toggle(index)}
+                    />
 
-                        <Collapse
-                          in={openRoutes[index]}
-                          timeout='auto'
-                          unmountOnExit
-                        >
-                          {category.children.map((route, index) => (
-                            !route?.isNotSlide &&
+                    <Collapse
+                      in={openRoutes[index]}
+                      timeout="auto"
+                      unmountOnExit
+                    >
+                      {category.children.map(
+                        (route, index) =>
+                          !route?.isNotSlide && (
                             <SidebarLink
                               key={index}
                               name={route.name}
@@ -127,23 +123,23 @@ const Sidebar = ({ location, ...rest }) => {
                               icon={route.icon}
                               badge={route.badge}
                             />
-                          ))}
-                        </Collapse>
-                      </React.Fragment>
-                    ) : category.icon ? (
-                      <SidebarCategory
-                        isCollapsable={false}
-                        name={category.id}
-                        to={category.path}
-                        activeClassName='active'
-                        component={NavLink}
-                        icon={category.icon}
-                        exact
-                        button
-                        badge={category.badge}
-                      />
-                    ) : null
-                }
+                          )
+                      )}
+                    </Collapse>
+                  </React.Fragment>
+                ) : category.icon ? (
+                  <SidebarCategory
+                    isCollapsable={false}
+                    name={category.id}
+                    to={category.path}
+                    activeClassName="active"
+                    component={NavLink}
+                    icon={category.icon}
+                    exact
+                    button
+                    badge={category.badge}
+                  />
+                ) : null}
               </React.Fragment>
             ))}
           </Items>
