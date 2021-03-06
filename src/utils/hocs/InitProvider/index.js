@@ -1,11 +1,7 @@
+import React, { memo, useEffect } from "react";
+import { useDispatch } from "react-redux";
 
-import React, { memo, useEffect } from 'react'
-import { useDispatch } from 'react-redux'
-
-import {
-  setAccessToken,
-  setCurrentUser
-} from 'redux/actions/authActions';
+import { setAccessToken, setCurrentUser } from "redux/actions/authActions";
 
 const InitProvider = () => {
   const dispatch = useDispatch();
@@ -15,15 +11,15 @@ const InitProvider = () => {
     const currentUser = localStorage.currentUser;
 
     if (!!accessToken) {
-      dispatch(setAccessToken(accessToken))
+      dispatch(setAccessToken(accessToken));
     }
 
     if (!!currentUser) {
-      dispatch(setCurrentUser(JSON.parse(currentUser)))
+      dispatch(setCurrentUser(JSON.parse(currentUser)));
     }
-  }, [dispatch])
+  }, [dispatch]);
 
-  return <div />
+  return <div />;
 };
 
 export default memo(InitProvider);

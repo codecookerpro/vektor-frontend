@@ -1,17 +1,17 @@
-import React, { memo, useState } from 'react';
-import styled, { createGlobalStyle } from 'styled-components/macro';
-import { spacing } from '@material-ui/system';
+import React, { memo, useState } from "react";
+import styled, { createGlobalStyle } from "styled-components/macro";
+import { spacing } from "@material-ui/system";
 import {
   Hidden,
   CssBaseline,
   Paper as MuiPaper,
   withWidth,
-} from '@material-ui/core';
-import { isWidthUp } from '@material-ui/core/withWidth';
+} from "@material-ui/core";
+import { isWidthUp } from "@material-ui/core/withWidth";
 
-import Header from './Header';
-import Footer from './Footer';
-import Sidebar from './Sidebar';
+import Header from "./Header";
+import Footer from "./Footer";
+import Sidebar from "./Sidebar";
 
 const drawerWidth = 268;
 
@@ -39,7 +39,7 @@ const Root = styled.div`
 `;
 
 const Drawer = styled.div`
-  ${(props) => props.theme.breakpoints.up('md')} {
+  ${(props) => props.theme.breakpoints.up("md")} {
     width: ${drawerWidth}px;
     flex-shrink: 0;
   }
@@ -60,10 +60,6 @@ const MainContent = styled(Paper)`
   @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
     flex: none;
   }
-
-  .MuiPaper-root .MuiPaper-root {
-    box-shadow: none;
-  }
 `;
 
 const Dashboard = ({ children, routes, width }) => {
@@ -78,16 +74,16 @@ const Dashboard = ({ children, routes, width }) => {
       <CssBaseline />
       <GlobalStyle />
       <Drawer>
-        <Hidden mdUp implementation='js'>
+        <Hidden mdUp implementation="js">
           <Sidebar
             routes={routes}
             PaperProps={{ style: { width: drawerWidth } }}
-            variant='temporary'
+            variant="temporary"
             open={mobileOpen}
             onClose={handleDrawerToggle}
           />
         </Hidden>
-        <Hidden smDown implementation='css'>
+        <Hidden smDown implementation="css">
           <Sidebar
             routes={routes}
             PaperProps={{ style: { width: drawerWidth } }}
@@ -96,9 +92,7 @@ const Dashboard = ({ children, routes, width }) => {
       </Drawer>
       <AppContent>
         <Header onDrawerToggle={handleDrawerToggle} />
-        <MainContent p={isWidthUp('lg', width) ? 6 : 4}>
-          {children}
-        </MainContent>
+        <MainContent p={isWidthUp("lg", width) ? 6 : 4}>{children}</MainContent>
         <Footer />
       </AppContent>
     </Root>
