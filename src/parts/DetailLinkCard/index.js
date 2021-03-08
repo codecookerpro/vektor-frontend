@@ -4,11 +4,7 @@ import { makeStyles } from "@material-ui/core/styles";
 
 import ContainedButton from "components/UI/Buttons/ContainedButton";
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    maxWidth: 350,
-    marginBottom: theme.spacing(6),
-  },
+const useStyles = makeStyles(() => ({
   content: {
     display: "flex",
     justifyContent: "space-between",
@@ -20,19 +16,19 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const SystemTrendChartCard = ({ onDetail }) => {
+const DetailLinkCard = ({ title, buttonLabel = "Detail", onDetail }) => {
   const classes = useStyles();
 
   return (
-    <Card className={classes.root}>
+    <Card>
       <CardContent className={classes.content}>
         <Typography variant="h6" color="textPrimary" className={classes.title}>
-          System Trend Chart
+          {title}
         </Typography>
-        <ContainedButton onClick={onDetail}>Details</ContainedButton>
+        <ContainedButton onClick={onDetail}>{buttonLabel}</ContainedButton>
       </CardContent>
     </Card>
   );
 };
 
-export default memo(SystemTrendChartCard);
+export default memo(DetailLinkCard);

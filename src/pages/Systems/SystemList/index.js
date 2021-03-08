@@ -1,23 +1,57 @@
+import React, { memo, useCallback, useState } from "react";
+import { useHistory } from "react-router-dom";
+import { Plus } from "react-feather";
 
-import React, { memo } from 'react'
-import { makeStyles } from '@material-ui/core/styles'
+import ContainedButton from "components/UI/Buttons/ContainedButton";
+import PageHeader from "parts/PageHeader";
+import SystemActions from "./SystemActions";
+import SystemsTable from "./SystemsTable";
+import LINKS from "utils/constants/links";
 
-const useStyles = makeStyles(() => ({
-  root: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center'
-  }
-}));
+const NAV_LINKS = [LINKS.PROJECT_MANAGEMENT];
 
 const SystemList = () => {
-  const classes = useStyles();
+  const history = useHistory();
+
+  const [search, setSearch] = useState("");
+  const [action, setAction] = useState("");
+  const [project, setProject] = useState("");
+  const [selectedItems, setSelectedItems] = useState([]);
+
+  const addHandler = useCallback(() => {
+    history.push(LINKS.ADD_SYSTEM.HREF);
+  }, [history]);
+
+  const actionHandler = useCallback(() => {
+    console.log("action go");
+  }, []);
 
   return (
-    <main className={classes.root}>
-      System List Page
-    </main>
-  )
-}
+    <>
+      <PageHeader
+        title={LINKS.SYSTEMS.TITLE}
+        links={NAV_LINKS}
+        leftElement={
+          <ContainedButton onClick={addHandler}>
+            <Plus /> Add System
+          </ContainedButton>
+        }
+      />
+      <SystemActions
+        search={search}
+        setSearch={setSearch}
+        action={action}
+        setAction={setAction}
+        project={project}
+        setProject={setProject}
+        onAction={actionHandler}
+      />
+      <SystemsTable
+        selectedItems={selectedItems}
+        setSelectedItems={setSelectedItems}
+      />
+    </>
+  );
+};
 
-export default memo(SystemList)
+export default memo(SystemList);

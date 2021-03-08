@@ -1,23 +1,18 @@
+import React, { memo } from "react";
 
-import React, { memo } from 'react'
-import { makeStyles } from '@material-ui/core/styles'
+import PageHeader from "parts/PageHeader";
+import SystemForm from "../Shared/SystemForm";
+import LINKS from "utils/constants/links";
 
-const useStyles = makeStyles(() => ({
-  root: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center'
-  }
-}));
+const NAV_LINKS = [LINKS.PROJECT_MANAGEMENT, LINKS.SYSTEMS];
 
-const AddEditSystem = () => {
-  const classes = useStyles();
-
+const AddSystem = () => {
   return (
-    <main className={classes.root}>
-      Add / Edit System Page
-    </main>
-  )
-}
+    <>
+      <PageHeader title={LINKS.ADD_SYSTEM.TITLE} links={NAV_LINKS} />
+      <SystemForm />
+    </>
+  );
+};
 
-export default memo(AddEditSystem)
+export default memo(AddSystem);
