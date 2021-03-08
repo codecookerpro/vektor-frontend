@@ -13,7 +13,7 @@ const NAV_LINKS = [LINKS.PROJECT_MANAGEMENT];
 const ProjectList = () => {
   const history = useHistory();
 
-  const addProjectHandler = useCallback(() => {
+  const addHandler = useCallback(() => {
     history.push(LINKS.ADD_PROJECT.HREF);
   }, [history]);
 
@@ -23,13 +23,12 @@ const ProjectList = () => {
         title={LINKS.PROJECTS.TITLE}
         links={NAV_LINKS}
         leftElement={
-          <ContainedButton onClick={addProjectHandler}>
+          <ContainedButton onClick={addHandler}>
             <Plus /> Add Project
           </ContainedButton>
         }
       />
       <OrganizationFilter />
-
       <ProjectsTable />
     </>
   );

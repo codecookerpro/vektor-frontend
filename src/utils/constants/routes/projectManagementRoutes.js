@@ -30,6 +30,9 @@ const ProjectHistory = lazy(() =>
     /* webpackChunkName: 'ProjectHistory' */ "pages/Projects/ProjectHistory"
   )
 );
+const ProjectPhases = lazy(() =>
+  import(/* webpackChunkName: 'ProjectPhases' */ "pages/Projects/ProjectPhases")
+);
 const SystemList = lazy(() =>
   import(/* webpackChunkName: 'SystemList' */ "pages/Systems/SystemList")
 );
@@ -39,8 +42,16 @@ const AddSystem = lazy(() =>
 const EditSystem = lazy(() =>
   import(/* webpackChunkName: 'EditSystem' */ "pages/Systems/EditSystem")
 );
+const SystemHistory = lazy(() =>
+  import(/* webpackChunkName: 'SystemHistory' */ "pages/Systems/SystemHistory")
+);
+const DeliverableTrendChart = lazy(() =>
+  import(
+    /* webpackChunkName: 'DeliverableTrendChart' */ "pages/Systems/DeliverableTrendChart"
+  )
+);
 const ReportList = lazy(() =>
-  import(/* webpackChunkName: 'ReportList' */ "pages/Reports/ReportList")
+  import(/* webpackChunkName: 'ReportList' */ "pages/Reports")
 );
 import LINKS from "utils/constants/links";
 
@@ -91,6 +102,12 @@ const projectManagementRoutes = Object.freeze({
       isNotSlide: true,
     },
     {
+      path: LINKS.PROJECT_PHASES.HREF,
+      name: LINKS.PROJECT_PHASES.TITLE,
+      component: ProjectPhases,
+      isNotSlide: true,
+    },
+    {
       path: LINKS.SYSTEMS.HREF,
       name: LINKS.SYSTEMS.TITLE,
       component: SystemList,
@@ -105,6 +122,18 @@ const projectManagementRoutes = Object.freeze({
       path: LINKS.EDIT_SYSTEM.HREF,
       name: LINKS.EDIT_SYSTEM.TITLE,
       component: EditSystem,
+      isNotSlide: true,
+    },
+    {
+      path: LINKS.SYSTEM_HISTORY.HREF,
+      name: LINKS.SYSTEM_HISTORY.TITLE,
+      component: SystemHistory,
+      isNotSlide: true,
+    },
+    {
+      path: LINKS.DELIVERABLE_TREND_CHART.HREF,
+      name: LINKS.DELIVERABLE_TREND_CHART.TITLE,
+      component: DeliverableTrendChart,
       isNotSlide: true,
     },
     {

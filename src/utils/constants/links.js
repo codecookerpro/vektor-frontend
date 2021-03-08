@@ -59,6 +59,10 @@ const LINKS = Object.freeze({
     TITLE: "Project History",
     HREF: "/project-management/projects/edit/:id/history",
   },
+  PROJECT_PHASES: {
+    TITLE: "Project Phases",
+    HREF: "/project-management/projects/edit/:id/phases",
+  },
   SYSTEMS: {
     TITLE: "Systems",
     HREF: "/project-management/systems",
@@ -70,6 +74,14 @@ const LINKS = Object.freeze({
   EDIT_SYSTEM: {
     TITLE: "Edit System",
     HREF: "/project-management/system/edit/:id",
+  },
+  SYSTEM_HISTORY: {
+    TITLE: "System History",
+    HREF: "/project-management/systems/edit/:id/history",
+  },
+  DELIVERABLE_TREND_CHART: {
+    TITLE: "Deliverable Trend Chart",
+    HREF: "/project-management/systems/edit/:id/deliverable-trend-chart",
   },
   REPORTS: {
     TITLE: "Reports",
