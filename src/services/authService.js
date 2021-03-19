@@ -1,15 +1,10 @@
 import axios from 'services/axios';
 
 const login = async params => {
-  return await axios.post('/api/login', params);
-};
-
-const register = async params => {
-  return await axios.post('/api/register', params);
+  return await axios.post('/api/users/sign-in', params);
 };
 
 export {
-  login,
-  register
+  login
 };
 
