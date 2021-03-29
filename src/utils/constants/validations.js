@@ -16,9 +16,15 @@ const STRING_INPUT_VALID = yup.string()
 const SELECT_VALID = yup.string()
   .required('Please Select one.')
 
+const INTEGER_VALID = yup.number()
+  .typeError('Please specify a number.')
+  .integer('Please input number.')
+  .min(1, 'This field should be more than one.')
+
 export {
   EMAIL_VALID,
   PASSWORD_VALID,
   STRING_INPUT_VALID,
-  SELECT_VALID
+  SELECT_VALID,
+  INTEGER_VALID
 };

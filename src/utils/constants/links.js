@@ -103,6 +103,18 @@ const LINKS = Object.freeze({
     TITLE: "Add Workflow Template",
     HREF: "/project-template/workflow-template/add",
   },
+  EDIT_WORKFLOW_TEMPLATE: {
+    TITLE: "Edit Workflow Template",
+    HREF: "/project-template/workflow-template/edit/:id",
+  },
+  WORKFLOW_TEMPLATE_HISTORY: {
+    TITLE: "Workflow Template History",
+    HREF: "/project-template/workflow-template/edit/:id/history",
+  },
+  WORKFLOW_TEMPLATE_CHART: {
+    TITLE: "Workflow Template Chart",
+    HREF: "/project-template/workflow-template/edit/:id/chart",
+  },
   PHASE_TEMPLATES: {
     TITLE: "Phase Templates",
     HREF: "/project-template/phase-templates",
@@ -126,6 +138,18 @@ const LINKS = Object.freeze({
   ORGANIZATIONS: {
     TITLE: "Organizations",
     HREF: "/user-management/organizations",
+  },
+  ADD_ORGANIZATION: {
+    TITLE: "Add Organization",
+    HREF: "/user-management/organizations/add",
+  },
+  EDIT_ORGANIZATION: {
+    TITLE: "Edit Organization",
+    HREF: "/user-management/organizations/edit/:id",
+  },
+  ORGANIZATION_HISTORY: {
+    TITLE: "Organization History",
+    HREF: "/user-management/organizations/:id/history",
   },
   GROUPS: {
     TITLE: "Groups",

@@ -141,7 +141,7 @@ const SystemForm = ({ system = {} }) => {
                 error={errors.equipmentCategory?.message}
                 control={control}
                 defaultValue={
-                  system?.equipment.category || EQUIPMENT_CATEGORIES[0].VALUE
+                  system?.equipment?.category || EQUIPMENT_CATEGORIES[0].VALUE
                 }
               />
             </Grid>
@@ -198,7 +198,7 @@ const SystemForm = ({ system = {} }) => {
                 }}
                 error={errors.project?.message}
                 control={control}
-                defaultValue={system?.project.id || ""}
+                defaultValue={system?.project?.id || ""}
               />
             </Grid>
             <Grid item xs={12} sm={6} md={3}>
