@@ -15,6 +15,7 @@ import {
 import { Alert } from '@material-ui/lab';
 import { makeStyles } from '@material-ui/core/styles'
 
+import * as authAPI from 'services/authService';
 import { setUserToken } from 'redux/actions/authActions';
 import Logo from 'components/Logo';
 import ContainedButton from 'components/UI/Buttons/ContainedButton'
@@ -46,6 +47,7 @@ const useStyles = makeStyles((theme) => ({
     }
   },
   forget: {
+    marginTop: theme.spacing(2),
     color: theme.custom.palette.lightGreen
   }
 }));
@@ -74,16 +76,11 @@ function SignIn() {
         password: data.password
       }
 
-      console.log(params);
-      const accessToken = 'Bearer dfasdfafeoeifjeofjeofjeofjeofjoejfoejfoefjoeif'
-      const user = {
-        email: data.email,
-        name: 'Admin',
-        password: data.password
-      }
+      const { accessToken, refreshToken, data: user } = await authAPI.login(params);
       await dispatch(
         setUserToken({
           accessToken,
+          refreshToken,
           user
         })
       );

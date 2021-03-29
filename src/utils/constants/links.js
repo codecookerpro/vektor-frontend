@@ -7,10 +7,6 @@ const LINKS = Object.freeze({
     TITLE: "Sign In",
     HREF: "/auth/sign-in",
   },
-  SIGN_UP: {
-    TITLE: "Sign Up",
-    HREF: "/auth/sign-up",
-  },
   RESET_PASSWORD: {
     TITLE: "Reset Password",
     HREF: "/auth/reset-password",
