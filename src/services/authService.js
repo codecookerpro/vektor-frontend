@@ -7,4 +7,3 @@ const login = async params => {
 export {
   login
 };
-
