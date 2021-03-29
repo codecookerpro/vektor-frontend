@@ -1,4 +1,5 @@
 import React, { memo } from 'react';
+import { useSelector } from 'react-redux'
 import styled from 'styled-components/macro';
 import {
   Badge,
@@ -39,6 +40,7 @@ const SidebarFooterBadge = styled(Badge)`
 `;
 
 const SidebarFooter = () => {
+  const { currentUser } = useSelector((state) => state.auth);
 
   return (
     <Footer>
@@ -54,16 +56,16 @@ const SidebarFooter = () => {
           >
             <Avatar
               alt='Lucy Lavender'
-              src='/static/img/avatars/avatar-1.jpg'
+              src=''
             />
           </SidebarFooterBadge>
         </Grid>
         <Grid item>
           <SidebarFooterText variant='body2'>
-            Lucy Lavender
+            {currentUser.email}
           </SidebarFooterText>
           <SidebarFooterSubText variant='caption'>
-            UX Designer
+            {currentUser.permissions}
           </SidebarFooterSubText>
         </Grid>
       </Grid>
