@@ -1,4 +1,5 @@
-import React, { memo, useState } from "react";
+import React, { memo, useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   Card,
   CardContent,
@@ -8,25 +9,32 @@ import {
   Typography,
 } from "@material-ui/core";
 
+import { getOrganizations } from 'redux/actions/organizations';
 import LinkButton from "components/UI/Buttons/LinkButton";
 import VektorTableContainer from "parts/Tables/VektorTableContainer";
 import * as TABLE_ENVIRONMENTS from "utils/constants/table-environments";
 import LINKS from "utils/constants/links";
-import results from "utils/temp/systems";
 
 const columns = [
   { id: "name", label: "Name", minWidth: 130 },
 ];
 
 const OrganizationsTable = ({ selectedItems, setSelectedItems }) => {
+  const dispatch = useDispatch();
+
+  const { results = [] } = useSelector(state => state.organizations);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(
     TABLE_ENVIRONMENTS.ROWS_PER_PAGE
   );
 
+  useEffect(() => {
+    dispatch(getOrganizations());
+  }, [dispatch]);
+
   const toggleHandler = (value) => () => {
     const currentIndex = selectedItems.findIndex(
-      (item) => item.id === value.id
+      (item) => item._id === value._id
     );
     const newSelectedItems = [...selectedItems];
 
@@ -60,20 +68,20 @@ const OrganizationsTable = ({ selectedItems, setSelectedItems }) => {
             )
             : results
           ).map((row) => (
-            <TableRow key={row.id}>
+            <TableRow key={row._id}>
               <TableCell component="th" scope="row">
                 <div style={{ display: "flex" }}>
                   <Checkbox
-                    inputProps={{ "aria-labelledby": `check-${row.id}` }}
+                    inputProps={{ "aria-labelledby": `check-${row._id}` }}
                     checked={
                       selectedItems.findIndex(
-                        (value) => row.id === value.id
+                        (value) => row._id === value._id
                       ) !== -1
                     }
                     onChange={toggleHandler(row)}
                   />
                   <LinkButton
-                    to={LINKS.EDIT_ORGANIZATION.HREF.replace(":id", row.id)}
+                    to={LINKS.EDIT_ORGANIZATION.HREF.replace(":id", row._id)}
                   >
                     {row.name}
                   </LinkButton>

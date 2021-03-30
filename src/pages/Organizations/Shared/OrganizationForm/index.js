@@ -1,4 +1,5 @@
 import React, { memo, useState } from "react";
+import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -7,9 +8,17 @@ import { Card, CardContent, Grid, Button, Typography } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import { makeStyles } from "@material-ui/core/styles";
 
+import * as organizationAPI from 'services/api-organization'
+import {
+  addOrganization,
+  editOrganization,
+  removeOrganization
+} from 'redux/actions/organizations';
 import VektorTextField from "components/UI/TextFields/VektorTextField";
 import { STRING_INPUT_VALID } from "utils/constants/validations";
 import LINKS from "utils/constants/links";
+import { isEmpty } from "utils/helpers/utility";
+import useLoading from 'utils/hooks/useLoading'
 
 const useStyles = makeStyles((theme) => ({
   alert: {
@@ -34,12 +43,13 @@ const useStyles = makeStyles((theme) => ({
 
 const schema = yup.object().shape({
   name: STRING_INPUT_VALID,
-  description: STRING_INPUT_VALID,
 });
 
 const OrganizationForm = ({ organization = {} }) => {
   const classes = useStyles();
+  const dispatch = useDispatch();
   const history = useHistory();
+  const { changeLoadingStatus } = useLoading()
 
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -48,13 +58,23 @@ const OrganizationForm = ({ organization = {} }) => {
   });
 
   const onSubmit = async (data) => {
+    changeLoadingStatus(true)
     try {
-      const params = {
+      let params = {
         name: data.name,
-        description: data.description,
       };
 
-      console.log(params);
+      if (isEmpty(organization)) {
+        const response = await organizationAPI.createOrganization(params);
+        dispatch(addOrganization(response.data))
+      } else {
+        params = {
+          _id: organization._id,
+          ...params
+        }
+        const response = await organizationAPI.updateOrganization(params);
+        dispatch(editOrganization(response.data))
+      }
       history.push(LINKS.ORGANIZATIONS.HREF);
     } catch (error) {
       if (error.response) {
@@ -64,10 +84,24 @@ const OrganizationForm = ({ organization = {} }) => {
         setErrorMessage(message);
       }
     }
+    changeLoadingStatus(false)
   };
 
-  const deleteHandler = () => {
-    console.log("delete");
+  const deleteHandler = async () => {
+    changeLoadingStatus(true)
+    try {
+      await organizationAPI.deleteOrganization({ _id: organization._id });
+      dispatch(removeOrganization(organization))
+      history.push(LINKS.ORGANIZATIONS.HREF);
+    } catch (error) {
+      if (error.response) {
+        const {
+          data: { message },
+        } = error.response;
+        setErrorMessage(message);
+      }
+    }
+    changeLoadingStatus(false)
   };
 
   return (
@@ -81,7 +115,7 @@ const OrganizationForm = ({ organization = {} }) => {
         <Typography variant="h6" className={classes.name}>
           {organization?.name || "New Organization"}
         </Typography>
-        <form noValidate className={classes.form}>
+        <form noValidate className={classes.form} onSubmit={handleSubmit(onSubmit)}>
           <Grid container spacing={6}>
             <Grid item xs={12}>
               <Controller
@@ -96,34 +130,25 @@ const OrganizationForm = ({ organization = {} }) => {
               />
             </Grid>
             <Grid item xs={12}>
-              <Controller
-                as={<VektorTextField />}
-                fullWidth
-                name="description"
-                label="Description"
-                placeholder="Description"
-                error={errors.description?.message}
-                control={control}
-                defaultValue={organization?.description || ""}
-              />
-            </Grid>
-            <Grid item xs={12}>
               <div className={classes.buttonContainer}>
                 <Button
                   variant="contained"
                   color="primary"
-                  onClick={handleSubmit(onSubmit())}
+                  type='submit'
                 >
                   Save Changes
                 </Button>
-                <Button
-                  color="primary"
-                  variant="contained"
-                  className={classes.delete}
-                  onClick={deleteHandler}
-                >
-                  Delete
-                </Button>
+                {
+                  !isEmpty(organization) &&
+                  <Button
+                    color="primary"
+                    variant="contained"
+                    className={classes.delete}
+                    onClick={deleteHandler}
+                  >
+                    Delete
+                  </Button>
+                }
               </div>
             </Grid>
           </Grid>

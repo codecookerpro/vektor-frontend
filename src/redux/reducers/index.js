@@ -1,7 +1,11 @@
 import { combineReducers } from "redux";
 
+import loadingReducer from "./loadingReducer";
 import authReducer from "./authReducer";
+import organizationsReducer from "./organizationsReducer";
 
-export const rootReducer = combineReducers({
+export default combineReducers({
+  loading: loadingReducer,
   auth: authReducer,
+  organizations: organizationsReducer
 });
