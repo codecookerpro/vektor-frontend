@@ -1,5 +1,3 @@
-
-
 import * as TYPES from 'redux/types'
 import * as organizationAPI from 'services/api-organization'
 import { isEmpty } from 'utils/helpers/utility'

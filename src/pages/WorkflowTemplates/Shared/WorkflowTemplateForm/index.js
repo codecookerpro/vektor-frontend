@@ -1,4 +1,5 @@
-import React, { memo, useState } from "react";
+import React, { memo, useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -7,6 +8,13 @@ import { Card, CardContent, Grid, Button, Typography } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import { makeStyles } from "@material-ui/core/styles";
 
+import * as workflowTemplateAPI from 'services/api-workflow-template'
+import {
+  addWorkflowTemplate,
+  editWorkflowTemplate,
+  removeWorkflowTemplate
+} from 'redux/actions/workflowTemplates';
+import { getOrganizations } from 'redux/actions/organizations';
 import VektorTextField from "components/UI/TextFields/VektorTextField";
 import FilterSelect from "components/UI/Selects/FilterSelect";
 import {
@@ -15,7 +23,8 @@ import {
   INTEGER_VALID
 } from "utils/constants/validations";
 import LINKS from "utils/constants/links";
-import { EQUIPMENT_TYPES } from "utils/constants/equipment";
+import useLoading from 'utils/hooks/useLoading'
+import { isEmpty } from "utils/helpers/utility"
 
 const useStyles = makeStyles((theme) => ({
   alert: {
@@ -47,22 +56,41 @@ const schema = yup.object().shape({
 const WorkflowTemplateForm = ({ workflowTemplate = {} }) => {
   const classes = useStyles();
   const history = useHistory();
+  const dispatch = useDispatch();
+  const { changeLoadingStatus } = useLoading()
 
+  const { results: organizations = [] } = useSelector(state => state.organizations);
   const [errorMessage, setErrorMessage] = useState("");
+
+  useEffect(() => {
+    dispatch(getOrganizations());
+  }, [dispatch]);
 
   const { control, handleSubmit, errors } = useForm({
     resolver: yupResolver(schema),
   });
 
   const onSubmit = async (data) => {
+    changeLoadingStatus(true)
     try {
-      const params = {
+      let params = {
         name: data.name,
         organization: data.organization,
         differentialWeight: data.differentialWeight,
+        deliverables: []
       };
 
-      console.log(params);
+      if (isEmpty(workflowTemplate)) {
+        const response = await workflowTemplateAPI.createWorkflowTemplate(params);
+        dispatch(addWorkflowTemplate(response.data))
+      } else {
+        params = {
+          _id: workflowTemplate._id,
+          ...params
+        }
+        const response = await workflowTemplateAPI.updateWorkflowTemplate(params);
+        dispatch(editWorkflowTemplate(response.data))
+      }
       history.push(LINKS.WORKFLOW_TEMPLATES.HREF);
     } catch (error) {
       if (error.response) {
@@ -72,10 +100,24 @@ const WorkflowTemplateForm = ({ workflowTemplate = {} }) => {
         setErrorMessage(message);
       }
     }
+    changeLoadingStatus(false)
   };
 
-  const deleteHandler = () => {
-    console.log("delete");
+  const deleteHandler = async () => {
+    changeLoadingStatus(true)
+    try {
+      await workflowTemplateAPI.deleteWorkflowTemplate({ _id: workflowTemplate._id });
+      dispatch(removeWorkflowTemplate(workflowTemplate))
+      history.push(LINKS.WORKFLOW_TEMPLATES.HREF);
+    } catch (error) {
+      if (error.response) {
+        const {
+          data: { message },
+        } = error.response;
+        setErrorMessage(message);
+      }
+    }
+    changeLoadingStatus(false)
   };
 
   return (
@@ -110,7 +152,11 @@ const WorkflowTemplateForm = ({ workflowTemplate = {} }) => {
                 name="organization"
                 label="Organization"
                 placeholder="Select organization"
-                items={EQUIPMENT_TYPES}
+                items={organizations}
+                keys={{
+                  label: "name",
+                  value: "_id",
+                }}
                 error={errors.organization?.message}
                 control={control}
                 defaultValue={workflowTemplate?.organization || ''}
@@ -134,18 +180,21 @@ const WorkflowTemplateForm = ({ workflowTemplate = {} }) => {
                 <Button
                   variant="contained"
                   color="primary"
-                  onClick={handleSubmit(onSubmit())}
+                  onClick={handleSubmit(onSubmit)}
                 >
                   Save
                 </Button>
-                <Button
-                  color="primary"
-                  variant="contained"
-                  className={classes.delete}
-                  onClick={deleteHandler}
-                >
-                  Delete
-                </Button>
+                {
+                  !isEmpty(workflowTemplate) &&
+                  <Button
+                    color="primary"
+                    variant="contained"
+                    className={classes.delete}
+                    onClick={deleteHandler}
+                  >
+                    Delete
+                  </Button>
+                }
               </div>
             </Grid>
           </Grid>
