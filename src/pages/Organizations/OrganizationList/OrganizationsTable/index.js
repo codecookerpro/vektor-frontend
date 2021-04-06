@@ -1,5 +1,5 @@
-import React, { memo, useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { memo, useState } from "react";
+import { useSelector } from "react-redux";
 import {
   Card,
   CardContent,
@@ -9,7 +9,6 @@ import {
   Typography,
 } from "@material-ui/core";
 
-import { getOrganizations } from 'redux/actions/organizations';
 import LinkButton from "components/UI/Buttons/LinkButton";
 import VektorTableContainer from "parts/Tables/VektorTableContainer";
 import * as TABLE_ENVIRONMENTS from "utils/constants/table-environments";
@@ -20,17 +19,11 @@ const columns = [
 ];
 
 const OrganizationsTable = ({ selectedItems, setSelectedItems }) => {
-  const dispatch = useDispatch();
-
   const { results = [] } = useSelector(state => state.organizations);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(
     TABLE_ENVIRONMENTS.ROWS_PER_PAGE
   );
-
-  useEffect(() => {
-    dispatch(getOrganizations());
-  }, [dispatch]);
 
   const toggleHandler = (value) => () => {
     const currentIndex = selectedItems.findIndex(

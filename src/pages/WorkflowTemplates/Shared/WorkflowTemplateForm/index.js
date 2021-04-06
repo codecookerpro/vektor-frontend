@@ -1,4 +1,4 @@
-import React, { memo, useState, useEffect } from "react";
+import React, { memo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { useForm, Controller } from "react-hook-form";
@@ -14,7 +14,6 @@ import {
   editWorkflowTemplate,
   removeWorkflowTemplate
 } from 'redux/actions/workflowTemplates';
-import { getOrganizations } from 'redux/actions/organizations';
 import VektorTextField from "components/UI/TextFields/VektorTextField";
 import FilterSelect from "components/UI/Selects/FilterSelect";
 import {
@@ -61,10 +60,6 @@ const WorkflowTemplateForm = ({ workflowTemplate = {} }) => {
 
   const { results: organizations = [] } = useSelector(state => state.organizations);
   const [errorMessage, setErrorMessage] = useState("");
-
-  useEffect(() => {
-    dispatch(getOrganizations());
-  }, [dispatch]);
 
   const { control, handleSubmit, errors } = useForm({
     resolver: yupResolver(schema),
