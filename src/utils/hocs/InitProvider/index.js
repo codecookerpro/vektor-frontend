@@ -1,10 +1,13 @@
 import { memo, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { setAccessToken, setRefreshToken, setCurrentUser } from "redux/actions/authActions";
+import { getOrganizations } from "redux/actions/organizations";
 
 const InitProvider = () => {
   const dispatch = useDispatch();
+
+  const { accessToken } = useSelector(state => state.auth)
 
   useEffect(() => {
     const accessToken = localStorage.accessToken;
@@ -23,6 +26,13 @@ const InitProvider = () => {
       dispatch(setCurrentUser(JSON.parse(currentUser)));
     }
   }, [dispatch]);
+
+  useEffect(() => {
+    if (accessToken) {
+      dispatch(getOrganizations())
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [accessToken]);
 
   return <div />;
 };

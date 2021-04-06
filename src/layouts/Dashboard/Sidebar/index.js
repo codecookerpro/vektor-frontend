@@ -47,7 +47,7 @@ const SidebarSection = styled(Typography)`
   display: block;
 `;
 
-const Sidebar = ({ location, ...rest }) => {
+const Sidebar = ({ location, PaperProps = {} }) => {
   const initOpenRoutes = () => {
     /* Open collapse element that matches current url */
     const pathName = location.pathname;
@@ -86,7 +86,7 @@ const Sidebar = ({ location, ...rest }) => {
   };
 
   return (
-    <Drawer variant="permanent" {...rest}>
+    <Drawer variant="permanent" PaperProps={PaperProps}>
       <SidebarHeader />
       <Scrollbar>
         <List disablePadding>

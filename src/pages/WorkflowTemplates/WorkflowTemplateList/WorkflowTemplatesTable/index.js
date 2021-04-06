@@ -24,6 +24,7 @@ const WorkflowTemplatesTable = ({ selectedItems, setSelectedItems }) => {
   const dispatch = useDispatch();
 
   const { results = [] } = useSelector(state => state.workflowTemplates);
+  const organizations = useSelector(state => state.organizations.results || []);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(
     TABLE_ENVIRONMENTS.ROWS_PER_PAGE
@@ -47,6 +48,11 @@ const WorkflowTemplatesTable = ({ selectedItems, setSelectedItems }) => {
 
     setSelectedItems(newSelectedItems);
   };
+
+  const getOrganizationName = (_id) => {
+    const organization = organizations.find((item) => item._id === _id)
+    return organization?.name || ''
+  }
 
   return (
     <Card>
@@ -88,7 +94,9 @@ const WorkflowTemplatesTable = ({ selectedItems, setSelectedItems }) => {
                   </LinkButton>
                 </div>
               </TableCell>
-              <TableCell>{row.organization || ''}</TableCell>
+              <TableCell>
+                {getOrganizationName(row.organization)}
+              </TableCell>
             </TableRow>
           ))}
         </VektorTableContainer>
