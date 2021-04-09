@@ -2,6 +2,9 @@ import { lazy } from 'react';
 import { User } from 'react-feather';
 
 const UserList = lazy(() => import(/* webpackChunkName: 'UserList' */ 'pages/Users/UserList'));
+const AddUser = lazy(() => import(/* webpackChunkName: 'AddUser' */ 'pages/Users/AddUser'));
+const EditUser = lazy(() => import(/* webpackChunkName: 'EditUser' */ 'pages/Users/EditUser'));
+const UserHistory = lazy(() => import(/* webpackChunkName: 'WorkflowTemplateHistory' */ 'pages/Users/UserHistory'));
 const OrganizationList = lazy(() => import(/* webpackChunkName: 'OrganizationList' */ 'pages/Organizations/OrganizationList'));
 const AddOrganization = lazy(() => import(/* webpackChunkName: 'AddOrganization' */ 'pages/Organizations/AddOrganization'));
 const EditOrganization = lazy(() => import(/* webpackChunkName: 'EditWorkflowTemplate' */ 'pages/Organizations/EditOrganization'));
@@ -20,6 +23,24 @@ const userManagementRoutes = Object.freeze({
       path: LINKS.USERS.HREF,
       name: LINKS.USERS.TITLE,
       component: UserList,
+    },
+    {
+      path: LINKS.ADD_USER.HREF,
+      name: LINKS.ADD_USER.TITLE,
+      component: AddUser,
+      isNotSlide: true,
+    },
+    {
+      path: LINKS.EDIT_USER.HREF,
+      name: LINKS.EDIT_USER.TITLE,
+      component: EditUser,
+      isNotSlide: true,
+    },
+    {
+      path: LINKS.USER_HISTORY.HREF,
+      name: LINKS.USER_HISTORY.TITLE,
+      component: UserHistory,
+      isNotSlide: true,
     },
     {
       path: LINKS.ORGANIZATIONS.HREF,

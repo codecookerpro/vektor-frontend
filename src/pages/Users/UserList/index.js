@@ -1,23 +1,36 @@
 
-import React, { memo } from 'react'
-import { makeStyles } from '@material-ui/core/styles'
+import React, { memo, useCallback } from 'react';
+import { useHistory } from 'react-router-dom';
+import { Plus } from 'react-feather';
 
-const useStyles = makeStyles(() => ({
-  root: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center'
-  }
-}));
+import ContainedButton from 'components/UI/Buttons/ContainedButton';
+import PageHeader from 'parts/PageHeader';
+import UsersTable from './UsersTable';
+import LINKS from 'utils/constants/links';
+
+const NAV_LINKS = [LINKS.USER_MANAGEMENT];
 
 const UserList = () => {
-  const classes = useStyles();
+  const history = useHistory();
+
+  const addHandler = useCallback(() => {
+    history.push(LINKS.ADD_USER.HREF);
+  }, [history]);
 
   return (
-    <main className={classes.root}>
-      User List Page
-    </main>
-  )
-}
+    <>
+      <PageHeader
+        title={LINKS.USERS.TITLE}
+        links={NAV_LINKS}
+        leftElement={
+          <ContainedButton onClick={addHandler}>
+            <Plus /> Add New User
+          </ContainedButton>
+        }
+      />
+      <UsersTable />
+    </>
+  );
+};
 
-export default memo(UserList)
+export default memo(UserList);

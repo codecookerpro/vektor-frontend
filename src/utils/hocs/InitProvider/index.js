@@ -1,8 +1,9 @@
-import { memo, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { memo, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
-import { setAccessToken, setRefreshToken, setCurrentUser } from "redux/actions/authActions";
-import { getOrganizations } from "redux/actions/organizations";
+import { setAccessToken, setRefreshToken, setCurrentUser } from 'redux/actions/authActions';
+import { getUsers } from 'redux/actions/users';
+import { getOrganizations } from 'redux/actions/organizations';
 
 const InitProvider = () => {
   const dispatch = useDispatch();
@@ -29,6 +30,7 @@ const InitProvider = () => {
 
   useEffect(() => {
     if (accessToken) {
+      dispatch(getUsers())
       dispatch(getOrganizations())
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
