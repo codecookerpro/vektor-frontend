@@ -9,7 +9,11 @@ const LINKS = Object.freeze({
   },
   RESET_PASSWORD: {
     TITLE: 'Reset Password',
-    HREF: '/auth/reset-password',
+    HREF: '/auth/reset-password/:passwordResetToken',
+  },
+  FORGOT_PASSWORD: {
+    TITLE: 'Forgot Password',
+    HREF: '/auth/forgot-password',
   },
   NOT_FOUND: {
     TITLE: '404 Page',

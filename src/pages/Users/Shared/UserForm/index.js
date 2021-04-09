@@ -20,9 +20,9 @@ import {
   STRING_INPUT_VALID,
   SELECT_VALID,
   EMAIL_VALID,
-  PASSWORD_VALID
 } from 'utils/constants/validations';
 import LINKS from 'utils/constants/links';
+import { PERMISSIONS } from 'utils/constants/permissions'
 import useLoading from 'utils/hooks/useLoading'
 import { isEmpty } from 'utils/helpers/utility'
 
@@ -51,8 +51,7 @@ const schema = yup.object().shape({
   email: EMAIL_VALID,
   name: STRING_INPUT_VALID,
   organization: SELECT_VALID,
-  group: SELECT_VALID,
-  password: PASSWORD_VALID,
+  permissions: SELECT_VALID,
 });
 
 const UserForm = ({ user = {} }) => {
@@ -75,8 +74,15 @@ const UserForm = ({ user = {} }) => {
         email: data.email,
         name: data.name,
         organization: data.organization,
-        password: data.password,
+        permissions: data.permissions,
       };
+
+      if (data.password) {
+        params = {
+          ...params,
+          password: data.password,
+        }
+      }
 
       if (isEmpty(user)) {
         const response = await userAPI.createUser(params);
@@ -176,17 +182,13 @@ const UserForm = ({ user = {} }) => {
               <Controller
                 as={<FilterSelect />}
                 fullWidth
-                name='group'
+                name='permissions'
                 label='Group'
                 placeholder='Select Group'
-                items={organizations}
-                keys={{
-                  label: 'name',
-                  value: '_id',
-                }}
-                error={errors.group?.message}
+                items={PERMISSIONS}
+                error={errors.permissions?.message}
                 control={control}
-                defaultValue={user?.group || ''}
+                defaultValue={user?.permissions || ''}
               />
             </Grid>
             <Grid item xs={12} sm={6} md={3}>
@@ -198,7 +200,7 @@ const UserForm = ({ user = {} }) => {
                 placeholder='Password'
                 error={errors.password?.message}
                 control={control}
-                defaultValue={user?.password || ''}
+                defaultValue={''}
               />
             </Grid>
             <Grid item xs={12}>
