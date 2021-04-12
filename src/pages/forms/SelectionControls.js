@@ -1,8 +1,8 @@
-import React from "react";
-import styled from "styled-components/macro";
-import { NavLink } from "react-router-dom";
+import React from 'react';
+import styled from 'styled-components/macro';
+import { NavLink } from 'react-router-dom';
 
-import { Helmet } from "react-helmet";
+import { Helmet } from 'react-helmet';
 
 import {
   CardContent,
@@ -21,9 +21,9 @@ import {
   RadioGroup,
   Switch,
   Typography,
-} from "@material-ui/core";
+} from '@material-ui/core';
 
-import { spacing } from "@material-ui/system";
+import { spacing } from '@material-ui/system';
 
 const Card = styled(MuiCard)(spacing);
 
@@ -34,7 +34,7 @@ const Breadcrumbs = styled(MuiBreadcrumbs)(spacing);
 const Paper = styled(MuiPaper)(spacing);
 
 function RadioButtonsGroup() {
-  const [value, setValue] = React.useState("female");
+  const [value, setValue] = React.useState('female');
 
   const handleChange = (event) => {
     setValue(event.target.value);
@@ -43,37 +43,37 @@ function RadioButtonsGroup() {
   return (
     <Card mb={6}>
       <CardContent>
-        <Typography variant="h6" gutterBottom>
+        <Typography variant='h6' gutterBottom>
           Radio Buttons
         </Typography>
-        <Typography variant="body2" gutterBottom>
+        <Typography variant='body2' gutterBottom>
           Radio buttons allow the user to select one option from a set.
         </Typography>
         <Paper mt={3}>
-          <FormControl component="fieldset">
-            <FormLabel component="legend">Gender</FormLabel>
+          <FormControl component='fieldset'>
+            <FormLabel component='legend'>Gender</FormLabel>
             <RadioGroup
-              aria-label="Gender"
-              name="gender1"
+              aria-label='Gender'
+              name='gender1'
               value={value}
               onChange={handleChange}
             >
               <FormControlLabel
-                value="female"
+                value='female'
                 control={<Radio />}
-                label="Female"
+                label='Female'
               />
-              <FormControlLabel value="male" control={<Radio />} label="Male" />
+              <FormControlLabel value='male' control={<Radio />} label='Male' />
               <FormControlLabel
-                value="other"
+                value='other'
                 control={<Radio />}
-                label="Other"
+                label='Other'
               />
               <FormControlLabel
-                value="disabled"
+                value='disabled'
                 disabled
                 control={<Radio />}
-                label="(Disabled option)"
+                label='(Disabled option)'
               />
             </RadioGroup>
           </FormControl>
@@ -99,45 +99,45 @@ function CheckboxesGroup() {
   return (
     <Card mb={6}>
       <CardContent>
-        <Typography variant="h6" gutterBottom>
+        <Typography variant='h6' gutterBottom>
           Checkboxes
         </Typography>
-        <Typography variant="body2" gutterBottom>
+        <Typography variant='body2' gutterBottom>
           Checkboxes allow the user to select one or more items from a set.
         </Typography>
         <Paper mt={3}>
-          <FormControl component="fieldset">
-            <FormLabel component="legend">Assign responsibility</FormLabel>
+          <FormControl component='fieldset'>
+            <FormLabel component='legend'>Assign responsibility</FormLabel>
             <FormGroup>
               <FormControlLabel
                 control={
                   <Checkbox
                     checked={gilad}
                     onChange={handleChange}
-                    name="gilad"
+                    name='gilad'
                   />
                 }
-                label="Gilad Gray"
+                label='Gilad Gray'
               />
               <FormControlLabel
                 control={
                   <Checkbox
                     checked={jason}
                     onChange={handleChange}
-                    name="jason"
+                    name='jason'
                   />
                 }
-                label="Jason Killian"
+                label='Jason Killian'
               />
               <FormControlLabel
                 control={
                   <Checkbox
                     checked={antoine}
                     onChange={handleChange}
-                    name="antoine"
+                    name='antoine'
                   />
                 }
-                label="Antoine Llorca"
+                label='Antoine Llorca'
               />
             </FormGroup>
           </FormControl>
@@ -163,45 +163,45 @@ function SwitchesGroup() {
   return (
     <Card mb={6}>
       <CardContent>
-        <Typography variant="h6" gutterBottom>
+        <Typography variant='h6' gutterBottom>
           Switches
         </Typography>
-        <Typography variant="body2" gutterBottom>
+        <Typography variant='body2' gutterBottom>
           Switches toggle the state of a single setting on or off.
         </Typography>
         <Paper mt={3}>
-          <FormControl component="fieldset">
-            <FormLabel component="legend">Assign responsibility</FormLabel>
+          <FormControl component='fieldset'>
+            <FormLabel component='legend'>Assign responsibility</FormLabel>
             <FormGroup>
               <FormControlLabel
                 control={
                   <Switch
                     checked={gilad}
                     onChange={handleChange}
-                    name="gilad"
+                    name='gilad'
                   />
                 }
-                label="Gilad Gray"
+                label='Gilad Gray'
               />
               <FormControlLabel
                 control={
                   <Switch
                     checked={jason}
                     onChange={handleChange}
-                    name="jason"
+                    name='jason'
                   />
                 }
-                label="Jason Killian"
+                label='Jason Killian'
               />
               <FormControlLabel
                 control={
                   <Switch
                     checked={antoine}
                     onChange={handleChange}
-                    name="antoine"
+                    name='antoine'
                   />
                 }
-                label="Antoine Llorca"
+                label='Antoine Llorca'
               />
             </FormGroup>
           </FormControl>
@@ -215,38 +215,38 @@ function FormControlLabelPosition() {
   return (
     <Card mb={6}>
       <CardContent>
-        <Typography variant="h6" gutterBottom>
+        <Typography variant='h6' gutterBottom>
           Label placement
         </Typography>
-        <Typography variant="body2" gutterBottom>
+        <Typography variant='body2' gutterBottom>
           You can change the placement of the label.
         </Typography>
         <Paper mt={3}>
-          <FormControl component="fieldset">
-            <RadioGroup aria-label="position" name="position" row>
+          <FormControl component='fieldset'>
+            <RadioGroup aria-label='position' name='position' row>
               <FormControlLabel
-                value="top"
-                control={<Radio color="primary" />}
-                label="Top"
-                labelPlacement="top"
+                value='top'
+                control={<Radio color='primary' />}
+                label='Top'
+                labelPlacement='top'
               />
               <FormControlLabel
-                value="start"
-                control={<Radio color="primary" />}
-                label="Start"
-                labelPlacement="start"
+                value='start'
+                control={<Radio color='primary' />}
+                label='Start'
+                labelPlacement='start'
               />
               <FormControlLabel
-                value="bottom"
-                control={<Radio color="primary" />}
-                label="Bottom"
-                labelPlacement="bottom"
+                value='bottom'
+                control={<Radio color='primary' />}
+                label='Bottom'
+                labelPlacement='bottom'
               />
               <FormControlLabel
-                value="end"
-                control={<Radio color="primary" />}
-                label="End"
-                labelPlacement="end"
+                value='end'
+                control={<Radio color='primary' />}
+                label='End'
+                labelPlacement='end'
               />
             </RadioGroup>
           </FormControl>
@@ -259,16 +259,16 @@ function FormControlLabelPosition() {
 function SelectionControls() {
   return (
     <React.Fragment>
-      <Helmet title="Selection Controls" />
-      <Typography variant="h3" gutterBottom display="inline">
+      <Helmet title='Selection Controls' />
+      <Typography variant='h3' gutterBottom display='inline'>
         Selection Controls
       </Typography>
 
-      <Breadcrumbs aria-label="Breadcrumb" mt={2}>
-        <Link component={NavLink} exact to="/">
+      <Breadcrumbs aria-label='Breadcrumb' mt={2}>
+        <Link component={NavLink} exact to='/'>
           Dashboard
         </Link>
-        <Link component={NavLink} exact to="/">
+        <Link component={NavLink} exact to='/'>
           Forms
         </Link>
         <Typography>Selection Controls</Typography>

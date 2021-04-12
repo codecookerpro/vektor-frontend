@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux'
 import axios from 'services/axios'
 
 const InterceptorProvider = () => {
-  const { accessToken } = useSelector(state => state.auth);
+  const { accessToken, passwordResetToken } = useSelector(state => state.auth);
 
   useEffect(() => {
     axios.interceptors.response.use(
@@ -21,7 +21,12 @@ const InterceptorProvider = () => {
   useEffect(() => {
     axios.interceptors.request.use(
       config => {
-        const authorization = localStorage.accessToken;
+        const accessToken = localStorage.accessToken;
+        const passwordResetToken = localStorage.passwordResetToken;
+        const authorization = accessToken
+          ? accessToken
+          : passwordResetToken ? passwordResetToken : ''
+
         config.headers['Authorization'] = `Bearer ${authorization}`;
         config.headers['Content-Type'] = 'application/json; charset=utf-8';
         return config;
@@ -29,7 +34,7 @@ const InterceptorProvider = () => {
       error => {
         return Promise.reject(error)
       });
-  }, [accessToken]);
+  }, [accessToken, passwordResetToken]);
 
   return (
     <div />

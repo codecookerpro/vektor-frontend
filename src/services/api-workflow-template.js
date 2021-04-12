@@ -17,9 +17,24 @@ const deleteWorkflowTemplate = async (params) => {
   return await axios.delete('/api/workflows', { params });
 };
 
+const createWorkflowTemplateDeliverable = async (params) => {
+  return await axios.post('/api/workflows/nested', params);
+};
+
+const updateWorkflowTemplateDeliverable = async (params) => {
+  return await axios.put('/api/workflows/nested', params);
+};
+
+const deleteWorkflowTemplateDeliverable = async (params) => {
+  return await axios.delete('/api/workflows/nested', { params });
+};
+
 export {
   getWorkflowTemplates,
   createWorkflowTemplate,
   updateWorkflowTemplate,
-  deleteWorkflowTemplate
+  deleteWorkflowTemplate,
+  createWorkflowTemplateDeliverable,
+  updateWorkflowTemplateDeliverable,
+  deleteWorkflowTemplateDeliverable
 };

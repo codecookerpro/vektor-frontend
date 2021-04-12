@@ -1,22 +1,20 @@
-import React, { memo, useState } from "react";
-import { useHistory } from "react-router-dom";
-import { useForm, Controller } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-import { Card, CardContent, Grid, Button, Typography } from "@material-ui/core";
-import { Alert } from "@material-ui/lab";
-import { makeStyles } from "@material-ui/core/styles";
+import React, { memo, useState } from 'react';
+import { useHistory } from 'react-router-dom';
+import { useForm, Controller } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
+import { Card, CardContent, Grid, Button, Typography } from '@material-ui/core';
+import { Alert } from '@material-ui/lab';
+import { makeStyles } from '@material-ui/core/styles';
 
-import VektorTextField from "components/UI/TextFields/VektorTextField";
-import FilterSelect from "components/UI/Selects/FilterSelect";
-import { STRING_INPUT_VALID, SELECT_VALID } from "utils/constants/validations";
-import LINKS from "utils/constants/links";
-import {
-  EQUIPMENT_CATEGORIES,
-  EQUIPMENT_TYPES,
-} from "utils/constants/equipment";
-import projects from "utils/temp/projects";
-import workflowTemplates from "utils/temp/workflow-templates";
+import VektorTextField from 'components/UI/TextFields/VektorTextField';
+import FilterSelect from 'components/UI/Selects/FilterSelect';
+import { STRING_INPUT_VALID, SELECT_VALID } from 'utils/constants/validations';
+import LINKS from 'utils/constants/links';
+import { EQUIPMENT_TYPE, EQUIPMENT_TYPES } from 'utils/constants/equipment-types';
+import { EQUIPMENT_CATEGORIES, EQUIPMENT_CATEGORY_TYPE } from 'utils/constants/equipment-categories';
+import projects from 'utils/temp/projects';
+import workflowTemplates from 'utils/temp/workflow-templates';
 
 const useStyles = makeStyles((theme) => ({
   alert: {
@@ -24,17 +22,17 @@ const useStyles = makeStyles((theme) => ({
   },
   name: {
     fontSize: 17,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     marginBottom: theme.spacing(3),
   },
   form: {
     marginBottom: theme.spacing(6),
   },
   buttonContainer: {
-    display: "flex",
+    display: 'flex',
   },
   delete: {
-    marginLeft: "auto",
+    marginLeft: 'auto',
     backgroundColor: theme.custom.palette.red,
   },
 }));
@@ -55,7 +53,7 @@ const SystemForm = ({ system = {} }) => {
   const classes = useStyles();
   const history = useHistory();
 
-  const [errorMessage, setErrorMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState('');
 
   const { control, handleSubmit, errors, reset } = useForm({
     resolver: yupResolver(schema),
@@ -78,15 +76,15 @@ const SystemForm = ({ system = {} }) => {
       console.log(params);
       if (addNew) {
         reset({
-          name: "",
-          equipmentCategory: "",
-          equipmentType: "",
-          equipmentName: "",
-          equipmentNumber: "",
-          project: "",
-          workflow: "",
-          productCode: "",
-          site: "",
+          name: '',
+          equipmentCategory: '',
+          equipmentType: '',
+          equipmentName: '',
+          equipmentNumber: '',
+          project: '',
+          workflow: '',
+          productCode: '',
+          site: '',
         });
       } else {
         history.push(LINKS.SYSTEMS.HREF);
@@ -102,19 +100,19 @@ const SystemForm = ({ system = {} }) => {
   };
 
   const deleteHandler = () => {
-    console.log("delete");
+    console.log('delete');
   };
 
   return (
     <Card>
       <CardContent>
         {errorMessage && (
-          <Alert mt={2} mb={1} severity="warning" className={classes.alert}>
+          <Alert mt={2} mb={1} severity='warning' className={classes.alert}>
             {errorMessage}
           </Alert>
         )}
-        <Typography variant="h6" className={classes.name}>
-          {system?.name || "New System"}
+        <Typography variant='h6' className={classes.name}>
+          {system?.name || 'New System'}
         </Typography>
         <form noValidate className={classes.form}>
           <Grid container spacing={6}>
@@ -122,26 +120,26 @@ const SystemForm = ({ system = {} }) => {
               <Controller
                 as={<VektorTextField />}
                 fullWidth
-                name="name"
-                label="Name"
-                placeholder="Name"
+                name='name'
+                label='Name'
+                placeholder='Name'
                 error={errors.name?.message}
                 control={control}
-                defaultValue={system?.name || ""}
+                defaultValue={system?.name || ''}
               />
             </Grid>
             <Grid item xs={12} sm={6} md={4}>
               <Controller
                 as={<FilterSelect />}
                 fullWidth
-                name="equipmentCategory"
-                label="Equipment Category"
-                placeholder="Select Category"
+                name='equipmentCategory'
+                label='Equipment Category'
+                placeholder='Select Category'
                 items={EQUIPMENT_CATEGORIES}
                 error={errors.equipmentCategory?.message}
                 control={control}
                 defaultValue={
-                  system?.equipment?.category || EQUIPMENT_CATEGORIES[0].VALUE
+                  system?.equipment?.category || EQUIPMENT_CATEGORY_TYPE.CUSTOM
                 }
               />
             </Grid>
@@ -149,14 +147,14 @@ const SystemForm = ({ system = {} }) => {
               <Controller
                 as={<FilterSelect />}
                 fullWidth
-                name="equipmentType"
-                label="Equipment Type"
-                placeholder="Select Type"
+                name='equipmentType'
+                label='Equipment Type'
+                placeholder='Select Type'
                 items={EQUIPMENT_TYPES}
                 error={errors.equipmentType?.message}
                 control={control}
                 defaultValue={
-                  system?.equipment?.type || EQUIPMENT_TYPES[0].VALUE
+                  system?.equipment?.type || EQUIPMENT_TYPE.PROCESS
                 }
               />
             </Grid>
@@ -164,103 +162,103 @@ const SystemForm = ({ system = {} }) => {
               <Controller
                 as={<VektorTextField />}
                 fullWidth
-                name="equipmentName"
-                label="Equipment Name"
-                placeholder="Equipment Name"
+                name='equipmentName'
+                label='Equipment Name'
+                placeholder='Equipment Name'
                 error={errors.equipmentName?.message}
                 control={control}
-                defaultValue={system?.equipment?.name || ""}
+                defaultValue={system?.equipment?.name || ''}
               />
             </Grid>
             <Grid item xs={12} sm={6} md={3}>
               <Controller
                 as={<VektorTextField />}
                 fullWidth
-                name="equipmentNumber"
-                label="Equipment Number"
-                placeholder="Equipment Number"
+                name='equipmentNumber'
+                label='Equipment Number'
+                placeholder='Equipment Number'
                 error={errors.equipmentNumber?.message}
                 control={control}
-                defaultValue={system?.equipment?.number || ""}
+                defaultValue={system?.equipment?.number || ''}
               />
             </Grid>
             <Grid item xs={12} sm={6} md={3}>
               <Controller
                 as={<FilterSelect />}
                 fullWidth
-                name="project"
-                label="Project"
-                placeholder="Project"
+                name='project'
+                label='Project'
+                placeholder='Project'
                 items={projects}
                 keys={{
-                  label: "name",
-                  value: "id",
+                  label: 'name',
+                  value: 'id',
                 }}
                 error={errors.project?.message}
                 control={control}
-                defaultValue={system?.project?.id || ""}
+                defaultValue={system?.project?.id || ''}
               />
             </Grid>
             <Grid item xs={12} sm={6} md={3}>
               <Controller
                 as={<FilterSelect />}
                 fullWidth
-                name="workflow"
-                label="Workflow"
-                placeholder="Workflow"
+                name='workflow'
+                label='Workflow'
+                placeholder='Workflow'
                 items={workflowTemplates}
                 keys={{
-                  label: "name",
-                  value: "id",
+                  label: 'name',
+                  value: 'id',
                 }}
                 error={errors.workflow?.message}
                 control={control}
-                defaultValue={system?.workflow?.id || ""}
+                defaultValue={system?.workflow?.id || ''}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
               <Controller
                 as={<VektorTextField />}
                 fullWidth
-                name="productCode"
-                label="Product Code"
-                placeholder="Product Code"
+                name='productCode'
+                label='Product Code'
+                placeholder='Product Code'
                 error={errors.productCode?.message}
                 control={control}
-                defaultValue={system?.productCode || ""}
+                defaultValue={system?.productCode || ''}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
               <Controller
                 as={<VektorTextField />}
                 fullWidth
-                name="site"
-                label="Site"
-                placeholder="Site"
+                name='site'
+                label='Site'
+                placeholder='Site'
                 error={errors.site?.message}
                 control={control}
-                defaultValue={system?.site || ""}
+                defaultValue={system?.site || ''}
               />
             </Grid>
             <Grid item xs={12}>
               <div className={classes.buttonContainer}>
                 <Button
-                  variant="contained"
-                  color="primary"
+                  variant='contained'
+                  color='primary'
                   onClick={handleSubmit(onSubmit(false))}
                 >
                   Save
                 </Button>
                 <Button
-                  color="primary"
+                  color='primary'
                   className={classes.addAnother}
                   onClick={handleSubmit(onSubmit(true))}
                 >
                   Save and add another
                 </Button>
                 <Button
-                  color="primary"
-                  variant="contained"
+                  color='primary'
+                  variant='contained'
                   className={classes.delete}
                   onClick={deleteHandler}
                 >

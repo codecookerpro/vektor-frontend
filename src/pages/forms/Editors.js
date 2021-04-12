@@ -1,12 +1,12 @@
-import React, { useState } from "react";
-import styled from "styled-components/macro";
-import { NavLink } from "react-router-dom";
+import React, { useState } from 'react';
+import styled from 'styled-components/macro';
+import { NavLink } from 'react-router-dom';
 
-import Helmet from "react-helmet";
+import Helmet from 'react-helmet';
 
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
-import "react-quill/dist/quill.bubble.css";
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
+import 'react-quill/dist/quill.bubble.css';
 
 import {
   Box,
@@ -17,9 +17,9 @@ import {
   Card as MuiCard,
   Divider as MuiDivider,
   Typography,
-} from "@material-ui/core";
+} from '@material-ui/core';
 
-import { spacing } from "@material-ui/system";
+import { spacing } from '@material-ui/system';
 
 const Card = styled(MuiCard)`
   ${spacing};
@@ -52,24 +52,24 @@ const BubbleWrapper = styled.div`
 `;
 
 function Quill() {
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState('');
 
   return (
     <Card mb={6}>
       <CardContent>
-        <Typography variant="h6" gutterBottom>
+        <Typography variant='h6' gutterBottom>
           Quill
         </Typography>
-        <Typography variant="body2" gutterBottom>
+        <Typography variant='body2' gutterBottom>
           Modern WYSIWYG editor built for compatibility and extensibility.
         </Typography>
         <Box mt={3}>
           <QuillWrapper>
             <ReactQuill
-              theme="snow"
+              theme='snow'
               value={value}
               onChange={setValue}
-              placeholder="Type something.."
+              placeholder='Type something..'
             />
           </QuillWrapper>
         </Box>
@@ -79,24 +79,24 @@ function Quill() {
 }
 
 function Bubble() {
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState('');
 
   return (
     <Card mb={6}>
       <CardContent>
-        <Typography variant="h6" gutterBottom>
+        <Typography variant='h6' gutterBottom>
           Bubble
         </Typography>
-        <Typography variant="body2" gutterBottom>
+        <Typography variant='body2' gutterBottom>
           Bubble is a simple tooltip based theme for Quill.
         </Typography>
         <Box mt={3}>
           <BubbleWrapper>
             <ReactQuill
-              theme="bubble"
+              theme='bubble'
               value={value}
               onChange={setValue}
-              placeholder="Compose an epic..."
+              placeholder='Compose an epic...'
             />
           </BubbleWrapper>
         </Box>
@@ -108,16 +108,16 @@ function Bubble() {
 function Editors() {
   return (
     <React.Fragment>
-      <Helmet title="Editors" />
-      <Typography variant="h3" gutterBottom display="inline">
+      <Helmet title='Editors' />
+      <Typography variant='h3' gutterBottom display='inline'>
         Editors
       </Typography>
 
-      <Breadcrumbs aria-label="Breadcrumb" mt={2}>
-        <Link component={NavLink} exact to="/">
+      <Breadcrumbs aria-label='Breadcrumb' mt={2}>
+        <Link component={NavLink} exact to='/'>
           Dashboard
         </Link>
-        <Link component={NavLink} exact to="/">
+        <Link component={NavLink} exact to='/'>
           Forms
         </Link>
         <Typography>Editors</Typography>

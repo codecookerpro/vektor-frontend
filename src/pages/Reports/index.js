@@ -1,9 +1,9 @@
-import React, { memo, useState } from "react";
+import React, { memo, useState } from 'react';
 
-import PageHeader from "parts/PageHeader";
-import ReportFilters from "./ReportFilters";
-import ReportsTable from "./ReportsTable";
-import LINKS from "utils/constants/links";
+import PageHeader from 'parts/PageHeader';
+import ReportFilters from './ReportFilters';
+import ReportsTable from './ReportsTable';
+import LINKS from 'utils/constants/links';
 
 const NAV_LINKS = [LINKS.PROJECT_MANAGEMENT];
 

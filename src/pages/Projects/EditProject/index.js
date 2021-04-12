@@ -1,18 +1,18 @@
-import React, { memo, useState, useMemo, useEffect } from "react";
-import { useParams, useHistory } from "react-router-dom";
-import { Grid } from "@material-ui/core";
+import React, { memo, useState, useMemo, useEffect } from 'react';
+import { useParams, useHistory } from 'react-router-dom';
+import { Grid } from '@material-ui/core';
 
-import ContainedButton from "components/UI/Buttons/ContainedButton";
-import PageHeader from "parts/PageHeader";
-import DetailLinkCard from "parts/DetailLinkCard";
-import ProjectForm from "../Shared/ProjectForm";
-import StopDailyData from "../Shared/StopDailyData";
-import ProjectSystemsTable from "../Shared/ProjectSystemsTable";
-import PhasesListView from "../Shared/PhasesListView";
-import LINKS from "utils/constants/links";
-import users from "utils/temp/users";
-import results from "utils/temp/projects";
-import { isEmpty } from "utils/helpers/utility";
+import ContainedButton from 'components/UI/Buttons/ContainedButton';
+import PageHeader from 'parts/PageHeader';
+import DetailLinkCard from 'parts/DetailLinkCard';
+import ProjectForm from '../Shared/ProjectForm';
+import StopDailyData from '../Shared/StopDailyData';
+import ProjectSystemsTable from '../Shared/ProjectSystemsTable';
+import PhasesListView from '../Shared/PhasesListView';
+import LINKS from 'utils/constants/links';
+import users from 'utils/temp/users';
+import results from 'utils/temp/projects';
+import { isEmpty } from 'utils/helpers/utility';
 
 const NAV_LINKS = [LINKS.PROJECT_MANAGEMENT, LINKS.PROJECTS];
 
@@ -20,7 +20,7 @@ const EditProject = () => {
   const { id } = useParams();
   const history = useHistory();
 
-  const [selectedOrganization, setSelectedOrganization] = useState("");
+  const [selectedOrganization, setSelectedOrganization] = useState('');
 
   const project = useMemo(() => results.find((item) => item.id === id), [id]);
 
@@ -37,7 +37,7 @@ const EditProject = () => {
   );
 
   const linkHandler = (href) => () => {
-    history.push(href.replace(":id", id));
+    history.push(href.replace(':id', id));
   };
 
   return (
@@ -64,7 +64,7 @@ const EditProject = () => {
         </Grid>
         <Grid item xs={12}>
           <DetailLinkCard
-            title="Phases"
+            title='Phases'
             onDetail={linkHandler(LINKS.PROJECT_PHASES.HREF)}
           />
         </Grid>
@@ -73,7 +73,7 @@ const EditProject = () => {
         </Grid>
         <Grid item xs={12}>
           <DetailLinkCard
-            title="System Trend Chart"
+            title='System Trend Chart'
             onDetail={linkHandler(LINKS.SYSTEM_TREND_CHART.HREF)}
           />
         </Grid>
