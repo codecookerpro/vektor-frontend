@@ -9,8 +9,9 @@ const OrganizationList = lazy(() => import(/* webpackChunkName: 'OrganizationLis
 const AddOrganization = lazy(() => import(/* webpackChunkName: 'AddOrganization' */ 'pages/Organizations/AddOrganization'));
 const EditOrganization = lazy(() => import(/* webpackChunkName: 'EditWorkflowTemplate' */ 'pages/Organizations/EditOrganization'));
 const OrganizationHistory = lazy(() => import(/* webpackChunkName: 'WorkflowTemplateHistory' */ 'pages/Organizations/OrganizationHistory'));
-const GroupList = lazy(() => import(/* webpackChunkName: 'GroupList' */ 'pages/Groups/GroupList'));
 const AuditTrailLogList = lazy(() => import(/* webpackChunkName: 'AuditTrailLogList' */ 'pages/AuditTrailLogs/AuditTrailLogList'));
+const AuditTrailLogDetail = lazy(() => import(/* webpackChunkName: 'AuditTrailLogDetail' */ 'pages/AuditTrailLogs/AuditTrailLogDetail'));
+const AuditTrailLogHistory = lazy(() => import(/* webpackChunkName: 'AuditTrailLogHistory' */ 'pages/AuditTrailLogs/AuditTrailLogHistory'));
 import LINKS from 'utils/constants/links';
 
 const userManagementRoutes = Object.freeze({
@@ -66,14 +67,21 @@ const userManagementRoutes = Object.freeze({
       isNotSlide: true,
     },
     {
-      path: LINKS.GROUPS.HREF,
-      name: LINKS.GROUPS.TITLE,
-      component: GroupList,
-    },
-    {
       path: LINKS.AUDIT_TRAIL_LOGS.HREF,
       name: LINKS.AUDIT_TRAIL_LOGS.TITLE,
       component: AuditTrailLogList,
+    },
+    {
+      path: LINKS.AUDIT_TRAIL_LOG_DETAIL.HREF,
+      name: LINKS.AUDIT_TRAIL_LOG_DETAIL.TITLE,
+      component: AuditTrailLogDetail,
+      isNotSlide: true,
+    },
+    {
+      path: LINKS.AUDIT_TRAIL_LOG_HISTORY.HREF,
+      name: LINKS.AUDIT_TRAIL_LOG_HISTORY.TITLE,
+      component: AuditTrailLogHistory,
+      isNotSlide: true,
     },
   ],
   component: null,

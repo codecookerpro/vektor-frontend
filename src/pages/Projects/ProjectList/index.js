@@ -1,12 +1,12 @@
-import React, { memo, useCallback } from "react";
-import { useHistory } from "react-router-dom";
-import { Plus } from "react-feather";
+import React, { memo, useCallback } from 'react';
+import { useHistory } from 'react-router-dom';
+import { Plus } from 'react-feather';
 
-import ContainedButton from "components/UI/Buttons/ContainedButton";
-import PageHeader from "parts/PageHeader";
-import OrganizationFilter from "./OrganizationFilter";
-import ProjectsTable from "./ProjectsTable";
-import LINKS from "utils/constants/links";
+import ContainedButton from 'components/UI/Buttons/ContainedButton';
+import PageHeader from 'parts/PageHeader';
+import OrganizationFilter from './OrganizationFilter';
+import ProjectsTable from './ProjectsTable';
+import LINKS from 'utils/constants/links';
 
 const NAV_LINKS = [LINKS.PROJECT_MANAGEMENT];
 

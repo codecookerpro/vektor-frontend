@@ -163,13 +163,17 @@ const LINKS = Object.freeze({
     TITLE: 'Organization History',
     HREF: '/user-management/organizations/:id/history',
   },
-  GROUPS: {
-    TITLE: 'Groups',
-    HREF: '/user-management/groups',
-  },
   AUDIT_TRAIL_LOGS: {
     TITLE: 'Audit Trail Logs',
     HREF: '/user-management/audit-trail-logs',
+  },
+  AUDIT_TRAIL_LOG_DETAIL: {
+    TITLE: 'View Audit Trail Log',
+    HREF: '/user-management/audit-trail-logs/detail/:id',
+  },
+  AUDIT_TRAIL_LOG_HISTORY: {
+    TITLE: 'Audit Trail Log History',
+    HREF: '/user-management/audit-trail-logs/:id/history',
   },
   RECENT_ACTIONS: {
     TITLE: 'Recent Actions',

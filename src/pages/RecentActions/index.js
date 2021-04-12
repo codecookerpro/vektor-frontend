@@ -1,22 +1,27 @@
 
 import React, { memo } from 'react'
-import { makeStyles } from '@material-ui/core/styles'
+import { Grid } from '@material-ui/core';
 
-const useStyles = makeStyles(() => ({
-  root: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center'
-  }
-}));
+import PageHeader from 'parts/PageHeader';
+import RecentActionsCard from 'parts/RecentActionsCard'
+import LINKS from 'utils/constants/links';
+import actions from 'utils/temp/recent-actions'
+
+const NAV_LINKS = [LINKS.RECENT_ACTIONS];
 
 const RecentActions = () => {
-  const classes = useStyles();
-
   return (
-    <main className={classes.root}>
-      Recent Actions Page
-    </main>
+    <>
+      <PageHeader
+        title={LINKS.RECENT_ACTIONS.TITLE}
+        links={NAV_LINKS}
+      />
+      <Grid container spacing={6}>
+        <Grid item xs={12} md={6} lg={4}>
+          <RecentActionsCard actions={actions} />
+        </Grid>
+      </Grid>
+    </>
   )
 }
 

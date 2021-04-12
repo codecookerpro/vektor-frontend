@@ -1,5 +1,5 @@
-import React, { memo, useState } from "react";
-import { useSelector } from "react-redux";
+import React, { memo, useState } from 'react';
+import { useSelector } from 'react-redux';
 import {
   Card,
   CardContent,
@@ -7,15 +7,15 @@ import {
   TableRow,
   Checkbox,
   Typography,
-} from "@material-ui/core";
+} from '@material-ui/core';
 
-import LinkButton from "components/UI/Buttons/LinkButton";
-import VektorTableContainer from "parts/Tables/VektorTableContainer";
-import * as TABLE_ENVIRONMENTS from "utils/constants/table-environments";
-import LINKS from "utils/constants/links";
+import LinkButton from 'components/UI/Buttons/LinkButton';
+import VektorTableContainer from 'parts/Tables/VektorTableContainer';
+import * as TABLE_ENVIRONMENTS from 'utils/constants/table-environments';
+import LINKS from 'utils/constants/links';
 
 const columns = [
-  { id: "name", label: "Name", minWidth: 130 },
+  { id: 'name', label: 'Name', minWidth: 130 },
 ];
 
 const OrganizationsTable = ({ selectedItems, setSelectedItems }) => {
@@ -43,7 +43,7 @@ const OrganizationsTable = ({ selectedItems, setSelectedItems }) => {
   return (
     <Card>
       <CardContent>
-        <Typography variant="h5" color="textPrimary" gutterBottom>
+        <Typography variant='h5' color='textPrimary' gutterBottom>
           {`${results.length} organizations`}
         </Typography>
         <VektorTableContainer
@@ -62,10 +62,10 @@ const OrganizationsTable = ({ selectedItems, setSelectedItems }) => {
             : results
           ).map((row) => (
             <TableRow key={row._id}>
-              <TableCell component="th" scope="row">
-                <div style={{ display: "flex" }}>
+              <TableCell component='th' scope='row'>
+                <div style={{ display: 'flex' }}>
                   <Checkbox
-                    inputProps={{ "aria-labelledby": `check-${row._id}` }}
+                    inputProps={{ 'aria-labelledby': `check-${row._id}` }}
                     checked={
                       selectedItems.findIndex(
                         (value) => row._id === value._id
@@ -74,7 +74,7 @@ const OrganizationsTable = ({ selectedItems, setSelectedItems }) => {
                     onChange={toggleHandler(row)}
                   />
                   <LinkButton
-                    to={LINKS.EDIT_ORGANIZATION.HREF.replace(":id", row._id)}
+                    to={LINKS.EDIT_ORGANIZATION.HREF.replace(':id', row._id)}
                   >
                     {row.name}
                   </LinkButton>

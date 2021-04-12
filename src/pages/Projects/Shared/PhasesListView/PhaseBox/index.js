@@ -1,9 +1,9 @@
-import React, { useState } from "react";
-import { Card, CardContent, CardHeader, Grid } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
-import { useDrop } from "react-dnd";
+import React, { useState } from 'react';
+import { Card, CardContent, CardHeader, Grid } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import { useDrop } from 'react-dnd';
 
-import PhaseItem from "../PhaseItem";
+import PhaseItem from '../PhaseItem';
 
 const useStyles = makeStyles(() => ({
   content: {
@@ -13,9 +13,9 @@ const useStyles = makeStyles(() => ({
 
 const PhaseBox = ({ id, fields, moveItem }) => {
   const classes = useStyles();
-  const [{}, drop] = useDrop(
+  const [{ }, drop] = useDrop(
     () => ({
-      accept: "ITEM",
+      accept: 'ITEM',
       drop: moveItem,
       collect: (monitor) => ({
         isOver: monitor.isOver(),
@@ -31,7 +31,7 @@ const PhaseBox = ({ id, fields, moveItem }) => {
   };
 
   const handleItemSelection = (index) => {
-    const field = index < 0 ? "" : fields[index];
+    const field = index < 0 ? '' : fields[index];
     setSelectedField(field);
   };
 

@@ -1,12 +1,12 @@
-import React, { memo, useState } from "react";
-import { useDispatch } from "react-redux";
-import { useHistory } from "react-router-dom";
-import { useForm, Controller } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-import { Card, CardContent, Grid, Button, Typography } from "@material-ui/core";
-import { Alert } from "@material-ui/lab";
-import { makeStyles } from "@material-ui/core/styles";
+import React, { memo, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import { useForm, Controller } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
+import { Card, CardContent, Grid, Button, Typography } from '@material-ui/core';
+import { Alert } from '@material-ui/lab';
+import { makeStyles } from '@material-ui/core/styles';
 
 import * as organizationAPI from 'services/api-organization'
 import {
@@ -14,10 +14,10 @@ import {
   editOrganization,
   removeOrganization
 } from 'redux/actions/organizations';
-import VektorTextField from "components/UI/TextFields/VektorTextField";
-import { STRING_INPUT_VALID } from "utils/constants/validations";
-import LINKS from "utils/constants/links";
-import { isEmpty } from "utils/helpers/utility";
+import VektorTextField from 'components/UI/TextFields/VektorTextField';
+import { STRING_INPUT_VALID } from 'utils/constants/validations';
+import LINKS from 'utils/constants/links';
+import { isEmpty } from 'utils/helpers/utility';
 import useLoading from 'utils/hooks/useLoading'
 
 const useStyles = makeStyles((theme) => ({
@@ -26,17 +26,17 @@ const useStyles = makeStyles((theme) => ({
   },
   name: {
     fontSize: 17,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     marginBottom: theme.spacing(3),
   },
   form: {
     marginBottom: theme.spacing(6),
   },
   buttonContainer: {
-    display: "flex",
+    display: 'flex',
   },
   delete: {
-    marginLeft: "auto",
+    marginLeft: 'auto',
     backgroundColor: theme.custom.palette.red,
   },
 }));
@@ -51,7 +51,7 @@ const OrganizationForm = ({ organization = {} }) => {
   const history = useHistory();
   const { changeLoadingStatus } = useLoading()
 
-  const [errorMessage, setErrorMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState('');
 
   const { control, handleSubmit, errors } = useForm({
     resolver: yupResolver(schema),
@@ -108,12 +108,12 @@ const OrganizationForm = ({ organization = {} }) => {
     <Card>
       <CardContent>
         {errorMessage && (
-          <Alert mt={2} mb={1} severity="warning" className={classes.alert}>
+          <Alert mt={2} mb={1} severity='warning' className={classes.alert}>
             {errorMessage}
           </Alert>
         )}
-        <Typography variant="h6" className={classes.name}>
-          {organization?.name || "New Organization"}
+        <Typography variant='h6' className={classes.name}>
+          {organization?.name || 'New Organization'}
         </Typography>
         <form noValidate className={classes.form} onSubmit={handleSubmit(onSubmit)}>
           <Grid container spacing={6}>
@@ -121,19 +121,19 @@ const OrganizationForm = ({ organization = {} }) => {
               <Controller
                 as={<VektorTextField />}
                 fullWidth
-                name="name"
-                label="Name"
-                placeholder="Name"
+                name='name'
+                label='Name'
+                placeholder='Name'
                 error={errors.name?.message}
                 control={control}
-                defaultValue={organization?.name || ""}
+                defaultValue={organization?.name || ''}
               />
             </Grid>
             <Grid item xs={12}>
               <div className={classes.buttonContainer}>
                 <Button
-                  variant="contained"
-                  color="primary"
+                  variant='contained'
+                  color='primary'
                   type='submit'
                 >
                   Save Changes
@@ -141,8 +141,8 @@ const OrganizationForm = ({ organization = {} }) => {
                 {
                   !isEmpty(organization) &&
                   <Button
-                    color="primary"
-                    variant="contained"
+                    color='primary'
+                    variant='contained'
                     className={classes.delete}
                     onClick={deleteHandler}
                   >

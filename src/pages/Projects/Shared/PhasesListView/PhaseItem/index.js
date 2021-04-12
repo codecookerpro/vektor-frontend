@@ -1,10 +1,10 @@
-import React from "react";
-import { DragSource as dragSource } from "react-dnd";
-import { Card, CardContent, Typography } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
-import clsx from "clsx";
+import React from 'react';
+import { DragSource as dragSource } from 'react-dnd';
+import { Card, CardContent, Typography } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import clsx from 'clsx';
 
-import ContainedButton from "components/UI/Buttons/ContainedButton";
+import ContainedButton from 'components/UI/Buttons/ContainedButton';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -15,9 +15,9 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.primary.main,
   },
   content: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     padding: `${theme.spacing(2)}px !important`,
   },
 }));
@@ -55,7 +55,7 @@ const PhaseItem = ({
     handleSelection(index);
   };
 
-  const detailHandler = () => {};
+  const detailHandler = () => { };
 
   return connectDragSource(
     <div>
@@ -67,9 +67,9 @@ const PhaseItem = ({
       >
         <CardContent className={classes.content}>
           <div>
-            <Typography color="textPrimary">{item.name}</Typography>
-            <Typography color="textPrimary">{item.projectName}</Typography>
-            <Typography color="textPrimary">{item.status * 100}%</Typography>
+            <Typography color='textPrimary'>{item.name}</Typography>
+            <Typography color='textPrimary'>{item.projectName}</Typography>
+            <Typography color='textPrimary'>{item.status * 100}%</Typography>
           </div>
           <ContainedButton onClick={detailHandler}>Detail</ContainedButton>
         </CardContent>
@@ -78,4 +78,4 @@ const PhaseItem = ({
   );
 };
 
-export default dragSource("ITEM", fieldSource, collect)(PhaseItem);
+export default dragSource('ITEM', fieldSource, collect)(PhaseItem);

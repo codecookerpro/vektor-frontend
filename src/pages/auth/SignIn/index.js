@@ -10,7 +10,7 @@ import {
   TextField,
 } from '@material-ui/core';
 
-import * as authAPI from 'services/authService';
+import * as authAPI from 'services/api-auth';
 import { setUserToken } from 'redux/actions/authActions';
 import ContainedButton from 'components/UI/Buttons/ContainedButton'
 import LinkButton from 'components/UI/Buttons/LinkButton'

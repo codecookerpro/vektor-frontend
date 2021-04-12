@@ -5,7 +5,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup';
 import { TextField } from '@material-ui/core';
 
-import * as authAPI from 'services/authService';
+import * as authAPI from 'services/api-auth';
 import ContainedButton from 'components/UI/Buttons/ContainedButton'
 import LinkButton from 'components/UI/Buttons/LinkButton'
 import AuthWrapper, { authPageStyles } from '../Shared/AuthWrapper'

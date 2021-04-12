@@ -1,16 +1,16 @@
-import React from "react";
-import { DragLayer as dragLayer } from "react-dnd";
+import React from 'react';
+import { DragLayer as dragLayer } from 'react-dnd';
 
-import PhaseItemTemplate from "../PhaseItemTemplate";
+import PhaseItemTemplate from '../PhaseItemTemplate';
 
 const layerStyles = {
-  position: "fixed",
-  pointerEvents: "none",
+  position: 'fixed',
+  pointerEvents: 'none',
   zIndex: 100,
   left: 0,
   top: 0,
-  width: "100%",
-  height: "100%",
+  width: '100%',
+  height: '100%',
 };
 
 const getFieldStyle = (isDragging) => {
@@ -25,7 +25,7 @@ const getFieldStyle = (isDragging) => {
 const getItemStyles = (currentOffset) => {
   if (!currentOffset) {
     return {
-      display: "none",
+      display: 'none',
     };
   }
 
@@ -48,7 +48,7 @@ const collect = (monitor) => ({
 const ItemsDragLayer = ({ item, itemType, isDragging, currentOffset }) => {
   const renderItem = (type, item) => {
     switch (type) {
-      case "ITEM":
+      case 'ITEM':
         return <PhaseItemTemplate fields={item.fields} />;
       default:
         return null;

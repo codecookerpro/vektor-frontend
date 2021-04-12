@@ -1,13 +1,13 @@
 
-import React, { memo, useMemo } from "react";
-import { useSelector } from "react-redux";
-import { useParams, useHistory } from "react-router-dom";
+import React, { memo, useMemo } from 'react';
+import { useSelector } from 'react-redux';
+import { useParams, useHistory } from 'react-router-dom';
 
-import ContainedButton from "components/UI/Buttons/ContainedButton";
-import PageHeader from "parts/PageHeader";
-import OrganizationForm from "../Shared/OrganizationForm";
-import LINKS from "utils/constants/links";
-import { isEmpty } from "utils/helpers/utility";
+import ContainedButton from 'components/UI/Buttons/ContainedButton';
+import PageHeader from 'parts/PageHeader';
+import OrganizationForm from '../Shared/OrganizationForm';
+import LINKS from 'utils/constants/links';
+import { isEmpty } from 'utils/helpers/utility';
 
 const NAV_LINKS = [LINKS.USER_MANAGEMENT, LINKS.ORGANIZATIONS];
 
@@ -19,7 +19,7 @@ const EditOrganization = () => {
   const organization = useMemo(() => results.find((item) => item._id === id), [results, id]);
 
   const historyHandler = () => {
-    history.push(LINKS.ORGANIZATION_HISTORY.HREF.replace(":id", id));
+    history.push(LINKS.ORGANIZATION_HISTORY.HREF.replace(':id', id));
   };
 
   return (

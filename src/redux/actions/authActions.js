@@ -1,4 +1,4 @@
-import * as TYPES from "redux/types";
+import * as TYPES from 'redux/types';
 
 const setUserToken = ({ accessToken, refreshToken, user }) => dispatch => {
   dispatch(setAccessToken(accessToken));
@@ -30,11 +30,20 @@ const setCurrentUser = currentUser => {
   };
 };
 
+const setPasswordResetToken = passwordResetToken => {
+  localStorage.setItem('passwordResetToken', passwordResetToken);
+  return {
+    type: TYPES.SET_PASSWORD_RESET_TOKEN,
+    payload: passwordResetToken
+  };
+};
+
 const logoutUser = () => dispatch => {
   localStorage.clear();
   dispatch(setAccessToken(''));
   dispatch(setRefreshToken(''));
   dispatch(setCurrentUser({}));
+  dispatch(setPasswordResetToken(''));
 };
 
 export {
@@ -42,5 +51,6 @@ export {
   setAccessToken,
   setRefreshToken,
   setCurrentUser,
+  setPasswordResetToken,
   logoutUser
 }

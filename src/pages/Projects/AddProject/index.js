@@ -1,14 +1,14 @@
-import React, { memo, useState, useMemo } from "react";
+import React, { memo, useState, useMemo } from 'react';
 
-import PageHeader from "parts/PageHeader";
-import ProjectForm from "../Shared/ProjectForm";
-import LINKS from "utils/constants/links";
-import users from "utils/temp/users";
+import PageHeader from 'parts/PageHeader';
+import ProjectForm from '../Shared/ProjectForm';
+import LINKS from 'utils/constants/links';
+import users from 'utils/temp/users';
 
 const NAV_LINKS = [LINKS.PROJECT_MANAGEMENT, LINKS.PROJECTS];
 
 const AddProject = () => {
-  const [selectedOrganization, setSelectedOrganization] = useState("");
+  const [selectedOrganization, setSelectedOrganization] = useState('');
 
   const userList = useMemo(
     () =>
