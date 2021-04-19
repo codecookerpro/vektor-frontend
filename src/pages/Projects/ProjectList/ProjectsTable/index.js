@@ -1,5 +1,5 @@
-import { memo, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { memo, useState } from 'react';
+import { useSelector } from 'react-redux';
 import {
   Card,
   CardContent,
@@ -8,13 +8,11 @@ import {
   Typography,
 } from '@material-ui/core';
 
-import { getProjects } from 'redux/actions/projects';
 import VektorChip from 'components/VektorChip';
 import LinkButton from 'components/UI/Buttons/LinkButton';
 import VektorTableContainer from 'parts/Tables/VektorTableContainer';
 import * as TABLE_ENVIRONMENTS from 'utils/constants/table-environments';
 import LINKS from 'utils/constants/links';
-import results from 'utils/temp/projects';
 
 const columns = [
   { id: 'name', label: 'Name', minWidth: 170 },
@@ -25,19 +23,18 @@ const columns = [
 ];
 
 const ProjectsTable = () => {
-  const dispatch = useDispatch()
-
-  const { results: data } = useSelector(state => state.projects)
+  const { results } = useSelector(state => state.projects)
+  const organizations = useSelector(state => state.organizations.results);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(
     TABLE_ENVIRONMENTS.ROWS_PER_PAGE
   );
 
-  useEffect(() => {
-    dispatch(getProjects());
-  }, [dispatch])
+  const getOrganizationName = (_id) => {
+    const organization = organizations.find((item) => item._id === _id)
+    return organization?.name || ''
+  }
 
-  console.log(data)
   return (
     <Card>
       <CardContent>
@@ -59,22 +56,22 @@ const ProjectsTable = () => {
             )
             : results
           ).map((row) => (
-            <TableRow key={row.id}>
+            <TableRow key={row._id}>
               <TableCell component='th' scope='row'>
-                <LinkButton to={LINKS.EDIT_PROJECT.HREF.replace(':id', row.id)}>
+                <LinkButton to={LINKS.EDIT_PROJECT.HREF.replace(':id', row._id)}>
                   {row.name}
                 </LinkButton>
               </TableCell>
-              <TableCell>{row.organization.name || ''}</TableCell>
+              <TableCell>{getOrganizationName(row.organization)}</TableCell>
               <TableCell>{row.number}</TableCell>
               <TableCell>
-                {row.finished ? (
+                {row?.finished ? (
                   <VektorChip label='Finished' color='success' />
                 ) : (
                   <VektorChip label='Not Finished' color='error' />
                 )}
               </TableCell>
-              <TableCell>{row.status * 100}%</TableCell>
+              <TableCell>{1 * 100}%</TableCell>
             </TableRow>
           ))}
         </VektorTableContainer>
