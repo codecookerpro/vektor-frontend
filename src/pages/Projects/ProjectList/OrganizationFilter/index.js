@@ -1,5 +1,6 @@
 
 import React, { memo } from 'react'
+import { useSelector } from 'react-redux';
 import {
   Card,
   CardContent,
@@ -8,7 +9,6 @@ import {
 import { makeStyles } from '@material-ui/core/styles'
 
 import FilterSelect from 'components/UI/Selects/FilterSelect'
-import ORGANIZATIONS from 'utils/temp/organizations'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -22,8 +22,12 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const OrganizationFilter = () => {
+const OrganizationFilter = ({
+  organization,
+  setOrganization
+}) => {
   const classes = useStyles();
+  const organizations = useSelector(state => state.organizations.results);
 
   return (
     <Card className={classes.root}>
@@ -35,8 +39,10 @@ const OrganizationFilter = () => {
         <FilterSelect
           label='By organization'
           placeholder='All organizations'
-          items={ORGANIZATIONS}
-          value=''
+          items={organizations}
+          keys={{ label: "name", value: "_id" }}
+          value={organization}
+          onChange={(event) => setOrganization(event.target.value)}
         />
       </CardContent>
     </Card>

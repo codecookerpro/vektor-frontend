@@ -2,7 +2,7 @@
 import axios from 'services/axios'
 
 const getProjects = async (data) => {
-  return await axios.get('/api/projects', { data });
+  return axios.get('/api/projects', { data });
 };
 
 const createProject = async (params) => {
