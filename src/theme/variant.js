@@ -56,6 +56,7 @@ const variant = {
   custom: {
     palette: {
       white: '#ffffff',
+      blue: '#7aa3d0',
       greyWhite: '#f7f9fc',
       grey: '#e0e0e0',
       lightGreen: '#a6b884',

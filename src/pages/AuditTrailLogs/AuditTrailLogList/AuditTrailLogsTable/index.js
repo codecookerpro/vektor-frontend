@@ -9,12 +9,13 @@ import {
   Typography,
 } from '@material-ui/core';
 
-import { getAuditTrailLogs } from 'redux/actions/auditTrailLogs';
+import { getEvents } from 'redux/actions/events';
 import LinkButton from 'components/UI/Buttons/LinkButton';
 import VektorTableContainer from 'parts/Tables/VektorTableContainer';
 import * as TABLE_ENVIRONMENTS from 'utils/constants/table-environments';
 import LINKS from 'utils/constants/links';
 import { getEnglishDateWithTime } from 'utils/helpers/time'
+import { isEmpty } from 'utils/helpers/utility';
 
 const columns = [
   { id: 'actionTime', label: 'Action Time', minWidth: 90 },
@@ -31,15 +32,21 @@ const AuditTrailLogsTable = ({
 }) => {
   const dispatch = useDispatch();
 
-  const { results = [] } = useSelector(state => state.auditTrailLogs);
+  const { results = [] } = useSelector(state => state.events);
+  const users = useSelector(state => state.users.results);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(
     TABLE_ENVIRONMENTS.ROWS_PER_PAGE
   );
 
   useEffect(() => {
-    dispatch(getAuditTrailLogs());
+    dispatch(getEvents());
   }, [dispatch])
+
+  const getUserName = (_id) => {
+    const user = users.find((item) => item._id === _id)
+    return user?.email || ''
+  }
 
   const toggleHandler = (value) => () => {
     const currentIndex = selectedItems.findIndex(
@@ -89,27 +96,27 @@ const AuditTrailLogsTable = ({
                     }
                     onChange={toggleHandler(row)}
                   />
-                  <LinkButton
-                    to={LINKS.AUDIT_TRAIL_LOG_DETAIL.HREF.replace(':id', row._id)}
-                  >
-                    {getEnglishDateWithTime(row.actionTime)}
+                  <LinkButton to={LINKS.AUDIT_TRAIL_LOG_DETAIL.HREF.replace(':id', row._id)}>
+                    {getEnglishDateWithTime(row.updatedAt)}
                   </LinkButton>
                 </div>
               </TableCell>
               <TableCell>
-                {row.user}
+                {getUserName(row.user)}
               </TableCell>
               <TableCell>
-                {row.contentType}
+                {row.mName}
               </TableCell>
               <TableCell>
-                {row.object}
+                {row.mId}
               </TableCell>
               <TableCell>
-                {row.action}
+                {row.actionType}
               </TableCell>
               <TableCell>
-                {row.changeMessage}
+                {!isEmpty(row?.change[0]) &&
+                  `${row?.change[0]?.field}: ${row?.change[0]?.nValue || ''} - ${row?.change[0]?.pValue || ''}`
+                }
               </TableCell>
             </TableRow>
           ))}

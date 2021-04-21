@@ -2,7 +2,10 @@
 import axios from 'services/axios'
 
 const getUsers = async (data) => {
-  return await axios.get('/api/users', { data });
+  const params = {
+    get_json: JSON.stringify(data)
+  }
+  return await axios.get('/api/users', { params });
 };
 
 const createUser = async (params) => {

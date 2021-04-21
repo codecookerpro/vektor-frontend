@@ -1,52 +1,72 @@
-import React, { memo, useState } from "react";
+import React, { memo, useEffect, useState } from 'react';
 import {
   Card,
   CardContent,
   TableCell,
   TableRow,
   Checkbox,
-} from "@material-ui/core";
-import { CSVLink } from "react-csv";
+} from '@material-ui/core';
+import { CSVLink } from 'react-csv';
 
-import ContainedButton from "components/UI/Buttons/ContainedButton";
-import LinkButton from "components/UI/Buttons/LinkButton";
-import VektorTableContainer from "parts/Tables/VektorTableContainer";
-import * as TABLE_ENVIRONMENTS from "utils/constants/table-environments";
-import LINKS from "utils/constants/links";
-import results from "utils/temp/systems";
+import * as reportAPI from 'services/api-report'
+import ContainedButton from 'components/UI/Buttons/ContainedButton';
+import LinkButton from 'components/UI/Buttons/LinkButton';
+import VektorTableContainer from 'parts/Tables/VektorTableContainer';
+import * as TABLE_ENVIRONMENTS from 'utils/constants/table-environments';
+import LINKS from 'utils/constants/links';
+import results from 'utils/temp/systems';
 
 const columns = [
-  { id: "name", label: "Name", minWidth: 130 },
-  { id: "workflow", label: "Workflow", minWidth: 60 },
-  { id: "project", label: "Project", minWidth: 60 },
-  { id: "equipmentCategory", label: "Equipment category", minWidth: 90 },
-  { id: "equipmentType", label: "Equipment type", minWidth: 90 },
-  { id: "equipmentName", label: "Equipment name", minWidth: 90 },
-  { id: "equipmentNumber", label: "Equipment number", minWidth: 90 },
-  { id: "totalHours", label: "Total Planned Hours", minWidth: 40 },
-  { id: "pv", label: "PV", minWidth: 25 },
-  { id: "status", label: "Status", minWidth: 25 },
-  { id: "effort", label: "Effort", minWidth: 25 },
-  { id: "ev", label: "EV", minWidth: 25 },
+  { id: 'name', label: 'Name', minWidth: 130 },
+  { id: 'workflow', label: 'Workflow', minWidth: 60 },
+  { id: 'project', label: 'Project', minWidth: 60 },
+  { id: 'equipmentCategory', label: 'Equipment category', minWidth: 90 },
+  { id: 'equipmentType', label: 'Equipment type', minWidth: 90 },
+  { id: 'equipmentName', label: 'Equipment name', minWidth: 90 },
+  { id: 'equipmentNumber', label: 'Equipment number', minWidth: 90 },
+  { id: 'totalHours', label: 'Total Planned Hours', minWidth: 40 },
+  { id: 'pv', label: 'PV', minWidth: 25 },
+  { id: 'status', label: 'Status', minWidth: 25 },
+  { id: 'effort', label: 'Effort', minWidth: 25 },
+  { id: 'ev', label: 'EV', minWidth: 25 },
 ];
 
 const headers = [
-  { label: "Name", key: "name" },
-  { label: "Workflow", key: "workflow" },
-  { label: "Project", key: "project" },
-  { label: "Total Planned Hours", key: "totalHours" },
-  { label: "PV", key: "pv" },
-  { label: "Status", key: "status" },
-  { label: "Effort", key: "effort" },
-  { label: "EV", key: "ev" },
+  { label: 'Name', key: 'name' },
+  { label: 'Workflow', key: 'workflow' },
+  { label: 'Project', key: 'project' },
+  { label: 'Total Planned Hours', key: 'totalHours' },
+  { label: 'PV', key: 'pv' },
+  { label: 'Status', key: 'status' },
+  { label: 'Effort', key: 'effort' },
+  { label: 'EV', key: 'ev' },
 ];
 
 const ReportsTable = () => {
+
+  const [reports, setReports] = useState([])
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(
-    TABLE_ENVIRONMENTS.ROWS_PER_PAGE
-  );
+  const [rowsPerPage, setRowsPerPage] = useState(TABLE_ENVIRONMENTS.ROWS_PER_PAGE);
   const [selectedItems, setSelectedItems] = useState([]);
+
+  useEffect(() => {
+    getReports()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page, rowsPerPage]);
+
+  const getReports = async () => {
+    try {
+      const params = {
+        skip: page * rowsPerPage + 1,
+        limit: rowsPerPage
+      }
+
+      const { data = [] } = await reportAPI.getReports(params)
+      setReports(data)
+    } catch (error) {
+      console.log('[getReports] error => ', error);
+    }
+  }
 
   const toggleHandler = (value) => () => {
     const currentIndex = selectedItems.findIndex(
@@ -63,13 +83,14 @@ const ReportsTable = () => {
     setSelectedItems(newSelectedItems);
   };
 
+  console.log(reports)
   return (
     <Card>
       <CardContent>
         <CSVLink
           data={selectedItems}
           headers={headers}
-          style={{ textDecoration: "unset" }}
+          style={{ textDecoration: 'unset' }}
         >
           <ContainedButton>CSV Download</ContainedButton>
         </CSVLink>
@@ -83,16 +104,16 @@ const ReportsTable = () => {
         >
           {(rowsPerPage > 0
             ? results.slice(
-                page * rowsPerPage,
-                page * rowsPerPage + rowsPerPage
-              )
+              page * rowsPerPage,
+              page * rowsPerPage + rowsPerPage
+            )
             : results
           ).map((row) => (
             <TableRow key={row.id}>
-              <TableCell component="th" scope="row">
-                <div style={{ display: "flex" }}>
+              <TableCell component='th' scope='row'>
+                <div style={{ display: 'flex' }}>
                   <Checkbox
-                    inputProps={{ "aria-labelledby": `check-${row.id}` }}
+                    inputProps={{ 'aria-labelledby': `check-${row.id}` }}
                     checked={
                       selectedItems.findIndex(
                         (value) => row.id === value.id
@@ -101,18 +122,18 @@ const ReportsTable = () => {
                     onChange={toggleHandler(row)}
                   />
                   <LinkButton
-                    to={LINKS.EDIT_SYSTEM.HREF.replace(":id", row.id)}
+                    to={LINKS.EDIT_SYSTEM.HREF.replace(':id', row.id)}
                   >
                     {row.name}
                   </LinkButton>
                 </div>
               </TableCell>
-              <TableCell>{row.workflow.name || ""}</TableCell>
-              <TableCell>{row.project.name || ""}</TableCell>
-              <TableCell>{row.equipment.category || ""}</TableCell>
-              <TableCell>{row.equipment.type || ""}</TableCell>
-              <TableCell>{row.equipment.name || ""}</TableCell>
-              <TableCell>{row.equipment.number || ""}</TableCell>
+              <TableCell>{row.workflow.name || ''}</TableCell>
+              <TableCell>{row.project.name || ''}</TableCell>
+              <TableCell>{row.equipment.category || ''}</TableCell>
+              <TableCell>{row.equipment.type || ''}</TableCell>
+              <TableCell>{row.equipment.name || ''}</TableCell>
+              <TableCell>{row.equipment.number || ''}</TableCell>
               <TableCell>{row.totalHours}</TableCell>
               <TableCell>{row.pv * 100}%</TableCell>
               <TableCell>{row.status * 100}%</TableCell>
