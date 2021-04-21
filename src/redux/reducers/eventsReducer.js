@@ -5,9 +5,9 @@ const INITIAL_STATE = Object.freeze({
   results: []
 });
 
-const auditTrailLogsReducer = (state = INITIAL_STATE, action) => {
+const eventsReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case TYPES.FETCH_AUDIT_TRAIL_LOGS:
+    case TYPES.FETCH_EVENTS:
       return {
         ...state,
         results: action.payload
@@ -17,4 +17,4 @@ const auditTrailLogsReducer = (state = INITIAL_STATE, action) => {
   }
 };
 
-export default auditTrailLogsReducer;
+export default eventsReducer;

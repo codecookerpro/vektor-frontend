@@ -11,7 +11,7 @@ import {
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
-import { getAuditTrailLogs } from 'redux/actions/auditTrailLogs';
+import { getEvents } from 'redux/actions/events';
 import ContainedButton from 'components/UI/Buttons/ContainedButton';
 import PageHeader from 'parts/PageHeader';
 import LINKS from 'utils/constants/links';
@@ -35,13 +35,19 @@ const AuditTrailLogDetail = () => {
   const dispatch = useDispatch();
   const classes = useStyles();
 
-  const { results = [] } = useSelector(state => state.auditTrailLogs);
+  const { results = [] } = useSelector(state => state.events);
+  const users = useSelector(state => state.users.results);
 
   useEffect(() => {
-    dispatch(getAuditTrailLogs());
+    dispatch(getEvents());
   }, [dispatch]);
 
-  const auditTrailLog = useMemo(() => results.find((item) => item._id === id), [id, results]);
+  const event = useMemo(() => results.find((item) => item._id === id), [id, results]);
+
+  const getUserName = (_id) => {
+    const user = users.find((item) => item._id === _id)
+    return user?.email || ''
+  }
 
   const historyHandler = () => {
     history.push(LINKS.AUDIT_TRAIL_LOG_HISTORY.HREF.replace(':id', id));
@@ -62,7 +68,7 @@ const AuditTrailLogDetail = () => {
           </ContainedButton>
         }
       />
-      {isEmpty(auditTrailLog)
+      {isEmpty(event)
         ? (
           <Typography variant='h5' color='textPrimary'>
             Not Found
@@ -73,19 +79,19 @@ const AuditTrailLogDetail = () => {
               <Card>
                 <CardContent>
                   <Typography variant='h6' color='textPrimary' className={classes.title}>
-                    {`Action Time: ${getEnglishDateWithTime(auditTrailLog.actionTime)}`}
+                    {`Action Time: ${getEnglishDateWithTime(event.updatedAt)}`}
                   </Typography>
                   <Typography variant='body2' color='textPrimary' className={classes.description}>
                     user <br />
-                    {auditTrailLog?.user}
+                    {getUserName(event?.user)}
                   </Typography>
                   <Typography variant='body2' color='textPrimary' className={classes.description}>
                     Action <br />
-                    {auditTrailLog?.action}
+                    {event?.actionType}
                   </Typography>
                   <Typography variant='body2' color='textPrimary'>
                     Object <br />
-                    {auditTrailLog?.object}
+                    {event?.mName}
                   </Typography>
                 </CardContent>
               </Card>
@@ -96,21 +102,25 @@ const AuditTrailLogDetail = () => {
                   <Typography variant='h6' color='textPrimary' className={classes.title}>
                     Details
                   </Typography>
-                  <Typography variant='body2' color='textPrimary' className={classes.description}>
-                    Change Message <br />
-                    {auditTrailLog?.changeMessage}
-                  </Typography>
-                  <Typography variant='body2' color='textPrimary' className={classes.description}>
-                    Content Type <br />
-                    {auditTrailLog?.contentType}
-                  </Typography>
+                  {!isEmpty(event?.change[0]) &&
+                    <Typography variant='body2' color='textPrimary' className={classes.description}>
+                      Change Message <br />
+                      {`${event?.change[0]?.field}: ${event?.change[0]?.nValue || ''} - ${event?.change[0]?.pValue || ''}`}
+                    </Typography>
+                  }
+                  {!isEmpty(event?.change[0]) &&
+                    <Typography variant='body2' color='textPrimary' className={classes.description}>
+                      Content Type <br />
+                      {event?.change[0]?.field}
+                    </Typography>
+                  }
                   <Typography variant='body2' color='textPrimary' className={classes.description}>
                     Object Id <br />
-                    {auditTrailLog?.objectID}
+                    {event?.mId}
                   </Typography>
                   <Typography variant='body2' color='textPrimary'>
                     Object Repr <br />
-                    {auditTrailLog?.objectRep}
+                    {event?.mName}
                   </Typography>
                 </CardContent>
               </Card>
