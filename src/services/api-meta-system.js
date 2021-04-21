@@ -1,41 +1,29 @@
 
 import axios from 'services/axios'
 
-const getSOWs = async (data) => {
-  return await axios.get('/api/sows', { data });
+const getMetaSystems = async (data) => {
+  const params = {
+    get_json: JSON.stringify(data)
+  }
+  return await axios.get('/api/metasystems', { params });
 };
 
-const createSOW = async (params) => {
-  return await axios.post('/api/sows', params);
+const createMetaSystem = async (params) => {
+  return await axios.post('/api/metasystems', params);
 };
 
-const updateSOW = async (params) => {
-  return await axios.put('/api/sows', params);
+const updateMetaSystem = async (params) => {
+  return await axios.put(`/api/metasystems`, params);
 };
 
-const deleteSOW = async (params) => {
-  return await axios.delete('/api/sows', { params });
-};
-
-const createSOWFile = async (params) => {
-  return await axios.post('/api/sows/file', params);
-};
-
-const getSOWFile = async (data) => {
-  return await axios.get('/api/sows/file', { data });
-};
-
-const deleteSOWFileUrl = async (params) => {
-  return await axios.delete('/api/sows/file', { params });
+const deleteMetaSystem = async (params) => {
+  return await axios.delete(`/api/metasystems`, { params });
 };
 
 export {
-  getSOWs,
-  createSOW,
-  updateSOW,
-  deleteSOW,
-  createSOWFile,
-  getSOWFile,
-  deleteSOWFileUrl
+  getMetaSystems,
+  createMetaSystem,
+  updateMetaSystem,
+  deleteMetaSystem
 };
 

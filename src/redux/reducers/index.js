@@ -7,6 +7,7 @@ import organizationsReducer from './organizationsReducer'
 import workflowTemplatesReducer from './workflowTemplatesReducer'
 import projectsReducer from './projectsReducer'
 import eventsReducer from './eventsReducer'
+import dashboardsReducer from './dashboardsReducer'
 
 export default combineReducers({
   loading: loadingReducer,
@@ -15,5 +16,6 @@ export default combineReducers({
   organizations: organizationsReducer,
   workflowTemplates: workflowTemplatesReducer,
   projects: projectsReducer,
-  events: eventsReducer
+  events: eventsReducer,
+  dashboards: dashboardsReducer
 });

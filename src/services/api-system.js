@@ -2,7 +2,10 @@
 import axios from 'services/axios'
 
 const getSystems = async (data) => {
-  return await axios.get('/api/metasystems/systems', { data });
+  const params = {
+    get_json: JSON.stringify(data)
+  }
+  return await axios.get('/api/metasystems/systems', { params });
 };
 
 const createSystem = async (params) => {

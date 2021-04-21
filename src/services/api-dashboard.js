@@ -1,12 +1,12 @@
 import axios from 'services/axios'
 
-const getReports = async (data) => {
+const getDashboards = async (data) => {
   const params = {
     get_json: JSON.stringify(data)
   }
-  return axios.get('/api/reports', { params });
+  return axios.get('/api/dashboard', { params });
 };
 
 export {
-  getReports
+  getDashboards
 };

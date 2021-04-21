@@ -2,7 +2,10 @@
 import axios from 'services/axios'
 
 const getOrganizations = async (data) => {
-  return await axios.get('/api/organizations', { data });
+  const params = {
+    get_json: JSON.stringify(data)
+  }
+  return await axios.get('/api/organizations', { params });
 };
 
 const createOrganization = async (params) => {
