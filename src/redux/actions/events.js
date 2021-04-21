@@ -11,7 +11,7 @@ const getEvents = (refresh = false) => async (dispatch, getState) => {
 
     const params = {
       skip: 1,
-      limit: 5
+      limit: 10000
     }
     const { data = [] } = await eventAPI.getEvents(params)
     await dispatch({
