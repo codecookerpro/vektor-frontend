@@ -2,7 +2,8 @@
 import * as TYPES from 'redux/types';
 
 const INITIAL_STATE = Object.freeze({
-  results: []
+  results: [],
+  latest: []
 });
 
 const eventsReducer = (state = INITIAL_STATE, action) => {
@@ -11,6 +12,11 @@ const eventsReducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         results: action.payload
+      };
+    case TYPES.FETCH_LATEST_EVENTS:
+      return {
+        ...state,
+        latest: action.payload
       };
     default:
       return state;

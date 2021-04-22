@@ -1,4 +1,6 @@
 import React, { memo } from 'react';
+import { useSelector } from 'react-redux'
+import { useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import {
   Card,
@@ -13,6 +15,7 @@ import {
 
 import ContainedButton from 'components/UI/Buttons/ContainedButton'
 import getActionIcon from 'utils/helpers/getActionIcon'
+import LINKS from 'utils/constants/links';
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -31,6 +34,33 @@ const useStyles = makeStyles((theme) => ({
 
 function RecentActionsCard({ actions }) {
   const classes = useStyles();
+  const history = useHistory()
+  const users = useSelector(state => state.users.results);
+
+  const getUserName = (_id) => {
+    const user = users.find((item) => item._id === _id)
+    return user?.email || ''
+  }
+
+  const detailHandler = (action) => () => {
+    let link = ''
+    switch (action.mName) {
+      case 'User':
+        link = LINKS.EDIT_USER.HREF; break;
+      case 'Project':
+        link = LINKS.EDIT_PROJECT.HREF; break;
+      case 'Organization':
+        link = LINKS.EDIT_ORGANIZATION.HREF; break;
+      case 'System':
+        link = LINKS.EDIT_SYSTEM.HREF; break;
+      case 'WorkflowTemplate':
+        link = LINKS.EDIT_WORKFLOW_TEMPLATE.HREF; break;
+      default:
+        link = LINKS.EDIT_USER.HREF; break;
+    }
+
+    history.push(link.replace(':id', action.mId))
+  }
 
   return (
     <Card>
@@ -43,24 +73,22 @@ function RecentActionsCard({ actions }) {
         </Typography>
         <div className={classes.demo}>
           <List dense>
-            {
-              actions.map((action, index) => (
-                <ListItem key={index} className={classes.list}>
-                  <ListItemIcon className={classes.itemIcon}>
-                    {getActionIcon(action.type)}
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={action.title}
-                    secondary={action.description}
-                  />
-                  <ListItemSecondaryAction>
-                    <ContainedButton>
-                      View Detail
-                    </ContainedButton>
-                  </ListItemSecondaryAction>
-                </ListItem>
-              ))
-            }
+            {actions.map((action, index) => (
+              <ListItem key={index} className={classes.list}>
+                <ListItemIcon className={classes.itemIcon}>
+                  {getActionIcon(action.actionType)}
+                </ListItemIcon>
+                <ListItemText
+                  primary={getUserName(action.user)}
+                  secondary={`${action.actionType} ${action.mName}`}
+                />
+                <ListItemSecondaryAction>
+                  <ContainedButton onClick={detailHandler(action)}>
+                    View Detail
+                  </ContainedButton>
+                </ListItemSecondaryAction>
+              </ListItem>
+            ))}
           </List>
         </div>
       </CardContent>

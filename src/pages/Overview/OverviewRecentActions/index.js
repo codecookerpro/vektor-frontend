@@ -1,11 +1,19 @@
-import React, { memo } from 'react';
+import React, { memo, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
+import { getLatestEvents } from 'redux/actions/events'
 import RecentActionsCard from 'parts/RecentActionsCard'
-import actions from 'utils/temp/recent-actions'
 
 function OverviewRecentActions() {
+  const dispatch = useDispatch();
+  const { latest } = useSelector(state => state.events);
+
+  useEffect(() => {
+    dispatch(getLatestEvents())
+  }, [dispatch])
+
   return (
-    <RecentActionsCard actions={actions} />
+    <RecentActionsCard actions={latest} />
   );
 }
 
