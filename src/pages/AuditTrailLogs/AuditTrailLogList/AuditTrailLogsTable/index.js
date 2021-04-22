@@ -18,7 +18,7 @@ import { getEnglishDateWithTime } from 'utils/helpers/time'
 import { isEmpty } from 'utils/helpers/utility';
 
 const columns = [
-  { id: 'actionTime', label: 'Action Time', minWidth: 90 },
+  { id: 'actionTime', label: 'Action Time', minWidth: 220 },
   { id: 'user', label: 'User', minWidth: 90 },
   { id: 'contentType', label: 'Content Type', minWidth: 90 },
   { id: 'object', label: 'Object', minWidth: 90 },
@@ -35,9 +35,7 @@ const AuditTrailLogsTable = ({
   const { results = [] } = useSelector(state => state.events);
   const users = useSelector(state => state.users.results);
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(
-    TABLE_ENVIRONMENTS.ROWS_PER_PAGE
-  );
+  const [rowsPerPage, setRowsPerPage] = useState(TABLE_ENVIRONMENTS.ROWS_PER_PAGE);
 
   useEffect(() => {
     dispatch(getEvents());

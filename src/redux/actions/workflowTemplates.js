@@ -10,7 +10,7 @@ const getWorkflowTemplates = (refresh = false) => async (dispatch, getState) => 
     }
 
     const params = {
-      skip: 1,
+      skip: 0,
       limit: 10000
     }
     const { data = [] } = await workflowTemplateAPI.getWorkflowTemplates(params)

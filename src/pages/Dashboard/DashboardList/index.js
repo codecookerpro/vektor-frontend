@@ -39,7 +39,10 @@ const DashboardList = () => {
       <Grid container spacing={6}>
         {results.map((item, index) =>
           <Grid key={index} item xs={12} md={6} lg={3}>
-            <DashboardCard showButton />
+            <DashboardCard
+              showButton
+              item={item}
+            />
           </Grid>
         )}
       </Grid>

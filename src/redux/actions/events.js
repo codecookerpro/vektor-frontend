@@ -10,7 +10,7 @@ const getEvents = (refresh = false) => async (dispatch, getState) => {
     }
 
     const params = {
-      skip: 1,
+      skip: 0,
       limit: 10000
     }
     const { data = [] } = await eventAPI.getEvents(params)
@@ -31,7 +31,7 @@ const getLatestEvents = (refresh = false) => async (dispatch, getState) => {
     }
 
     const params = {
-      skip: 1,
+      skip: 0,
       limit: 10
     }
     const { data = [] } = await eventAPI.getEvents(params)
