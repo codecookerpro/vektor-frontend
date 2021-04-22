@@ -10,7 +10,7 @@ const getProjects = ({ refresh = false, organization = '' }) => async (dispatch,
     }
 
     let params = {
-      skip: 1,
+      skip: 0,
       limit: 10000,
     }
 

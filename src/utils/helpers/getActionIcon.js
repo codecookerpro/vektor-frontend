@@ -1,17 +1,20 @@
 
 import {
   Edit,
+  Trash2,
   PlusSquare
 } from 'react-feather';
 
 const getActionIcon = type => {
   switch (type) {
-    case 'EDIT':
+    case 'UPDATE':
       return <Edit />
-    case 'ADD':
+    case 'CREATE':
       return <PlusSquare />
+    case 'DELETE':
+      return <Trash2 />
     default:
-      return <PlusSquare />
+      return <Edit />
   }
 };
 

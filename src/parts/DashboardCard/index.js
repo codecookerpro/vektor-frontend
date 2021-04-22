@@ -27,7 +27,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const DashboardCard = ({
-  showButton = false
+  showButton = false,
+  item
 }) => {
   const classes = useStyles();
   const history = useHistory()
@@ -38,7 +39,7 @@ const DashboardCard = ({
 
   return (
     <Card mb={3} className={classes.card}>
-      <CardHeader title='Voxsync' />
+      <CardHeader title={item.name} />
       <CardContent className={classes.cardContent}>
         <DashboardChart />
         <DashboardTable />
