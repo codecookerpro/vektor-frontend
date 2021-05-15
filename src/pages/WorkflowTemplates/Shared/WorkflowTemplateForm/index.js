@@ -46,12 +46,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const schema = yup.object().shape({
-  name: STRING_INPUT_VALID,
-  organization: SELECT_VALID,
-  differentialWeight: INTEGER_VALID,
-});
-
 const WorkflowTemplateForm = ({ workflowTemplate = {} }) => {
   const classes = useStyles();
   const history = useHistory();
@@ -60,6 +54,21 @@ const WorkflowTemplateForm = ({ workflowTemplate = {} }) => {
 
   const { results: organizations = [] } = useSelector(state => state.organizations);
   const [errorMessage, setErrorMessage] = useState("");
+
+  const { currentUser } = useSelector(state => state.auth);
+
+  let schemaForOrg = {
+    name: STRING_INPUT_VALID,
+    differentialWeight: INTEGER_VALID
+  };
+
+  if (currentUser.permissions === "ADMIN") {
+    schemaForOrg.organization = SELECT_VALID;
+  }
+
+  const schema = yup.object().shape(
+    schemaForOrg
+  );
 
   const { control, handleSubmit, errors } = useForm({
     resolver: yupResolver(schema),
@@ -70,7 +79,7 @@ const WorkflowTemplateForm = ({ workflowTemplate = {} }) => {
     try {
       let params = {
         name: data.name,
-        organization: data.organization,
+        organization: currentUser.permissions === "ADMIN" ? data.organization : currentUser.organization,
         differentialWeight: data.differentialWeight,
         deliverables: []
       };
@@ -140,23 +149,25 @@ const WorkflowTemplateForm = ({ workflowTemplate = {} }) => {
                 defaultValue={workflowTemplate?.name || ""}
               />
             </Grid>
-            <Grid item xs={12} sm={6} md={4}>
-              <Controller
-                as={<FilterSelect />}
-                fullWidth
-                name="organization"
-                label="Organization"
-                placeholder="Select organization"
-                items={organizations}
-                keys={{
-                  label: "name",
-                  value: "_id",
-                }}
-                error={errors.organization?.message}
-                control={control}
-                defaultValue={workflowTemplate?.organization || ''}
-              />
-            </Grid>
+            {currentUser.permissions === "ADMIN" && (
+              <Grid item xs={12} sm={6} md={4}>
+                <Controller
+                  as={<FilterSelect />}
+                  fullWidth
+                  name="organization"
+                  label="Organization"
+                  placeholder="Select organization"
+                  items={organizations}
+                  keys={{
+                    label: "name",
+                    value: "_id",
+                  }}
+                  error={errors.organization?.message}
+                  control={control}
+                  defaultValue={workflowTemplate?.organization || ''}
+                />
+              </Grid>
+            )}
             <Grid item xs={12} sm={6} md={4}>
               <Controller
                 as={<VektorTextField />}
