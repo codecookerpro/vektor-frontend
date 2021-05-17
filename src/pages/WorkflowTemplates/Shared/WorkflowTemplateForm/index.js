@@ -8,6 +8,7 @@ import { Card, CardContent, Grid, Button, Typography } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import { makeStyles } from "@material-ui/core/styles";
 
+import { PERMISSION_TYPE } from 'utils/constants/permissions'
 import * as workflowTemplateAPI from 'services/api-workflow-template'
 import {
   addWorkflowTemplate,
@@ -46,12 +47,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const schema = yup.object().shape({
-  name: STRING_INPUT_VALID,
-  organization: SELECT_VALID,
-  differentialWeight: INTEGER_VALID,
-});
-
 const WorkflowTemplateForm = ({ workflowTemplate = {} }) => {
   const classes = useStyles();
   const history = useHistory();
@@ -60,6 +55,21 @@ const WorkflowTemplateForm = ({ workflowTemplate = {} }) => {
 
   const { results: organizations = [] } = useSelector(state => state.organizations);
   const [errorMessage, setErrorMessage] = useState("");
+
+  const permissionType = useSelector(state => state.auth.currentUser.permissions);
+
+  let schemaForOrg = {
+    name: STRING_INPUT_VALID,
+    differentialWeight: INTEGER_VALID
+  };
+
+  if (permissionType === PERMISSION_TYPE.ADMIN) {
+    schemaForOrg.organization = SELECT_VALID;
+  }
+
+  const schema = yup.object().shape(
+    schemaForOrg
+  );
 
   const { control, handleSubmit, errors } = useForm({
     resolver: yupResolver(schema),
@@ -70,7 +80,7 @@ const WorkflowTemplateForm = ({ workflowTemplate = {} }) => {
     try {
       let params = {
         name: data.name,
-        organization: data.organization,
+        organization: permissionType === PERMISSION_TYPE.ADMIN ? data.organization : currentUser.organization,
         differentialWeight: data.differentialWeight,
         deliverables: []
       };
@@ -140,23 +150,25 @@ const WorkflowTemplateForm = ({ workflowTemplate = {} }) => {
                 defaultValue={workflowTemplate?.name || ""}
               />
             </Grid>
-            <Grid item xs={12} sm={6} md={4}>
-              <Controller
-                as={<FilterSelect />}
-                fullWidth
-                name="organization"
-                label="Organization"
-                placeholder="Select organization"
-                items={organizations}
-                keys={{
-                  label: "name",
-                  value: "_id",
-                }}
-                error={errors.organization?.message}
-                control={control}
-                defaultValue={workflowTemplate?.organization || ''}
-              />
-            </Grid>
+            {permissionType === PERMISSION_TYPE.ADMIN && (
+              <Grid item xs={12} sm={6} md={4}>
+                <Controller
+                  as={<FilterSelect />}
+                  fullWidth
+                  name="organization"
+                  label="Organization"
+                  placeholder="Select organization"
+                  items={organizations}
+                  keys={{
+                    label: "name",
+                    value: "_id",
+                  }}
+                  error={errors.organization?.message}
+                  control={control}
+                  defaultValue={workflowTemplate?.organization || ''}
+                />
+              </Grid>
+            )}
             <Grid item xs={12} sm={6} md={4}>
               <Controller
                 as={<VektorTextField />}
