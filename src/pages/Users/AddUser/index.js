@@ -1,4 +1,3 @@
-
 import React, { memo } from 'react';
 
 import PageHeader from 'parts/PageHeader';

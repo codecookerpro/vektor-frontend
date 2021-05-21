@@ -1,11 +1,11 @@
-import React, { memo } from "react";
-import { Card, CardHeader, CardContent, Typography } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
+import React, { memo } from 'react';
+import { Card, CardHeader, CardContent, Typography } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
   content: {
-    display: "flex",
-    alignItems: "center",
+    display: 'flex',
+    alignItems: 'center',
   },
   assetsId: {
     width: 30,

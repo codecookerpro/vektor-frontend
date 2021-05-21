@@ -1,10 +1,9 @@
-
-import axios from 'services/axios'
+import axios from 'services/axios';
 
 const getOrganizations = async (data) => {
   const params = {
-    get_json: JSON.stringify(data)
-  }
+    get_json: JSON.stringify(data),
+  };
   return await axios.get('/api/organizations', { params });
 };
 
@@ -39,5 +38,5 @@ export {
   deleteOrganization,
   createOrganizationDepartment,
   updateOrganizationDepartment,
-  deleteOrganizationDepartment
+  deleteOrganizationDepartment,
 };

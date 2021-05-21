@@ -1,8 +1,7 @@
-
 import * as TYPES from 'redux/types';
 
 const INITIAL_STATE = Object.freeze({
-  results: []
+  results: [],
 });
 
 const reportsReducer = (state = INITIAL_STATE, action) => {
@@ -10,7 +9,7 @@ const reportsReducer = (state = INITIAL_STATE, action) => {
     case TYPES.FETCH_REPORTS:
       return {
         ...state,
-        results: action.payload
+        results: action.payload,
       };
     default:
       return state;

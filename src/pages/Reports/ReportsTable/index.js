@@ -1,18 +1,12 @@
-import React, { memo, useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import {
-  Card,
-  CardContent,
-  TableCell,
-  TableRow,
-  Checkbox,
-} from '@material-ui/core'
-import { CSVLink } from 'react-csv'
+import React, { memo, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Card, CardContent, TableCell, TableRow, Checkbox } from '@material-ui/core';
+import { CSVLink } from 'react-csv';
 
-import { getReports } from 'redux/actions/reports'
-import ContainedButton from 'components/UI/Buttons/ContainedButton'
-import VektorTableContainer from 'parts/Tables/VektorTableContainer'
-import * as TABLE_ENVIRONMENTS from 'utils/constants/table-environments'
+import { getReports } from 'redux/actions/reports';
+import ContainedButton from 'components/UI/Buttons/ContainedButton';
+import VektorTableContainer from 'parts/Tables/VektorTableContainer';
+import * as TABLE_ENVIRONMENTS from 'utils/constants/table-environments';
 
 const columns = [
   { id: 'organization', label: 'Organization', minWidth: 130 },
@@ -20,7 +14,7 @@ const columns = [
   { id: 'projectNumber', label: 'Project Number', minWidth: 90 },
   { id: 'pn', label: 'PN Name', minWidth: 90 },
   { id: 'phaseTemplate', label: 'Phase Template', minWidth: 90 },
-  { id: 'systemName', label: 'System Name', minWidth: 90 }
+  { id: 'systemName', label: 'System Name', minWidth: 90 },
 ];
 
 const headers = [
@@ -35,20 +29,18 @@ const headers = [
 const ReportsTable = () => {
   const dispatch = useDispatch();
 
-  const { results } = useSelector(state => state.reports)
+  const { results } = useSelector((state) => state.reports);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(TABLE_ENVIRONMENTS.ROWS_PER_PAGE);
   const [selectedItems, setSelectedItems] = useState([]);
 
   useEffect(() => {
-    dispatch(getReports())
+    dispatch(getReports());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch]);
 
   const toggleHandler = (value) => () => {
-    const currentIndex = selectedItems.findIndex(
-      (item) => item.id === value.id
-    );
+    const currentIndex = selectedItems.findIndex((item) => item.id === value.id);
     const newSelectedItems = [...selectedItems];
 
     if (currentIndex === -1) {
@@ -60,15 +52,11 @@ const ReportsTable = () => {
     setSelectedItems(newSelectedItems);
   };
 
-  console.log(results)
+  console.log(results);
   return (
     <Card>
       <CardContent>
-        <CSVLink
-          data={selectedItems}
-          headers={headers}
-          style={{ textDecoration: 'unset' }}
-        >
+        <CSVLink data={selectedItems} headers={headers} style={{ textDecoration: 'unset' }}>
           <ContainedButton>CSV Download</ContainedButton>
         </CSVLink>
         <VektorTableContainer
@@ -79,23 +67,13 @@ const ReportsTable = () => {
           rowsPerPage={rowsPerPage}
           setRowsPerPage={setRowsPerPage}
         >
-          {(rowsPerPage > 0
-            ? results.slice(
-              page * rowsPerPage,
-              page * rowsPerPage + rowsPerPage
-            )
-            : results
-          ).map((row, index) => (
+          {(rowsPerPage > 0 ? results.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) : results).map((row, index) => (
             <TableRow key={index}>
-              <TableCell component='th' scope='row'>
+              <TableCell component="th" scope="row">
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                   <Checkbox
                     inputProps={{ 'aria-labelledby': `check-${row.id}` }}
-                    checked={
-                      selectedItems.findIndex(
-                        (value) => row.id === value.id
-                      ) !== -1
-                    }
+                    checked={selectedItems.findIndex((value) => row.id === value.id) !== -1}
                     onChange={toggleHandler(row)}
                   />
                   {row.organization}

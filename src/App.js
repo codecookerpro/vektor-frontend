@@ -2,11 +2,7 @@ import React from 'react';
 import { Helmet } from 'react-helmet';
 import DateFnsUtils from '@date-io/date-fns';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
-import {
-  StylesProvider,
-  ThemeProvider as MuiThemeProvider,
-  jssPreset,
-} from '@material-ui/core/styles';
+import { StylesProvider, ThemeProvider as MuiThemeProvider, jssPreset } from '@material-ui/core/styles';
 import { ThemeProvider } from 'styled-components/macro';
 import { create } from 'jss';
 
@@ -21,10 +17,7 @@ const jss = create({
 function App() {
   return (
     <React.Fragment>
-      <Helmet
-        titleTemplate='%s | Vector DynamixE'
-        defaultTitle='Vector DynamixE - Admin Dashboard'
-      />
+      <Helmet titleTemplate="%s | Vector DynamixE" defaultTitle="Vector DynamixE - Admin Dashboard" />
       <StylesProvider jss={jss}>
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
           <MuiThemeProvider theme={theme}>

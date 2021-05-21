@@ -107,11 +107,11 @@ const SystemForm = ({ system = {} }) => {
     <Card>
       <CardContent>
         {errorMessage && (
-          <Alert mt={2} mb={1} severity='warning' className={classes.alert}>
+          <Alert mt={2} mb={1} severity="warning" className={classes.alert}>
             {errorMessage}
           </Alert>
         )}
-        <Typography variant='h6' className={classes.name}>
+        <Typography variant="h6" className={classes.name}>
           {system?.name || 'New System'}
         </Typography>
         <form noValidate className={classes.form}>
@@ -120,9 +120,9 @@ const SystemForm = ({ system = {} }) => {
               <Controller
                 as={<VektorTextField />}
                 fullWidth
-                name='name'
-                label='Name'
-                placeholder='Name'
+                name="name"
+                label="Name"
+                placeholder="Name"
                 error={errors.name?.message}
                 control={control}
                 defaultValue={system?.name || ''}
@@ -132,39 +132,35 @@ const SystemForm = ({ system = {} }) => {
               <Controller
                 as={<FilterSelect />}
                 fullWidth
-                name='equipmentCategory'
-                label='Equipment Category'
-                placeholder='Select Category'
+                name="equipmentCategory"
+                label="Equipment Category"
+                placeholder="Select Category"
                 items={EQUIPMENT_CATEGORIES}
                 error={errors.equipmentCategory?.message}
                 control={control}
-                defaultValue={
-                  system?.equipment?.category || EQUIPMENT_CATEGORY_TYPE.CUSTOM
-                }
+                defaultValue={system?.equipment?.category || EQUIPMENT_CATEGORY_TYPE.CUSTOM}
               />
             </Grid>
             <Grid item xs={12} sm={6} md={4}>
               <Controller
                 as={<FilterSelect />}
                 fullWidth
-                name='equipmentType'
-                label='Equipment Type'
-                placeholder='Select Type'
+                name="equipmentType"
+                label="Equipment Type"
+                placeholder="Select Type"
                 items={EQUIPMENT_TYPES}
                 error={errors.equipmentType?.message}
                 control={control}
-                defaultValue={
-                  system?.equipment?.type || EQUIPMENT_TYPE.PROCESS
-                }
+                defaultValue={system?.equipment?.type || EQUIPMENT_TYPE.PROCESS}
               />
             </Grid>
             <Grid item xs={12} sm={6} md={3}>
               <Controller
                 as={<VektorTextField />}
                 fullWidth
-                name='equipmentName'
-                label='Equipment Name'
-                placeholder='Equipment Name'
+                name="equipmentName"
+                label="Equipment Name"
+                placeholder="Equipment Name"
                 error={errors.equipmentName?.message}
                 control={control}
                 defaultValue={system?.equipment?.name || ''}
@@ -174,9 +170,9 @@ const SystemForm = ({ system = {} }) => {
               <Controller
                 as={<VektorTextField />}
                 fullWidth
-                name='equipmentNumber'
-                label='Equipment Number'
-                placeholder='Equipment Number'
+                name="equipmentNumber"
+                label="Equipment Number"
+                placeholder="Equipment Number"
                 error={errors.equipmentNumber?.message}
                 control={control}
                 defaultValue={system?.equipment?.number || ''}
@@ -186,9 +182,9 @@ const SystemForm = ({ system = {} }) => {
               <Controller
                 as={<FilterSelect />}
                 fullWidth
-                name='project'
-                label='Project'
-                placeholder='Project'
+                name="project"
+                label="Project"
+                placeholder="Project"
                 items={projects}
                 keys={{
                   label: 'name',
@@ -203,9 +199,9 @@ const SystemForm = ({ system = {} }) => {
               <Controller
                 as={<FilterSelect />}
                 fullWidth
-                name='workflow'
-                label='Workflow'
-                placeholder='Workflow'
+                name="workflow"
+                label="Workflow"
+                placeholder="Workflow"
                 items={workflowTemplates}
                 keys={{
                   label: 'name',
@@ -220,9 +216,9 @@ const SystemForm = ({ system = {} }) => {
               <Controller
                 as={<VektorTextField />}
                 fullWidth
-                name='productCode'
-                label='Product Code'
-                placeholder='Product Code'
+                name="productCode"
+                label="Product Code"
+                placeholder="Product Code"
                 error={errors.productCode?.message}
                 control={control}
                 defaultValue={system?.productCode || ''}
@@ -232,9 +228,9 @@ const SystemForm = ({ system = {} }) => {
               <Controller
                 as={<VektorTextField />}
                 fullWidth
-                name='site'
-                label='Site'
-                placeholder='Site'
+                name="site"
+                label="Site"
+                placeholder="Site"
                 error={errors.site?.message}
                 control={control}
                 defaultValue={system?.site || ''}
@@ -242,26 +238,13 @@ const SystemForm = ({ system = {} }) => {
             </Grid>
             <Grid item xs={12}>
               <div className={classes.buttonContainer}>
-                <Button
-                  variant='contained'
-                  color='primary'
-                  onClick={handleSubmit(onSubmit(false))}
-                >
+                <Button variant="contained" color="primary" onClick={handleSubmit(onSubmit(false))}>
                   Save
                 </Button>
-                <Button
-                  color='primary'
-                  className={classes.addAnother}
-                  onClick={handleSubmit(onSubmit(true))}
-                >
+                <Button color="primary" className={classes.addAnother} onClick={handleSubmit(onSubmit(true))}>
                   Save and add another
                 </Button>
-                <Button
-                  color='primary'
-                  variant='contained'
-                  className={classes.delete}
-                  onClick={deleteHandler}
-                >
+                <Button color="primary" variant="contained" className={classes.delete} onClick={deleteHandler}>
                   Delete
                 </Button>
               </div>

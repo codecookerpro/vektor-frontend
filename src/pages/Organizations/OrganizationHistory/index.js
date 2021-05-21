@@ -23,11 +23,8 @@ const OrganizationHistory = () => {
 
   return (
     <>
-      <PageHeader
-        title={`${LINKS.ORGANIZATION_HISTORY.TITLE}: ${organization?.name || 'Not Found'}`}
-        links={NAV_LINKS}
-      />
-      <HistoryTableCard title='Organization' results={results} />
+      <PageHeader title={`${LINKS.ORGANIZATION_HISTORY.TITLE}: ${organization?.name || 'Not Found'}`} links={NAV_LINKS} />
+      <HistoryTableCard title="Organization" results={results} />
     </>
   );
 };

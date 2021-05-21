@@ -1,11 +1,7 @@
 import React, { memo } from 'react';
 import styled from 'styled-components/macro';
 import { rgba, darken } from 'polished';
-import {
-  Chip,
-  ListItem,
-  ListItemText,
-} from '@material-ui/core';
+import { Chip, ListItem, ListItemText } from '@material-ui/core';
 import { ExpandLess, ExpandMore } from '@material-ui/icons';
 
 const Category = styled(ListItem)`
@@ -28,8 +24,7 @@ const Category = styled(ListItem)`
   }
 
   &.${(props) => props.activeClassName} {
-    background-color: ${(props) =>
-    darken(0.03, props.theme.sidebar.background)};
+    background-color: ${(props) => darken(0.03, props.theme.sidebar.background)};
 
     span {
       color: ${(props) => props.theme.sidebar.color};
@@ -72,29 +67,12 @@ const CategoryBadge = styled(Chip)`
   }
 `;
 
-const SidebarCategory = ({
-  name,
-  icon,
-  isOpen,
-  isCollapsable,
-  badge,
-  ...rest
-}) => {
+const SidebarCategory = ({ name, icon, isOpen, isCollapsable, badge, ...rest }) => {
   return (
     <Category {...rest}>
       {icon}
       <CategoryText>{name}</CategoryText>
-      {
-        isCollapsable
-          ? (
-            isOpen
-              ? (
-                <CategoryIconMore />
-              ) : (
-                <CategoryIconLess />
-              )
-          ) : null
-      }
+      {isCollapsable ? isOpen ? <CategoryIconMore /> : <CategoryIconLess /> : null}
       {badge ? <CategoryBadge label={badge} /> : ''}
     </Category>
   );

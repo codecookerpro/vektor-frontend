@@ -30,11 +30,7 @@ const EditProject = () => {
     }
   }, [project]);
 
-  const userList = useMemo(
-    () =>
-      users?.filter((user) => user?.organization.id === selectedOrganization),
-    [selectedOrganization]
-  );
+  const userList = useMemo(() => users?.filter((user) => user?.organization.id === selectedOrganization), [selectedOrganization]);
 
   const linkHandler = (href) => () => {
     history.push(href.replace(':id', id));
@@ -45,37 +41,23 @@ const EditProject = () => {
       <PageHeader
         title={LINKS.EDIT_PROJECT.TITLE}
         links={NAV_LINKS}
-        leftElement={
-          <ContainedButton onClick={linkHandler(LINKS.PROJECT_HISTORY.HREF)}>
-            History
-          </ContainedButton>
-        }
+        leftElement={<ContainedButton onClick={linkHandler(LINKS.PROJECT_HISTORY.HREF)}>History</ContainedButton>}
       />
       <Grid container spacing={6}>
         <Grid item xs={12}>
-          <ProjectForm
-            users={userList}
-            project={project}
-            setSelectedOrganization={setSelectedOrganization}
-          />
+          <ProjectForm users={userList} project={project} setSelectedOrganization={setSelectedOrganization} />
         </Grid>
         <Grid item xs={12}>
           <StopDailyData project={project} />
         </Grid>
         <Grid item xs={12}>
-          <DetailLinkCard
-            title='Phases'
-            onDetail={linkHandler(LINKS.PROJECT_PHASES.HREF)}
-          />
+          <DetailLinkCard title="Phases" onDetail={linkHandler(LINKS.PROJECT_PHASES.HREF)} />
         </Grid>
         <Grid item xs={12}>
           <PhasesListView />
         </Grid>
         <Grid item xs={12}>
-          <DetailLinkCard
-            title='System Trend Chart'
-            onDetail={linkHandler(LINKS.SYSTEM_TREND_CHART.HREF)}
-          />
+          <DetailLinkCard title="System Trend Chart" onDetail={linkHandler(LINKS.SYSTEM_TREND_CHART.HREF)} />
         </Grid>
         <Grid item xs={12}>
           <ProjectSystemsTable />

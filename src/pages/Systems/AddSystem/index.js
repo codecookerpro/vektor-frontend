@@ -1,8 +1,8 @@
-import React, { memo } from "react";
+import React, { memo } from 'react';
 
-import PageHeader from "parts/PageHeader";
-import SystemForm from "../Shared/SystemForm";
-import LINKS from "utils/constants/links";
+import PageHeader from 'parts/PageHeader';
+import SystemForm from '../Shared/SystemForm';
+import LINKS from 'utils/constants/links';
 
 const NAV_LINKS = [LINKS.PROJECT_MANAGEMENT, LINKS.SYSTEMS];
 

@@ -1,17 +1,14 @@
 import React, { memo, Suspense } from 'react';
 import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
 
-import Loader from 'components/Loader'
+import Loader from 'components/Loader';
 import DashboardLayout from 'layouts/Dashboard';
 import AuthLayout from 'layouts/Auth';
 import Page404 from 'pages/auth/Page404';
 import AuthGuard from 'utils/hocs/AuthGuard';
 import GuestGuard from 'utils/hocs/GuestGuard';
-import {
-  dashboardLayoutRoutes,
-  authLayoutRoutes
-} from 'utils/constants/routes';
-import LINKS from 'utils/constants/links'
+import { dashboardLayoutRoutes, authLayoutRoutes } from 'utils/constants/routes';
+import LINKS from 'utils/constants/links';
 
 const childRoutes = (Layout, routes, isAuthGuard) =>
   routes.map(({ component: Component, children, path }, index) => {
