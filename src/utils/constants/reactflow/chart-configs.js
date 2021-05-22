@@ -1,0 +1,18 @@
+export const CHART_CONFIGS = {
+	label: 'Deliverable name',
+	// below values units are pixels
+	chartContainerHeight: 600,
+	nodeHeight: 70,
+	defaultNodeMarginY: 15,
+	nodeWidth: 149,
+	defaultNodeMarginX: 15,
+	// below line nodes configurations
+	lineNodeParams: {
+		type: 'smoothstep',
+		arrowHeadType: 'arrowclosed',
+		style: {
+			// line color
+			stroke: '#000'
+		},
+	},
+};

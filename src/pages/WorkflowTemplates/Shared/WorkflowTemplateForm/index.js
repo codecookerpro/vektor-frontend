@@ -45,6 +45,9 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: "auto",
     backgroundColor: theme.custom.palette.red,
   },
+  content: {
+    marginBottom: theme.spacing(6),
+  },
 }));
 
 const WorkflowTemplateForm = ({ workflowTemplate = {} }) => {
@@ -126,7 +129,7 @@ const WorkflowTemplateForm = ({ workflowTemplate = {} }) => {
   };
 
   return (
-    <Card>
+    <Card className={classes.content}>
       <CardContent>
         {errorMessage && (
           <Alert mt={2} mb={1} severity="warning" className={classes.alert}>
