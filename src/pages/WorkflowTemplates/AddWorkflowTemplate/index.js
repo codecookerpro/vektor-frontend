@@ -1,5 +1,5 @@
 
-import React, { memo } from "react";
+import React, { memo, useState } from "react";
 
 import PageHeader from "parts/PageHeader";
 import WorkflowTemplateForm from "../Shared/WorkflowTemplateForm";
@@ -9,11 +9,16 @@ import WorkflowTemplateChart from '../WorkflowTemplateChart';
 const NAV_LINKS = [LINKS.PROJECT_TEMPLATE, LINKS.WORKFLOW_TEMPLATES];
 
 const AddWorkflowTemplate = () => {
+	// timely deliverables object for validation and las deliverables data generation for API structure
+	const [timelyDeliverables, setTimelyDeliverables] = useState({});
+	// nodes array for chart generation
+	const [nodes, setNodes] = useState([]);
+
 	return (
 		<>
 			<PageHeader title={LINKS.ADD_WORKFLOW_TEMPLATE.TITLE} links={NAV_LINKS} />
-			<WorkflowTemplateForm />
-			<WorkflowTemplateChart />
+			<WorkflowTemplateForm timelyDeliverables={timelyDeliverables} nodes={nodes} />
+			<WorkflowTemplateChart timelyDeliverables={timelyDeliverables} setTimelyDeliverables={setTimelyDeliverables} nodes={nodes} setNodes={setNodes} />
 		</>
 	);
 };

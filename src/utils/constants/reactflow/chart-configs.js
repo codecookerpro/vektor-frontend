@@ -1,7 +1,7 @@
 export const CHART_CONFIGS = {
 	label: 'Deliverable name',
 	// below values units are pixels
-	chartContainerHeight: 600,
+	chartContainerHeight: 350,
 	nodeHeight: 70,
 	defaultNodeMarginY: 15,
 	nodeWidth: 149,

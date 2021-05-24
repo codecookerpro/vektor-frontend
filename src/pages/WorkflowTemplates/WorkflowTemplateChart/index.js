@@ -1,4 +1,4 @@
-import React, { memo, useState, useEffect } from 'react';
+import React, { memo, useState, useEffect, useRef } from 'react';
 import { Card, CardHeader, CardContent, Button, Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Plus } from 'react-feather';
@@ -7,14 +7,23 @@ import CustomFlowNode from './CustomFlowNode';
 import * as customNodeTypes from '../../../utils/constants/reactflow/custom-node-types';
 import { CHART_CONFIGS } from '../../../utils/constants/reactflow/chart-configs';
 
-const WorkflowTemplateChart = () => {
+const useStyles = makeStyles((theme) => ({
+	content: {
+		height: CHART_CONFIGS.chartContainerHeight + 'px',
+		marginBottom: theme.spacing(10),
+	},
+	buttonContainer: {
+		display: 'flex',
+	},
+}));
 
-	// to do, just note, need to be deleted later the nodes array nested objects is equal to the API request "deliverables.chartData", need to attach the node input value to the "deliverable.name"
-	// deliverables array configured for API
-	const [deliverables, setDeliverables] = useState([]);
-	// nodes array for chart generation
-	const [nodes, setNodes] = useState([]);
-	
+const WorkflowTemplateChart = ({timelyDeliverables, setTimelyDeliverables, nodes, setNodes}) => {
+	const [magicWayDependency, setMagicWayDependency] = useState(';1,3,5,4;5,7;10,15,3,4;');
+	const [markerSizesCustomized, setMarkerSizesCustomized] = useState(null);
+	const [nodesConnectionsInfo, setNodesConnectionsInfo] = useState({});
+	const countRef = useRef(timelyDeliverables);
+	countRef.current = timelyDeliverables;
+
 	const nodesCountY = () => {
 		return CHART_CONFIGS.chartContainerHeight / (CHART_CONFIGS.nodeHeight + CHART_CONFIGS.defaultNodeMarginY)
 	}
@@ -39,20 +48,7 @@ const WorkflowTemplateChart = () => {
 				label: CHART_CONFIGS.label,
 				handleInputChange: (id, e) => {
 					e.preventDefault();
-					// validation
-					if (e.target.value) {
-						setDeliverables([...deliverables, {
-							id, id,
-							name: e.target.value,
-						}]);
-					// if the validation doesn't passed, remove data from deliverables
-					} else if (deliverables.includes(id)) {
-						let removedFromDeliverable = deliverables.filter((el) => el.id !== id);
-						setDeliverables(removedFromDeliverable);
-					}
-				},
-				deliverables: () => {
-					return deliverables
+					setTimelyDeliverables({...countRef.current, [id]: {name: e.target.value}});
 				},
 			},
 			style: {
@@ -67,26 +63,90 @@ const WorkflowTemplateChart = () => {
 		}
 	}
 	const handleConnectNodes = (params) => {
-console.log('handleConnectNodes:params', params);
+		/*
+console.log('params: ', params);
+/////////////////////////////////////////////
+	params.source = 4; // for example
+		//let dependencyStr = magicWayDependency + ';' + params.source + ',' + params.target;
+		// let magicPattern = /[;]((?!(;)).)*[4;]/g;
+		let magicPattern = new RegExp("[;]((?!(;)).)*[" + params.source + ";]", "g");
+		let lineages = magicWayDependency.match(magicPattern); //.toString()
+
+console.log('lineages: ', lineages);
+//		setMagicWayDependency()
+*/
+///////////////////////////////////////////
+		let currentSourceNodeChildNodes = nodesConnectionsInfo[params.source];
+		// when the current node(source) have child nodes(target)
+		// when node(target) is already child of the current node(source)
+		if (Array.isArray(currentSourceNodeChildNodes) && currentSourceNodeChildNodes.length && currentSourceNodeChildNodes.includes(params.target)) {
+			return;
+		}
+
+		let currentTargetNodeChildNodes = nodesConnectionsInfo[params.target];
+		// when the current node(target) have child nodes(target)
+		// when the child node(target) is already parent of the current node(source)
+		if (Array.isArray(currentTargetNodeChildNodes) && currentTargetNodeChildNodes.length && currentTargetNodeChildNodes.includes(params.source)) {
+			return;
+		}
+
+		// all parent nodes
+		let allParentNodes = Object.keys(nodesConnectionsInfo);
+		let allChildsNodes = Object.values(nodesConnectionsInfo).map
+console.log('allParentNodes: ', allParentNodes);
+		let wantToBeParentOfNode = params.target;
+		// check if wantToBeParentOfNodeNode is parent of someone
+		if (allParentNodes.includes(wantToBeParentOfNode)) {
+console.log('this child: ', wantToBeParentOfNode, ' already has childs: ', nodesConnectionsInfo[wantToBeParentOfNode]);
+			let childsOfwantToBeParentOfNode = nodesConnectionsInfo[wantToBeParentOfNode];
+			// when the expected child has childs
+			if (Array.isArray(childsOfwantToBeParentOfNode) && childsOfwantToBeParentOfNode.length) {
+console.log('when the expected child has childs');
+				// find childs for each child // level 3
+				let isThirdLevelChild = false;
+				for (childNodes of childsOfwantToBeParentOfNode) {
+					if (childNodes.includes(params.source)) {
+						isThirdLevelChild = true;
+						break;
+					}
+				}
+				if (isThirdLevelChild) {
+					return;
+				}
+			}
+		}
+
+		let childNodes = [params.target];
+		if (Array.isArray(nodesConnectionsInfo[params.source])) {
+			childNodes = [...nodesConnectionsInfo[params.source], params.target];
+		}
+		setNodesConnectionsInfo({
+			...nodesConnectionsInfo,
+			[params.source]: childNodes,
+		});
+
 		setNodes((lineNodes) => addEdge({...params, ...CHART_CONFIGS.lineNodeParams}, lineNodes));
 	}
 
-	const useStyles = makeStyles((theme) => ({
-		content: {
-			height: CHART_CONFIGS.chartContainerHeight + 'px',
-			marginBottom: theme.spacing(10),
-		},
-		buttonContainer: {
-			display: 'flex',
-		},
-	}));
-
 	const classes = useStyles();
+	// const onElementsRemove = (elementsToRemove) => setElements((els) => removeElements(elementsToRemove, els));
+
+	// change the marker sizes, written custom code, because module doesn't have ability to do this
+	let marker = document.getElementById('react-flow__arrowclosed');
+	useEffect(() => {
+		if (markerSizesCustomized) {
+			return;
+		}
+		if (marker) {
+			marker.markerWidth.baseVal.value = 30;
+			marker.markerHeight.baseVal.value = 30;
+			setMarkerSizesCustomized(true);
+		}
+	}, [marker]);
 
 	useEffect(() => {
-		console.log('nodes: ', JSON.stringify(nodes));
-	}, [nodes]);
-	// const onElementsRemove = (elementsToRemove) => setElements((els) => removeElements(elementsToRemove, els));
+		console.log('nodesConnectionsInfo: ', nodesConnectionsInfo);
+	}, [nodesConnectionsInfo]);
 
 	return (
 		<>
@@ -101,6 +161,7 @@ console.log('handleConnectNodes:params', params);
 						deleteKeyCode={46}
 						// the below params required
 						nodeTypes={{ [customNodeTypes.INPUT]: CustomFlowNode }}
+						arrowHeadColor='#4d84c0'
 					>
 						<MiniMap />
 						<Controls />

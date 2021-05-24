@@ -25,6 +25,7 @@ import {
 import LINKS from "utils/constants/links";
 import useLoading from 'utils/hooks/useLoading'
 import { isEmpty } from "utils/helpers/utility"
+import * as customNodeTypes from '../../../../utils/constants/reactflow/custom-node-types';
 
 const useStyles = makeStyles((theme) => ({
   alert: {
@@ -50,7 +51,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const WorkflowTemplateForm = ({ workflowTemplate = {} }) => {
+const WorkflowTemplateForm = ({ workflowTemplate = {}, timelyDeliverables, nodes }) => {
   const classes = useStyles();
   const history = useHistory();
   const dispatch = useDispatch();
@@ -78,14 +79,45 @@ const WorkflowTemplateForm = ({ workflowTemplate = {} }) => {
     resolver: yupResolver(schema),
   });
 
+  const isDeliverablesValid = () => {
+console.log('nodes', nodes);
+    return nodes.filter((node) => node.type === customNodeTypes.INPUT).length === Object.keys(timelyDeliverables).length;
+  }
+
+  const getDeliverables = () => {
+    if (!isDeliverablesValid()) {
+      return false;
+    }
+
+    let connectionLines = nodes.filter(node => node.type === 'smoothstep');
+
+    let deliverables = nodes.filter(node => node.type === customNodeTypes.INPUT).map(node => {
+      let currentNodeConnectionsWithChilds = connectionLines.filter(line => line.source === node.id);
+      let chartData = {...node, connectionLines: currentNodeConnectionsWithChilds};
+      
+      return {
+        name: timelyDeliverables[node.id].name,
+        chartData: chartData,
+      }
+    });
+
+    return deliverables;
+  }
+
   const onSubmit = async (data) => {
     changeLoadingStatus(true)
+    let deliverables = getDeliverables();
+    if (!deliverables) {
+      setErrorMessage('Deliverables are not valid.');
+      changeLoadingStatus(false);
+      return;
+    }
     try {
       let params = {
         name: data.name,
         organization: permissionType === PERMISSION_TYPE.ADMIN ? data.organization : currentUser.organization,
         differentialWeight: data.differentialWeight,
-        deliverables: []
+        deliverables: deliverables,
       };
 
       if (isEmpty(workflowTemplate)) {
