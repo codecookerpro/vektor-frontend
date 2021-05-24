@@ -13,7 +13,6 @@ const WorkflowTemplateHistory = () => {
   const workflowTemplate = useMemo(() => systems.find((item) => item.id === id), [id]);
 
   const NAV_LINKS = [
-    LINKS.PROJECT_TEMPLATE,
     LINKS.WORKFLOW_TEMPLATES,
     {
       HREF: LINKS.EDIT_WORKFLOW_TEMPLATE.HREF.replace(':id', id),

@@ -12,6 +12,7 @@ const authRoutes = Object.freeze({
   id: LINKS.AUTH.TITLE,
   path: LINKS.AUTH.HREF,
   icon: <Users />,
+  component: null,
   children: [
     {
       path: LINKS.SIGN_IN.HREF,
@@ -39,7 +40,6 @@ const authRoutes = Object.freeze({
       component: Page500,
     },
   ],
-  component: null,
 });
 
 export default authRoutes;

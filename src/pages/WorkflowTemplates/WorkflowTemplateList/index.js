@@ -8,7 +8,7 @@ import WorkflowTemplateActions from './WorkflowTemplateActions';
 import WorkflowTemplatesTable from './WorkflowTemplatesTable';
 import LINKS from 'utils/constants/links';
 
-const NAV_LINKS = [LINKS.PROJECT_TEMPLATE];
+const NAV_LINKS = [];
 
 const WorkflowTemplateList = () => {
   const history = useHistory();

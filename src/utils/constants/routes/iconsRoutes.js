@@ -4,9 +4,10 @@ import { Heart } from 'react-feather';
 const FeatherIcons = lazy(() => import(/* webpackChunkName: 'MaterialIcons' */ 'pages/icons/FeatherIcons'));
 
 const iconsRoutes = Object.freeze({
-  id: 'Icons',
+  id: '[DEV] Icons',
   path: '/icons',
   icon: <Heart />,
+  component: null,
   children: [
     {
       path: '/icons/feather-icons',
@@ -14,7 +15,6 @@ const iconsRoutes = Object.freeze({
       component: FeatherIcons,
     },
   ],
-  component: null,
 });
 
 export default iconsRoutes;

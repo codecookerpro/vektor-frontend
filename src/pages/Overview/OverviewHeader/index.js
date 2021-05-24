@@ -4,8 +4,6 @@ import { Helmet } from 'react-helmet';
 import { Grid, Divider as MuiDivider, Typography as MuiTypography } from '@material-ui/core';
 import { spacing } from '@material-ui/system';
 
-import ContainedButton from 'components/UI/Buttons/ContainedButton';
-
 const Divider = styled(MuiDivider)(spacing);
 
 const Typography = styled(MuiTypography)(spacing);
@@ -20,12 +18,7 @@ function OverviewHeader() {
             Welcome to Vektor DynamixE, real-time Project Status Panel
           </Typography>
         </Grid>
-
-        <Grid item>
-          <ContainedButton>New Action</ContainedButton>
-        </Grid>
       </Grid>
-
       <Divider my={6} />
     </>
   );

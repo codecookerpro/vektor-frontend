@@ -22,6 +22,7 @@ const projectManagementRoutes = Object.freeze({
   path: LINKS.PROJECT_MANAGEMENT.HREF,
   icon: <Sliders />,
   containsHome: true,
+  component: null,
   children: [
     {
       path: LINKS.DASHBOARD.HREF,
@@ -104,7 +105,6 @@ const projectManagementRoutes = Object.freeze({
       component: ReportList,
     },
   ],
-  component: null,
 });
 
 export default projectManagementRoutes;
