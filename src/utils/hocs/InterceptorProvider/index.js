@@ -1,45 +1,46 @@
+import React, { memo, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
-import React, { memo, useEffect } from 'react'
-import { useDispatch, useSelector } from "react-redux";
-
-import axios from 'services/axios'
-import * as authAPI from "../../../services/api-auth";
-import { logoutUser, setUserToken } from "../../../redux/actions/authActions";
+import axios from 'services/axios';
+import * as authAPI from '../../../services/api-auth';
+import { logoutUser, setUserToken } from '../../../redux/actions/authActions';
 
 const InterceptorProvider = () => {
-  const { accessToken, passwordResetToken } = useSelector(state => state.auth);
+  const { accessToken, passwordResetToken } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
   useEffect(() => {
     axios.interceptors.response.use(
-      response => response,
-      error => {
+      (response) => response,
+      (error) => {
         if (error.response) {
           const { data, config } = error.response;
-          const refreshUrl = "/api/users/refresh"
-          if (config.url === refreshUrl ) {
+          const refreshUrl = '/api/users/refresh';
+          if (config.url === refreshUrl) {
             dispatch(logoutUser());
             window.location.reload();
           }
-          if ( data.code === 1002 || data.code === 1001) {
-              const refreshToken = localStorage.refreshToken;
-              const params = {
-                refreshToken,
-              }
-              authAPI.refreshToken(params).then( (response) => {
-                const {accessToken, refreshToken, data: user} = response;
-                dispatch(
-                  setUserToken({
-                    accessToken,
-                    refreshToken,
-                    user
-                  })
-                );
-              })
+          if (data.code === 1002 || data.code === 1001) {
+            const refreshToken = localStorage.refreshToken;
+            const params = {
+              refreshToken,
+            };
+            authAPI.refreshToken(params).then((response) => {
+              const { accessToken, refreshToken, data: user } = response;
+              dispatch(
+                setUserToken({
+                  accessToken,
+                  refreshToken,
+                  user,
+                })
+              );
+              window.location.reload();
+            });
           }
           return Promise.reject(error);
         }
-      });
+      }
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
