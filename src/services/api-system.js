@@ -1,10 +1,9 @@
-
-import axios from 'services/axios'
+import axios from 'services/axios';
 
 const getSystems = async (data) => {
   const params = {
-    get_json: JSON.stringify(data)
-  }
+    get_json: JSON.stringify(data),
+  };
   return await axios.get('/api/metasystems/systems', { params });
 };
 
@@ -32,12 +31,4 @@ const deleteSystemDeliverable = async (params) => {
   return await axios.delete(`/api/metasystems/systems/nested`, { params });
 };
 
-export {
-  getSystems,
-  createSystem,
-  updateSystem,
-  deleteSystem,
-  createSystemDeliverable,
-  updateSystemDeliverable,
-  deleteSystemDeliverable
-};
+export { getSystems, createSystem, updateSystem, deleteSystem, createSystemDeliverable, updateSystemDeliverable, deleteSystemDeliverable };

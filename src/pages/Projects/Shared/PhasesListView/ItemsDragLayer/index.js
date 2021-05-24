@@ -58,9 +58,7 @@ const ItemsDragLayer = ({ item, itemType, isDragging, currentOffset }) => {
   return isDragging ? (
     <div style={layerStyles}>
       <div style={getItemStyles(currentOffset)}>
-        <div style={getFieldStyle(isDragging)}>
-          {renderItem(itemType, item)}
-        </div>
+        <div style={getFieldStyle(isDragging)}>{renderItem(itemType, item)}</div>
       </div>
     </div>
   ) : null;

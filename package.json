@@ -51,17 +51,28 @@
     "babel-eslint": "^10.1.0",
     "eslint": "^7.11.0",
     "eslint-loader": "^4.0.2",
+    "eslint-plugin-prettier": "^3.4.0",
     "eslint-plugin-react": "^7.21.4",
     "eslint-plugin-react-hooks": "^4.1.2",
+    "husky": "^6.0.0",
+    "lint-staged": ">=10",
     "pm2": "^4.5.4",
+    "prettier": "^2.3.0",
     "redux-devtools-extension": "^2.13.8",
     "redux-logger": "^3.0.6"
+  },
+  "lint-staged": {
+    "*.{js,jsx}": "eslint --cache --fix",
+    "src/**/*.{js,jsx,json,css}": "prettier --single-quote --write"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "eject": "react-scripts eject",
-    "lint": "eslint src --ext .js,.jsx,.ts,.tsx --fix",
+    "prepare": "husky install",
+    "pre-commit": "lint-staged && git add .",
+    "lint": "eslint src --fix",
+    "format": "prettier --single-quote --write \"src/**/*.{js,jsx,json,css}\"",
     "deploy:dev": "pm2 deploy frontend.json dev update"
   }
 }

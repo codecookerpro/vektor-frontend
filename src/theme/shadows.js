@@ -3,7 +3,7 @@ function createShadow() {
 }
 
 const shadows = [
-  "none",
+  'none',
   createShadow(),
   createShadow(),
   createShadow(),

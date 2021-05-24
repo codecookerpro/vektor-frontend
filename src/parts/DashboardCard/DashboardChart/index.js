@@ -19,20 +19,13 @@ const DoughnutInner = styled.div`
   z-index: 0;
 `;
 
-const DashboardChart = ({
-  theme
-}) => {
+const DashboardChart = ({ theme }) => {
   const data = {
     labels: ['Social', 'Search Engines', 'Direct', 'Other'],
     datasets: [
       {
         data: [260, 125, 54, 146],
-        backgroundColor: [
-          theme.palette.secondary.main,
-          red[500],
-          orange[500],
-          theme.palette.grey[200],
-        ],
+        backgroundColor: [theme.palette.secondary.main, red[500], orange[500], theme.palette.grey[200]],
         borderWidth: 5,
         borderColor: theme.palette.background.paper,
       },
@@ -49,9 +42,9 @@ const DashboardChart = ({
 
   return (
     <ChartWrapper>
-      <DoughnutInner variant='h4'>
-        <Typography variant='h4'>+27%</Typography>
-        <Typography variant='caption'>more sales</Typography>
+      <DoughnutInner variant="h4">
+        <Typography variant="h4">+27%</Typography>
+        <Typography variant="caption">more sales</Typography>
       </DoughnutInner>
       <Doughnut data={data} options={options} />
     </ChartWrapper>

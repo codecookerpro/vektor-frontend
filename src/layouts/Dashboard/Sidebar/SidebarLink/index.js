@@ -3,11 +3,7 @@ import styled from 'styled-components/macro';
 import { rgba } from 'polished';
 import { NavLink } from 'react-router-dom';
 import { darken } from 'polished';
-import {
-  Chip,
-  ListItem,
-  ListItemText,
-} from '@material-ui/core';
+import { Chip, ListItem, ListItemText } from '@material-ui/core';
 
 const Link = styled(ListItem)`
   padding-left: ${(props) => props.theme.spacing(17.5)}px;
@@ -23,13 +19,11 @@ const Link = styled(ListItem)`
   }
 
   &:hover {
-    background-color: ${(props) =>
-    darken(0.015, props.theme.sidebar.background)};
+    background-color: ${(props) => darken(0.015, props.theme.sidebar.background)};
   }
 
   &.${(props) => props.activeClassName} {
-    background-color: ${(props) =>
-    darken(0.03, props.theme.sidebar.background)};
+    background-color: ${(props) => darken(0.03, props.theme.sidebar.background)};
 
     span {
       color: ${(props) => props.theme.sidebar.color};
@@ -64,19 +58,8 @@ const LinkBadge = styled(Chip)`
   }
 `;
 
-const SidebarLink = ({
-  name,
-  to,
-  badge
-}) => (
-  <Link
-    button
-    dense
-    component={NavLink}
-    exact
-    to={to}
-    activeClassName='active'
-  >
+const SidebarLink = ({ name, to, badge }) => (
+  <Link button dense component={NavLink} exact to={to} activeClassName="active">
     <LinkText>{name}</LinkText>
     {badge ? <LinkBadge label={badge} /> : ''}
   </Link>

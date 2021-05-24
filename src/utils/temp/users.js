@@ -5,8 +5,8 @@ const USERS = [
     email: 'rbuccino@celgene.com',
     organization: {
       id: '0001',
-      name: 'Falcon'
-    }
+      name: 'Falcon',
+    },
   },
   {
     id: '0002',
@@ -14,8 +14,8 @@ const USERS = [
     email: 'fbutkevich@celgene.com',
     organization: {
       id: '0001',
-      name: 'Falcon'
-    }
+      name: 'Falcon',
+    },
   },
   {
     id: '0003',
@@ -23,8 +23,8 @@ const USERS = [
     email: 'lokranjn@dynamixe.com',
     organization: {
       id: '0001',
-      name: 'Falcon'
-    }
+      name: 'Falcon',
+    },
   },
   {
     id: '0004',
@@ -32,8 +32,8 @@ const USERS = [
     email: 'janiss@dynamixe.com',
     organization: {
       id: '0001',
-      name: 'Falcon'
-    }
+      name: 'Falcon',
+    },
   },
   {
     id: '0005',
@@ -41,8 +41,8 @@ const USERS = [
     email: 'ratkik@gmail.com',
     organization: {
       id: '0002',
-      name: 'Voxsync'
-    }
+      name: 'Voxsync',
+    },
   },
   {
     id: '0006',
@@ -50,8 +50,8 @@ const USERS = [
     email: 'vox.test102@protonmail.com',
     organization: {
       id: '0002',
-      name: 'Voxsync'
-    }
+      name: 'Voxsync',
+    },
   },
   {
     id: '0007',
@@ -59,8 +59,8 @@ const USERS = [
     email: 'ilya.moroz@voxsync.com',
     organization: {
       id: '0002',
-      name: 'Voxsync'
-    }
+      name: 'Voxsync',
+    },
   },
   {
     id: '0008',
@@ -68,8 +68,8 @@ const USERS = [
     email: 'marys@dynamixe.com',
     organization: {
       id: '0002',
-      name: 'Voxsync'
-    }
+      name: 'Voxsync',
+    },
   },
   {
     id: '0009',
@@ -77,8 +77,8 @@ const USERS = [
     email: 'stores@marysiew.com',
     organization: {
       id: '0002',
-      name: 'Voxsync'
-    }
+      name: 'Voxsync',
+    },
   },
   {
     id: '0010',
@@ -86,8 +86,8 @@ const USERS = [
     email: 'varshak@dynamixe.com',
     organization: {
       id: '0002',
-      name: 'Voxsync'
-    }
+      name: 'Voxsync',
+    },
   },
   {
     id: '0011',
@@ -95,9 +95,9 @@ const USERS = [
     email: 'jamartin@celgene.com',
     organization: {
       id: '0002',
-      name: 'Voxsync'
-    }
+      name: 'Voxsync',
+    },
   },
-]
+];
 
-export default USERS
+export default USERS;

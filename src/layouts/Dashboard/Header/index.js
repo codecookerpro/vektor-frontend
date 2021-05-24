@@ -1,14 +1,8 @@
 import React, { memo } from 'react';
 import styled, { withTheme } from 'styled-components/macro';
-import {
-  Grid,
-  Hidden,
-  AppBar as MuiAppBar,
-  IconButton as MuiIconButton,
-  Toolbar,
-} from '@material-ui/core';
+import { Grid, Hidden, AppBar as MuiAppBar, IconButton as MuiIconButton, Toolbar } from '@material-ui/core';
 import { Menu as MenuIcon } from '@material-ui/icons';
-import { makeStyles } from '@material-ui/core/styles'
+import { makeStyles } from '@material-ui/core/styles';
 
 import UserDropdown from './UserDropdown';
 import SearchInput from './SearchInput';
@@ -29,8 +23,8 @@ const IconButton = styled(MuiIconButton)`
 const useStyles = makeStyles(() => ({
   userInfo: {
     display: 'flex',
-    alignItems: 'center'
-  }
+    alignItems: 'center',
+  },
 }));
 
 const Header = ({ onDrawerToggle }) => {
@@ -38,16 +32,12 @@ const Header = ({ onDrawerToggle }) => {
 
   return (
     <React.Fragment>
-      <AppBar position='sticky' elevation={0}>
+      <AppBar position="sticky" elevation={0}>
         <Toolbar>
-          <Grid container alignItems='center'>
+          <Grid container alignItems="center">
             <Hidden mdUp>
               <Grid item>
-                <IconButton
-                  color='inherit'
-                  aria-label='Open drawer'
-                  onClick={onDrawerToggle}
-                >
+                <IconButton color="inherit" aria-label="Open drawer" onClick={onDrawerToggle}>
                   <MenuIcon />
                 </IconButton>
               </Grid>
@@ -66,7 +56,7 @@ const Header = ({ onDrawerToggle }) => {
         </Toolbar>
       </AppBar>
     </React.Fragment>
-  )
+  );
 };
 
 export default memo(withTheme(Header));

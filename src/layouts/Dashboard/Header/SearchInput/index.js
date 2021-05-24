@@ -50,7 +50,7 @@ const SearchInput = () => (
     <SearchIconWrapper>
       <SearchIcon />
     </SearchIconWrapper>
-    <Input placeholder='Search topics' />
+    <Input placeholder="Search topics" />
   </Search>
 );
 

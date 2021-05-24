@@ -42,20 +42,14 @@ const collect = (connect, monitor) => ({
   isDragging: monitor.isDragging(),
 });
 
-const PhaseItem = ({
-  index,
-  item,
-  selectedField,
-  handleSelection,
-  connectDragSource,
-}) => {
+const PhaseItem = ({ index, item, selectedField, handleSelection, connectDragSource }) => {
   const classes = useStyles();
 
   const handleRowSelection = () => {
     handleSelection(index);
   };
 
-  const detailHandler = () => { };
+  const detailHandler = () => {};
 
   return connectDragSource(
     <div>
@@ -67,9 +61,9 @@ const PhaseItem = ({
       >
         <CardContent className={classes.content}>
           <div>
-            <Typography color='textPrimary'>{item.name}</Typography>
-            <Typography color='textPrimary'>{item.projectName}</Typography>
-            <Typography color='textPrimary'>{item.status * 100}%</Typography>
+            <Typography color="textPrimary">{item.name}</Typography>
+            <Typography color="textPrimary">{item.projectName}</Typography>
+            <Typography color="textPrimary">{item.status * 100}%</Typography>
           </div>
           <ContainedButton onClick={detailHandler}>Detail</ContainedButton>
         </CardContent>

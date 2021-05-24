@@ -1,41 +1,36 @@
-import { memo, useCallback } from 'react'
-import { makeStyles } from '@material-ui/core/styles'
-import {
-  TableFooter,
-  TablePagination,
-  TableRow,
-} from '@material-ui/core'
+import { memo, useCallback } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import { TableFooter, TablePagination, TableRow } from '@material-ui/core';
 
-import TablePaginationActions from 'parts/Tables/TablePaginationActions'
+import TablePaginationActions from 'parts/Tables/TablePaginationActions';
 
 const useStyles = makeStyles((theme) => ({
   menuItem: {
-    backgroundColor: `${theme.palette.background.primary} !important`
+    backgroundColor: `${theme.palette.background.primary} !important`,
   },
   selectIcon: {
-    color: theme.palette.text.primary
-  }
+    color: theme.palette.text.primary,
+  },
 }));
 
-const VektorTableFooter = ({
-  colSpan,
-  rowCounts,
-  page,
-  setPage,
-  rowsPerPage,
-  setRowsPerPage
-}) => {
+const VektorTableFooter = ({ colSpan, rowCounts, page, setPage, rowsPerPage, setRowsPerPage }) => {
   const classes = useStyles();
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const handleChangePage = useCallback((event, newPage) => {
-    setPage(newPage);
-  }, [setPage]);
+  const handleChangePage = useCallback(
+    (event, newPage) => {
+      setPage(newPage);
+    },
+    [setPage]
+  );
 
-  const handleChangeRowsPerPage = useCallback((event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  }, [setPage, setRowsPerPage]);
+  const handleChangeRowsPerPage = useCallback(
+    (event) => {
+      setRowsPerPage(parseInt(event.target.value, 10));
+      setPage(0);
+    },
+    [setPage, setRowsPerPage]
+  );
 
   return (
     <TableFooter>
@@ -52,7 +47,7 @@ const VektorTableFooter = ({
           }}
           classes={{
             menuItem: classes.menuItem,
-            selectIcon: classes.selectIcon
+            selectIcon: classes.selectIcon,
           }}
           onChangePage={handleChangePage}
           onChangeRowsPerPage={handleChangeRowsPerPage}
@@ -61,6 +56,6 @@ const VektorTableFooter = ({
       </TableRow>
     </TableFooter>
   );
-}
+};
 
 export default memo(VektorTableFooter);

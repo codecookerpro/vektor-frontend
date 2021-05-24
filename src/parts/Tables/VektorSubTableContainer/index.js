@@ -1,8 +1,8 @@
-import { memo } from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import { Table, TableBody, TableContainer } from "@material-ui/core";
+import { memo } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import { Table, TableBody, TableContainer } from '@material-ui/core';
 
-import VektorTableHeader from "parts/Tables/VektorTableHeader";
+import VektorTableHeader from 'parts/Tables/VektorTableHeader';
 
 const useStyles = makeStyles(() => ({
   table: {

@@ -1,25 +1,25 @@
-import { grey } from "@material-ui/core/colors";
+import { grey } from '@material-ui/core/colors';
 
 const variant = {
   name: 'BLUE',
   palette: {
-    type: "light",
+    type: 'light',
     primary: {
       main: '#5A83BB',
-      contrastText: "#FFF",
+      contrastText: '#FFF',
     },
     secondary: {
       main: '#5A83BB',
-      contrastText: "#FFF",
+      contrastText: '#FFF',
     },
     background: {
-      default: "#F7F9FC",
-      paper: "#FFF",
+      default: '#F7F9FC',
+      paper: '#FFF',
     },
   },
   header: {
     color: grey[500],
-    background: "#FFF",
+    background: '#FFF',
     search: {
       color: grey[800],
     },
@@ -29,28 +29,28 @@ const variant = {
   },
   footer: {
     color: grey[500],
-    background: "#FFF",
+    background: '#FFF',
   },
   sidebar: {
-    color: "#FFF",
+    color: '#FFF',
     background: '#5A83BB',
     header: {
-      color: "#FFF",
+      color: '#FFF',
       background: '#5A83BB',
       brand: {
-        color: "#FFFFFF",
+        color: '#FFFFFF',
       },
     },
     footer: {
-      color: "#FFF",
+      color: '#FFF',
       background: '#5A83BB',
       online: {
-        background: "#FFF",
+        background: '#FFF',
       },
     },
     badge: {
-      color: "#000",
-      background: "#FFF",
+      color: '#000',
+      background: '#FFF',
     },
   },
   custom: {
@@ -62,9 +62,9 @@ const variant = {
       lightGreen: '#a6b884',
       red: '#d32f2f',
       black: '#000000',
-      border: '#f1f0f2'
+      border: '#f1f0f2',
     },
-  }
+  },
 };
 
 export default variant;

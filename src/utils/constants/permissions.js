@@ -1,11 +1,10 @@
-
 const PERMISSION_TYPE = Object.freeze({
   ADMIN: 'ADMIN',
   SUPERVISOR: 'SUPERVISOR',
   PROJECT_MANAGER: 'PROJECT_MANAGER',
   USER: 'USER',
   VIEWER: 'VIEWER',
-})
+});
 
 const PERMISSIONS = [
   {
@@ -30,7 +29,4 @@ const PERMISSIONS = [
   },
 ];
 
-export {
-  PERMISSION_TYPE,
-  PERMISSIONS
-};
+export { PERMISSION_TYPE, PERMISSIONS };

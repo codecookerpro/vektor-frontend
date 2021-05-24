@@ -1,14 +1,16 @@
 import { lazy } from 'react';
 import { Activity } from 'react-feather';
+import LINKS from 'utils/constants/links';
 
 const WorkflowTemplateList = lazy(() => import(/* webpackChunkName: 'WorkflowTemplateList' */ 'pages/WorkflowTemplates/WorkflowTemplateList'));
 const AddWorkflowTemplate = lazy(() => import(/* webpackChunkName: 'AddWorkflowTemplate' */ 'pages/WorkflowTemplates/AddWorkflowTemplate'));
 const EditWorkflowTemplate = lazy(() => import(/* webpackChunkName: 'EditWorkflowTemplate' */ 'pages/WorkflowTemplates/EditWorkflowTemplate'));
-const WorkflowTemplateHistory = lazy(() => import(/* webpackChunkName: 'WorkflowTemplateHistory' */ 'pages/WorkflowTemplates/WorkflowTemplateHistory'));
+const WorkflowTemplateHistory = lazy(() =>
+  import(/* webpackChunkName: 'WorkflowTemplateHistory' */ 'pages/WorkflowTemplates/WorkflowTemplateHistory')
+);
 const WorkflowTemplateChart = lazy(() => import(/* webpackChunkName: 'WorkflowTemplateChart' */ 'pages/WorkflowTemplates/WorkflowTemplateChart'));
 const PhaseTemplateList = lazy(() => import(/* webpackChunkName: 'PhaseTemplateList' */ 'pages/PhaseTemplates/PhaseTemplateList'));
 const AddEditPhaseTemplate = lazy(() => import(/* webpackChunkName: 'AddEditPhaseTemplate' */ 'pages/PhaseTemplates/AddEditPhaseTemplate'));
-import LINKS from 'utils/constants/links';
 
 const projectTemplateRoutes = Object.freeze({
   id: LINKS.PROJECT_TEMPLATE.TITLE,

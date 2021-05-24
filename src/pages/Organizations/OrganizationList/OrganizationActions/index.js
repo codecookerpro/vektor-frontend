@@ -19,25 +19,21 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const OrganizationActions = ({
-  action,
-  setAction,
-  onAction,
-}) => {
+const OrganizationActions = ({ action, setAction, onAction }) => {
   const classes = useStyles();
 
   return (
     <Card className={classes.root}>
       <CardContent className={classes.content}>
         <FilterSelect
-          label='Action:'
-          placeholder='Select Action'
+          label="Action:"
+          placeholder="Select Action"
           items={SYSTEM_ACTIONS}
           value={action}
           onChange={(e) => setAction(e.target.value)}
           className={classes.input}
         />
-        <Button color='primary' variant='contained' onClick={onAction}>
+        <Button color="primary" variant="contained" onClick={onAction}>
           Go
         </Button>
       </CardContent>

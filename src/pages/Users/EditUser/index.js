@@ -1,4 +1,3 @@
-
 import React, { memo, useMemo, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useHistory } from 'react-router-dom';
@@ -17,7 +16,7 @@ const EditUser = () => {
   const history = useHistory();
   const dispatch = useDispatch();
 
-  const { results = [] } = useSelector(state => state.users);
+  const { results = [] } = useSelector((state) => state.users);
 
   useEffect(() => {
     dispatch(getUsers());
@@ -31,19 +30,8 @@ const EditUser = () => {
 
   return (
     <>
-      <PageHeader
-        title={LINKS.EDIT_USER.TITLE}
-        links={NAV_LINKS}
-        leftElement={
-          <ContainedButton onClick={historyHandler}>
-            History
-          </ContainedButton>
-        }
-      />
-      {
-        !isEmpty(user) &&
-        <UserForm user={user} />
-      }
+      <PageHeader title={LINKS.EDIT_USER.TITLE} links={NAV_LINKS} leftElement={<ContainedButton onClick={historyHandler}>History</ContainedButton>} />
+      {!isEmpty(user) && <UserForm user={user} />}
     </>
   );
 };

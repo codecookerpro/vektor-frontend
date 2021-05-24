@@ -1,4 +1,3 @@
-
 const getEnglishDateWithTime = (date) => {
   if (!!date) {
     return new Date(date).toLocaleDateString('en-US', {
@@ -7,11 +6,11 @@ const getEnglishDateWithTime = (date) => {
       day: 'numeric',
       hour: 'numeric',
       minute: 'numeric',
-      hour12: true
+      hour12: true,
     });
   }
-  return ''
-}
+  return '';
+};
 
 const getEnglishDate = (date) => {
   if (!!date) {
@@ -21,22 +20,18 @@ const getEnglishDate = (date) => {
       day: 'numeric',
     });
   }
-  return ''
-}
+  return '';
+};
 
 const getEnglishTime = (date) => {
   if (!!date) {
     return new Date(date).toLocaleTimeString('en-US', {
       hour: 'numeric',
       minute: 'numeric',
-      hour12: true
+      hour12: true,
     });
   }
-  return ''
-}
+  return '';
+};
 
-export {
-  getEnglishDate,
-  getEnglishTime,
-  getEnglishDateWithTime,
-}
+export { getEnglishDate, getEnglishTime, getEnglishDateWithTime };

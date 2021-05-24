@@ -47,11 +47,7 @@ const PhasesListView = () => {
         <Grid container spacing={6}>
           {phases.map((phase, index) => (
             <Grid key={index} item xs={12} sm={6} md={3}>
-              <PhaseBox
-                id={phase.name}
-                fields={data[phase.name]}
-                moveItem={moveItem}
-              />
+              <PhaseBox id={phase.name} fields={data[phase.name]} moveItem={moveItem} />
             </Grid>
           ))}
         </Grid>

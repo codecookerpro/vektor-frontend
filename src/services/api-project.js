@@ -1,10 +1,9 @@
-
-import axios from 'services/axios'
+import axios from 'services/axios';
 
 const getProjects = async (data) => {
   const params = {
-    get_json: JSON.stringify(data)
-  }
+    get_json: JSON.stringify(data),
+  };
   return axios.get('/api/projects', { params });
 };
 
@@ -32,12 +31,4 @@ const deleteProjectPhase = async (params) => {
   return await axios.delete(`/api/projects/nested`, { params });
 };
 
-export {
-  getProjects,
-  createProject,
-  updateProject,
-  deleteProject,
-  createProjectPhase,
-  updateProjectPhase,
-  deleteProjectPhase
-};
+export { getProjects, createProject, updateProject, deleteProject, createProjectPhase, updateProjectPhase, deleteProjectPhase };

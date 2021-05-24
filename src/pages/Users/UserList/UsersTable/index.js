@@ -1,12 +1,6 @@
 import React, { memo, useState } from 'react';
 import { useSelector } from 'react-redux';
-import {
-  Card,
-  CardContent,
-  TableCell,
-  TableRow,
-  Typography,
-} from '@material-ui/core';
+import { Card, CardContent, TableCell, TableRow, Typography } from '@material-ui/core';
 
 import LinkButton from 'components/UI/Buttons/LinkButton';
 import VektorTableContainer from 'parts/Tables/VektorTableContainer';
@@ -20,22 +14,20 @@ const columns = [
 ];
 
 const UsersTable = () => {
-  const { results = [] } = useSelector(state => state.users);
-  const organizations = useSelector(state => state.organizations.results);
+  const { results = [] } = useSelector((state) => state.users);
+  const organizations = useSelector((state) => state.organizations.results);
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(
-    TABLE_ENVIRONMENTS.ROWS_PER_PAGE
-  );
+  const [rowsPerPage, setRowsPerPage] = useState(TABLE_ENVIRONMENTS.ROWS_PER_PAGE);
 
   const getOrganizationName = (_id) => {
-    const organization = organizations.find((item) => item._id === _id)
-    return organization?.name || ''
-  }
+    const organization = organizations.find((item) => item._id === _id);
+    return organization?.name || '';
+  };
 
   return (
     <Card>
       <CardContent>
-        <Typography variant='h5' color='textPrimary' gutterBottom>
+        <Typography variant="h5" color="textPrimary" gutterBottom>
           {`${results.length} users`}
         </Typography>
         <VektorTableContainer
@@ -46,27 +38,13 @@ const UsersTable = () => {
           rowsPerPage={rowsPerPage}
           setRowsPerPage={setRowsPerPage}
         >
-          {(rowsPerPage > 0
-            ? results.slice(
-              page * rowsPerPage,
-              page * rowsPerPage + rowsPerPage
-            )
-            : results
-          ).map((row) => (
+          {(rowsPerPage > 0 ? results.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) : results).map((row) => (
             <TableRow key={row._id}>
-              <TableCell component='th' scope='row'>
-                <LinkButton
-                  to={LINKS.EDIT_USER.HREF.replace(':id', row._id)}
-                >
-                  {row.name || 'No Name'}
-                </LinkButton>
+              <TableCell component="th" scope="row">
+                <LinkButton to={LINKS.EDIT_USER.HREF.replace(':id', row._id)}>{row.name || 'No Name'}</LinkButton>
               </TableCell>
-              <TableCell>
-                {row.email}
-              </TableCell>
-              <TableCell>
-                {row?.organization ? getOrganizationName(row?.organization) : 'No Organization'}
-              </TableCell>
+              <TableCell>{row.email}</TableCell>
+              <TableCell>{row?.organization ? getOrganizationName(row?.organization) : 'No Organization'}</TableCell>
             </TableRow>
           ))}
         </VektorTableContainer>

@@ -1,4 +1,3 @@
-
 import React, { memo, useCallback, useState } from 'react';
 
 import PageHeader from 'parts/PageHeader';
@@ -18,19 +17,9 @@ const AuditTrailLogList = () => {
 
   return (
     <>
-      <PageHeader
-        title={LINKS.AUDIT_TRAIL_LOGS.TITLE}
-        links={NAV_LINKS}
-      />
-      <AuditTrailLogsActions
-        action={action}
-        setAction={setAction}
-        onAction={actionHandler}
-      />
-      <AuditTrailLogsTable
-        selectedItems={selectedItems}
-        setSelectedItems={setSelectedItems}
-      />
+      <PageHeader title={LINKS.AUDIT_TRAIL_LOGS.TITLE} links={NAV_LINKS} />
+      <AuditTrailLogsActions action={action} setAction={setAction} onAction={actionHandler} />
+      <AuditTrailLogsTable selectedItems={selectedItems} setSelectedItems={setSelectedItems} />
     </>
   );
 };

@@ -1,4 +1,3 @@
-
 import React, { memo, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams, useHistory } from 'react-router-dom';
@@ -15,7 +14,7 @@ const EditOrganization = () => {
   const { id } = useParams();
   const history = useHistory();
 
-  const { results = [] } = useSelector(state => state.organizations);
+  const { results = [] } = useSelector((state) => state.organizations);
   const organization = useMemo(() => results.find((item) => item._id === id), [results, id]);
 
   const historyHandler = () => {
@@ -27,16 +26,9 @@ const EditOrganization = () => {
       <PageHeader
         title={LINKS.EDIT_ORGANIZATION.TITLE}
         links={NAV_LINKS}
-        leftElement={
-          <ContainedButton onClick={historyHandler}>
-            History
-          </ContainedButton>
-        }
+        leftElement={<ContainedButton onClick={historyHandler}>History</ContainedButton>}
       />
-      {
-        !isEmpty(organization) &&
-        <OrganizationForm organization={organization} />
-      }
+      {!isEmpty(organization) && <OrganizationForm organization={organization} />}
     </>
   );
 };

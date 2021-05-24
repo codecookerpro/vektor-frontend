@@ -8,16 +8,7 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import 'react-quill/dist/quill.bubble.css';
 
-import {
-  Box,
-  CardContent,
-  Grid,
-  Link,
-  Breadcrumbs as MuiBreadcrumbs,
-  Card as MuiCard,
-  Divider as MuiDivider,
-  Typography,
-} from '@material-ui/core';
+import { Box, CardContent, Grid, Link, Breadcrumbs as MuiBreadcrumbs, Card as MuiCard, Divider as MuiDivider, Typography } from '@material-ui/core';
 
 import { spacing } from '@material-ui/system';
 
@@ -57,20 +48,15 @@ function Quill() {
   return (
     <Card mb={6}>
       <CardContent>
-        <Typography variant='h6' gutterBottom>
+        <Typography variant="h6" gutterBottom>
           Quill
         </Typography>
-        <Typography variant='body2' gutterBottom>
+        <Typography variant="body2" gutterBottom>
           Modern WYSIWYG editor built for compatibility and extensibility.
         </Typography>
         <Box mt={3}>
           <QuillWrapper>
-            <ReactQuill
-              theme='snow'
-              value={value}
-              onChange={setValue}
-              placeholder='Type something..'
-            />
+            <ReactQuill theme="snow" value={value} onChange={setValue} placeholder="Type something.." />
           </QuillWrapper>
         </Box>
       </CardContent>
@@ -84,20 +70,15 @@ function Bubble() {
   return (
     <Card mb={6}>
       <CardContent>
-        <Typography variant='h6' gutterBottom>
+        <Typography variant="h6" gutterBottom>
           Bubble
         </Typography>
-        <Typography variant='body2' gutterBottom>
+        <Typography variant="body2" gutterBottom>
           Bubble is a simple tooltip based theme for Quill.
         </Typography>
         <Box mt={3}>
           <BubbleWrapper>
-            <ReactQuill
-              theme='bubble'
-              value={value}
-              onChange={setValue}
-              placeholder='Compose an epic...'
-            />
+            <ReactQuill theme="bubble" value={value} onChange={setValue} placeholder="Compose an epic..." />
           </BubbleWrapper>
         </Box>
       </CardContent>
@@ -108,16 +89,16 @@ function Bubble() {
 function Editors() {
   return (
     <React.Fragment>
-      <Helmet title='Editors' />
-      <Typography variant='h3' gutterBottom display='inline'>
+      <Helmet title="Editors" />
+      <Typography variant="h3" gutterBottom display="inline">
         Editors
       </Typography>
 
-      <Breadcrumbs aria-label='Breadcrumb' mt={2}>
-        <Link component={NavLink} exact to='/'>
+      <Breadcrumbs aria-label="Breadcrumb" mt={2}>
+        <Link component={NavLink} exact to="/">
           Dashboard
         </Link>
-        <Link component={NavLink} exact to='/'>
+        <Link component={NavLink} exact to="/">
           Forms
         </Link>
         <Typography>Editors</Typography>

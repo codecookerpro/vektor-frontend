@@ -1,5 +1,4 @@
-
-import axios from 'services/axios'
+import axios from 'services/axios';
 
 const getWorkflowTemplates = async (data) => {
   return await axios.get('/api/workflows', { data });
@@ -36,5 +35,5 @@ export {
   deleteWorkflowTemplate,
   createWorkflowTemplateDeliverable,
   updateWorkflowTemplateDeliverable,
-  deleteWorkflowTemplateDeliverable
+  deleteWorkflowTemplateDeliverable,
 };

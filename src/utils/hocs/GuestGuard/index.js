@@ -5,7 +5,7 @@ function GuestGuard({ children }) {
   const accessToken = localStorage.accessToken;
 
   if (!!accessToken) {
-    return <Redirect to='/' />;
+    return <Redirect to="/" />;
   }
 
   return children;

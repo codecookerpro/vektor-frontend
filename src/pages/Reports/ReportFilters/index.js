@@ -1,24 +1,24 @@
-import React, { memo } from "react";
-import { Card, CardContent, Typography } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
+import React, { memo } from 'react';
+import { Card, CardContent, Typography } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 
-import FilterSelect from "components/UI/Selects/FilterSelect";
-import organizations from "utils/temp/organizations";
-import projects from "utils/temp/projects";
+import FilterSelect from 'components/UI/Selects/FilterSelect';
+import organizations from 'utils/temp/organizations';
+import projects from 'utils/temp/projects';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     marginBottom: theme.spacing(7.5),
   },
   content: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     padding: `${theme.spacing(6, 8)} !important`,
   },
   container: {
-    display: "flex",
-    alignItems: "center",
+    display: 'flex',
+    alignItems: 'center',
   },
   input: {
     margin: theme.spacing(4),
@@ -48,7 +48,7 @@ const ReportFilters = ({ filter, setFilter }) => {
             placeholder="All organizations"
             name="organization"
             items={organizations}
-            value={filter?.organization || ""}
+            value={filter?.organization || ''}
             onChange={inputHandler}
             className={classes.input}
           />
@@ -58,10 +58,10 @@ const ReportFilters = ({ filter, setFilter }) => {
             name="project"
             items={projects}
             keys={{
-              label: "name",
-              value: "id",
+              label: 'name',
+              value: 'id',
             }}
-            value={filter?.project || ""}
+            value={filter?.project || ''}
             onChange={inputHandler}
             className={classes.input}
           />
@@ -71,10 +71,10 @@ const ReportFilters = ({ filter, setFilter }) => {
             name="projectNumber"
             items={projects}
             keys={{
-              label: "name",
-              value: "id",
+              label: 'name',
+              value: 'id',
             }}
-            value={filter?.projectNumber || ""}
+            value={filter?.projectNumber || ''}
             onChange={inputHandler}
             className={classes.input}
           />
@@ -84,10 +84,10 @@ const ReportFilters = ({ filter, setFilter }) => {
             name="pnName"
             items={projects}
             keys={{
-              label: "name",
-              value: "id",
+              label: 'name',
+              value: 'id',
             }}
-            value={filter?.pnName || ""}
+            value={filter?.pnName || ''}
             onChange={inputHandler}
             className={classes.input}
           />
