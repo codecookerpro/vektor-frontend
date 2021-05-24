@@ -20,11 +20,17 @@ import {
   PASSWORD_VALID
 } from 'utils/constants/validations';
 import LINKS from 'utils/constants/links';
+import PopupError from "../../../components/UI/PopupError";
 
 const schema = yup.object().shape({
   email: EMAIL_VALID,
   password: PASSWORD_VALID
 });
+
+const VALID_ERROR_MESSAGE = {
+  email: 'Must be a valid email',
+  password: 'Must be a valid password',
+};
 
 function SignIn() {
   const classes = authPageStyles();
@@ -32,9 +38,10 @@ function SignIn() {
   const history = useHistory();
 
   const [errorMessage, setErrorMessage] = useState('');
+  const [errorPopup, setErrorPopup] = useState('');
   const [remember, setRemember] = useState(false);
 
-  const { control, handleSubmit, errors } = useForm({
+  const { control, handleSubmit, errors, reset } = useForm({
     resolver: yupResolver(schema)
   });
 
@@ -56,8 +63,23 @@ function SignIn() {
       history.push(LINKS.OVERVIEW.HREF);
     } catch (error) {
       if (error.response) {
-        const { data: { message } } = error.response;
-        setErrorMessage(message);
+        const { data } = error.response;
+        if ( data.errors ) {
+          const { errors: errorsResponse = [] } = data;
+          let messages = '';
+          errorsResponse.map(error => {
+            const { path = [] } = error;
+            messages += VALID_ERROR_MESSAGE[path[0]] + ' \n';
+          })
+          setErrorMessage(messages);
+        } else {
+          const { info } = data;
+          setErrorPopup(info);
+          reset({
+            email: '',
+            password: '',
+          })
+        }
       }
     }
   };
@@ -121,6 +143,7 @@ function SignIn() {
           Forgot password
         </LinkButton>
       </form>
+      { !!errorPopup.length && <PopupError errorPopup={errorPopup} setErrorPopup={setErrorPopup}/>}
     </AuthWrapper>
   );
 }

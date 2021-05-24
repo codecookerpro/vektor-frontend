@@ -14,7 +14,8 @@ const authPageStyles = makeStyles((theme) => ({
     width: '100%'
   },
   input: {
-    margin: theme.spacing(2, 0)
+    margin: theme.spacing(2, 0),
+    whiteSpace: 'pre-line',
   },
   logoContainer: {
     display: 'flex',
