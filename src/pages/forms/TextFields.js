@@ -1,8 +1,8 @@
-import React from "react";
-import styled from "styled-components/macro";
-import { NavLink } from "react-router-dom";
+import React from 'react';
+import styled from 'styled-components/macro';
+import { NavLink } from 'react-router-dom';
 
-import { Helmet } from "react-helmet";
+import { Helmet } from 'react-helmet';
 
 import {
   CardContent,
@@ -14,9 +14,9 @@ import {
   Paper as MuiPaper,
   TextField as MuiTextField,
   Typography,
-} from "@material-ui/core";
+} from '@material-ui/core';
 
-import { spacing } from "@material-ui/system";
+import { spacing } from '@material-ui/system';
 
 const Card = styled(MuiCard)(spacing);
 
@@ -40,32 +40,13 @@ function DefaultTextFields() {
           Text Fields
         </Typography>
         <Typography variant="body2" gutterBottom>
-          The <code>TextField</code> wrapper component is a complete form
-          control including a label, input and help text.
+          The <code>TextField</code> wrapper component is a complete form control including a label, input and help text.
         </Typography>
         <Paper mt={3}>
           <form noValidate autoComplete="off">
-            <TextField
-              m={2}
-              required
-              id="standard-required"
-              label="Required"
-              defaultValue="Hello World"
-            />
-            <TextField
-              m={2}
-              disabled
-              id="standard-disabled"
-              label="Disabled"
-              defaultValue="Hello World"
-            />
-            <TextField
-              id="standard-password-input"
-              label="Password"
-              type="password"
-              autoComplete="current-password"
-              m={2}
-            />
+            <TextField m={2} required id="standard-required" label="Required" defaultValue="Hello World" />
+            <TextField m={2} disabled id="standard-disabled" label="Disabled" defaultValue="Hello World" />
+            <TextField id="standard-password-input" label="Password" type="password" autoComplete="current-password" m={2} />
             <TextField
               id="standard-read-only-input"
               label="Read Only"
@@ -84,19 +65,8 @@ function DefaultTextFields() {
               }}
               m={2}
             />
-            <TextField
-              m={2}
-              id="standard-search"
-              label="Search field"
-              type="search"
-            />
-            <TextField
-              id="standard-helperText"
-              label="Helper text"
-              defaultValue="Default Value"
-              helperText="Some important text"
-              m={2}
-            />
+            <TextField m={2} id="standard-search" label="Search field" type="search" />
+            <TextField id="standard-helperText" label="Helper text" defaultValue="Default Value" helperText="Some important text" m={2} />
           </form>
         </Paper>
       </CardContent>
@@ -116,30 +86,9 @@ function OutlinedTextFields() {
         </Typography>
         <Paper mt={3}>
           <form noValidate autoComplete="off">
-            <TextField
-              required
-              id="standard-required"
-              label="Required"
-              defaultValue="Hello World"
-              variant="outlined"
-              m={2}
-            />
-            <TextField
-              disabled
-              id="standard-disabled"
-              label="Disabled"
-              defaultValue="Hello World"
-              variant="outlined"
-              m={2}
-            />
-            <TextField
-              id="standard-password-input"
-              label="Password"
-              type="password"
-              autoComplete="current-password"
-              variant="outlined"
-              m={2}
-            />
+            <TextField required id="standard-required" label="Required" defaultValue="Hello World" variant="outlined" m={2} />
+            <TextField disabled id="standard-disabled" label="Disabled" defaultValue="Hello World" variant="outlined" m={2} />
+            <TextField id="standard-password-input" label="Password" type="password" autoComplete="current-password" variant="outlined" m={2} />
             <TextField
               id="standard-read-only-input"
               label="Read Only"
@@ -160,13 +109,7 @@ function OutlinedTextFields() {
               variant="outlined"
               m={2}
             />
-            <TextField
-              id="standard-search"
-              label="Search field"
-              type="search"
-              variant="outlined"
-              m={2}
-            />
+            <TextField id="standard-search" label="Search field" type="search" variant="outlined" m={2} />
             <TextField
               id="standard-helperText"
               label="Helper text"

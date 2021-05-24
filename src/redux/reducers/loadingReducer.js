@@ -1,8 +1,7 @@
-
 import * as TYPES from 'redux/types';
 
 const initialState = {
-  loadingStatus: false
+  loadingStatus: false,
 };
 
 export default function loadingReducer(state = initialState, action) {
@@ -10,7 +9,7 @@ export default function loadingReducer(state = initialState, action) {
     case TYPES.SET_LOADING_STATUS:
       return {
         ...state,
-        loadingStatus: action.payload
+        loadingStatus: action.payload,
       };
     default:
       return state;

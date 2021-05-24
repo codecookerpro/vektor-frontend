@@ -1,20 +1,15 @@
-import React, { useState, memo } from "react";
-import styled from "styled-components/macro";
-import { NavLink, withRouter } from "react-router-dom";
-import PerfectScrollbar from "react-perfect-scrollbar";
-import {
-  Collapse,
-  Drawer as MuiDrawer,
-  List as MuiList,
-  Typography,
-} from "@material-ui/core";
+import React, { useState, memo } from 'react';
+import styled from 'styled-components/macro';
+import { NavLink, withRouter } from 'react-router-dom';
+import PerfectScrollbar from 'react-perfect-scrollbar';
+import { Collapse, Drawer as MuiDrawer, List as MuiList, Typography } from '@material-ui/core';
 
-import SidebarHeader from "./SidebarHeader";
-import SidebarLink from "./SidebarLink";
-import SidebarCategory from "./SidebarCategory";
-import SidebarFooter from "./SidebarFooter";
-import { sidebarRoutes as routes } from "utils/constants/routes";
-import "vendor/perfect-scrollbar.css";
+import SidebarHeader from './SidebarHeader';
+import SidebarLink from './SidebarLink';
+import SidebarCategory from './SidebarCategory';
+import SidebarFooter from './SidebarFooter';
+import { sidebarRoutes as routes } from 'utils/constants/routes';
+import 'vendor/perfect-scrollbar.css';
 
 const Drawer = styled(MuiDrawer)`
   border-right: 0;
@@ -40,9 +35,7 @@ const Items = styled.div`
 
 const SidebarSection = styled(Typography)`
   color: ${(props) => props.theme.sidebar.color};
-  padding: ${(props) => props.theme.spacing(4)}px
-    ${(props) => props.theme.spacing(7)}px
-    ${(props) => props.theme.spacing(1)}px;
+  padding: ${(props) => props.theme.spacing(4)}px ${(props) => props.theme.spacing(7)}px ${(props) => props.theme.spacing(1)}px;
   opacity: 0.9;
   display: block;
 `;
@@ -57,7 +50,7 @@ const Sidebar = ({ location, PaperProps = {} }) => {
     routes.forEach((route, index) => {
       const isActive = pathName.indexOf(route.path) === 0;
       const isOpen = route.open;
-      const isHome = route.containsHome && pathName === "/";
+      const isHome = route.containsHome && pathName === '/';
 
       _routes = Object.assign({}, _routes, {
         [index]: isActive || isOpen || isHome,
@@ -71,18 +64,10 @@ const Sidebar = ({ location, PaperProps = {} }) => {
 
   const toggle = (index) => {
     // Collapse all elements
-    Object.keys(openRoutes).forEach(
-      (item) =>
-        openRoutes[index] ||
-        setOpenRoutes((openRoutes) =>
-          Object.assign({}, openRoutes, { [item]: false })
-        )
-    );
+    Object.keys(openRoutes).forEach((item) => openRoutes[index] || setOpenRoutes((openRoutes) => Object.assign({}, openRoutes, { [item]: false })));
 
     // Toggle selected element
-    setOpenRoutes((openRoutes) =>
-      Object.assign({}, openRoutes, { [index]: !openRoutes[index] })
-    );
+    setOpenRoutes((openRoutes) => Object.assign({}, openRoutes, { [index]: !openRoutes[index] }));
   };
 
   return (
@@ -93,9 +78,7 @@ const Sidebar = ({ location, PaperProps = {} }) => {
           <Items>
             {routes.map((category, index) => (
               <React.Fragment key={index}>
-                {category.header && (
-                  <SidebarSection>{category.header}</SidebarSection>
-                )}
+                {category.header && <SidebarSection>{category.header}</SidebarSection>}
 
                 {category.children && category.icon ? (
                   <React.Fragment key={index}>
@@ -108,22 +91,10 @@ const Sidebar = ({ location, PaperProps = {} }) => {
                       onClick={() => toggle(index)}
                     />
 
-                    <Collapse
-                      in={openRoutes[index]}
-                      timeout="auto"
-                      unmountOnExit
-                    >
+                    <Collapse in={openRoutes[index]} timeout="auto" unmountOnExit>
                       {category.children.map(
                         (route, index) =>
-                          !route?.isNotSlide && (
-                            <SidebarLink
-                              key={index}
-                              name={route.name}
-                              to={route.path}
-                              icon={route.icon}
-                              badge={route.badge}
-                            />
-                          )
+                          !route?.isNotSlide && <SidebarLink key={index} name={route.name} to={route.path} icon={route.icon} badge={route.badge} />
                       )}
                     </Collapse>
                   </React.Fragment>

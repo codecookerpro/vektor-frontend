@@ -1,4 +1,3 @@
-
 import React, { memo, useCallback, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Plus } from 'react-feather';
@@ -36,15 +35,8 @@ const OrganizationList = () => {
           </ContainedButton>
         }
       />
-      <OrganizationActions
-        action={action}
-        setAction={setAction}
-        onAction={actionHandler}
-      />
-      <OrganizationsTable
-        selectedItems={selectedItems}
-        setSelectedItems={setSelectedItems}
-      />
+      <OrganizationActions action={action} setAction={setAction} onAction={actionHandler} />
+      <OrganizationsTable selectedItems={selectedItems} setSelectedItems={setSelectedItems} />
     </>
   );
 };

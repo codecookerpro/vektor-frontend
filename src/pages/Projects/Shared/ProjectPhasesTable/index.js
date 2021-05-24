@@ -1,11 +1,5 @@
 import React, { memo } from 'react';
-import {
-  Card,
-  CardContent,
-  TableCell,
-  TableRow,
-  Typography,
-} from '@material-ui/core';
+import { Card, CardContent, TableCell, TableRow, Typography } from '@material-ui/core';
 import { Calendar } from 'react-feather';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -31,7 +25,7 @@ const ProjectPhasesTable = () => {
   return (
     <Card>
       <CardContent>
-        <Typography variant='h5' color='textPrimary' gutterBottom>
+        <Typography variant="h5" color="textPrimary" gutterBottom>
           Project Phases
         </Typography>
         <VektorSubTableContainer columns={columns}>

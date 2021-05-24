@@ -13,14 +13,14 @@ import LINKS from 'utils/constants/links';
 const NAV_LINKS = [LINKS.PROJECT_MANAGEMENT];
 
 const ProjectList = () => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const history = useHistory();
 
-  const [organization, setOrganization] = useState('')
+  const [organization, setOrganization] = useState('');
 
   useEffect(() => {
     dispatch(getProjects({ organization }));
-  }, [dispatch, organization])
+  }, [dispatch, organization]);
 
   const addHandler = useCallback(() => {
     history.push(LINKS.ADD_PROJECT.HREF);
@@ -37,10 +37,7 @@ const ProjectList = () => {
           </ContainedButton>
         }
       />
-      <OrganizationFilter
-        organization={organization}
-        setOrganization={setOrganization}
-      />
+      <OrganizationFilter organization={organization} setOrganization={setOrganization} />
       <ProjectsTable />
     </>
   );

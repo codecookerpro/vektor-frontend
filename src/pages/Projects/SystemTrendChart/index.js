@@ -19,40 +19,14 @@ const data = (canvas) => {
   gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
 
   return {
-    labels: [
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'May',
-      'Jun',
-      'Jul',
-      'Aug',
-      'Sep',
-      'Oct',
-      'Nov',
-      'Dec',
-    ],
+    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
     datasets: [
       {
         label: 'Sales ($)',
         fill: true,
         backgroundColor: gradient,
         borderColor: theme.palette.secondary.main,
-        data: [
-          2115,
-          1562,
-          1584,
-          1892,
-          1587,
-          1923,
-          2566,
-          2448,
-          2805,
-          3438,
-          2917,
-          3327,
-        ],
+        data: [2115, 1562, 1584, 1892, 1587, 1923, 2566, 2448, 2805, 3438, 2917, 3327],
       },
     ],
   };
@@ -125,19 +99,15 @@ const SystemTrendChart = () => {
 
   return (
     <>
-      <PageHeader
-        title={`${LINKS.SYSTEM_TREND_CHART.TITLE}: ${project?.name || 'Not Found'
-          }`}
-        links={NAV_LINKS}
-      />
+      <PageHeader title={`${LINKS.SYSTEM_TREND_CHART.TITLE}: ${project?.name || 'Not Found'}`} links={NAV_LINKS} />
       <Card className={classes.root}>
         <CardHeader
           action={
-            <IconButton aria-label='settings'>
+            <IconButton aria-label="settings">
               <MoreVertical />
             </IconButton>
           }
-          title='System Trend Chart'
+          title="System Trend Chart"
         />
         <CardContent>
           <div>

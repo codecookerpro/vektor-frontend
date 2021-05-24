@@ -8,7 +8,7 @@ const AUDIT_TRAIL_LOGS = [
     objectRep: 'Vox Test',
     action: 'addiction',
     changeMessage: 'Added',
-    objectID: '6062ebdbd06f3470791a786b'
+    objectID: '6062ebdbd06f3470791a786b',
   },
   {
     _id: '0002',
@@ -19,7 +19,7 @@ const AUDIT_TRAIL_LOGS = [
     objectRep: 'Vox Test',
     action: 'addiction',
     changeMessage: 'Added',
-    objectID: '6062ebdbd06f3470791a786b'
+    objectID: '6062ebdbd06f3470791a786b',
   },
   {
     _id: '0003',
@@ -30,8 +30,8 @@ const AUDIT_TRAIL_LOGS = [
     objectRep: 'Vox Test',
     action: 'addiction',
     changeMessage: 'Added',
-    objectID: '6062ebdbd06f3470791a786b'
+    objectID: '6062ebdbd06f3470791a786b',
   },
-]
+];
 
 export default AUDIT_TRAIL_LOGS;

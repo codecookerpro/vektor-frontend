@@ -41,29 +41,26 @@ const InterceptorProvider = () => {
         }
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, []);
 
   useEffect(() => {
     axios.interceptors.request.use(
-      config => {
+      (config) => {
         const accessToken = localStorage.accessToken;
         const passwordResetToken = localStorage.passwordResetToken;
-        const authorization = accessToken
-          ? accessToken
-          : passwordResetToken ? passwordResetToken : ''
+        const authorization = accessToken ? accessToken : passwordResetToken ? passwordResetToken : '';
 
         config.headers['Authorization'] = `Bearer ${authorization}`;
         config.headers['Content-Type'] = 'application/json; charset=utf-8';
         return config;
       },
-      error => {
-        return Promise.reject(error)
-      });
+      (error) => {
+        return Promise.reject(error);
+      }
+    );
   }, [accessToken, passwordResetToken]);
 
-  return (
-    <div />
-  );
+  return <div />;
 };
 
 export default memo(InterceptorProvider);

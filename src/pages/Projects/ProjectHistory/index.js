@@ -22,12 +22,8 @@ const ProjectHistory = () => {
 
   return (
     <>
-      <PageHeader
-        title={`${LINKS.PROJECT_HISTORY.TITLE}: ${project?.name || 'Not Found'
-          }`}
-        links={NAV_LINKS}
-      />
-      <HistoryTableCard title='Projects' results={results} />
+      <PageHeader title={`${LINKS.PROJECT_HISTORY.TITLE}: ${project?.name || 'Not Found'}`} links={NAV_LINKS} />
+      <HistoryTableCard title="Projects" results={results} />
     </>
   );
 };

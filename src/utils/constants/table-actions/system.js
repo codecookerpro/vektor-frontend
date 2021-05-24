@@ -1,7 +1,7 @@
 const SYSTEM_ACTIONS = [
   {
-    LABEL: "Duplicate",
-    VALUE: "duplicate",
+    LABEL: 'Duplicate',
+    VALUE: 'duplicate',
   },
 ];
 

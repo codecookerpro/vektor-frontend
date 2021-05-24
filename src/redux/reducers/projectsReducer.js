@@ -1,9 +1,8 @@
-
 import * as TYPES from 'redux/types';
 
 const INITIAL_STATE = Object.freeze({
   results: [],
-  organization: ''
+  organization: '',
 });
 
 const projectsReducer = (state = INITIAL_STATE, action) => {
@@ -11,7 +10,7 @@ const projectsReducer = (state = INITIAL_STATE, action) => {
     case TYPES.FETCH_PROJECTS:
       return {
         ...state,
-        ...action.payload
+        ...action.payload,
       };
     default:
       return state;

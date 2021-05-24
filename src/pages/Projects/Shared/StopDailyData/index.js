@@ -1,7 +1,7 @@
-import React, { memo } from "react";
-import { Card, CardContent, Typography } from "@material-ui/core";
+import React, { memo } from 'react';
+import { Card, CardContent, Typography } from '@material-ui/core';
 
-import VektorCheckbox from "components/UI/VektorCheckbox";
+import VektorCheckbox from 'components/UI/VektorCheckbox';
 
 const StopDailyData = ({ project }) => {
   return (

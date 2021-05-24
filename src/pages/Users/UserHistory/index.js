@@ -23,11 +23,8 @@ const UserHistory = () => {
 
   return (
     <>
-      <PageHeader
-        title={`${LINKS.USER_HISTORY.TITLE}: ${user?.name || 'Not Found'}`}
-        links={NAV_LINKS}
-      />
-      <HistoryTableCard title='Workflow Template' results={results} />
+      <PageHeader title={`${LINKS.USER_HISTORY.TITLE}: ${user?.name || 'Not Found'}`} links={NAV_LINKS} />
+      <HistoryTableCard title="Workflow Template" results={results} />
     </>
   );
 };

@@ -3,12 +3,7 @@ import styled from 'styled-components/macro';
 import { Power } from 'react-feather';
 import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import {
-  Tooltip,
-  Menu,
-  MenuItem,
-  IconButton as MuiIconButton,
-} from '@material-ui/core';
+import { Tooltip, Menu, MenuItem, IconButton as MuiIconButton } from '@material-ui/core';
 
 import { logoutUser } from 'redux/actions/authActions';
 
@@ -39,22 +34,12 @@ function UserDropdown() {
 
   return (
     <React.Fragment>
-      <Tooltip title='Account'>
-        <IconButton
-          aria-owns={Boolean(anchorMenu) ? 'menu-appbar' : undefined}
-          aria-haspopup='true'
-          onClick={toggleMenu}
-          color='inherit'
-        >
+      <Tooltip title="Account">
+        <IconButton aria-owns={Boolean(anchorMenu) ? 'menu-appbar' : undefined} aria-haspopup="true" onClick={toggleMenu} color="inherit">
           <Power />
         </IconButton>
       </Tooltip>
-      <Menu
-        id='menu-appbar'
-        anchorEl={anchorMenu}
-        open={Boolean(anchorMenu)}
-        onClose={closeMenu}
-      >
+      <Menu id="menu-appbar" anchorEl={anchorMenu} open={Boolean(anchorMenu)} onClose={closeMenu}>
         <MenuItem onClick={closeMenu}>Profile</MenuItem>
         <MenuItem onClick={handleSignOut}>Sign out</MenuItem>
       </Menu>

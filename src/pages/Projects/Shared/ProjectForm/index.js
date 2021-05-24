@@ -95,12 +95,12 @@ const ProjectForm = ({ users = [], project = {}, setSelectedOrganization }) => {
     <Card>
       <CardContent>
         {errorMessage && (
-          <Alert mt={2} mb={1} severity='warning' className={classes.alert}>
+          <Alert mt={2} mb={1} severity="warning" className={classes.alert}>
             {errorMessage}
           </Alert>
         )}
 
-        <Typography variant='h6' className={classes.name}>
+        <Typography variant="h6" className={classes.name}>
           {project?.name || 'New Project'}
         </Typography>
 
@@ -110,9 +110,9 @@ const ProjectForm = ({ users = [], project = {}, setSelectedOrganization }) => {
               <Controller
                 as={<VektorTextField />}
                 fullWidth
-                name='name'
-                label='Name'
-                placeholder='Name'
+                name="name"
+                label="Name"
+                placeholder="Name"
                 error={errors.name?.message}
                 control={control}
                 defaultValue={project?.name || ''}
@@ -122,9 +122,9 @@ const ProjectForm = ({ users = [], project = {}, setSelectedOrganization }) => {
               <Controller
                 as={<VektorTextField />}
                 fullWidth
-                name='number'
-                label='Number'
-                placeholder='Number'
+                name="number"
+                label="Number"
+                placeholder="Number"
                 error={errors.number?.message}
                 control={control}
                 defaultValue={project?.number || ''}
@@ -134,9 +134,9 @@ const ProjectForm = ({ users = [], project = {}, setSelectedOrganization }) => {
               <Controller
                 as={<FilterSelect />}
                 fullWidth
-                name='organization'
-                label='Organization'
-                placeholder='Select organization'
+                name="organization"
+                label="Organization"
+                placeholder="Select organization"
                 items={ORGANIZATIONS}
                 error={errors.organization?.message}
                 control={control}
@@ -147,9 +147,9 @@ const ProjectForm = ({ users = [], project = {}, setSelectedOrganization }) => {
               <Controller
                 as={<FilterSelect />}
                 fullWidth
-                name='pm'
-                label='PM'
-                placeholder='Select PM'
+                name="pm"
+                label="PM"
+                placeholder="Select PM"
                 items={ORGANIZATIONS}
                 error={errors.pm?.message}
                 control={control}
@@ -160,9 +160,9 @@ const ProjectForm = ({ users = [], project = {}, setSelectedOrganization }) => {
               <Controller
                 as={<FilterSelect />}
                 fullWidth
-                name='supervisor'
-                label='Supervisor'
-                placeholder='Select supervisor'
+                name="supervisor"
+                label="Supervisor"
+                placeholder="Select supervisor"
                 items={ORGANIZATIONS}
                 error={errors.supervisor?.message}
                 control={control}
@@ -173,9 +173,9 @@ const ProjectForm = ({ users = [], project = {}, setSelectedOrganization }) => {
               <Controller
                 as={<FilterSelect />}
                 fullWidth
-                name='template'
-                label='Phase set template:'
-                placeholder='Select template'
+                name="template"
+                label="Phase set template:"
+                placeholder="Select template"
                 items={ORGANIZATIONS}
                 error={errors.template?.message}
                 control={control}
@@ -187,18 +187,10 @@ const ProjectForm = ({ users = [], project = {}, setSelectedOrganization }) => {
             </Grid>
             <Grid item xs={12}>
               <div className={classes.buttonContainer}>
-                <Button
-                  variant='contained'
-                  color='primary'
-                  onClick={handleSubmit(onSubmit(false))}
-                >
+                <Button variant="contained" color="primary" onClick={handleSubmit(onSubmit(false))}>
                   Save
                 </Button>
-                <Button
-                  color='primary'
-                  className={classes.addAnother}
-                  onClick={handleSubmit(onSubmit(true))}
-                >
+                <Button color="primary" className={classes.addAnother} onClick={handleSubmit(onSubmit(true))}>
                   Save and add another
                 </Button>
               </div>

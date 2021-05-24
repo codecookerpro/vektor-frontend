@@ -1,17 +1,17 @@
-import React, { memo } from "react";
-import { Button, Card, CardContent } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
+import React, { memo } from 'react';
+import { Button, Card, CardContent } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 
-import FilterSelect from "components/UI/Selects/FilterSelect";
-import SYSTEM_ACTIONS from "utils/constants/table-actions/system";
+import FilterSelect from 'components/UI/Selects/FilterSelect';
+import SYSTEM_ACTIONS from 'utils/constants/table-actions/system';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     marginBottom: theme.spacing(7.5),
   },
   content: {
-    display: "flex",
-    alignItems: "flex-end",
+    display: 'flex',
+    alignItems: 'flex-end',
     padding: `${theme.spacing(6, 8)} !important`,
   },
   input: {
@@ -19,11 +19,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const WorkflowTemplateActions = ({
-  action,
-  setAction,
-  onAction,
-}) => {
+const WorkflowTemplateActions = ({ action, setAction, onAction }) => {
   const classes = useStyles();
 
   return (

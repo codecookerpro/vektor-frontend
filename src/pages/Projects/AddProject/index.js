@@ -10,19 +10,12 @@ const NAV_LINKS = [LINKS.PROJECT_MANAGEMENT, LINKS.PROJECTS];
 const AddProject = () => {
   const [selectedOrganization, setSelectedOrganization] = useState('');
 
-  const userList = useMemo(
-    () =>
-      users.filter((user) => user?.organization.id === selectedOrganization),
-    [selectedOrganization]
-  );
+  const userList = useMemo(() => users.filter((user) => user?.organization.id === selectedOrganization), [selectedOrganization]);
 
   return (
     <>
       <PageHeader title={LINKS.ADD_PROJECT.TITLE} links={NAV_LINKS} />
-      <ProjectForm
-        users={userList}
-        setSelectedOrganization={setSelectedOrganization}
-      />
+      <ProjectForm users={userList} setSelectedOrganization={setSelectedOrganization} />
     </>
   );
 };

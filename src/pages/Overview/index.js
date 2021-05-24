@@ -1,12 +1,12 @@
 import React, { memo } from 'react';
 import { Grid } from '@material-ui/core';
 
-import OverviewHeader from './OverviewHeader'
-import ProjectManagementCard from './ProjectManagementCard'
-import SOWTrackerCard from './SOWTrackerCard'
-import ProjectTemplateCard from './ProjectTemplateCard'
-import UserManagementCard from './UserManagementCard'
-import OverviewRecentActions from './OverviewRecentActions'
+import OverviewHeader from './OverviewHeader';
+import ProjectManagementCard from './ProjectManagementCard';
+import SOWTrackerCard from './SOWTrackerCard';
+import ProjectTemplateCard from './ProjectTemplateCard';
+import UserManagementCard from './UserManagementCard';
+import OverviewRecentActions from './OverviewRecentActions';
 
 function Analytics() {
   return (

@@ -1,8 +1,8 @@
-import React, { memo } from "react";
-import { Card, CardContent, Typography } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
+import React, { memo } from 'react';
+import { Card, CardContent, Typography } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 
-import ContainedButton from "components/UI/Buttons/ContainedButton";
+import ContainedButton from 'components/UI/Buttons/ContainedButton';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -10,9 +10,9 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.custom.palette.lightGreen,
   },
   content: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     padding: `${theme.spacing(2)}px !important`,
   },
 }));

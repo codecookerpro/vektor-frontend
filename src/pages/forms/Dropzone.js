@@ -37,12 +37,11 @@ function DefaultDropzone() {
   return (
     <Card mb={6}>
       <CardContent>
-        <Typography variant='h6' gutterBottom>
+        <Typography variant="h6" gutterBottom>
           Default Dropzone
         </Typography>
-        <Typography variant='body2' gutterBottom>
-          Material-UI-Dropzone is a React component using Material-UI and is
-          based on the excellent react-dropzone library.
+        <Typography variant="body2" gutterBottom>
+          Material-UI-Dropzone is a React component using Material-UI and is based on the excellent react-dropzone library.
         </Typography>
 
         <Spacer mb={4} />
@@ -65,31 +64,20 @@ function DialogDropzone() {
   return (
     <Card mb={6}>
       <CardContent>
-        <Typography variant='h6' gutterBottom>
+        <Typography variant="h6" gutterBottom>
           Dialog Dropzone
         </Typography>
-        <Typography variant='body2' gutterBottom>
-          Material-UI-Dropzone is a React component using Material-UI and is
-          based on the excellent react-dropzone library.
+        <Typography variant="body2" gutterBottom>
+          Material-UI-Dropzone is a React component using Material-UI and is based on the excellent react-dropzone library.
         </Typography>
 
         <Spacer mb={4} />
 
-        <Button
-          variant='contained'
-          color='primary'
-          onClick={() => setOpen(true)}
-        >
+        <Button variant="contained" color="primary" onClick={() => setOpen(true)}>
           Open dialog
         </Button>
 
-        <DropzoneDialog
-          open={open}
-          onSave={handleSave}
-          showPreviews={true}
-          maxFileSize={5000000}
-          onClose={() => setOpen(false)}
-        />
+        <DropzoneDialog open={open} onSave={handleSave} showPreviews={true} maxFileSize={5000000} onClose={() => setOpen(false)} />
       </CardContent>
     </Card>
   );
@@ -99,16 +87,16 @@ function Dropzone() {
   return (
     <React.Fragment>
       <GlobalStyleDropzone />
-      <Helmet title='Dropzone' />
-      <Typography variant='h3' gutterBottom display='inline'>
+      <Helmet title="Dropzone" />
+      <Typography variant="h3" gutterBottom display="inline">
         Dropzone
       </Typography>
 
-      <Breadcrumbs aria-label='Breadcrumb' mt={2}>
-        <Link component={NavLink} exact to='/'>
+      <Breadcrumbs aria-label="Breadcrumb" mt={2}>
+        <Link component={NavLink} exact to="/">
           Dashboard
         </Link>
-        <Link component={NavLink} exact to='/'>
+        <Link component={NavLink} exact to="/">
           Components
         </Link>
         <Typography>Dropzone</Typography>

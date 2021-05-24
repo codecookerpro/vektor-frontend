@@ -22,10 +22,7 @@ const ProjectPhases = () => {
 
   return (
     <>
-      <PageHeader
-        title={`${LINKS.PROJECT_PHASES.TITLE}: ${project?.name || 'Not Found'}`}
-        links={NAV_LINKS}
-      />
+      <PageHeader title={`${LINKS.PROJECT_PHASES.TITLE}: ${project?.name || 'Not Found'}`} links={NAV_LINKS} />
       <Grid container spacing={6}>
         <Grid item xs={12}>
           <Card>

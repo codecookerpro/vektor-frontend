@@ -1,30 +1,22 @@
-import React, { memo, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
-import { useForm, Controller } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-import { Card, CardContent, Grid, Button, Typography } from "@material-ui/core";
-import { Alert } from "@material-ui/lab";
-import { makeStyles } from "@material-ui/core/styles";
+import React, { memo, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import { useForm, Controller } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
+import { Card, CardContent, Grid, Button, Typography } from '@material-ui/core';
+import { Alert } from '@material-ui/lab';
+import { makeStyles } from '@material-ui/core/styles';
 
-import { PERMISSION_TYPE } from 'utils/constants/permissions'
-import * as workflowTemplateAPI from 'services/api-workflow-template'
-import {
-  addWorkflowTemplate,
-  editWorkflowTemplate,
-  removeWorkflowTemplate
-} from 'redux/actions/workflowTemplates';
-import VektorTextField from "components/UI/TextFields/VektorTextField";
-import FilterSelect from "components/UI/Selects/FilterSelect";
-import {
-  STRING_INPUT_VALID,
-  SELECT_VALID,
-  INTEGER_VALID
-} from "utils/constants/validations";
-import LINKS from "utils/constants/links";
-import useLoading from 'utils/hooks/useLoading'
-import { isEmpty } from "utils/helpers/utility"
+import { PERMISSION_TYPE } from 'utils/constants/permissions';
+import * as workflowTemplateAPI from 'services/api-workflow-template';
+import { addWorkflowTemplate, editWorkflowTemplate, removeWorkflowTemplate } from 'redux/actions/workflowTemplates';
+import VektorTextField from 'components/UI/TextFields/VektorTextField';
+import FilterSelect from 'components/UI/Selects/FilterSelect';
+import { STRING_INPUT_VALID, SELECT_VALID, INTEGER_VALID } from 'utils/constants/validations';
+import LINKS from 'utils/constants/links';
+import useLoading from 'utils/hooks/useLoading';
+import { isEmpty } from 'utils/helpers/utility';
 
 const useStyles = makeStyles((theme) => ({
   alert: {
@@ -32,17 +24,17 @@ const useStyles = makeStyles((theme) => ({
   },
   name: {
     fontSize: 17,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     marginBottom: theme.spacing(3),
   },
   form: {
     marginBottom: theme.spacing(6),
   },
   buttonContainer: {
-    display: "flex",
+    display: 'flex',
   },
   delete: {
-    marginLeft: "auto",
+    marginLeft: 'auto',
     backgroundColor: theme.custom.palette.red,
   },
 }));
@@ -51,50 +43,48 @@ const WorkflowTemplateForm = ({ workflowTemplate = {} }) => {
   const classes = useStyles();
   const history = useHistory();
   const dispatch = useDispatch();
-  const { changeLoadingStatus } = useLoading()
+  const { changeLoadingStatus } = useLoading();
 
-  const { results: organizations = [] } = useSelector(state => state.organizations);
-  const [errorMessage, setErrorMessage] = useState("");
+  const { results: organizations = [] } = useSelector((state) => state.organizations);
+  const [errorMessage, setErrorMessage] = useState('');
 
-  const permissionType = useSelector(state => state.auth.currentUser.permissions);
+  const currentUser = useSelector((state) => state.auth.currentUser);
 
   let schemaForOrg = {
     name: STRING_INPUT_VALID,
-    differentialWeight: INTEGER_VALID
+    differentialWeight: INTEGER_VALID,
   };
 
-  if (permissionType === PERMISSION_TYPE.ADMIN) {
+  if (currentUser.permissionType === PERMISSION_TYPE.ADMIN) {
     schemaForOrg.organization = SELECT_VALID;
   }
 
-  const schema = yup.object().shape(
-    schemaForOrg
-  );
+  const schema = yup.object().shape(schemaForOrg);
 
   const { control, handleSubmit, errors } = useForm({
     resolver: yupResolver(schema),
   });
 
   const onSubmit = async (data) => {
-    changeLoadingStatus(true)
+    changeLoadingStatus(true);
     try {
       let params = {
         name: data.name,
-        organization: permissionType === PERMISSION_TYPE.ADMIN ? data.organization : currentUser.organization,
+        organization: currentUser.permissionType === PERMISSION_TYPE.ADMIN ? data.organization : currentUser.organization,
         differentialWeight: data.differentialWeight,
-        deliverables: []
+        deliverables: [],
       };
 
       if (isEmpty(workflowTemplate)) {
         const response = await workflowTemplateAPI.createWorkflowTemplate(params);
-        dispatch(addWorkflowTemplate(response.data))
+        dispatch(addWorkflowTemplate(response.data));
       } else {
         params = {
           _id: workflowTemplate._id,
-          ...params
-        }
+          ...params,
+        };
         const response = await workflowTemplateAPI.updateWorkflowTemplate(params);
-        dispatch(editWorkflowTemplate(response.data))
+        dispatch(editWorkflowTemplate(response.data));
       }
       history.push(LINKS.WORKFLOW_TEMPLATES.HREF);
     } catch (error) {
@@ -105,14 +95,14 @@ const WorkflowTemplateForm = ({ workflowTemplate = {} }) => {
         setErrorMessage(message);
       }
     }
-    changeLoadingStatus(false)
+    changeLoadingStatus(false);
   };
 
   const deleteHandler = async () => {
-    changeLoadingStatus(true)
+    changeLoadingStatus(true);
     try {
       await workflowTemplateAPI.deleteWorkflowTemplate({ _id: workflowTemplate._id });
-      dispatch(removeWorkflowTemplate(workflowTemplate))
+      dispatch(removeWorkflowTemplate(workflowTemplate));
       history.push(LINKS.WORKFLOW_TEMPLATES.HREF);
     } catch (error) {
       if (error.response) {
@@ -122,7 +112,7 @@ const WorkflowTemplateForm = ({ workflowTemplate = {} }) => {
         setErrorMessage(message);
       }
     }
-    changeLoadingStatus(false)
+    changeLoadingStatus(false);
   };
 
   return (
@@ -134,7 +124,7 @@ const WorkflowTemplateForm = ({ workflowTemplate = {} }) => {
           </Alert>
         )}
         <Typography variant="h6" className={classes.name}>
-          {workflowTemplate?.name || "New workflowTemplate"}
+          {workflowTemplate?.name || 'New workflowTemplate'}
         </Typography>
         <form noValidate className={classes.form}>
           <Grid container spacing={6}>
@@ -147,10 +137,10 @@ const WorkflowTemplateForm = ({ workflowTemplate = {} }) => {
                 placeholder="Name"
                 error={errors.name?.message}
                 control={control}
-                defaultValue={workflowTemplate?.name || ""}
+                defaultValue={workflowTemplate?.name || ''}
               />
             </Grid>
-            {permissionType === PERMISSION_TYPE.ADMIN && (
+            {currentUser.permissionType === PERMISSION_TYPE.ADMIN && (
               <Grid item xs={12} sm={6} md={4}>
                 <Controller
                   as={<FilterSelect />}
@@ -160,8 +150,8 @@ const WorkflowTemplateForm = ({ workflowTemplate = {} }) => {
                   placeholder="Select organization"
                   items={organizations}
                   keys={{
-                    label: "name",
-                    value: "_id",
+                    label: 'name',
+                    value: '_id',
                   }}
                   error={errors.organization?.message}
                   control={control}
@@ -173,7 +163,7 @@ const WorkflowTemplateForm = ({ workflowTemplate = {} }) => {
               <Controller
                 as={<VektorTextField />}
                 fullWidth
-                type='number'
+                type="number"
                 name="differentialWeight"
                 label="Differential Weight"
                 placeholder="Number"
@@ -184,24 +174,14 @@ const WorkflowTemplateForm = ({ workflowTemplate = {} }) => {
             </Grid>
             <Grid item xs={12}>
               <div className={classes.buttonContainer}>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={handleSubmit(onSubmit)}
-                >
+                <Button variant="contained" color="primary" onClick={handleSubmit(onSubmit)}>
                   Save
                 </Button>
-                {
-                  !isEmpty(workflowTemplate) &&
-                  <Button
-                    color="primary"
-                    variant="contained"
-                    className={classes.delete}
-                    onClick={deleteHandler}
-                  >
+                {!isEmpty(workflowTemplate) && (
+                  <Button color="primary" variant="contained" className={classes.delete} onClick={deleteHandler}>
                     Delete
                   </Button>
-                }
+                )}
               </div>
             </Grid>
           </Grid>
