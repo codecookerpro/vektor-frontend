@@ -12,8 +12,13 @@ const changePassword = async (params) => {
   return await axios.post('/api/users/change-password', params);
 };
 
+const refreshToken = async (params) => {
+  return await axios.post('/api/users/refresh', params);
+};
+
 export {
   login,
   restorePassword,
-  changePassword
+  changePassword,
+  refreshToken
 };
