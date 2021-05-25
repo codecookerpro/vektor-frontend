@@ -4,7 +4,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import axios from 'services/axios';
 import * as authAPI from 'services/api-auth';
 import { logoutUser, setUserToken } from 'redux/actions/authActions';
-import { GENERIC_ERRORS } from "utils/constants/error-codes";
+import { GENERIC_ERRORS } from 'utils/constants/error-codes';
+import { setErrorPopup, setErrorPopupText } from '../../../redux/actions/errorsActions';
 
 const InterceptorProvider = () => {
   const { accessToken, passwordResetToken } = useSelector((state) => state.auth);
@@ -15,10 +16,21 @@ const InterceptorProvider = () => {
       (response) => response,
       async (error) => {
         if (error.response) {
-          const {
-            data: { code },
-          } = error.response;
+          const { data } = error.response;
+          const { code } = data;
           switch (code) {
+            case GENERIC_ERRORS.VALIDATION:
+              if (process.env.NODE_ENV !== 'production') {
+                const { errors: errorsResponse = [] } = data;
+                let messages = '[DEBUG] \n';
+                errorsResponse.forEach((error) => {
+                  const { message } = error;
+                  messages += message + ' \n';
+                });
+                dispatch(setErrorPopupText(messages));
+                dispatch(setErrorPopup(true));
+              }
+              break;
             case GENERIC_ERRORS.AUTH:
             case GENERIC_ERRORS.ACCESS_TOKEN_EXP:
               const params = { refreshToken: localStorage.refreshToken };
@@ -37,7 +49,8 @@ const InterceptorProvider = () => {
               window.location.reload();
               break;
             default:
-              throw Error(error);
+              // throw Error(error);
+              return Promise.reject(error);
           }
         }
       }
