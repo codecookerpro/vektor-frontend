@@ -13,7 +13,7 @@ import LinkButton from 'components/UI/Buttons/LinkButton';
 import AuthWrapper, { authPageStyles } from '../Shared/AuthWrapper';
 import { EMAIL_VALID, PASSWORD_VALID } from 'utils/constants/validations';
 import LINKS from 'utils/constants/links';
-import PopupError from "../../../components/UI/PopupError";
+import PopupError from '../../../components/UI/PopupError';
 
 const schema = yup.object().shape({
   email: EMAIL_VALID,
@@ -35,7 +35,7 @@ function SignIn() {
   const [remember, setRemember] = useState(false);
 
   const { control, handleSubmit, errors, reset } = useForm({
-    resolver: yupResolver(schema)
+    resolver: yupResolver(schema),
   });
 
   const onSubmit = async (data) => {
@@ -57,13 +57,13 @@ function SignIn() {
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
-        if ( data.errors ) {
+        if (data.errors) {
           const { errors: errorsResponse = [] } = data;
           let messages = '';
-          errorsResponse.map(error => {
+          errorsResponse.map((error) => {
             const { path = [] } = error;
             messages += VALID_ERROR_MESSAGE[path[0]] + ' \n';
-          })
+          });
           setErrorMessage(messages);
         } else {
           const { info } = data;
@@ -71,7 +71,7 @@ function SignIn() {
           reset({
             email: '',
             password: '',
-          })
+          });
         }
       }
     }
@@ -118,7 +118,7 @@ function SignIn() {
           Forgot password
         </LinkButton>
       </form>
-      { !!errorPopup.length && <PopupError errorPopup={errorPopup} setErrorPopup={setErrorPopup}/>}
+      {!!errorPopup.length && <PopupError errorPopup={errorPopup} setErrorPopup={setErrorPopup} />}
     </AuthWrapper>
   );
 }

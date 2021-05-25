@@ -1,22 +1,13 @@
-import React, { memo, useState } from "react";
-import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  IconButton
-} from "@material-ui/core";
+import React, { memo, useState } from 'react';
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 
-import { makeStyles } from "@material-ui/core/styles";
-
+import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
   backDrop: {
-    backdropFilter: "blur(3px)",
-    backgroundColor:'rgba(0,0,30,0.4)'
+    backdropFilter: 'blur(3px)',
+    backgroundColor: 'rgba(0,0,30,0.4)',
   },
   closeButton: {
     position: 'absolute',
@@ -33,11 +24,10 @@ const useStyles = makeStyles((theme) => ({
   },
   dialogContentText: {
     color: theme.custom.palette.black,
-  }
+  },
 }));
 
-const PopupError = ({ errorPopup= '', setErrorPopup }) => {
-
+const PopupError = ({ errorPopup = '', setErrorPopup }) => {
   const [open, setOpen] = useState(!!errorPopup.length);
   const classes = useStyles();
 
@@ -66,9 +56,7 @@ const PopupError = ({ errorPopup= '', setErrorPopup }) => {
           </IconButton>
         </DialogTitle>
         <DialogContent>
-          <DialogContentText  className={classes.dialogContentText}>
-            { errorPopup }
-          </DialogContentText>
+          <DialogContentText className={classes.dialogContentText}>{errorPopup}</DialogContentText>
         </DialogContent>
         <DialogActions className={classes.actionButtons}>
           <Button color="primary" variant="contained" onClick={handleClose}>
@@ -78,6 +66,6 @@ const PopupError = ({ errorPopup= '', setErrorPopup }) => {
       </Dialog>
     </div>
   );
-}
+};
 
 export default memo(PopupError);
