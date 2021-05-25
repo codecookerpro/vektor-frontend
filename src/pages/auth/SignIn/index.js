@@ -5,7 +5,6 @@ import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { Checkbox, FormControlLabel, TextField } from '@material-ui/core';
-
 import * as authAPI from 'services/api-auth';
 import { setUserToken } from 'redux/actions/authActions';
 import ContainedButton from 'components/UI/Buttons/ContainedButton';
@@ -13,7 +12,7 @@ import LinkButton from 'components/UI/Buttons/LinkButton';
 import AuthWrapper, { authPageStyles } from '../Shared/AuthWrapper';
 import { EMAIL_VALID, PASSWORD_VALID } from 'utils/constants/validations';
 import LINKS from 'utils/constants/links';
-import PopupError from '../../../components/UI/PopupError';
+import PopupError from 'components/UI/PopupError';
 
 const schema = yup.object().shape({
   email: EMAIL_VALID,
@@ -60,7 +59,7 @@ function SignIn() {
         if (data.errors) {
           const { errors: errorsResponse = [] } = data;
           let messages = '';
-          errorsResponse.map((error) => {
+          errorsResponse.forEach((error) => {
             const { path = [] } = error;
             messages += VALID_ERROR_MESSAGE[path[0]] + ' \n';
           });

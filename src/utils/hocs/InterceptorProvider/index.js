@@ -2,8 +2,9 @@ import React, { memo, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import axios from 'services/axios';
-import * as authAPI from '../../../services/api-auth';
-import { logoutUser, setUserToken } from '../../../redux/actions/authActions';
+import * as authAPI from 'services/api-auth';
+import { logoutUser, setUserToken } from 'redux/actions/authActions';
+import { GENERIC_ERRORS } from "utils/constants/error-codes";
 
 const InterceptorProvider = () => {
   const { accessToken, passwordResetToken } = useSelector((state) => state.auth);
@@ -12,21 +13,16 @@ const InterceptorProvider = () => {
   useEffect(() => {
     axios.interceptors.response.use(
       (response) => response,
-      (error) => {
+      async (error) => {
         if (error.response) {
-          const { data, config } = error.response;
-          const refreshUrl = '/api/users/refresh';
-          if (config.url === refreshUrl) {
-            dispatch(logoutUser());
-            window.location.reload();
-          }
-          if (data.code === 1002 || data.code === 1001) {
-            const refreshToken = localStorage.refreshToken;
-            const params = {
-              refreshToken,
-            };
-            authAPI.refreshToken(params).then((response) => {
-              const { accessToken, refreshToken, data: user } = response;
+          const {
+            data: { code },
+          } = error.response;
+          switch (code) {
+            case GENERIC_ERRORS.AUTH:
+            case GENERIC_ERRORS.ACCESS_TOKEN_EXP:
+              const params = { refreshToken: localStorage.refreshToken };
+              const { accessToken, refreshToken, data: user } = await authAPI.refreshToken(params);
               dispatch(
                 setUserToken({
                   accessToken,
@@ -35,14 +31,18 @@ const InterceptorProvider = () => {
                 })
               );
               window.location.reload();
-            });
+              break;
+            case GENERIC_ERRORS.REFRESH_TOKEN:
+              dispatch(logoutUser());
+              window.location.reload();
+              break;
+            default:
+              throw Error(error);
           }
-          return Promise.reject(error);
         }
       }
     );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     axios.interceptors.request.use(
