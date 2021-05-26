@@ -1,8 +1,3 @@
-const SYSTEM_ACTIONS = [
-  {
-    LABEL: 'Duplicate',
-    VALUE: 'duplicate',
-  },
-];
+const SYSTEM_ACTIONS = [];
 
 export default SYSTEM_ACTIONS;

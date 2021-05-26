@@ -2,7 +2,7 @@ import authRoutes from './authRoutes';
 import overviewRoutes from './overviewRoutes';
 import projectManagementRoutes from './projectManagementRoutes';
 import sowTrackerRoutes from './sowTrackerRoutes';
-import projectTemplateRoutes from './projectTemplateRoutes';
+import workflowTemplateRoutes from './workflowTemplateRoutes';
 import userManagementRoutes from './userManagementRoutes';
 import recentActionRoutes from './recentActionRoutes';
 
@@ -13,7 +13,7 @@ export const dashboardLayoutRoutes = [
   overviewRoutes,
   projectManagementRoutes,
   sowTrackerRoutes,
-  projectTemplateRoutes,
+  workflowTemplateRoutes,
   userManagementRoutes,
   recentActionRoutes,
 
@@ -27,7 +27,7 @@ export const sidebarRoutes = [
   overviewRoutes,
   projectManagementRoutes,
   sowTrackerRoutes,
-  projectTemplateRoutes,
+  workflowTemplateRoutes,
   userManagementRoutes,
   recentActionRoutes,
 
