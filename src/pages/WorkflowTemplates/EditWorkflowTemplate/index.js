@@ -11,7 +11,7 @@ import WorkflowTemplateForm from '../Shared/WorkflowTemplateForm';
 import LINKS from 'utils/constants/links';
 import { isEmpty } from 'utils/helpers/utility';
 
-const NAV_LINKS = [LINKS.PROJECT_TEMPLATE, LINKS.WORKFLOW_TEMPLATES];
+const NAV_LINKS = [LINKS.WORKFLOW_TEMPLATES];
 
 const EditWorkflowTemplate = () => {
   const { id } = useParams();

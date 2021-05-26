@@ -4,7 +4,7 @@ import PageHeader from 'parts/PageHeader';
 import WorkflowTemplateForm from '../Shared/WorkflowTemplateForm';
 import LINKS from 'utils/constants/links';
 
-const NAV_LINKS = [LINKS.PROJECT_TEMPLATE, LINKS.WORKFLOW_TEMPLATES];
+const NAV_LINKS = [LINKS.WORKFLOW_TEMPLATES];
 
 const AddWorkflowTemplate = () => {
   return (

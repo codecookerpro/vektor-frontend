@@ -20,7 +20,6 @@ const WorkflowTemplateChart = () => {
   const workflowTemplate = useMemo(() => results.find((item) => item.id === id), [id]);
 
   const NAV_LINKS = [
-    LINKS.PROJECT_TEMPLATE,
     LINKS.WORKFLOW_TEMPLATES,
     {
       HREF: LINKS.WORKFLOW_TEMPLATE_CHART.HREF.replace(':id', id),

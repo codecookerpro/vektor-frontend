@@ -9,14 +9,12 @@ const WorkflowTemplateHistory = lazy(() =>
   import(/* webpackChunkName: 'WorkflowTemplateHistory' */ 'pages/WorkflowTemplates/WorkflowTemplateHistory')
 );
 const WorkflowTemplateChart = lazy(() => import(/* webpackChunkName: 'WorkflowTemplateChart' */ 'pages/WorkflowTemplates/WorkflowTemplateChart'));
-const PhaseTemplateList = lazy(() => import(/* webpackChunkName: 'PhaseTemplateList' */ 'pages/PhaseTemplates/PhaseTemplateList'));
-const AddEditPhaseTemplate = lazy(() => import(/* webpackChunkName: 'AddEditPhaseTemplate' */ 'pages/PhaseTemplates/AddEditPhaseTemplate'));
 
-const projectTemplateRoutes = Object.freeze({
-  id: LINKS.PROJECT_TEMPLATE.TITLE,
-  path: LINKS.PROJECT_TEMPLATE.HREF,
+const workflowTemplateRoutes = Object.freeze({
+  id: LINKS.WORKFLOW_TEMPLATES.TITLE,
+  path: LINKS.WORKFLOW_TEMPLATES.HREF,
   icon: <Activity />,
-  containsHome: true,
+  component: WorkflowTemplateList,
   children: [
     {
       path: LINKS.WORKFLOW_TEMPLATES.HREF,
@@ -47,19 +45,7 @@ const projectTemplateRoutes = Object.freeze({
       component: WorkflowTemplateChart,
       isNotSlide: true,
     },
-    {
-      path: LINKS.PHASE_TEMPLATES.HREF,
-      name: LINKS.PHASE_TEMPLATES.TITLE,
-      component: PhaseTemplateList,
-    },
-    {
-      path: LINKS.ADD_PHASE_TEMPLATE.HREF,
-      name: LINKS.ADD_PHASE_TEMPLATE.TITLE,
-      component: AddEditPhaseTemplate,
-      isNotSlide: true,
-    },
   ],
-  component: null,
 });
 
-export default projectTemplateRoutes;
+export default workflowTemplateRoutes;

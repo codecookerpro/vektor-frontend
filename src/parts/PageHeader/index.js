@@ -31,7 +31,7 @@ const PageHeader = ({ title, links = [], leftElement }) => {
           </Typography>
 
           <Breadcrumbs aria-label="Breadcrumb" mt={2}>
-            {links.map((link, index) => (
+            {links.map((link = { HREF: 'CHECK_CODE', TITLE: 'CHECK_CODE' }, index) => (
               <Link exact key={index} component={NavLink} to={link.HREF}>
                 {link.TITLE}
               </Link>

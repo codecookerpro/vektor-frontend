@@ -95,37 +95,25 @@ const LINKS = Object.freeze({
     TITLE: 'Add SOW',
     HREF: '/sows/add',
   },
-  PROJECT_TEMPLATE: {
-    TITLE: 'Project Template',
-    HREF: '/project-template',
-  },
   WORKFLOW_TEMPLATES: {
     TITLE: 'Workflow Templates',
-    HREF: '/project-template/workflow-templates',
+    HREF: '/workflow-templates',
   },
   ADD_WORKFLOW_TEMPLATE: {
     TITLE: 'Add Workflow Template',
-    HREF: '/project-template/workflow-template/add',
+    HREF: '/workflow-template/add',
   },
   EDIT_WORKFLOW_TEMPLATE: {
     TITLE: 'Edit Workflow Template',
-    HREF: '/project-template/workflow-template/edit/:id',
+    HREF: '/workflow-template/edit/:id',
   },
   WORKFLOW_TEMPLATE_HISTORY: {
     TITLE: 'Workflow Template History',
-    HREF: '/project-template/workflow-template/edit/:id/history',
+    HREF: '/workflow-template/edit/:id/history',
   },
   WORKFLOW_TEMPLATE_CHART: {
     TITLE: 'Workflow Template Chart',
-    HREF: '/project-template/workflow-template/edit/:id/chart',
-  },
-  PHASE_TEMPLATES: {
-    TITLE: 'Phase Templates',
-    HREF: '/project-template/phase-templates',
-  },
-  ADD_PHASE_TEMPLATE: {
-    TITLE: 'Add Phase Template',
-    HREF: '/project-template/phase-template/add',
+    HREF: '/workflow-template/edit/:id/chart',
   },
   USER_MANAGEMENT: {
     TITLE: 'User Management',
