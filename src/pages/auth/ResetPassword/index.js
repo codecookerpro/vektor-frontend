@@ -2,8 +2,8 @@ import React, { memo, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useParams, useHistory } from 'react-router-dom';
 import { useForm, Controller } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
+import { joiResolver } from '@hookform/resolvers/joi';
+import joi from 'joi';
 import { TextField } from '@material-ui/core';
 
 import * as authAPI from 'services/api-auth';
@@ -14,7 +14,7 @@ import AuthWrapper, { authPageStyles } from '../Shared/AuthWrapper';
 import { PASSWORD_VALID } from 'utils/constants/validations';
 import LINKS from 'utils/constants/links';
 
-const schema = yup.object().shape({
+const schema = joi.object().keys({
   password: PASSWORD_VALID,
 });
 
@@ -31,7 +31,7 @@ function ResetPassword() {
   }, [dispatch, passwordResetToken]);
 
   const { control, handleSubmit, errors } = useForm({
-    resolver: yupResolver(schema),
+    resolver: joiResolver(schema),
   });
 
   const onSubmit = async (data) => {

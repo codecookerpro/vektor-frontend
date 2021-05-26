@@ -2,8 +2,8 @@ import React, { memo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { useForm, Controller } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
+import { joiResolver } from '@hookform/resolvers/joi';
+import joi from 'joi';
 import { Card, CardContent, Grid, Button, Typography } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 import { makeStyles } from '@material-ui/core/styles';
@@ -12,7 +12,7 @@ import * as userAPI from 'services/api-user';
 import { addUser, editUser, removeUser } from 'redux/actions/users';
 import VektorTextField from 'components/UI/TextFields/VektorTextField';
 import FilterSelect from 'components/UI/Selects/FilterSelect';
-import { STRING_INPUT_VALID, SELECT_VALID, EMAIL_VALID } from 'utils/constants/validations';
+import { STRING_INPUT_VALID, SELECT_VALID, EMAIL_VALID, PASSWORD_VALID } from 'utils/constants/validations';
 import LINKS from 'utils/constants/links';
 import { PERMISSIONS } from 'utils/constants/permissions';
 import useLoading from 'utils/hooks/useLoading';
@@ -39,11 +39,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const schema = yup.object().shape({
+const schema = joi.object().keys({
   email: EMAIL_VALID,
   name: STRING_INPUT_VALID,
   organization: SELECT_VALID,
   permissions: SELECT_VALID,
+  password: PASSWORD_VALID,
 });
 
 const UserForm = ({ user = {} }) => {
@@ -56,7 +57,7 @@ const UserForm = ({ user = {} }) => {
   const [errorMessage, setErrorMessage] = useState('');
 
   const { control, handleSubmit, errors } = useForm({
-    resolver: yupResolver(schema),
+    resolver: joiResolver(schema),
   });
 
   const onSubmit = async (data) => {
