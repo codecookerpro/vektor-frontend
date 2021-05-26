@@ -1,8 +1,10 @@
-import React, { memo, useState } from 'react';
+import React, { memo } from 'react';
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 
 import { makeStyles } from '@material-ui/core/styles';
+import { setErrorPopup, setErrorPopupText } from 'redux/actions/errorsActions';
+import { useDispatch, useSelector } from 'react-redux';
 
 const useStyles = makeStyles((theme) => ({
   backDrop: {
@@ -24,22 +26,24 @@ const useStyles = makeStyles((theme) => ({
   },
   dialogContentText: {
     color: theme.custom.palette.black,
+    whiteSpace: 'pre-line',
   },
 }));
 
-const PopupError = ({ errorPopup = '', setErrorPopup }) => {
-  const [open, setOpen] = useState(!!errorPopup.length);
+const PopupError = () => {
+  const dispatch = useDispatch();
   const classes = useStyles();
+  const { errorPopup = false, errorPopupText = '' } = useSelector((state) => state.errors);
 
-  const handleClose = () => {
-    setOpen(false);
-    setErrorPopup('');
+  const handleClose = async () => {
+    await dispatch(setErrorPopup(false));
+    dispatch(setErrorPopupText(''));
   };
 
   return (
     <div>
       <Dialog
-        open={open}
+        open={errorPopup}
         onClose={handleClose}
         maxWidth="xs"
         fullWidth={false}
@@ -56,7 +60,7 @@ const PopupError = ({ errorPopup = '', setErrorPopup }) => {
           </IconButton>
         </DialogTitle>
         <DialogContent>
-          <DialogContentText className={classes.dialogContentText}>{errorPopup}</DialogContentText>
+          <DialogContentText className={classes.dialogContentText}>{errorPopupText}</DialogContentText>
         </DialogContent>
         <DialogActions className={classes.actionButtons}>
           <Button color="primary" variant="contained" onClick={handleClose}>

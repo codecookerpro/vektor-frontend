@@ -9,6 +9,7 @@ import projectsReducer from './projectsReducer';
 import eventsReducer from './eventsReducer';
 import dashboardsReducer from './dashboardsReducer';
 import reportsReducer from './reportsReducer';
+import errorsReducer from './errorsReducer';
 
 export default combineReducers({
   loading: loadingReducer,
@@ -20,4 +21,5 @@ export default combineReducers({
   events: eventsReducer,
   dashboards: dashboardsReducer,
   reports: reportsReducer,
+  errors: errorsReducer,
 });
