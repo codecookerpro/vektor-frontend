@@ -14,8 +14,8 @@ const EMAIL_VALID_SIGN_IN = joi
   });
 
 const PASSWORD_VALID_SIGN_IN = joi.string().required().min(6).max(64).messages({
-  'string.base': `Must be a valid email`,
-  'string.empty': `Email cannot be an empty field`,
+  'string.base': `Must be a valid password`,
+  'string.empty': `Password cannot be an empty field`,
   'string.min': `Passwords need to be at least 6 characters.`,
   'string.max': `Passwords maximum length has to be less than 64 characters.`,
   'string.required': `Please enter in Password.`,

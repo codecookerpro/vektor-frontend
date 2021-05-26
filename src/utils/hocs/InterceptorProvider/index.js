@@ -49,7 +49,6 @@ const InterceptorProvider = () => {
               window.location.reload();
               break;
             default:
-              // throw Error(error);
               return Promise.reject(error);
           }
         }
