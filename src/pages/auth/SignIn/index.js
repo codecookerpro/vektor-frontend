@@ -2,21 +2,22 @@ import React, { memo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { useForm, Controller } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
+import { joiResolver } from '@hookform/resolvers/joi';
+import joi from 'joi';
 import { Checkbox, FormControlLabel, TextField } from '@material-ui/core';
-
 import * as authAPI from 'services/api-auth';
 import { setUserToken } from 'redux/actions/authActions';
 import ContainedButton from 'components/UI/Buttons/ContainedButton';
 import LinkButton from 'components/UI/Buttons/LinkButton';
 import AuthWrapper, { authPageStyles } from '../Shared/AuthWrapper';
-import { EMAIL_VALID, PASSWORD_VALID } from 'utils/constants/validations';
+import { EMAIL_VALID_SIGN_IN, PASSWORD_VALID_SIGN_IN } from 'utils/constants/validations';
 import LINKS from 'utils/constants/links';
+import { LOCAL_SIGN_IN_ERRORS } from 'utils/constants/error-codes';
+import { setErrorPopup, setErrorPopupText } from 'redux/actions/errorsActions';
 
-const schema = yup.object().shape({
-  email: EMAIL_VALID,
-  password: PASSWORD_VALID,
+const schema = joi.object().keys({
+  email: EMAIL_VALID_SIGN_IN,
+  password: PASSWORD_VALID_SIGN_IN,
 });
 
 function SignIn() {
@@ -26,9 +27,8 @@ function SignIn() {
 
   const [errorMessage, setErrorMessage] = useState('');
   const [remember, setRemember] = useState(false);
-
-  const { control, handleSubmit, errors } = useForm({
-    resolver: yupResolver(schema),
+  const { control, handleSubmit, errors, reset } = useForm({
+    resolver: joiResolver(schema),
   });
 
   const onSubmit = async (data) => {
@@ -49,10 +49,27 @@ function SignIn() {
       history.push(LINKS.OVERVIEW.HREF);
     } catch (error) {
       if (error.response) {
-        const {
-          data: { message },
-        } = error.response;
-        setErrorMessage(message);
+        const { data } = error.response;
+        const { code } = data;
+        let message = '';
+        switch (code) {
+          case LOCAL_SIGN_IN_ERRORS.VALIDATION.CODE:
+            message = LOCAL_SIGN_IN_ERRORS.VALIDATION.TEXT;
+            break;
+          case LOCAL_SIGN_IN_ERRORS.NO_PASSWORD.CODE:
+            message = LOCAL_SIGN_IN_ERRORS.NO_PASSWORD.TEXT;
+            break;
+          default:
+            message = LOCAL_SIGN_IN_ERRORS.DEFAULT.TEXT;
+            break;
+        }
+        dispatch(setErrorPopupText(message));
+        dispatch(setErrorPopup(true));
+
+        reset({
+          email: '',
+          password: '',
+        });
       }
     }
   };
