@@ -6,7 +6,6 @@ import ReactFlow, { isNode, isEdge, removeElements, addEdge, MiniMap, Controls, 
 import CustomFlowNode from './CustomFlowNode';
 import * as customNodeTypes from '../../../utils/constants/reactflow/custom-node-types';
 import { CHART_CONFIGS } from '../../../utils/constants/reactflow/chart-configs';
-
 const useStyles = makeStyles((theme) => ({
 	content: {
 		height: CHART_CONFIGS.chartContainerHeight + 'px',
@@ -18,14 +17,16 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const WorkflowTemplateChart = ({timelyDeliverables, setTimelyDeliverables, nodes, setNodes}) => {
-	const [magicWayDependency, setMagicWayDependency] = useState(';1,3,5,4;5,7;10,15,3,4;');
 	const [markerSizesCustomized, setMarkerSizesCustomized] = useState(null);
-	const [nodesConnectionsInfo, setNodesConnectionsInfo] = useState({});
-	const countRef = useRef(timelyDeliverables);
-	countRef.current = timelyDeliverables;
+	const [nodesConnectionsInfoParents, setNodesConnectionsInfoParents] = useState({});
+	const [nodesConnectionsInfoChilds, setNodesConnectionsInfoChilds] = useState({});
+	const countRefTimelyDeliverables = useRef(timelyDeliverables);
+	countRefTimelyDeliverables.current = timelyDeliverables;
+	const countRefNodes = useRef(nodes);
+	countRefNodes.current = nodes;
 
 	const nodesCountY = () => {
-		return CHART_CONFIGS.chartContainerHeight / (CHART_CONFIGS.nodeHeight + CHART_CONFIGS.defaultNodeMarginY)
+		return CHART_CONFIGS.chartContainerHeight / (CHART_CONFIGS.nodeHeight + CHART_CONFIGS.defaultNodeMarginY);
 	}
 	const position = (nodesCount) => {
 		let positionX = ((nodesCount + 1) / nodesCountY()) >= 1 ? (Math.floor((nodesCount + 1) / nodesCountY()) * (CHART_CONFIGS.nodeWidth + CHART_CONFIGS.defaultNodeMarginX)) : 0;
@@ -46,9 +47,13 @@ const WorkflowTemplateChart = ({timelyDeliverables, setTimelyDeliverables, nodes
 				id: id,
 				// placeholder of node input
 				label: CHART_CONFIGS.label,
-				handleInputChange: (id, e) => {
+				handleInputChange: (id, value) => {
+					setTimelyDeliverables({...countRefTimelyDeliverables.current, [id]: {name: value}});
+				},
+				handleDeleteNode: (id, e) => {
 					e.preventDefault();
-					setTimelyDeliverables({...countRef.current, [id]: {name: e.target.value}});
+					let elementsToBeRemoved = countRefNodes.current.filter((node) => {return node.id === id});
+					setNodes((updatedNodes) => removeElements(elementsToBeRemoved, updatedNodes));
 				},
 			},
 			style: {
@@ -62,67 +67,76 @@ const WorkflowTemplateChart = ({timelyDeliverables, setTimelyDeliverables, nodes
 			position: position(nodesCount),
 		}
 	}
-	const handleConnectNodes = (params) => {
-		/*
-console.log('params: ', params);
-/////////////////////////////////////////////
-	params.source = 4; // for example
-		//let dependencyStr = magicWayDependency + ';' + params.source + ',' + params.target;
-		// let magicPattern = /[;]((?!(;)).)*[4;]/g;
-		let magicPattern = new RegExp("[;]((?!(;)).)*[" + params.source + ";]", "g");
-		let lineages = magicWayDependency.match(magicPattern); //.toString()
 
-console.log('lineages: ', lineages);
-//		setMagicWayDependency()
-*/
-///////////////////////////////////////////
-		let currentSourceNodeChildNodes = nodesConnectionsInfo[params.source];
+	const handleConnectNodes = (params) => {
+		let currentSourceNodeChildNodes = nodesConnectionsInfoParents[params.source];
 		// when the current node(source) have child nodes(target)
 		// when node(target) is already child of the current node(source)
 		if (Array.isArray(currentSourceNodeChildNodes) && currentSourceNodeChildNodes.length && currentSourceNodeChildNodes.includes(params.target)) {
 			return;
 		}
 
-		let currentTargetNodeChildNodes = nodesConnectionsInfo[params.target];
+		let currentTargetNodeChildNodes = nodesConnectionsInfoParents[params.target];
 		// when the current node(target) have child nodes(target)
 		// when the child node(target) is already parent of the current node(source)
 		if (Array.isArray(currentTargetNodeChildNodes) && currentTargetNodeChildNodes.length && currentTargetNodeChildNodes.includes(params.source)) {
 			return;
 		}
 
-		// all parent nodes
-		let allParentNodes = Object.keys(nodesConnectionsInfo);
-		let allChildsNodes = Object.values(nodesConnectionsInfo).map
-console.log('allParentNodes: ', allParentNodes);
-		let wantToBeParentOfNode = params.target;
-		// check if wantToBeParentOfNodeNode is parent of someone
-		if (allParentNodes.includes(wantToBeParentOfNode)) {
-console.log('this child: ', wantToBeParentOfNode, ' already has childs: ', nodesConnectionsInfo[wantToBeParentOfNode]);
-			let childsOfwantToBeParentOfNode = nodesConnectionsInfo[wantToBeParentOfNode];
-			// when the expected child has childs
-			if (Array.isArray(childsOfwantToBeParentOfNode) && childsOfwantToBeParentOfNode.length) {
-console.log('when the expected child has childs');
-				// find childs for each child // level 3
-				let isThirdLevelChild = false;
-				for (childNodes of childsOfwantToBeParentOfNode) {
-					if (childNodes.includes(params.source)) {
-						isThirdLevelChild = true;
-						break;
-					}
-				}
-				if (isThirdLevelChild) {
-					return;
-				}
-			}
+		let childNodes = [];
+		if (Array.isArray(nodesConnectionsInfoParents[params.source])) {
+			childNodes = [...nodesConnectionsInfoParents[params.source], ...(Array.isArray(nodesConnectionsInfoParents[params.target]) ? [...nodesConnectionsInfoParents[params.target], params.target] : [params.target])];
+			childNodes = [... new Set(childNodes)];
+		} else if (Array.isArray(nodesConnectionsInfoParents[params.target])) {
+			childNodes = [...nodesConnectionsInfoParents[params.target], params.target];
+		} else {
+			childNodes = [params.target];
 		}
 
-		let childNodes = [params.target];
-		if (Array.isArray(nodesConnectionsInfo[params.source])) {
-			childNodes = [...nodesConnectionsInfo[params.source], params.target];
+		// when the current source have parents
+		if (Array.isArray(nodesConnectionsInfoChilds[params.source])) {
+			nodesConnectionsInfoChilds[params.source].map((parentId) => {
+				if (Array.isArray(nodesConnectionsInfoParents[parentId])) {
+					if (!nodesConnectionsInfoParents[parentId].includes(params.target)) {
+						nodesConnectionsInfoParents[parentId] = [...nodesConnectionsInfoParents[parentId], params.target];
+					}
+				} else {
+					nodesConnectionsInfoParents[parentId] = [params.target];
+				}
+			});
 		}
-		setNodesConnectionsInfo({
-			...nodesConnectionsInfo,
+
+		setNodesConnectionsInfoParents({
+			...nodesConnectionsInfoParents,
 			[params.source]: childNodes,
+		});
+
+		let parentNodes = [];
+		if (Array.isArray(nodesConnectionsInfoChilds[params.target])) {
+			parentNodes = [...nodesConnectionsInfoChilds[params.target], ...(Array.isArray(nodesConnectionsInfoChilds[params.source]) ? [...nodesConnectionsInfoChilds[params.source], params.source] : [params.source])];
+			parentNodes = [... new Set(parentNodes)];
+		} else if (Array.isArray(nodesConnectionsInfoChilds[params.source])) {
+			parentNodes = [...nodesConnectionsInfoChilds[params.source], params.source];
+		} else {
+			parentNodes = [params.source];
+		}
+
+		// when the current target have childs, add current source as parent for each childs of target
+		if (Array.isArray(nodesConnectionsInfoParents[params.target])) {
+			nodesConnectionsInfoParents[params.target].map((childId) => {
+				if (Array.isArray(nodesConnectionsInfoChilds[childId])) {
+					if (!nodesConnectionsInfoChilds[childId].includes(params.source)) {
+						nodesConnectionsInfoChilds[childId] = [...nodesConnectionsInfoChilds[childId], params.source];
+					}
+				} else {
+					nodesConnectionsInfoChilds[childId] = [params.source];
+				}
+			});
+		}
+
+		setNodesConnectionsInfoChilds({
+			...nodesConnectionsInfoChilds,
+			[params.target]: parentNodes,
 		});
 
 		setNodes((lineNodes) => addEdge({...params, ...CHART_CONFIGS.lineNodeParams}, lineNodes));
@@ -133,6 +147,7 @@ console.log('when the expected child has childs');
 
 	// change the marker sizes, written custom code, because module doesn't have ability to do this
 	let marker = document.getElementById('react-flow__arrowclosed');
+	
 	useEffect(() => {
 		if (markerSizesCustomized) {
 			return;
@@ -144,10 +159,6 @@ console.log('when the expected child has childs');
 		}
 	}, [marker]);
 
-	useEffect(() => {
-		console.log('nodesConnectionsInfo: ', nodesConnectionsInfo);
-	}, [nodesConnectionsInfo]);
-
 	return (
 		<>
 			<Card>
@@ -155,16 +166,13 @@ console.log('when the expected child has childs');
 				<CardContent className={classes.content}>
 					<ReactFlow 
 						elements={nodes}
-						// onElementsRemove={onElementsRemove}
-						// onElementClick={onElementClick}
 						onConnect={handleConnectNodes}
 						deleteKeyCode={46}
-						// the below params required
 						nodeTypes={{ [customNodeTypes.INPUT]: CustomFlowNode }}
 						arrowHeadColor='#4d84c0'
 					>
 						<MiniMap />
-						<Controls />
+						{/* <Controls /> */}
 						<Background gap={12} size={0.5} />
 						<Background gap={16} />
 					</ReactFlow>
