@@ -80,7 +80,19 @@ const Sidebar = ({ location, PaperProps = {} }) => {
               <React.Fragment key={index}>
                 {category.header && <SidebarSection>{category.header}</SidebarSection>}
 
-                {category.children && category.icon ? (
+                {category.component ? (
+                  <SidebarCategory
+                    isCollapsable={false}
+                    name={category.id}
+                    to={category.path}
+                    activeClassName="active"
+                    component={NavLink}
+                    icon={category.icon}
+                    exact
+                    button
+                    badge={category.badge}
+                  />
+                ) : (
                   <React.Fragment key={index}>
                     <SidebarCategory
                       isOpen={!openRoutes[index]}
@@ -98,19 +110,7 @@ const Sidebar = ({ location, PaperProps = {} }) => {
                       )}
                     </Collapse>
                   </React.Fragment>
-                ) : category.icon ? (
-                  <SidebarCategory
-                    isCollapsable={false}
-                    name={category.id}
-                    to={category.path}
-                    activeClassName="active"
-                    component={NavLink}
-                    icon={category.icon}
-                    exact
-                    button
-                    badge={category.badge}
-                  />
-                ) : null}
+                )}
               </React.Fragment>
             ))}
           </Items>

@@ -14,35 +14,45 @@ const childRoutes = (Layout, routes, isAuthGuard) =>
   routes.map(({ component: Component, children, path }, index) => {
     const Guard = isAuthGuard ? AuthGuard : GuestGuard;
 
-    return children ? (
-      children.map((element, index) => (
+    const output = [];
+
+    if (Component) {
+      output.push(
         <Route
           key={index}
-          path={element.path}
+          path={path}
           exact
           render={(props) => (
             <Guard>
               <Layout>
-                <element.component {...props} />
+                <Component {...props} />
               </Layout>
             </Guard>
           )}
         />
-      ))
-    ) : Component ? (
-      <Route
-        key={index}
-        path={path}
-        exact
-        render={(props) => (
-          <Guard>
-            <Layout>
-              <Component {...props} />
-            </Layout>
-          </Guard>
-        )}
-      />
-    ) : null;
+      );
+    }
+
+    if (children) {
+      children.forEach((element, index) =>
+        output.push(
+          <Route
+            key={index}
+            path={element.path}
+            exact
+            render={(props) => (
+              <Guard>
+                <Layout>
+                  <element.component {...props} />
+                </Layout>
+              </Guard>
+            )}
+          />
+        )
+      );
+    }
+
+    return output;
   });
 
 const Routes = () => (

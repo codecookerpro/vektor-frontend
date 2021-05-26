@@ -7,9 +7,10 @@ const Dropzone = lazy(() => import(/* webpackChunkName: 'Dropzone' */ 'pages/for
 const Editors = lazy(() => import(/* webpackChunkName: 'Editors' */ 'pages/forms/Editors'));
 
 const formsRoutes = Object.freeze({
-  id: 'Forms',
+  id: '[DEV] Forms',
   path: '/forms',
   icon: <CheckSquare />,
+  component: null,
   children: [
     {
       path: '/forms/selection-controls',
@@ -32,7 +33,6 @@ const formsRoutes = Object.freeze({
       component: Editors,
     },
   ],
-  component: null,
 });
 
 export default formsRoutes;

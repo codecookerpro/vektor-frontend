@@ -18,7 +18,7 @@ const userManagementRoutes = Object.freeze({
   id: LINKS.USER_MANAGEMENT.TITLE,
   path: LINKS.USER_MANAGEMENT.HREF,
   icon: <User />,
-  containsHome: true,
+  component: null,
   children: [
     {
       path: LINKS.USERS.HREF,
@@ -84,7 +84,6 @@ const userManagementRoutes = Object.freeze({
       isNotSlide: true,
     },
   ],
-  component: null,
 });
 
 export default userManagementRoutes;
