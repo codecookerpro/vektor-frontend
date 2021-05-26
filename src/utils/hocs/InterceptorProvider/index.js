@@ -5,7 +5,7 @@ import axios from 'services/axios';
 import * as authAPI from 'services/api-auth';
 import { logoutUser, setUserToken } from 'redux/actions/authActions';
 import { GENERIC_ERRORS } from 'utils/constants/error-codes';
-import { setErrorPopup, setErrorPopupText } from '../../../redux/actions/errorsActions';
+import { setErrorPopup, setErrorPopupText } from 'redux/actions/errorsActions';
 
 const InterceptorProvider = () => {
   const { accessToken, passwordResetToken } = useSelector((state) => state.auth);

@@ -11,11 +11,11 @@ export const GENERIC_ERRORS = {
 export const LOCAL_SIGN_IN_ERRORS = {
   VALIDATION: {
     CODE: 102,
-    TEXT: 'Invalid email or password',
+    TEXT: 'Incorrect email or password',
   },
   NO_PASSWORD: {
     CODE: 103,
-    TEXT: 'Invalid password',
+    TEXT: "Account has no password, use 'forgot password' to set a password",
   },
   DEFAULT: {
     TEXT: 'Something wrong!',
