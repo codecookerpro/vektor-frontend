@@ -2,8 +2,9 @@ import React, { memo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { useForm, Controller } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
+import { joiResolver } from '@hookform/resolvers/joi';
+import joi from 'joi';
+
 import { Card, CardContent, Grid, Button, Typography } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 import { makeStyles } from '@material-ui/core/styles';
@@ -59,10 +60,10 @@ const WorkflowTemplateForm = ({ workflowTemplate = {} }) => {
     schemaForOrg.organization = SELECT_VALID;
   }
 
-  const schema = yup.object().shape(schemaForOrg);
+  const schema = joi.object().keys(schemaForOrg);
 
   const { control, handleSubmit, errors } = useForm({
-    resolver: yupResolver(schema),
+    resolver: joiResolver(schema),
   });
 
   const onSubmit = async (data) => {

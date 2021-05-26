@@ -1,8 +1,8 @@
 import React, { memo, useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useForm, Controller } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
+import { joiResolver } from '@hookform/resolvers/joi';
+import joi from 'joi';
 import { Card, CardContent, Grid, Button, Typography } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 import { makeStyles } from '@material-ui/core/styles';
@@ -10,7 +10,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import VektorTextField from 'components/UI/TextFields/VektorTextField';
 import FilterSelect from 'components/UI/Selects/FilterSelect';
 import UserTransfer from 'parts/UserTransfer';
-import { STRING_INPUT_VALID, SELECT_VALID } from 'utils/constants/validations';
+import { STRING_INPUT_VALID, SELECT_VALID, INTEGER_VALID } from 'utils/constants/validations';
 import LINKS from 'utils/constants/links';
 import ORGANIZATIONS from 'utils/temp/organizations';
 
@@ -31,9 +31,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const schema = yup.object().shape({
+const schema = joi.object().keys({
   name: STRING_INPUT_VALID,
-  number: STRING_INPUT_VALID,
+  number: INTEGER_VALID,
   organization: SELECT_VALID,
   pm: SELECT_VALID,
   supervisor: SELECT_VALID,
@@ -47,7 +47,7 @@ const ProjectForm = ({ users = [], project = {}, setSelectedOrganization }) => {
   const [errorMessage, setErrorMessage] = useState('');
 
   const { control, handleSubmit, errors, reset, watch } = useForm({
-    resolver: yupResolver(schema),
+    resolver: joiResolver(schema),
   });
 
   const watchOrganization = watch('organization');
@@ -63,7 +63,6 @@ const ProjectForm = ({ users = [], project = {}, setSelectedOrganization }) => {
         template: data.template,
       };
 
-      console.log(params);
       if (addNew) {
         reset({
           name: '',

@@ -4,20 +4,22 @@ import { useHistory } from 'react-router-dom';
 import { useForm, Controller } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
 import joi from 'joi';
+
 import { Checkbox, FormControlLabel, TextField } from '@material-ui/core';
+
 import * as authAPI from 'services/api-auth';
 import { setUserToken } from 'redux/actions/authActions';
 import ContainedButton from 'components/UI/Buttons/ContainedButton';
 import LinkButton from 'components/UI/Buttons/LinkButton';
 import AuthWrapper, { authPageStyles } from '../Shared/AuthWrapper';
-import { EMAIL_VALID_SIGN_IN, PASSWORD_VALID_SIGN_IN } from 'utils/constants/validations';
+import { EMAIL_VALID, PASSWORD_VALID } from 'utils/constants/validations';
 import LINKS from 'utils/constants/links';
 import { LOCAL_SIGN_IN_ERRORS } from 'utils/constants/error-codes';
 import { setErrorPopup, setErrorPopupText } from 'redux/actions/errorsActions';
 
 const schema = joi.object().keys({
-  email: EMAIL_VALID_SIGN_IN,
-  password: PASSWORD_VALID_SIGN_IN,
+  email: EMAIL_VALID,
+  password: PASSWORD_VALID,
 });
 
 function SignIn() {
