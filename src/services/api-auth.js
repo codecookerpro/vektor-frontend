@@ -12,4 +12,8 @@ const changePassword = async (params) => {
   return await axios.post('/api/users/change-password', params);
 };
 
-export { login, restorePassword, changePassword };
+const refreshToken = async (params) => {
+  return await axios.post('/api/users/refresh', params);
+};
+
+export { login, restorePassword, changePassword, refreshToken };

@@ -14,6 +14,8 @@ import LinkButton from 'components/UI/Buttons/LinkButton';
 import AuthWrapper, { authPageStyles } from '../Shared/AuthWrapper';
 import { EMAIL_VALID, PASSWORD_VALID } from 'utils/constants/validations';
 import LINKS from 'utils/constants/links';
+import { LOCAL_SIGN_IN_ERRORS } from 'utils/constants/error-codes';
+import { setErrorPopup, setErrorPopupText } from 'redux/actions/errorsActions';
 
 const schema = joi.object().keys({
   email: EMAIL_VALID,
@@ -27,8 +29,7 @@ function SignIn() {
 
   const [errorMessage, setErrorMessage] = useState('');
   const [remember, setRemember] = useState(false);
-
-  const { control, handleSubmit, errors } = useForm({
+  const { control, handleSubmit, errors, reset } = useForm({
     resolver: joiResolver(schema),
   });
 
@@ -50,10 +51,27 @@ function SignIn() {
       history.push(LINKS.OVERVIEW.HREF);
     } catch (error) {
       if (error.response) {
-        const {
-          data: { message },
-        } = error.response;
-        setErrorMessage(message);
+        const { data } = error.response;
+        const { code } = data;
+        let message = '';
+        switch (code) {
+          case LOCAL_SIGN_IN_ERRORS.VALIDATION.CODE:
+            message = LOCAL_SIGN_IN_ERRORS.VALIDATION.TEXT;
+            break;
+          case LOCAL_SIGN_IN_ERRORS.NO_PASSWORD.CODE:
+            message = LOCAL_SIGN_IN_ERRORS.NO_PASSWORD.TEXT;
+            break;
+          default:
+            message = LOCAL_SIGN_IN_ERRORS.DEFAULT.TEXT;
+            break;
+        }
+        dispatch(setErrorPopupText(message));
+        dispatch(setErrorPopup(true));
+
+        reset({
+          email: '',
+          password: '',
+        });
       }
     }
   };
