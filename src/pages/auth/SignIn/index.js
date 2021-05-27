@@ -15,7 +15,7 @@ import AuthWrapper, { authPageStyles } from '../Shared/AuthWrapper';
 import { EMAIL_VALID, PASSWORD_VALID } from 'utils/constants/validations';
 import LINKS from 'utils/constants/links';
 import { LOCAL_SIGN_IN_ERRORS } from 'utils/constants/error-codes';
-import { setErrorPopup, setErrorPopupText } from 'redux/actions/errorsActions';
+import { setPopup } from 'redux/actions/popupActions';
 
 const schema = joi.object().keys({
   email: EMAIL_VALID,
@@ -64,9 +64,12 @@ function SignIn() {
             message = LOCAL_SIGN_IN_ERRORS.DEFAULT.TEXT;
             break;
         }
-        dispatch(setErrorPopupText(message));
-        dispatch(setErrorPopup(true));
-
+        dispatch(
+          setPopup({
+            popupType: 'error',
+            popupText: message,
+          })
+        );
         reset({
           email: '',
           password: '',

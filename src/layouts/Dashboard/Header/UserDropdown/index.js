@@ -6,6 +6,7 @@ import { useDispatch } from 'react-redux';
 import { Tooltip, Menu, MenuItem, IconButton as MuiIconButton } from '@material-ui/core';
 
 import { logoutUser } from 'redux/actions/authActions';
+import LINKS from 'utils/constants/links';
 
 const IconButton = styled(MuiIconButton)`
   svg {
@@ -29,11 +30,11 @@ function UserDropdown() {
 
   const handleSignOut = async () => {
     await dispatch(logoutUser());
-    history.push('/auth/sign-in');
+    history.push(LINKS.SIGN_IN.HREF);
   };
 
   const handleEditProfile = async () => {
-    history.push('/profile/edit');
+    history.push(LINKS.EDIT_PROFILE.HREF);
   };
 
   return (

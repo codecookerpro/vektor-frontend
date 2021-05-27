@@ -11,7 +11,7 @@ import VektorTextField from 'components/UI/TextFields/VektorTextField';
 import { PASSWORD_VALID } from 'utils/constants/validations';
 import useLoading from 'utils/hooks/useLoading';
 import ContainedButton from 'components/UI/Buttons/ContainedButton';
-import { setErrorPopup, setErrorPopupText } from 'redux/actions/errorsActions';
+import { setPopup } from 'redux/actions/popupActions';
 import { Visibility, VisibilityOff } from '@material-ui/icons';
 import { LOCAL_CHANGE_PASSWORD_ERRORS } from 'utils/constants/error-codes';
 
@@ -91,8 +91,12 @@ const ProfileForm = () => {
         return;
       }
       await userAPI.changeUserPassword(params);
-      dispatch(setErrorPopupText('Password was changed'));
-      dispatch(setErrorPopup(true));
+      dispatch(
+        setPopup({
+          popupType: 'info',
+          popupText: 'Password was changed',
+        })
+      );
       reset({
         oldPassword: '',
         newPassword: '',
@@ -105,24 +109,28 @@ const ProfileForm = () => {
       });
     } catch (error) {
       if (error.response) {
-        const { data } = error.response;
-        const { code, message } = data;
-        setErrorMessage(message);
+        const {
+          data: { code },
+        } = error.response;
         if (code) {
-          let messages = '';
+          let message = '';
           switch (code) {
             case LOCAL_CHANGE_PASSWORD_ERRORS.VALIDATION.CODE:
-              messages = LOCAL_CHANGE_PASSWORD_ERRORS.VALIDATION.TEXT;
+              message = LOCAL_CHANGE_PASSWORD_ERRORS.VALIDATION.TEXT;
               break;
             case LOCAL_CHANGE_PASSWORD_ERRORS.NO_PASSWORD.CODE:
-              messages = LOCAL_CHANGE_PASSWORD_ERRORS.NO_PASSWORD.TEXT;
+              message = LOCAL_CHANGE_PASSWORD_ERRORS.NO_PASSWORD.TEXT;
               break;
             default:
-              messages = LOCAL_CHANGE_PASSWORD_ERRORS.DEFAULT.TEXT;
+              message = LOCAL_CHANGE_PASSWORD_ERRORS.DEFAULT.TEXT;
               break;
           }
-          dispatch(setErrorPopupText(messages));
-          dispatch(setErrorPopup(true));
+          dispatch(
+            setPopup({
+              popupType: 'error',
+              popupText: message,
+            })
+          );
         }
         reset({
           oldPassword: '',
