@@ -1,8 +1,8 @@
 import { lazy } from 'react';
 import { Home } from 'react-feather';
+import LINKS from 'utils/constants/links';
 
 const Overview = lazy(() => import(/* webpackChunkName: 'Overview' */ 'pages/Overview'));
-import LINKS from 'utils/constants/links';
 
 const overviewRoutes = Object.freeze({
   id: LINKS.OVERVIEW.TITLE,

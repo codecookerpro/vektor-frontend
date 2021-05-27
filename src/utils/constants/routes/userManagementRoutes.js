@@ -1,5 +1,6 @@
 import { lazy } from 'react';
 import { User } from 'react-feather';
+import LINKS from 'utils/constants/links';
 
 const UserList = lazy(() => import(/* webpackChunkName: 'UserList' */ 'pages/Users/UserList'));
 const AddUser = lazy(() => import(/* webpackChunkName: 'AddUser' */ 'pages/Users/AddUser'));
@@ -12,13 +13,12 @@ const OrganizationHistory = lazy(() => import(/* webpackChunkName: 'WorkflowTemp
 const AuditTrailLogList = lazy(() => import(/* webpackChunkName: 'AuditTrailLogList' */ 'pages/AuditTrailLogs/AuditTrailLogList'));
 const AuditTrailLogDetail = lazy(() => import(/* webpackChunkName: 'AuditTrailLogDetail' */ 'pages/AuditTrailLogs/AuditTrailLogDetail'));
 const AuditTrailLogHistory = lazy(() => import(/* webpackChunkName: 'AuditTrailLogHistory' */ 'pages/AuditTrailLogs/AuditTrailLogHistory'));
-import LINKS from 'utils/constants/links';
 
 const userManagementRoutes = Object.freeze({
   id: LINKS.USER_MANAGEMENT.TITLE,
   path: LINKS.USER_MANAGEMENT.HREF,
   icon: <User />,
-  containsHome: true,
+  component: null,
   children: [
     {
       path: LINKS.USERS.HREF,
@@ -84,7 +84,6 @@ const userManagementRoutes = Object.freeze({
       isNotSlide: true,
     },
   ],
-  component: null,
 });
 
 export default userManagementRoutes;

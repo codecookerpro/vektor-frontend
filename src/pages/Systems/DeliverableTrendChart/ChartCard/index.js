@@ -1,73 +1,34 @@
-import React, { memo } from "react";
-import { Card, CardHeader, CardContent, IconButton } from "@material-ui/core";
-import { fade } from "@material-ui/core/styles/colorManipulator";
-import { MoreVertical } from "react-feather";
-import { Line } from "react-chartjs-2";
+import React, { memo } from 'react';
+import { Card, CardHeader, CardContent, IconButton } from '@material-ui/core';
+import { fade } from '@material-ui/core/styles/colorManipulator';
+import { MoreVertical } from 'react-feather';
+import { Line } from 'react-chartjs-2';
 
-import theme from "theme";
+import theme from 'theme';
 
 const data = (canvas) => {
-  const ctx = canvas.getContext("2d");
+  const ctx = canvas.getContext('2d');
 
   const gradient = ctx.createLinearGradient(0, 0, 0, 300);
   gradient.addColorStop(0, fade(theme.palette.secondary.main, 0.0875));
-  gradient.addColorStop(1, "rgba(0, 0, 0, 0)");
+  gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
 
   return {
-    labels: [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec",
-    ],
+    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
     datasets: [
       {
-        label: "Sales ($)",
+        label: 'Sales ($)',
         fill: true,
         backgroundColor: gradient,
         borderColor: theme.palette.secondary.main,
-        data: [
-          2115,
-          1562,
-          1584,
-          1892,
-          1587,
-          1923,
-          2566,
-          2448,
-          2805,
-          3438,
-          2917,
-          3327,
-        ],
+        data: [2115, 1562, 1584, 1892, 1587, 1923, 2566, 2448, 2805, 3438, 2917, 3327],
       },
       {
-        label: "Orders",
+        label: 'Orders',
         fill: true,
-        backgroundColor: "transparent",
+        backgroundColor: 'transparent',
         borderColor: theme.custom.palette.lightGreen,
-        data: [
-          958,
-          724,
-          629,
-          883,
-          915,
-          1214,
-          1476,
-          1212,
-          1554,
-          2128,
-          1466,
-          1827,
-        ],
+        data: [958, 724, 629, 883, 915, 1214, 1476, 1212, 1554, 2128, 1466, 1827],
       },
     ],
   };
@@ -94,7 +55,7 @@ const options = {
       {
         reverse: true,
         gridLines: {
-          color: "rgba(0,0,0,0.0)",
+          color: 'rgba(0,0,0,0.0)',
         },
         ticks: {
           fontColor: theme.palette.text.secondary,
@@ -110,8 +71,8 @@ const options = {
         display: true,
         borderDash: [5, 5],
         gridLines: {
-          color: "rgba(0,0,0,0.0375)",
-          fontColor: "#fff",
+          color: 'rgba(0,0,0,0.0375)',
+          fontColor: '#fff',
         },
       },
     ],

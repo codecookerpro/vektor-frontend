@@ -1,5 +1,3 @@
-const PROXY_URL = 'https://vektor-new-api.voxsync.com'
+const PROXY_URL = 'https://vektor-new-api.voxsync.com';
 
-export {
-  PROXY_URL
-}
+export { PROXY_URL };

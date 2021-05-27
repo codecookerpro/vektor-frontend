@@ -1,11 +1,5 @@
 import React, { memo } from 'react';
-import {
-  Card,
-  CardContent,
-  TableCell,
-  TableRow,
-  Typography,
-} from '@material-ui/core';
+import { Card, CardContent, TableCell, TableRow, Typography } from '@material-ui/core';
 
 import VektorSubTableContainer from 'parts/Tables/VektorSubTableContainer';
 
@@ -19,7 +13,7 @@ const HistoryTableCard = ({ title, results }) => {
   return (
     <Card>
       <CardContent>
-        <Typography variant='h5' color='textPrimary' gutterBottom>
+        <Typography variant="h5" color="textPrimary" gutterBottom>
           {title}
         </Typography>
         <VektorSubTableContainer columns={columns}>

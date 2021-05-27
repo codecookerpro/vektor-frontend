@@ -1,13 +1,7 @@
 import React, { memo, useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import {
-  Grid,
-  IconButton
-} from '@material-ui/core';
-import {
-  ArrowRightCircle,
-  ArrowLeftCircle
-} from 'react-feather';
+import { Grid, IconButton } from '@material-ui/core';
+import { ArrowRightCircle, ArrowLeftCircle } from 'react-feather';
 
 import TransferLeftList from './TransferLeftList';
 import TransferRightList from './TransferRightList';
@@ -17,22 +11,20 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     borderRadius: 30,
-    backgroundColor: theme.custom.palette.grey
+    backgroundColor: theme.custom.palette.grey,
   },
   arrowIcon: {
     padding: 0,
     margin: theme.spacing(1),
-    cursor: 'pointer'
-  }
+    cursor: 'pointer',
+  },
 }));
 
 function not(a, b) {
   return a.filter((value) => b.indexOf(value) === -1);
 }
 
-const UserTransfer = ({
-  users
-}) => {
+const UserTransfer = ({ users }) => {
   const classes = useStyles();
   const [leftChecked, setLeftChecked] = useState([]);
   const [rightChecked, setRightChecked] = useState([]);
@@ -41,12 +33,12 @@ const UserTransfer = ({
   const [right, setRight] = useState([]);
 
   useEffect(() => {
-    setLeft(users)
-    setRight([])
-    setLeftChecked([])
-    setRightChecked([])
+    setLeft(users);
+    setRight([]);
+    setLeftChecked([]);
+    setRightChecked([]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [users])
+  }, [users]);
 
   const handleToggle = (value, side) => {
     const checked = side === 'left' ? leftChecked : rightChecked;
@@ -60,22 +52,22 @@ const UserTransfer = ({
     }
 
     if (side === 'left') {
-      setLeftChecked(newChecked)
+      setLeftChecked(newChecked);
     } else {
-      setRightChecked(newChecked)
+      setRightChecked(newChecked);
     }
   };
 
   const handleAllRight = () => {
     setRight(right.concat(left));
-    setLeftChecked([])
+    setLeftChecked([]);
     setLeft([]);
   };
 
   const handleCheckedRight = () => {
     setRight(right.concat(leftChecked));
     setLeft(not(left, leftChecked));
-    setLeftChecked([])
+    setLeftChecked([]);
   };
 
   const handleCheckedLeft = () => {
@@ -91,44 +83,27 @@ const UserTransfer = ({
   };
 
   return (
-    <Grid container spacing={2} alignItems='center'>
+    <Grid container spacing={2} alignItems="center">
       <Grid item>
-        <TransferLeftList
-          items={left}
-          selectedItems={leftChecked}
-          chooseAll={handleAllRight}
-          selectItem={handleToggle}
-        />
+        <TransferLeftList items={left} selectedItems={leftChecked} chooseAll={handleAllRight} selectItem={handleToggle} />
       </Grid>
       <Grid item>
-        <Grid container direction='column' alignItems='center'>
+        <Grid container direction="column" alignItems="center">
           <div className={classes.actions}>
-            <IconButton
-              onClick={handleCheckedRight}
-              disabled={leftChecked.length === 0}
-              className={classes.arrowIcon}>
+            <IconButton onClick={handleCheckedRight} disabled={leftChecked.length === 0} className={classes.arrowIcon}>
               <ArrowRightCircle />
             </IconButton>
-            <IconButton
-              onClick={handleCheckedLeft}
-              disabled={rightChecked.length === 0}
-              className={classes.arrowIcon}
-            >
+            <IconButton onClick={handleCheckedLeft} disabled={rightChecked.length === 0} className={classes.arrowIcon}>
               <ArrowLeftCircle />
             </IconButton>
           </div>
         </Grid>
       </Grid>
       <Grid item>
-        <TransferRightList
-          items={right}
-          selectedItems={rightChecked}
-          removeAll={handleAllLeft}
-          selectItem={handleToggle}
-        />
+        <TransferRightList items={right} selectedItems={rightChecked} removeAll={handleAllLeft} selectItem={handleToggle} />
       </Grid>
     </Grid>
   );
-}
+};
 
-export default memo(UserTransfer)
+export default memo(UserTransfer);

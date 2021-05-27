@@ -1,10 +1,9 @@
-
-import axios from 'services/axios'
+import axios from 'services/axios';
 
 const getSOWs = async (data) => {
   const params = {
-    get_json: JSON.stringify(data)
-  }
+    get_json: JSON.stringify(data),
+  };
   return await axios.get('/api/sows', { params });
 };
 
@@ -32,13 +31,4 @@ const deleteSOWFileUrl = async (params) => {
   return await axios.delete('/api/sows/file', { params });
 };
 
-export {
-  getSOWs,
-  createSOW,
-  updateSOW,
-  deleteSOW,
-  createSOWFile,
-  getSOWFile,
-  deleteSOWFileUrl
-};
-
+export { getSOWs, createSOW, updateSOW, deleteSOW, createSOWFile, getSOWFile, deleteSOWFileUrl };

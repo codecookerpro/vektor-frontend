@@ -13,7 +13,7 @@ const useStyles = makeStyles(() => ({
 
 const PhaseBox = ({ id, fields, moveItem }) => {
   const classes = useStyles();
-  const [{ }, drop] = useDrop(
+  const [, drop] = useDrop(
     () => ({
       accept: 'ITEM',
       drop: moveItem,

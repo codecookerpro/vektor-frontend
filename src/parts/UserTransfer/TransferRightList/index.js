@@ -1,16 +1,8 @@
-import React, { memo } from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import {
-  Card,
-  CardHeader,
-  CardActions,
-  Button,
-  List,
-  ListItem,
-  ListItemText,
-} from "@material-ui/core";
-import { ArrowLeft } from "react-feather";
-import clsx from "clsx";
+import React, { memo } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import { Card, CardHeader, CardActions, Button, List, ListItem, ListItemText } from '@material-ui/core';
+import { ArrowLeft } from 'react-feather';
+import clsx from 'clsx';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -22,14 +14,14 @@ const useStyles = makeStyles((theme) => ({
   },
   list: {
     height: 246,
-    overflowY: "scroll",
+    overflowY: 'scroll',
   },
   selected: {
     backgroundColor: theme.custom.palette.grey,
   },
   actions: {
-    display: "flex",
-    justifyContent: "flex-end",
+    display: 'flex',
+    justifyContent: 'flex-end',
   },
   arrowIcon: {
     width: 15,
@@ -41,7 +33,7 @@ function TransferRightList({ items, selectedItems, removeAll, selectItem }) {
   const classes = useStyles();
 
   const handleToggle = (value) => () => {
-    selectItem(value, "right");
+    selectItem(value, 'right');
   };
 
   return (
@@ -55,14 +47,10 @@ function TransferRightList({ items, selectedItems, removeAll, selectItem }) {
             role="listitem"
             onClick={handleToggle(item)}
             className={clsx({
-              [classes.selected]:
-                selectedItems.findIndex((value) => item.id === value.id) !== -1,
+              [classes.selected]: selectedItems.findIndex((value) => item.id === value.id) !== -1,
             })}
           >
-            <ListItemText
-              id={`transfer-list-item-${item.id}-label`}
-              primary={item.name}
-            />
+            <ListItemText id={`transfer-list-item-${item.id}-label`} primary={item.name} />
           </ListItem>
         ))}
       </List>

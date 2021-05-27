@@ -1,10 +1,9 @@
-
-import axios from 'services/axios'
+import axios from 'services/axios';
 
 const getUsers = async (data) => {
   const params = {
-    get_json: JSON.stringify(data)
-  }
+    get_json: JSON.stringify(data),
+  };
   return await axios.get('/api/users', { params });
 };
 
@@ -20,9 +19,4 @@ const deleteUser = async (params) => {
   return await axios.delete(`/api/users`, { params });
 };
 
-export {
-  getUsers,
-  createUser,
-  updateUser,
-  deleteUser
-};
+export { getUsers, createUser, updateUser, deleteUser };

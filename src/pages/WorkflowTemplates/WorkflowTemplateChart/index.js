@@ -1,4 +1,5 @@
-import React, { memo, useState, useEffect, useRef } from 'react';
+import React, { memo, useMemo, useState, useEffect, useRef } from 'react';
+import { useParams } from 'react-router-dom';
 import { Card, CardHeader, CardContent, Button, Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Plus } from 'react-feather';
@@ -8,6 +9,9 @@ import * as customNodeTypes from '../../../utils/constants/reactflow/custom-node
 import { CHART_CONFIGS } from '../../../utils/constants/reactflow/chart-configs';
 // to do, should be used for chart layout (horizontal, vertical)
 // import dagre from 'dagre';
+import PageHeader from 'parts/PageHeader';
+import LINKS from 'utils/constants/links';
+import results from 'utils/temp/systems';
 
 const useStyles = makeStyles((theme) => ({
 	content: {
@@ -20,11 +24,12 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const WorkflowTemplateChart = ({timelyDeliverables, setTimelyDeliverables, nodes, setNodes}) => {
+	const classes = useStyles();
+  const { id } = useParams();
 	const [zoomOnScroll, setZoomOnScroll] = useState(true);
 	const [isDraggable, setIsDraggable] = useState(true);
 	const [paneMoveable, setPaneMoveable] = useState(true);
 	const [hasOpenedPopup, setHasOpenedPopup] = useState(false);
-	const classes = useStyles();
 	const [markerSizesCustomized, setMarkerSizesCustomized] = useState(null);
 	const [nodesConnectionsInfoParents, setNodesConnectionsInfoParents] = useState({});
 	const [nodesConnectionsInfoChilds, setNodesConnectionsInfoChilds] = useState({});
@@ -32,6 +37,16 @@ const WorkflowTemplateChart = ({timelyDeliverables, setTimelyDeliverables, nodes
 	countRefTimelyDeliverables.current = timelyDeliverables;
 	const countRefNodes = useRef(nodes);
 	countRefNodes.current = nodes;
+
+  const workflowTemplate = useMemo(() => results.find((item) => item.id === id), [id]);
+
+  const NAV_LINKS = [
+    LINKS.WORKFLOW_TEMPLATES,
+    {
+      HREF: LINKS.WORKFLOW_TEMPLATE_CHART.HREF.replace(':id', id),
+      TITLE: workflowTemplate?.name || 'Not Found',
+    },
+  ];
 
 	const nodesCountY = () => {
 		return CHART_CONFIGS.chartContainerHeight / (CHART_CONFIGS.nodeHeight + CHART_CONFIGS.defaultNodeMarginY);
@@ -200,8 +215,8 @@ const WorkflowTemplateChart = ({timelyDeliverables, setTimelyDeliverables, nodes
 
 	return (
 		<>
-			<Card>
-				<CardHeader title='Workflow Chart' />
+			<Card className={classes.root}>
+				<CardHeader title='Workflow Template Chart' />
 				<CardContent className={classes.content}>
 					<ReactFlow
 						elements={nodes}

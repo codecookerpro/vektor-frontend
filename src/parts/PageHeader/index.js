@@ -1,24 +1,19 @@
-import React, { memo } from "react";
-import styled from "styled-components/macro";
-import { NavLink } from "react-router-dom";
-import Helmet from "react-helmet";
-import { makeStyles } from "@material-ui/core/styles";
-import {
-  Breadcrumbs as MuiBreadcrumbs,
-  Divider as MuiDivider,
-  Link,
-  Typography,
-} from "@material-ui/core";
-import { spacing } from "@material-ui/system";
+import React, { memo } from 'react';
+import styled from 'styled-components/macro';
+import { NavLink } from 'react-router-dom';
+import Helmet from 'react-helmet';
+import { makeStyles } from '@material-ui/core/styles';
+import { Breadcrumbs as MuiBreadcrumbs, Divider as MuiDivider, Link, Typography } from '@material-ui/core';
+import { spacing } from '@material-ui/system';
 
 const Breadcrumbs = styled(MuiBreadcrumbs)(spacing);
 const Divider = styled(MuiDivider)(spacing);
 
 const useStyles = makeStyles(() => ({
   root: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
 }));
 
@@ -36,7 +31,7 @@ const PageHeader = ({ title, links = [], leftElement }) => {
           </Typography>
 
           <Breadcrumbs aria-label="Breadcrumb" mt={2}>
-            {links.map((link, index) => (
+            {links.map((link = { HREF: 'CHECK_CODE', TITLE: 'CHECK_CODE' }, index) => (
               <Link exact key={index} component={NavLink} to={link.HREF}>
                 {link.TITLE}
               </Link>

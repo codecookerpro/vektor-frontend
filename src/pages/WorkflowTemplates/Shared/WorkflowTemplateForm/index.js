@@ -2,26 +2,20 @@ import React, { memo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { useForm, Controller } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
+
+import { joiResolver } from '@hookform/resolvers/joi';
+import joi from 'joi';
+
 import { Card, CardContent, Grid, Button, Typography } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 import { makeStyles } from '@material-ui/core/styles';
 
 import { PERMISSION_TYPE } from 'utils/constants/permissions'
 import * as workflowTemplateAPI from 'services/api-workflow-template'
-import {
-  addWorkflowTemplate,
-  editWorkflowTemplate,
-  removeWorkflowTemplate
-} from 'redux/actions/workflowTemplates';
+import { addWorkflowTemplate, editWorkflowTemplate, removeWorkflowTemplate } from 'redux/actions/workflowTemplates';
 import VektorTextField from 'components/UI/TextFields/VektorTextField';
 import FilterSelect from 'components/UI/Selects/FilterSelect';
-import {
-  STRING_INPUT_VALID,
-  SELECT_VALID,
-  INTEGER_VALID
-} from 'utils/constants/validations';
+import { STRING_INPUT_VALID, SELECT_VALID, INTEGER_VALID } from 'utils/constants/validations';
 import LINKS from 'utils/constants/links';
 import useLoading from 'utils/hooks/useLoading'
 import { isEmpty } from 'utils/helpers/utility'
@@ -55,32 +49,28 @@ const WorkflowTemplateForm = ({ workflowTemplate = {}, timelyDeliverables, nodes
   const classes = useStyles();
   const history = useHistory();
   const dispatch = useDispatch();
-  const { changeLoadingStatus } = useLoading()
-
-  const { results: organizations = [] } = useSelector(state => state.organizations);
+  const { changeLoadingStatus } = useLoading();
+  const { results: organizations = [] } = useSelector((state) => state.organizations);
   const [errorMessage, setErrorMessage] = useState('');
 
-  const permissionType = useSelector(state => state.auth.currentUser.permissions);
+  const currentUser = useSelector((state) => state.auth.currentUser);
 
   let schemaForOrg = {
     name: STRING_INPUT_VALID,
-    differentialWeight: INTEGER_VALID
+    differentialWeight: INTEGER_VALID,
   };
 
-  if (permissionType === PERMISSION_TYPE.ADMIN) {
+  if (currentUser.permissionType === PERMISSION_TYPE.ADMIN) {
     schemaForOrg.organization = SELECT_VALID;
   }
 
-  const schema = yup.object().shape(
-    schemaForOrg
-  );
+  const schema = joi.object().keys(schemaForOrg);
 
   const { control, handleSubmit, errors } = useForm({
-    resolver: yupResolver(schema),
+    resolver: joiResolver(schema),
   });
 
   const isDeliverablesValid = () => {
-console.log('nodes', nodes);
     return nodes.filter((node) => node.type === customNodeTypes.INPUT).length === Object.keys(timelyDeliverables).length;
   }
 
@@ -105,31 +95,32 @@ console.log('nodes', nodes);
   }
 
   const onSubmit = async (data) => {
-    changeLoadingStatus(true)
+    changeLoadingStatus(true);
     let deliverables = getDeliverables();
     if (!deliverables) {
       setErrorMessage('Deliverables are not valid.');
       changeLoadingStatus(false);
       return;
     }
+
     try {
       let params = {
         name: data.name,
-        organization: permissionType === PERMISSION_TYPE.ADMIN ? data.organization : currentUser.organization,
+        organization: currentUser.permissionType === PERMISSION_TYPE.ADMIN ? data.organization : currentUser.organization,
         differentialWeight: data.differentialWeight,
         deliverables: deliverables,
       };
 
       if (isEmpty(workflowTemplate)) {
         const response = await workflowTemplateAPI.createWorkflowTemplate(params);
-        dispatch(addWorkflowTemplate(response.data))
+        dispatch(addWorkflowTemplate(response.data));
       } else {
         params = {
           _id: workflowTemplate._id,
-          ...params
-        }
+          ...params,
+        };
         const response = await workflowTemplateAPI.updateWorkflowTemplate(params);
-        dispatch(editWorkflowTemplate(response.data))
+        dispatch(editWorkflowTemplate(response.data));
       }
       history.push(LINKS.WORKFLOW_TEMPLATES.HREF);
     } catch (error) {
@@ -140,14 +131,14 @@ console.log('nodes', nodes);
         setErrorMessage(message);
       }
     }
-    changeLoadingStatus(false)
+    changeLoadingStatus(false);
   };
 
   const deleteHandler = async () => {
-    changeLoadingStatus(true)
+    changeLoadingStatus(true);
     try {
       await workflowTemplateAPI.deleteWorkflowTemplate({ _id: workflowTemplate._id });
-      dispatch(removeWorkflowTemplate(workflowTemplate))
+      dispatch(removeWorkflowTemplate(workflowTemplate));
       history.push(LINKS.WORKFLOW_TEMPLATES.HREF);
     } catch (error) {
       if (error.response) {
@@ -157,7 +148,7 @@ console.log('nodes', nodes);
         setErrorMessage(message);
       }
     }
-    changeLoadingStatus(false)
+    changeLoadingStatus(false);
   };
 
   return (
@@ -185,7 +176,7 @@ console.log('nodes', nodes);
                 defaultValue={workflowTemplate?.name || ''}
               />
             </Grid>
-            {permissionType === PERMISSION_TYPE.ADMIN && (
+            {currentUser.permissionType === PERMISSION_TYPE.ADMIN && (
               <Grid item xs={12} sm={6} md={4}>
                 <Controller
                   as={<FilterSelect />}
@@ -219,24 +210,14 @@ console.log('nodes', nodes);
             </Grid>
             <Grid item xs={12}>
               <div className={classes.buttonContainer}>
-                <Button
-                  variant='contained'
-                  color='primary'
-                  onClick={handleSubmit(onSubmit)}
-                >
+                <Button variant='contained' color='primary' onClick={handleSubmit(onSubmit)}>
                   Save
                 </Button>
-                {
-                  !isEmpty(workflowTemplate) &&
-                  <Button
-                    color='primary'
-                    variant='contained'
-                    className={classes.delete}
-                    onClick={deleteHandler}
-                  >
+                {!isEmpty(workflowTemplate) && (
+                  <Button color='primary' variant='contained' className={classes.delete} onClick={deleteHandler}>
                     Delete
                   </Button>
-                }
+                )}
               </div>
             </Grid>
           </Grid>

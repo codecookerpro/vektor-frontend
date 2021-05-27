@@ -1,38 +1,26 @@
-import React, { memo } from "react";
-import { MenuItem, Select, Typography } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
-import clsx from "clsx";
+import React, { memo } from 'react';
+import { MenuItem, Select, Typography } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import clsx from 'clsx';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    display: "flex",
-    flexDirection: "column",
+    display: 'flex',
+    flexDirection: 'column',
     minWidth: 148,
   },
   label: {
     fontSize: 12,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     marginBottom: theme.spacing(2),
   },
   fullWidth: {
-    width: "100%",
+    width: '100%',
   },
 }));
 
 const FilterSelect = React.forwardRef(
-  (
-    {
-      label,
-      placeholder,
-      items,
-      error,
-      fullWidth = false,
-      keys = { label: "LABEL", value: "VALUE" },
-      className,
-      ...rest
-    },
-    ref
-  ) => {
+  ({ label, placeholder, items, error, fullWidth = false, keys = { label: 'LABEL', value: 'VALUE' }, className, ...rest }, ref) => {
     const classes = useStyles();
 
     return (

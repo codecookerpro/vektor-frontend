@@ -5,7 +5,7 @@ function AuthGuard({ children }) {
   const accessToken = localStorage.accessToken;
 
   if (!accessToken) {
-    return <Redirect to='/auth/sign-in' />;
+    return <Redirect to="/auth/sign-in" />;
   }
 
   return children;

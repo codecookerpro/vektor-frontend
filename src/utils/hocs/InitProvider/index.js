@@ -8,7 +8,7 @@ import { getOrganizations } from 'redux/actions/organizations';
 const InitProvider = () => {
   const dispatch = useDispatch();
 
-  const { accessToken } = useSelector(state => state.auth)
+  const { accessToken } = useSelector((state) => state.auth);
 
   useEffect(() => {
     const accessToken = localStorage.accessToken;
@@ -30,8 +30,8 @@ const InitProvider = () => {
 
   useEffect(() => {
     if (accessToken) {
-      dispatch(getUsers())
-      dispatch(getOrganizations())
+      dispatch(getUsers());
+      dispatch(getOrganizations());
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [accessToken]);

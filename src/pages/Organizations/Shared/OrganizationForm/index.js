@@ -2,23 +2,19 @@ import React, { memo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { useForm, Controller } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
+import { joiResolver } from '@hookform/resolvers/joi';
+import joi from 'joi';
 import { Card, CardContent, Grid, Button, Typography } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 import { makeStyles } from '@material-ui/core/styles';
 
-import * as organizationAPI from 'services/api-organization'
-import {
-  addOrganization,
-  editOrganization,
-  removeOrganization
-} from 'redux/actions/organizations';
+import * as organizationAPI from 'services/api-organization';
+import { addOrganization, editOrganization, removeOrganization } from 'redux/actions/organizations';
 import VektorTextField from 'components/UI/TextFields/VektorTextField';
 import { STRING_INPUT_VALID } from 'utils/constants/validations';
 import LINKS from 'utils/constants/links';
 import { isEmpty } from 'utils/helpers/utility';
-import useLoading from 'utils/hooks/useLoading'
+import useLoading from 'utils/hooks/useLoading';
 
 const useStyles = makeStyles((theme) => ({
   alert: {
@@ -41,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const schema = yup.object().shape({
+const schema = joi.object().keys({
   name: STRING_INPUT_VALID,
 });
 
@@ -49,16 +45,16 @@ const OrganizationForm = ({ organization = {} }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const history = useHistory();
-  const { changeLoadingStatus } = useLoading()
+  const { changeLoadingStatus } = useLoading();
 
   const [errorMessage, setErrorMessage] = useState('');
 
   const { control, handleSubmit, errors } = useForm({
-    resolver: yupResolver(schema),
+    resolver: joiResolver(schema),
   });
 
   const onSubmit = async (data) => {
-    changeLoadingStatus(true)
+    changeLoadingStatus(true);
     try {
       let params = {
         name: data.name,
@@ -66,14 +62,14 @@ const OrganizationForm = ({ organization = {} }) => {
 
       if (isEmpty(organization)) {
         const response = await organizationAPI.createOrganization(params);
-        dispatch(addOrganization(response.data))
+        dispatch(addOrganization(response.data));
       } else {
         params = {
           _id: organization._id,
-          ...params
-        }
+          ...params,
+        };
         const response = await organizationAPI.updateOrganization(params);
-        dispatch(editOrganization(response.data))
+        dispatch(editOrganization(response.data));
       }
       history.push(LINKS.ORGANIZATIONS.HREF);
     } catch (error) {
@@ -84,14 +80,14 @@ const OrganizationForm = ({ organization = {} }) => {
         setErrorMessage(message);
       }
     }
-    changeLoadingStatus(false)
+    changeLoadingStatus(false);
   };
 
   const deleteHandler = async () => {
-    changeLoadingStatus(true)
+    changeLoadingStatus(true);
     try {
       await organizationAPI.deleteOrganization({ _id: organization._id });
-      dispatch(removeOrganization(organization))
+      dispatch(removeOrganization(organization));
       history.push(LINKS.ORGANIZATIONS.HREF);
     } catch (error) {
       if (error.response) {
@@ -101,18 +97,18 @@ const OrganizationForm = ({ organization = {} }) => {
         setErrorMessage(message);
       }
     }
-    changeLoadingStatus(false)
+    changeLoadingStatus(false);
   };
 
   return (
     <Card>
       <CardContent>
         {errorMessage && (
-          <Alert mt={2} mb={1} severity='warning' className={classes.alert}>
+          <Alert mt={2} mb={1} severity="warning" className={classes.alert}>
             {errorMessage}
           </Alert>
         )}
-        <Typography variant='h6' className={classes.name}>
+        <Typography variant="h6" className={classes.name}>
           {organization?.name || 'New Organization'}
         </Typography>
         <form noValidate className={classes.form} onSubmit={handleSubmit(onSubmit)}>
@@ -121,9 +117,9 @@ const OrganizationForm = ({ organization = {} }) => {
               <Controller
                 as={<VektorTextField />}
                 fullWidth
-                name='name'
-                label='Name'
-                placeholder='Name'
+                name="name"
+                label="Name"
+                placeholder="Name"
                 error={errors.name?.message}
                 control={control}
                 defaultValue={organization?.name || ''}
@@ -131,24 +127,14 @@ const OrganizationForm = ({ organization = {} }) => {
             </Grid>
             <Grid item xs={12}>
               <div className={classes.buttonContainer}>
-                <Button
-                  variant='contained'
-                  color='primary'
-                  type='submit'
-                >
+                <Button variant="contained" color="primary" type="submit">
                   Save Changes
                 </Button>
-                {
-                  !isEmpty(organization) &&
-                  <Button
-                    color='primary'
-                    variant='contained'
-                    className={classes.delete}
-                    onClick={deleteHandler}
-                  >
+                {!isEmpty(organization) && (
+                  <Button color="primary" variant="contained" className={classes.delete} onClick={deleteHandler}>
                     Delete
                   </Button>
-                }
+                )}
               </div>
             </Grid>
           </Grid>

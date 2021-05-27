@@ -1,17 +1,18 @@
 import { lazy } from 'react';
 import { Users } from 'react-feather';
+import LINKS from 'utils/constants/links';
 
 const SignIn = lazy(() => import(/* webpackChunkName: 'SignIn' */ 'pages/auth/SignIn'));
 const ResetPassword = lazy(() => import(/* webpackChunkName: 'ResetPassword' */ 'pages/auth/ResetPassword'));
 const ForgotPassword = lazy(() => import(/* webpackChunkName: 'ResetPassword' */ 'pages/auth/ForgotPassword'));
 const Page404 = lazy(() => import(/* webpackChunkName: 'Page404' */ 'pages/auth/Page404'));
 const Page500 = lazy(() => import(/* webpackChunkName: 'Page500' */ 'pages/auth/Page500'));
-import LINKS from 'utils/constants/links'
 
 const authRoutes = Object.freeze({
   id: LINKS.AUTH.TITLE,
   path: LINKS.AUTH.HREF,
   icon: <Users />,
+  component: null,
   children: [
     {
       path: LINKS.SIGN_IN.HREF,
@@ -39,7 +40,6 @@ const authRoutes = Object.freeze({
       component: Page500,
     },
   ],
-  component: null,
 });
 
 export default authRoutes;

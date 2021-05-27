@@ -1,12 +1,12 @@
-import React, { memo, useMemo } from "react";
-import { useParams } from "react-router-dom";
-import { Grid } from "@material-ui/core";
+import React, { memo, useMemo } from 'react';
+import { useParams } from 'react-router-dom';
+import { Grid } from '@material-ui/core';
 
-import PageHeader from "parts/PageHeader";
-import ChartCard from "./ChartCard";
-import LegendCard from "./LegendCard";
-import LINKS from "utils/constants/links";
-import results from "utils/temp/systems";
+import PageHeader from 'parts/PageHeader';
+import ChartCard from './ChartCard';
+import LegendCard from './LegendCard';
+import LINKS from 'utils/constants/links';
+import results from 'utils/temp/systems';
 
 const DeliverableTrendChart = () => {
   const { id } = useParams();
@@ -16,19 +16,14 @@ const DeliverableTrendChart = () => {
     LINKS.PROJECT_MANAGEMENT,
     LINKS.SYSTEMS,
     {
-      HREF: LINKS.EDIT_SYSTEM.HREF.replace(":id", id),
-      TITLE: system?.name || "Not Found",
+      HREF: LINKS.EDIT_SYSTEM.HREF.replace(':id', id),
+      TITLE: system?.name || 'Not Found',
     },
   ];
 
   return (
     <>
-      <PageHeader
-        title={`${LINKS.SYSTEM_TREND_CHART.TITLE}: ${
-          system?.name || "Not Found"
-        }`}
-        links={NAV_LINKS}
-      />
+      <PageHeader title={`${LINKS.SYSTEM_TREND_CHART.TITLE}: ${system?.name || 'Not Found'}`} links={NAV_LINKS} />
       <Grid container spacing={6}>
         <Grid item xs={12}>
           <ChartCard />

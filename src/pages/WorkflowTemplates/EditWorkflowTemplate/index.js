@@ -1,4 +1,3 @@
-
 import React, { memo, useMemo, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useHistory } from 'react-router-dom';
@@ -12,14 +11,14 @@ import WorkflowTemplateForm from '../Shared/WorkflowTemplateForm';
 import LINKS from 'utils/constants/links';
 import { isEmpty } from 'utils/helpers/utility';
 
-const NAV_LINKS = [LINKS.PROJECT_TEMPLATE, LINKS.WORKFLOW_TEMPLATES];
+const NAV_LINKS = [LINKS.WORKFLOW_TEMPLATES];
 
 const EditWorkflowTemplate = () => {
   const { id } = useParams();
   const history = useHistory();
   const dispatch = useDispatch();
 
-  const { results = [] } = useSelector(state => state.workflowTemplates);
+  const { results = [] } = useSelector((state) => state.workflowTemplates);
 
   useEffect(() => {
     dispatch(getWorkflowTemplates());
@@ -40,25 +39,14 @@ const EditWorkflowTemplate = () => {
       <PageHeader
         title={LINKS.EDIT_WORKFLOW_TEMPLATE.TITLE}
         links={NAV_LINKS}
-        leftElement={
-          <ContainedButton onClick={historyHandler}>
-            History
-          </ContainedButton>
-        }
+        leftElement={<ContainedButton onClick={historyHandler}>History</ContainedButton>}
       />
       <Grid container spacing={6}>
         <Grid item xs={12}>
-          {
-            !isEmpty(workflowTemplate) &&
-            <WorkflowTemplateForm workflowTemplate={workflowTemplate} />
-          }
+          {!isEmpty(workflowTemplate) && <WorkflowTemplateForm workflowTemplate={workflowTemplate} />}
         </Grid>
         <Grid item xs={12}>
-          <DetailLinkCard
-            title='Workflow Chart'
-            buttonLabel='See Chart'
-            onDetail={workflowChartHandler}
-          />
+          <DetailLinkCard title="Workflow Chart" buttonLabel="See Chart" onDetail={workflowChartHandler} />
         </Grid>
       </Grid>
     </>

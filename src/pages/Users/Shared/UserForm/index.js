@@ -2,29 +2,21 @@ import React, { memo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { useForm, Controller } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
+import { joiResolver } from '@hookform/resolvers/joi';
+import joi from 'joi';
 import { Card, CardContent, Grid, Button, Typography } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 import { makeStyles } from '@material-ui/core/styles';
 
-import * as userAPI from 'services/api-user'
-import {
-  addUser,
-  editUser,
-  removeUser
-} from 'redux/actions/users';
+import * as userAPI from 'services/api-user';
+import { addUser, editUser, removeUser } from 'redux/actions/users';
 import VektorTextField from 'components/UI/TextFields/VektorTextField';
 import FilterSelect from 'components/UI/Selects/FilterSelect';
-import {
-  STRING_INPUT_VALID,
-  SELECT_VALID,
-  EMAIL_VALID,
-} from 'utils/constants/validations';
+import { STRING_INPUT_VALID, SELECT_VALID, EMAIL_VALID, PASSWORD_VALID } from 'utils/constants/validations';
 import LINKS from 'utils/constants/links';
-import { PERMISSIONS } from 'utils/constants/permissions'
-import useLoading from 'utils/hooks/useLoading'
-import { isEmpty } from 'utils/helpers/utility'
+import { PERMISSIONS } from 'utils/constants/permissions';
+import useLoading from 'utils/hooks/useLoading';
+import { isEmpty } from 'utils/helpers/utility';
 
 const useStyles = makeStyles((theme) => ({
   alert: {
@@ -47,28 +39,29 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const schema = yup.object().shape({
+const schema = joi.object().keys({
   email: EMAIL_VALID,
   name: STRING_INPUT_VALID,
   organization: SELECT_VALID,
   permissions: SELECT_VALID,
+  password: PASSWORD_VALID,
 });
 
 const UserForm = ({ user = {} }) => {
   const classes = useStyles();
   const history = useHistory();
   const dispatch = useDispatch();
-  const { changeLoadingStatus } = useLoading()
+  const { changeLoadingStatus } = useLoading();
 
-  const { results: organizations = [] } = useSelector(state => state.organizations);
+  const { results: organizations = [] } = useSelector((state) => state.organizations);
   const [errorMessage, setErrorMessage] = useState('');
 
   const { control, handleSubmit, errors } = useForm({
-    resolver: yupResolver(schema),
+    resolver: joiResolver(schema),
   });
 
   const onSubmit = async (data) => {
-    changeLoadingStatus(true)
+    changeLoadingStatus(true);
     try {
       let params = {
         email: data.email,
@@ -81,19 +74,19 @@ const UserForm = ({ user = {} }) => {
         params = {
           ...params,
           password: data.password,
-        }
+        };
       }
 
       if (isEmpty(user)) {
         const response = await userAPI.createUser(params);
-        dispatch(addUser(response.data))
+        dispatch(addUser(response.data));
       } else {
         params = {
           _id: user._id,
-          ...params
-        }
+          ...params,
+        };
         const response = await userAPI.updateUser(params);
-        dispatch(editUser(response.data))
+        dispatch(editUser(response.data));
       }
       history.push(LINKS.USERS.HREF);
     } catch (error) {
@@ -104,14 +97,14 @@ const UserForm = ({ user = {} }) => {
         setErrorMessage(message);
       }
     }
-    changeLoadingStatus(false)
+    changeLoadingStatus(false);
   };
 
   const deleteHandler = async () => {
-    changeLoadingStatus(true)
+    changeLoadingStatus(true);
     try {
       await userAPI.deleteUser({ _id: user._id });
-      dispatch(removeUser(user))
+      dispatch(removeUser(user));
       history.push(LINKS.USERS.HREF);
     } catch (error) {
       if (error.response) {
@@ -121,18 +114,18 @@ const UserForm = ({ user = {} }) => {
         setErrorMessage(message);
       }
     }
-    changeLoadingStatus(false)
+    changeLoadingStatus(false);
   };
 
   return (
     <Card>
       <CardContent>
         {errorMessage && (
-          <Alert mt={2} mb={1} severity='warning' className={classes.alert}>
+          <Alert mt={2} mb={1} severity="warning" className={classes.alert}>
             {errorMessage}
           </Alert>
         )}
-        <Typography variant='h6' className={classes.name}>
+        <Typography variant="h6" className={classes.name}>
           {user?.name || 'New user'}
         </Typography>
         <form noValidate className={classes.form}>
@@ -141,9 +134,9 @@ const UserForm = ({ user = {} }) => {
               <Controller
                 as={<VektorTextField />}
                 fullWidth
-                name='email'
-                label='Email'
-                placeholder='Email'
+                name="email"
+                label="Email"
+                placeholder="Email"
                 error={errors.email?.message}
                 control={control}
                 defaultValue={user?.email || ''}
@@ -153,9 +146,9 @@ const UserForm = ({ user = {} }) => {
               <Controller
                 as={<FilterSelect />}
                 fullWidth
-                name='organization'
-                label='Organization'
-                placeholder='Select organization'
+                name="organization"
+                label="Organization"
+                placeholder="Select organization"
                 items={organizations}
                 keys={{
                   label: 'name',
@@ -170,9 +163,9 @@ const UserForm = ({ user = {} }) => {
               <Controller
                 as={<VektorTextField />}
                 fullWidth
-                name='name'
-                label='Name'
-                placeholder='Name'
+                name="name"
+                label="Name"
+                placeholder="Name"
                 error={errors.name?.message}
                 control={control}
                 defaultValue={user?.name || ''}
@@ -182,9 +175,9 @@ const UserForm = ({ user = {} }) => {
               <Controller
                 as={<FilterSelect />}
                 fullWidth
-                name='permissions'
-                label='Group'
-                placeholder='Select Group'
+                name="permissions"
+                label="Group"
+                placeholder="Select Group"
                 items={PERMISSIONS}
                 error={errors.permissions?.message}
                 control={control}
@@ -195,9 +188,9 @@ const UserForm = ({ user = {} }) => {
               <Controller
                 as={<VektorTextField />}
                 fullWidth
-                name='password'
-                label='Password'
-                placeholder='Password'
+                name="password"
+                label="Password"
+                placeholder="Password"
                 error={errors.password?.message}
                 control={control}
                 defaultValue={''}
@@ -205,24 +198,14 @@ const UserForm = ({ user = {} }) => {
             </Grid>
             <Grid item xs={12}>
               <div className={classes.buttonContainer}>
-                <Button
-                  variant='contained'
-                  color='primary'
-                  onClick={handleSubmit(onSubmit)}
-                >
+                <Button variant="contained" color="primary" onClick={handleSubmit(onSubmit)}>
                   Save
                 </Button>
-                {
-                  !isEmpty(user) &&
-                  <Button
-                    color='primary'
-                    variant='contained'
-                    className={classes.delete}
-                    onClick={deleteHandler}
-                  >
+                {!isEmpty(user) && (
+                  <Button color="primary" variant="contained" className={classes.delete} onClick={deleteHandler}>
                     Delete
                   </Button>
-                }
+                )}
               </div>
             </Grid>
           </Grid>

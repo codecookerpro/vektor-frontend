@@ -1,14 +1,15 @@
-import { combineReducers } from 'redux'
+import { combineReducers } from 'redux';
 
-import loadingReducer from './loadingReducer'
-import authReducer from './authReducer'
-import usersReducer from './usersReducer'
-import organizationsReducer from './organizationsReducer'
-import workflowTemplatesReducer from './workflowTemplatesReducer'
-import projectsReducer from './projectsReducer'
-import eventsReducer from './eventsReducer'
-import dashboardsReducer from './dashboardsReducer'
-import reportsReducer from './reportsReducer'
+import loadingReducer from './loadingReducer';
+import authReducer from './authReducer';
+import usersReducer from './usersReducer';
+import organizationsReducer from './organizationsReducer';
+import workflowTemplatesReducer from './workflowTemplatesReducer';
+import projectsReducer from './projectsReducer';
+import eventsReducer from './eventsReducer';
+import dashboardsReducer from './dashboardsReducer';
+import reportsReducer from './reportsReducer';
+import errorsReducer from './errorsReducer';
 
 export default combineReducers({
   loading: loadingReducer,
@@ -19,5 +20,6 @@ export default combineReducers({
   projects: projectsReducer,
   events: eventsReducer,
   dashboards: dashboardsReducer,
-  reports: reportsReducer
+  reports: reportsReducer,
+  errors: errorsReducer,
 });

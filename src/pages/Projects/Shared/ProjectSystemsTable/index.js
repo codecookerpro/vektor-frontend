@@ -1,11 +1,5 @@
 import React, { memo } from 'react';
-import {
-  Card,
-  CardContent,
-  TableCell,
-  TableRow,
-  Typography,
-} from '@material-ui/core';
+import { Card, CardContent, TableCell, TableRow, Typography } from '@material-ui/core';
 
 import LinkButton from 'components/UI/Buttons/LinkButton';
 import VektorSubTableContainer from 'parts/Tables/VektorSubTableContainer';
@@ -26,16 +20,14 @@ const ProjectSystemsTable = () => {
   return (
     <Card>
       <CardContent>
-        <Typography variant='h5' color='textPrimary' gutterBottom>
+        <Typography variant="h5" color="textPrimary" gutterBottom>
           Systems
         </Typography>
         <VektorSubTableContainer columns={columns}>
           {results.map((row) => (
             <TableRow key={row.id}>
-              <TableCell component='th' scope='row'>
-                <LinkButton to={LINKS.EDIT_SYSTEM.HREF.replace(':id', row.id)}>
-                  {row.name}
-                </LinkButton>
+              <TableCell component="th" scope="row">
+                <LinkButton to={LINKS.EDIT_SYSTEM.HREF.replace(':id', row.id)}>{row.name}</LinkButton>
               </TableCell>
               <TableCell>{row.workflow.name || ''}</TableCell>
               <TableCell>{row.totalHours}</TableCell>

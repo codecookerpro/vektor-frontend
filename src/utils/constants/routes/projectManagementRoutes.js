@@ -1,65 +1,28 @@
-import { lazy } from "react";
-import { Sliders } from "react-feather";
+import { lazy } from 'react';
+import { Sliders } from 'react-feather';
+import LINKS from 'utils/constants/links';
 
-const DashboardList = lazy(() =>
-  import(
-    /* webpackChunkName: 'DashboardList' */ "pages/Dashboard/DashboardList"
-  )
-);
-const DashboardDetail = lazy(() =>
-  import(
-    /* webpackChunkName: 'DashboardDetail' */ "pages/Dashboard/DashboardDetail"
-  )
-);
-const ProjectList = lazy(() =>
-  import(/* webpackChunkName: 'ProjectList' */ "pages/Projects/ProjectList")
-);
-const AddProject = lazy(() =>
-  import(/* webpackChunkName: 'AddProject' */ "pages/Projects/AddProject")
-);
-const EditProject = lazy(() =>
-  import(/* webpackChunkName: 'EditProject' */ "pages/Projects/EditProject")
-);
-const SystemTrendChart = lazy(() =>
-  import(
-    /* webpackChunkName: 'SystemTrendChart' */ "pages/Projects/SystemTrendChart"
-  )
-);
-const ProjectHistory = lazy(() =>
-  import(
-    /* webpackChunkName: 'ProjectHistory' */ "pages/Projects/ProjectHistory"
-  )
-);
-const ProjectPhases = lazy(() =>
-  import(/* webpackChunkName: 'ProjectPhases' */ "pages/Projects/ProjectPhases")
-);
-const SystemList = lazy(() =>
-  import(/* webpackChunkName: 'SystemList' */ "pages/Systems/SystemList")
-);
-const AddSystem = lazy(() =>
-  import(/* webpackChunkName: 'AddSystem' */ "pages/Systems/AddSystem")
-);
-const EditSystem = lazy(() =>
-  import(/* webpackChunkName: 'EditSystem' */ "pages/Systems/EditSystem")
-);
-const SystemHistory = lazy(() =>
-  import(/* webpackChunkName: 'SystemHistory' */ "pages/Systems/SystemHistory")
-);
-const DeliverableTrendChart = lazy(() =>
-  import(
-    /* webpackChunkName: 'DeliverableTrendChart' */ "pages/Systems/DeliverableTrendChart"
-  )
-);
-const ReportList = lazy(() =>
-  import(/* webpackChunkName: 'ReportList' */ "pages/Reports")
-);
-import LINKS from "utils/constants/links";
+const DashboardList = lazy(() => import(/* webpackChunkName: 'DashboardList' */ 'pages/Dashboard/DashboardList'));
+const DashboardDetail = lazy(() => import(/* webpackChunkName: 'DashboardDetail' */ 'pages/Dashboard/DashboardDetail'));
+const ProjectList = lazy(() => import(/* webpackChunkName: 'ProjectList' */ 'pages/Projects/ProjectList'));
+const AddProject = lazy(() => import(/* webpackChunkName: 'AddProject' */ 'pages/Projects/AddProject'));
+const EditProject = lazy(() => import(/* webpackChunkName: 'EditProject' */ 'pages/Projects/EditProject'));
+const SystemTrendChart = lazy(() => import(/* webpackChunkName: 'SystemTrendChart' */ 'pages/Projects/SystemTrendChart'));
+const ProjectHistory = lazy(() => import(/* webpackChunkName: 'ProjectHistory' */ 'pages/Projects/ProjectHistory'));
+const ProjectPhases = lazy(() => import(/* webpackChunkName: 'ProjectPhases' */ 'pages/Projects/ProjectPhases'));
+const SystemList = lazy(() => import(/* webpackChunkName: 'SystemList' */ 'pages/Systems/SystemList'));
+const AddSystem = lazy(() => import(/* webpackChunkName: 'AddSystem' */ 'pages/Systems/AddSystem'));
+const EditSystem = lazy(() => import(/* webpackChunkName: 'EditSystem' */ 'pages/Systems/EditSystem'));
+const SystemHistory = lazy(() => import(/* webpackChunkName: 'SystemHistory' */ 'pages/Systems/SystemHistory'));
+const DeliverableTrendChart = lazy(() => import(/* webpackChunkName: 'DeliverableTrendChart' */ 'pages/Systems/DeliverableTrendChart'));
+const ReportList = lazy(() => import(/* webpackChunkName: 'ReportList' */ 'pages/Reports'));
 
 const projectManagementRoutes = Object.freeze({
   id: LINKS.PROJECT_MANAGEMENT.TITLE,
   path: LINKS.PROJECT_MANAGEMENT.HREF,
   icon: <Sliders />,
   containsHome: true,
+  component: null,
   children: [
     {
       path: LINKS.DASHBOARD.HREF,
@@ -142,7 +105,6 @@ const projectManagementRoutes = Object.freeze({
       component: ReportList,
     },
   ],
-  component: null,
 });
 
 export default projectManagementRoutes;

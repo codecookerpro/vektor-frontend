@@ -3,7 +3,7 @@ import * as TYPES from 'redux/types';
 const initialState = {
   accessToken: '',
   passwordResetToken: '',
-  currentUser: {}
+  currentUser: {},
 };
 
 export default function authReducer(state = initialState, action) {
@@ -11,17 +11,17 @@ export default function authReducer(state = initialState, action) {
     case TYPES.SET_ACCESS_TOKEN:
       return {
         ...state,
-        accessToken: action.payload
+        accessToken: action.payload,
       };
     case TYPES.SET_PASSWORD_RESET_TOKEN:
       return {
         ...state,
-        passwordResetToken: action.payload
+        passwordResetToken: action.payload,
       };
     case TYPES.SET_CURRENT_USER:
       return {
         ...state,
-        currentUser: action.payload
+        currentUser: action.payload,
       };
     default:
       return state;

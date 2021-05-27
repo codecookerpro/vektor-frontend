@@ -1,22 +1,22 @@
-import React, { memo } from "react";
-import { Card, CardContent, Typography } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
+import React, { memo } from 'react';
+import { Card, CardContent, Typography } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 
-import ContainedButton from "components/UI/Buttons/ContainedButton";
+import ContainedButton from 'components/UI/Buttons/ContainedButton';
 
 const useStyles = makeStyles(() => ({
   content: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   title: {
     fontSize: 17,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
 }));
 
-const DetailLinkCard = ({ title, buttonLabel = "Detail", onDetail }) => {
+const DetailLinkCard = ({ title, buttonLabel = 'Detail', onDetail }) => {
   const classes = useStyles();
 
   return (

@@ -1,8 +1,8 @@
-import React from "react";
-import styled from "styled-components/macro";
-import { NavLink } from "react-router-dom";
+import React from 'react';
+import styled from 'styled-components/macro';
+import { NavLink } from 'react-router-dom';
 
-import Helmet from "react-helmet";
+import Helmet from 'react-helmet';
 
 import {
   CardContent,
@@ -13,11 +13,11 @@ import {
   Divider as MuiDivider,
   Paper as MuiPaper,
   Typography,
-} from "@material-ui/core";
+} from '@material-ui/core';
 
-import { spacing } from "@material-ui/system";
+import { spacing } from '@material-ui/system';
 
-import * as Icon from "react-feather";
+import * as Icon from 'react-feather';
 
 const icons = {
   Activity: <Icon.Activity />,

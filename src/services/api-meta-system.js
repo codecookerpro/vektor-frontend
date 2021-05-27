@@ -1,10 +1,9 @@
-
-import axios from 'services/axios'
+import axios from 'services/axios';
 
 const getMetaSystems = async (data) => {
   const params = {
-    get_json: JSON.stringify(data)
-  }
+    get_json: JSON.stringify(data),
+  };
   return await axios.get('/api/metasystems', { params });
 };
 
@@ -20,10 +19,4 @@ const deleteMetaSystem = async (params) => {
   return await axios.delete(`/api/metasystems`, { params });
 };
 
-export {
-  getMetaSystems,
-  createMetaSystem,
-  updateMetaSystem,
-  deleteMetaSystem
-};
-
+export { getMetaSystems, createMetaSystem, updateMetaSystem, deleteMetaSystem };

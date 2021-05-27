@@ -1,8 +1,8 @@
 import React, { memo, useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useForm, Controller } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
+import { joiResolver } from '@hookform/resolvers/joi';
+import joi from 'joi';
 import { Card, CardContent, Grid, Button, Typography } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 import { makeStyles } from '@material-ui/core/styles';
@@ -10,7 +10,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import VektorTextField from 'components/UI/TextFields/VektorTextField';
 import FilterSelect from 'components/UI/Selects/FilterSelect';
 import UserTransfer from 'parts/UserTransfer';
-import { STRING_INPUT_VALID, SELECT_VALID } from 'utils/constants/validations';
+import { STRING_INPUT_VALID, SELECT_VALID, INTEGER_VALID } from 'utils/constants/validations';
 import LINKS from 'utils/constants/links';
 import ORGANIZATIONS from 'utils/temp/organizations';
 
@@ -31,9 +31,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const schema = yup.object().shape({
+const schema = joi.object().keys({
   name: STRING_INPUT_VALID,
-  number: STRING_INPUT_VALID,
+  number: INTEGER_VALID,
   organization: SELECT_VALID,
   pm: SELECT_VALID,
   supervisor: SELECT_VALID,
@@ -47,7 +47,7 @@ const ProjectForm = ({ users = [], project = {}, setSelectedOrganization }) => {
   const [errorMessage, setErrorMessage] = useState('');
 
   const { control, handleSubmit, errors, reset, watch } = useForm({
-    resolver: yupResolver(schema),
+    resolver: joiResolver(schema),
   });
 
   const watchOrganization = watch('organization');
@@ -63,7 +63,6 @@ const ProjectForm = ({ users = [], project = {}, setSelectedOrganization }) => {
         template: data.template,
       };
 
-      console.log(params);
       if (addNew) {
         reset({
           name: '',
@@ -95,12 +94,12 @@ const ProjectForm = ({ users = [], project = {}, setSelectedOrganization }) => {
     <Card>
       <CardContent>
         {errorMessage && (
-          <Alert mt={2} mb={1} severity='warning' className={classes.alert}>
+          <Alert mt={2} mb={1} severity="warning" className={classes.alert}>
             {errorMessage}
           </Alert>
         )}
 
-        <Typography variant='h6' className={classes.name}>
+        <Typography variant="h6" className={classes.name}>
           {project?.name || 'New Project'}
         </Typography>
 
@@ -110,9 +109,9 @@ const ProjectForm = ({ users = [], project = {}, setSelectedOrganization }) => {
               <Controller
                 as={<VektorTextField />}
                 fullWidth
-                name='name'
-                label='Name'
-                placeholder='Name'
+                name="name"
+                label="Name"
+                placeholder="Name"
                 error={errors.name?.message}
                 control={control}
                 defaultValue={project?.name || ''}
@@ -122,9 +121,9 @@ const ProjectForm = ({ users = [], project = {}, setSelectedOrganization }) => {
               <Controller
                 as={<VektorTextField />}
                 fullWidth
-                name='number'
-                label='Number'
-                placeholder='Number'
+                name="number"
+                label="Number"
+                placeholder="Number"
                 error={errors.number?.message}
                 control={control}
                 defaultValue={project?.number || ''}
@@ -134,9 +133,9 @@ const ProjectForm = ({ users = [], project = {}, setSelectedOrganization }) => {
               <Controller
                 as={<FilterSelect />}
                 fullWidth
-                name='organization'
-                label='Organization'
-                placeholder='Select organization'
+                name="organization"
+                label="Organization"
+                placeholder="Select organization"
                 items={ORGANIZATIONS}
                 error={errors.organization?.message}
                 control={control}
@@ -147,9 +146,9 @@ const ProjectForm = ({ users = [], project = {}, setSelectedOrganization }) => {
               <Controller
                 as={<FilterSelect />}
                 fullWidth
-                name='pm'
-                label='PM'
-                placeholder='Select PM'
+                name="pm"
+                label="PM"
+                placeholder="Select PM"
                 items={ORGANIZATIONS}
                 error={errors.pm?.message}
                 control={control}
@@ -160,9 +159,9 @@ const ProjectForm = ({ users = [], project = {}, setSelectedOrganization }) => {
               <Controller
                 as={<FilterSelect />}
                 fullWidth
-                name='supervisor'
-                label='Supervisor'
-                placeholder='Select supervisor'
+                name="supervisor"
+                label="Supervisor"
+                placeholder="Select supervisor"
                 items={ORGANIZATIONS}
                 error={errors.supervisor?.message}
                 control={control}
@@ -173,9 +172,9 @@ const ProjectForm = ({ users = [], project = {}, setSelectedOrganization }) => {
               <Controller
                 as={<FilterSelect />}
                 fullWidth
-                name='template'
-                label='Phase set template:'
-                placeholder='Select template'
+                name="template"
+                label="Phase set template:"
+                placeholder="Select template"
                 items={ORGANIZATIONS}
                 error={errors.template?.message}
                 control={control}
@@ -187,18 +186,10 @@ const ProjectForm = ({ users = [], project = {}, setSelectedOrganization }) => {
             </Grid>
             <Grid item xs={12}>
               <div className={classes.buttonContainer}>
-                <Button
-                  variant='contained'
-                  color='primary'
-                  onClick={handleSubmit(onSubmit(false))}
-                >
+                <Button variant="contained" color="primary" onClick={handleSubmit(onSubmit(false))}>
                   Save
                 </Button>
-                <Button
-                  color='primary'
-                  className={classes.addAnother}
-                  onClick={handleSubmit(onSubmit(true))}
-                >
+                <Button color="primary" className={classes.addAnother} onClick={handleSubmit(onSubmit(true))}>
                   Save and add another
                 </Button>
               </div>

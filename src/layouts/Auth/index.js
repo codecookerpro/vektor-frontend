@@ -1,9 +1,10 @@
 import React, { memo } from 'react';
 import { createGlobalStyle } from 'styled-components/macro';
 import { CssBaseline } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles'
+import { makeStyles } from '@material-ui/core/styles';
 
 import { AUTH_BACKGROUND_IMAGE_PATH } from 'utils/constants/image-paths';
+import PopupError from 'components/UI/PopupError';
 
 const GlobalStyle = createGlobalStyle`
   html,
@@ -27,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundSize: 'contain',
     backgroundPosition: 'center',
     backgroundColor: theme.palette.background.default,
-    backgroundPositionY: 'top'
+    backgroundPositionY: 'top',
   },
   container: {
     display: 'flex',
@@ -35,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     width: '100%',
     maxWidth: 520,
-  }
+  },
 }));
 
 const Auth = ({ children }) => {
@@ -43,12 +44,11 @@ const Auth = ({ children }) => {
 
   return (
     <>
+      <PopupError />
       <CssBaseline />
       <GlobalStyle />
       <div className={classes.root}>
-        <div className={classes.container}>
-          {children}
-        </div>
+        <div className={classes.container}>{children}</div>
       </div>
     </>
   );
