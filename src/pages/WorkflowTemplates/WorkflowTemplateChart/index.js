@@ -1,5 +1,4 @@
-import React, { memo, useMemo, useState, useEffect, useRef } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { memo, useState, useEffect, useRef } from 'react';
 import { Card, CardHeader, CardContent, Button, Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Plus } from 'react-feather';
@@ -9,9 +8,6 @@ import * as customNodeTypes from '../../../utils/constants/reactflow/custom-node
 import { CHART_CONFIGS } from '../../../utils/constants/reactflow/chart-configs';
 // to do, should be used for chart layout (horizontal, vertical)
 // import dagre from 'dagre';
-import PageHeader from 'parts/PageHeader';
-import LINKS from 'utils/constants/links';
-import results from 'utils/temp/systems';
 
 const useStyles = makeStyles((theme) => ({
   content: {
@@ -25,7 +21,6 @@ const useStyles = makeStyles((theme) => ({
 
 const WorkflowTemplateChart = ({ timelyDeliverables, setTimelyDeliverables, nodes, setNodes }) => {
   const classes = useStyles();
-  const { id } = useParams();
   const [zoomOnScroll, setZoomOnScroll] = useState(true);
   const [isDraggable, setIsDraggable] = useState(true);
   const [paneMoveable, setPaneMoveable] = useState(true);
@@ -37,16 +32,6 @@ const WorkflowTemplateChart = ({ timelyDeliverables, setTimelyDeliverables, node
   countRefTimelyDeliverables.current = timelyDeliverables;
   const countRefNodes = useRef(nodes);
   countRefNodes.current = nodes;
-
-  const workflowTemplate = useMemo(() => results.find((item) => item.id === id), [id]);
-
-  const NAV_LINKS = [
-    LINKS.WORKFLOW_TEMPLATES,
-    {
-      HREF: LINKS.WORKFLOW_TEMPLATE_CHART.HREF.replace(':id', id),
-      TITLE: workflowTemplate?.name || 'Not Found',
-    },
-  ];
 
   const nodesCountY = () => {
     return CHART_CONFIGS.chartContainerHeight / (CHART_CONFIGS.nodeHeight + CHART_CONFIGS.defaultNodeMarginY);
@@ -132,7 +117,7 @@ const WorkflowTemplateChart = ({ timelyDeliverables, setTimelyDeliverables, node
 
     // when the current source have parents
     if (Array.isArray(nodesConnectionsInfoChilds[params.source])) {
-      nodesConnectionsInfoChilds[params.source].map((parentId) => {
+      for (let parentId of nodesConnectionsInfoChilds[params.source]) {
         if (Array.isArray(nodesConnectionsInfoParents[parentId])) {
           if (!nodesConnectionsInfoParents[parentId].includes(params.target)) {
             nodesConnectionsInfoParents[parentId] = [...nodesConnectionsInfoParents[parentId], params.target];
@@ -140,7 +125,7 @@ const WorkflowTemplateChart = ({ timelyDeliverables, setTimelyDeliverables, node
         } else {
           nodesConnectionsInfoParents[parentId] = [params.target];
         }
-      });
+      }
     }
 
     setNodesConnectionsInfoParents({
@@ -165,7 +150,7 @@ const WorkflowTemplateChart = ({ timelyDeliverables, setTimelyDeliverables, node
 
     // when the current target have childs, add current source as parent for each childs of target
     if (Array.isArray(nodesConnectionsInfoParents[params.target])) {
-      nodesConnectionsInfoParents[params.target].map((childId) => {
+      for (let childId of nodesConnectionsInfoParents[params.target]) {
         if (Array.isArray(nodesConnectionsInfoChilds[childId])) {
           if (!nodesConnectionsInfoChilds[childId].includes(params.source)) {
             nodesConnectionsInfoChilds[childId] = [...nodesConnectionsInfoChilds[childId], params.source];
@@ -173,7 +158,7 @@ const WorkflowTemplateChart = ({ timelyDeliverables, setTimelyDeliverables, node
         } else {
           nodesConnectionsInfoChilds[childId] = [params.source];
         }
-      });
+      }
     }
 
     setNodesConnectionsInfoChilds({
