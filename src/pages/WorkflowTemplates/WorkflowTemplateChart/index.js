@@ -2,10 +2,12 @@ import React, { memo, useState, useEffect, useRef } from 'react';
 import { Card, CardHeader, CardContent, Button, Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Plus } from 'react-feather';
-import ReactFlow, { isNode, isEdge, removeElements, addEdge, MiniMap, Controls, Background, ReactFlowProps } from 'react-flow-renderer';
+import ReactFlow, {removeElements, addEdge, MiniMap, Background } from 'react-flow-renderer';
 import CustomFlowNode from './CustomFlowNode';
 import * as customNodeTypes from '../../../utils/constants/reactflow/custom-node-types';
 import { CHART_CONFIGS } from '../../../utils/constants/reactflow/chart-configs';
+// import dagre from 'dagre';
+
 const useStyles = makeStyles((theme) => ({
 	content: {
 		height: CHART_CONFIGS.chartContainerHeight + 'px',
@@ -17,6 +19,11 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const WorkflowTemplateChart = ({timelyDeliverables, setTimelyDeliverables, nodes, setNodes}) => {
+	const [zoomOnScroll, setZoomOnScroll] = useState(true);
+	const [isDraggable, setIsDraggable] = useState(true);
+	const [paneMoveable, setPaneMoveable] = useState(true);
+	const [hasOpenedPopup, setHasOpenedPopup] = useState(false);
+	const classes = useStyles();
 	const [markerSizesCustomized, setMarkerSizesCustomized] = useState(null);
 	const [nodesConnectionsInfoParents, setNodesConnectionsInfoParents] = useState({});
 	const [nodesConnectionsInfoChilds, setNodesConnectionsInfoChilds] = useState({});
@@ -55,6 +62,7 @@ const WorkflowTemplateChart = ({timelyDeliverables, setTimelyDeliverables, nodes
 					let elementsToBeRemoved = countRefNodes.current.filter((node) => {return node.id === id});
 					setNodes((updatedNodes) => removeElements(elementsToBeRemoved, updatedNodes));
 				},
+				handleSwitchPopup: (val) => setHasOpenedPopup(val),
 			},
 			style: {
 				border: '1.5px solid #4d84c0',
@@ -142,7 +150,29 @@ const WorkflowTemplateChart = ({timelyDeliverables, setTimelyDeliverables, nodes
 		setNodes((lineNodes) => addEdge({...params, ...CHART_CONFIGS.lineNodeParams}, lineNodes));
 	}
 
-	const classes = useStyles();
+	// const dagreGraph = new dagre.graphlib.Graph();
+	// dagreGraph.setDefaultEdgeLabel(() => ({}));
+
+	// const layoutedElements = getLayoutedElements(nodes);
+	// const getLayoutedElements = (elements, direction = 'TB') => {
+	// 	const isHorizontal = direction === 'LR';
+	// 	dagreGraph.setGraph({ rankdir: direction });
+
+	// 	elements.forEach((el) => {
+	// 		if (isNode(el)) {
+	// 			dagreGraph.setNode(el.id, { width: CHART_CONFIGS.nodeWidth, height: CHART_CONFIGS.nodeHeight });
+	// 		} else {
+	// 			dagreGraph.setEdge(el.source, el.target);
+	// 		}
+	// 	});
+	// }
+
+	// const onLayout = useCallback(
+	// 	(direction) => {
+	// 		const layoutedElements = getLayoutedElements(nodes, direction);
+	// 		setNodes(layoutedElements);
+	// 	},[nodes]
+	// );
 	// const onElementsRemove = (elementsToRemove) => setElements((els) => removeElements(elementsToRemove, els));
 
 	// change the marker sizes, written custom code, because module doesn't have ability to do this
@@ -157,22 +187,32 @@ const WorkflowTemplateChart = ({timelyDeliverables, setTimelyDeliverables, nodes
 			marker.markerHeight.baseVal.value = 30;
 			setMarkerSizesCustomized(true);
 		}
-	}, [marker]);
+	}, [marker, markerSizesCustomized]);
+
+	useEffect(() => {
+		setIsDraggable(!hasOpenedPopup);
+		setPaneMoveable(!hasOpenedPopup);
+		setZoomOnScroll(!hasOpenedPopup);
+		// eslint-disable-next-line
+	}, [hasOpenedPopup]);
 
 	return (
 		<>
 			<Card>
 				<CardHeader title="Workflow Chart" />
 				<CardContent className={classes.content}>
-					<ReactFlow 
+					<ReactFlow
 						elements={nodes}
 						onConnect={handleConnectNodes}
 						deleteKeyCode={46}
 						nodeTypes={{ [customNodeTypes.INPUT]: CustomFlowNode }}
 						arrowHeadColor='#4d84c0'
+						zoomOnScroll={zoomOnScroll}
+						nodesDraggable={isDraggable}
+						paneMoveable={paneMoveable}
+						zoomOnDoubleClick={false}
 					>
 						<MiniMap />
-						{/* <Controls /> */}
 						<Background gap={12} size={0.5} />
 						<Background gap={16} />
 					</ReactFlow>
