@@ -5,6 +5,7 @@ import sowTrackerRoutes from './sowTrackerRoutes';
 import workflowTemplateRoutes from './workflowTemplateRoutes';
 import userManagementRoutes from './userManagementRoutes';
 import recentActionRoutes from './recentActionRoutes';
+import profileEditRoute from './profileEditRoute';
 
 import formsRoutes from './formsRoutes';
 import iconsRoutes from './iconsRoutes';
@@ -16,6 +17,7 @@ export const dashboardLayoutRoutes = [
   workflowTemplateRoutes,
   userManagementRoutes,
   recentActionRoutes,
+  profileEditRoute,
 
   formsRoutes,
   iconsRoutes,

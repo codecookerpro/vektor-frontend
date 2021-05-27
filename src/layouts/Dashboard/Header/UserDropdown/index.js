@@ -32,6 +32,10 @@ function UserDropdown() {
     history.push('/auth/sign-in');
   };
 
+  const handleEditProfile = async () => {
+    history.push('/profile/edit');
+  };
+
   return (
     <React.Fragment>
       <Tooltip title="Account">
@@ -41,6 +45,7 @@ function UserDropdown() {
       </Tooltip>
       <Menu id="menu-appbar" anchorEl={anchorMenu} open={Boolean(anchorMenu)} onClose={closeMenu}>
         <MenuItem onClick={closeMenu}>Profile</MenuItem>
+        <MenuItem onClick={handleEditProfile}>Edit profile</MenuItem>
         <MenuItem onClick={handleSignOut}>Sign out</MenuItem>
       </Menu>
     </React.Fragment>

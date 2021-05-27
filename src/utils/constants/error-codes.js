@@ -21,3 +21,17 @@ export const LOCAL_SIGN_IN_ERRORS = {
     TEXT: 'Something wrong!',
   },
 };
+
+export const LOCAL_CHANGE_PASSWORD_ERRORS = {
+  VALIDATION: {
+    CODE: 102,
+    TEXT: 'Incorrect password',
+  },
+  NO_PASSWORD: {
+    CODE: 103,
+    TEXT: "Account has no password, use 'forgot password' to set a password",
+  },
+  DEFAULT: {
+    TEXT: 'Something wrong!',
+  },
+};

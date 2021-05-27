@@ -26,7 +26,6 @@ function SignIn() {
   const classes = authPageStyles();
   const dispatch = useDispatch();
   const history = useHistory();
-
   const [errorMessage, setErrorMessage] = useState('');
   const [remember, setRemember] = useState(false);
   const { control, handleSubmit, errors, reset } = useForm({
