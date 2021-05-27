@@ -36,12 +36,7 @@ const Popup = () => {
   const { popupType = '', popupText = '' } = useSelector((state) => state.popup);
 
   const handleClose = async () => {
-    await dispatch(
-      setPopup({
-        popupType: '',
-        popupText: '',
-      })
-    );
+    await dispatch(setPopup({ popupType: '', popupText: '' }));
   };
 
   return (

@@ -6,6 +6,7 @@ import * as authAPI from 'services/api-auth';
 import { logoutUser, setUserToken } from 'redux/actions/authActions';
 import { GENERIC_ERRORS } from 'utils/constants/error-codes';
 import { setPopup } from 'redux/actions/popupActions';
+import { POPUP_TYPE } from 'utils/constants/popupType';
 
 const InterceptorProvider = () => {
   const { accessToken, passwordResetToken } = useSelector((state) => state.auth);
@@ -27,12 +28,7 @@ const InterceptorProvider = () => {
                   const { message } = error;
                   messages += message + ' \n';
                 });
-                dispatch(
-                  setPopup({
-                    popupType: 'error',
-                    popupText: messages,
-                  })
-                );
+                dispatch(setPopup({ popupType: POPUP_TYPE.ERROR, popupText: messages }));
               }
               break;
             case GENERIC_ERRORS.AUTH:
