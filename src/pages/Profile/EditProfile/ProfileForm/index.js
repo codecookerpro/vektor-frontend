@@ -41,6 +41,21 @@ const schema = joi.object().keys({
   repeatNewPassword: PASSWORD_VALID,
 });
 
+const TYPES_INPUT = [
+  {
+    LABEL: 'Old password',
+    VALUE: 'oldPassword',
+  },
+  {
+    LABEL: 'New password',
+    VALUE: 'newPassword',
+  },
+  {
+    LABEL: 'Repear new password',
+    VALUE: 'repeatNewPassword',
+  },
+];
+
 const ProfileForm = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -147,90 +162,36 @@ const ProfileForm = () => {
           Set new password
         </Typography>
         <form noValidate className={classes.form}>
-          <Grid container spacing={6}>
-            <Grid item xs={12} sm={6} md={3}>
-              <Controller
-                as={<VektorTextField />}
-                fullWidth
-                name="oldPassword"
-                type={showPassword.oldPassword ? 'text' : 'password'}
-                placeholder="Old password"
-                error={errors.oldPassword?.message}
-                control={control}
-                defaultValue={''}
-                className={classes.formInput}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton
-                        aria-label="toggle password visibility"
-                        onClick={() => handleClickShowPassword('oldPassword')}
-                        onMouseDown={handleMouseDownPassword}
-                      >
-                        {showPassword.oldPassword ? <Visibility /> : <VisibilityOff />}
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
-              />
+          {TYPES_INPUT.map((input) => (
+            <Grid container spacing={6}>
+              <Grid item xs={12} sm={6} md={3}>
+                <Controller
+                  as={<VektorTextField />}
+                  fullWidth
+                  name={input.VALUE}
+                  type={showPassword[input.VALUE] ? 'text' : 'password'}
+                  placeholder={input.LABEL}
+                  error={errors[input.VALUE]?.message}
+                  control={control}
+                  defaultValue={''}
+                  className={classes.formInput}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          aria-label="toggle password visibility"
+                          onClick={() => handleClickShowPassword(input.VALUE)}
+                          onMouseDown={handleMouseDownPassword}
+                        >
+                          {showPassword[input.VALUE] ? <Visibility /> : <VisibilityOff />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </Grid>
             </Grid>
-          </Grid>
-          <Grid container spacing={6}>
-            <Grid item xs={12} sm={6} md={3}>
-              <Controller
-                as={<VektorTextField />}
-                fullWidth
-                name="newPassword"
-                type={showPassword.newPassword ? 'text' : 'password'}
-                placeholder="New password"
-                error={errors.newPassword?.message}
-                control={control}
-                defaultValue={''}
-                className={classes.formInput}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton
-                        aria-label="toggle password visibility"
-                        onClick={() => handleClickShowPassword('newPassword')}
-                        onMouseDown={handleMouseDownPassword}
-                      >
-                        {showPassword.newPassword ? <Visibility /> : <VisibilityOff />}
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            </Grid>
-          </Grid>
-          <Grid container spacing={6}>
-            <Grid item xs={12} sm={6} md={3}>
-              <Controller
-                as={<VektorTextField />}
-                fullWidth
-                name="repeatNewPassword"
-                type={showPassword.repeatNewPassword ? 'text' : 'password'}
-                placeholder="Repeat new password"
-                error={errors.repeatNewPassword?.message}
-                control={control}
-                defaultValue={''}
-                className={classes.formInput}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton
-                        aria-label="toggle password visibility"
-                        onClick={() => handleClickShowPassword('repeatNewPassword')}
-                        onMouseDown={handleMouseDownPassword}
-                      >
-                        {showPassword.repeatNewPassword ? <Visibility /> : <VisibilityOff />}
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            </Grid>
-          </Grid>
+          ))}
           <Grid container spacing={6}>
             <Grid item xs={12} sm={6} md={3}>
               <ContainedButton className={classes.buttonContainer} onClick={handleSubmit(onSubmit)}>
