@@ -6,6 +6,7 @@ import ReactFlow, {removeElements, addEdge, MiniMap, Background } from 'react-fl
 import CustomFlowNode from './CustomFlowNode';
 import * as customNodeTypes from '../../../utils/constants/reactflow/custom-node-types';
 import { CHART_CONFIGS } from '../../../utils/constants/reactflow/chart-configs';
+// to do, should be used for chart layout (horizontal, vertical)
 // import dagre from 'dagre';
 
 const useStyles = makeStyles((theme) => ({
@@ -150,6 +151,7 @@ const WorkflowTemplateChart = ({timelyDeliverables, setTimelyDeliverables, nodes
 		setNodes((lineNodes) => addEdge({...params, ...CHART_CONFIGS.lineNodeParams}, lineNodes));
 	}
 
+  // to do, the below commented code should be used for chart graph
 	// const dagreGraph = new dagre.graphlib.Graph();
 	// dagreGraph.setDefaultEdgeLabel(() => ({}));
 
@@ -199,7 +201,7 @@ const WorkflowTemplateChart = ({timelyDeliverables, setTimelyDeliverables, nodes
 	return (
 		<>
 			<Card>
-				<CardHeader title="Workflow Chart" />
+				<CardHeader title='Workflow Chart' />
 				<CardContent className={classes.content}>
 					<ReactFlow
 						elements={nodes}

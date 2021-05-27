@@ -1,9 +1,9 @@
 
-import React, { memo, useState } from "react";
+import React, { memo, useState } from 'react';
 
-import PageHeader from "parts/PageHeader";
-import WorkflowTemplateForm from "../Shared/WorkflowTemplateForm";
-import LINKS from "utils/constants/links";
+import PageHeader from 'parts/PageHeader';
+import WorkflowTemplateForm from '../Shared/WorkflowTemplateForm';
+import LINKS from 'utils/constants/links';
 import WorkflowTemplateChart from '../WorkflowTemplateChart';
 
 const NAV_LINKS = [LINKS.PROJECT_TEMPLATE, LINKS.WORKFLOW_TEMPLATES];

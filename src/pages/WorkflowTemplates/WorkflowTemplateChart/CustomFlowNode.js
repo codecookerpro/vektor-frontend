@@ -14,7 +14,7 @@ import CloseIcon from '@material-ui/icons/Close';
 const GlobalCss = withStyles({
   // @global is handled by jss-plugin-global.
   '@global': {
-    // You should target [class*="MuiButton-root"] instead if you nest themes.
+	// You should target [class*='MuiButton-root'] instead if you nest themes.
 	'.MuiInputBase-root::before, .MuiInputBase-root::after': {
 		display: 'none',
 	},
@@ -106,7 +106,7 @@ export default memo(({ data }) => {
 	};
 
 	return (
-	    <>
+		<>
 			<GlobalCss />
 			<div onDoubleClick={(e) => handlePopUpClick(e)}>
 				<Handle type='target' style={{ background: '#557fb9' }} position='top' id={('top-' + data.id)} className={classes.handle} />
@@ -134,14 +134,14 @@ export default memo(({ data }) => {
 					)}
 				</Popper>
 			</div>
-			<Dialog open={dialogOpen} onClose={handleDialogCancel} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description" >
-				<DialogTitle id="alert-dialog-title" className={classes.nodePopupTextAlign} >{"EDIT"}</DialogTitle>
+			<Dialog open={dialogOpen} onClose={handleDialogCancel} aria-labelledby='alert-dialog-title' aria-describedby='alert-dialog-description' >
+				<DialogTitle id='alert-dialog-title' className={classes.nodePopupTextAlign} >{'EDIT'}</DialogTitle>
 				<DialogContent>
 					<TextField onChange={handleNameUpdate} label={data.label} defaultValue={name} className={classes.textField} multiline={true} rows={2} classes={{root: classes.root}} autoFocus={true} />
 				</DialogContent>
 				<DialogActions>
-					<Button onClick={handleDialogCancel} color="primary"> Cancel </Button>
-					<Button onClick={handleDialogApprove} color="primary" autoFocus> Approve </Button>
+					<Button onClick={handleDialogCancel} color='primary'> Cancel </Button>
+					<Button onClick={handleDialogApprove} color='primary' autoFocus> Approve </Button>
 				</DialogActions>
 			</Dialog>
 		</>
