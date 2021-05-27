@@ -1,1 +1,1 @@
-export const INPUT = "inputNode";
+export const INPUT = 'inputNode';

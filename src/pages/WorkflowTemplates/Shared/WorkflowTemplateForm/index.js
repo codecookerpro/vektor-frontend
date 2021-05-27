@@ -10,15 +10,15 @@ import { Card, CardContent, Grid, Button, Typography } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 import { makeStyles } from '@material-ui/core/styles';
 
-import { PERMISSION_TYPE } from 'utils/constants/permissions'
-import * as workflowTemplateAPI from 'services/api-workflow-template'
+import { PERMISSION_TYPE } from 'utils/constants/permissions';
+import * as workflowTemplateAPI from 'services/api-workflow-template';
 import { addWorkflowTemplate, editWorkflowTemplate, removeWorkflowTemplate } from 'redux/actions/workflowTemplates';
 import VektorTextField from 'components/UI/TextFields/VektorTextField';
 import FilterSelect from 'components/UI/Selects/FilterSelect';
 import { STRING_INPUT_VALID, SELECT_VALID, INTEGER_VALID } from 'utils/constants/validations';
 import LINKS from 'utils/constants/links';
-import useLoading from 'utils/hooks/useLoading'
-import { isEmpty } from 'utils/helpers/utility'
+import useLoading from 'utils/hooks/useLoading';
+import { isEmpty } from 'utils/helpers/utility';
 import * as customNodeTypes from '../../../../utils/constants/reactflow/custom-node-types';
 
 const useStyles = makeStyles((theme) => ({
@@ -72,27 +72,29 @@ const WorkflowTemplateForm = ({ workflowTemplate = {}, timelyDeliverables, nodes
 
   const isDeliverablesValid = () => {
     return nodes.filter((node) => node.type === customNodeTypes.INPUT).length === Object.keys(timelyDeliverables).length;
-  }
+  };
 
   const getDeliverables = () => {
     if (!isDeliverablesValid()) {
       return false;
     }
 
-    let connectionLines = nodes.filter(node => node.type === 'smoothstep');
+    let connectionLines = nodes.filter((node) => node.type === 'smoothstep');
 
-    let deliverables = nodes.filter(node => node.type === customNodeTypes.INPUT).map(node => {
-      let currentNodeConnectionsWithChilds = connectionLines.filter(line => line.source === node.id);
-      let chartData = {...node, connectionLines: currentNodeConnectionsWithChilds};
-      
-      return {
-        name: timelyDeliverables[node.id].name,
-        chartData: chartData,
-      }
-    });
+    let deliverables = nodes
+      .filter((node) => node.type === customNodeTypes.INPUT)
+      .map((node) => {
+        let currentNodeConnectionsWithChilds = connectionLines.filter((line) => line.source === node.id);
+        let chartData = { ...node, connectionLines: currentNodeConnectionsWithChilds };
+
+        return {
+          name: timelyDeliverables[node.id].name,
+          chartData: chartData,
+        };
+      });
 
     return deliverables;
-  }
+  };
 
   const onSubmit = async (data) => {
     changeLoadingStatus(true);
@@ -155,11 +157,11 @@ const WorkflowTemplateForm = ({ workflowTemplate = {}, timelyDeliverables, nodes
     <Card className={classes.content}>
       <CardContent>
         {errorMessage && (
-          <Alert mt={2} mb={1} severity='warning' className={classes.alert}>
+          <Alert mt={2} mb={1} severity="warning" className={classes.alert}>
             {errorMessage}
           </Alert>
         )}
-        <Typography variant='h6' className={classes.name}>
+        <Typography variant="h6" className={classes.name}>
           {workflowTemplate?.name || 'New workflowTemplate'}
         </Typography>
         <form noValidate className={classes.form}>
@@ -168,9 +170,9 @@ const WorkflowTemplateForm = ({ workflowTemplate = {}, timelyDeliverables, nodes
               <Controller
                 as={<VektorTextField />}
                 fullWidth
-                name='name'
-                label='Name'
-                placeholder='Name'
+                name="name"
+                label="Name"
+                placeholder="Name"
                 error={errors.name?.message}
                 control={control}
                 defaultValue={workflowTemplate?.name || ''}
@@ -181,9 +183,9 @@ const WorkflowTemplateForm = ({ workflowTemplate = {}, timelyDeliverables, nodes
                 <Controller
                   as={<FilterSelect />}
                   fullWidth
-                  name='organization'
-                  label='Organization'
-                  placeholder='Select organization'
+                  name="organization"
+                  label="Organization"
+                  placeholder="Select organization"
                   items={organizations}
                   keys={{
                     label: 'name',
@@ -199,10 +201,10 @@ const WorkflowTemplateForm = ({ workflowTemplate = {}, timelyDeliverables, nodes
               <Controller
                 as={<VektorTextField />}
                 fullWidth
-                type='number'
-                name='differentialWeight'
-                label='Differential Weight'
-                placeholder='Number'
+                type="number"
+                name="differentialWeight"
+                label="Differential Weight"
+                placeholder="Number"
                 error={errors.differentialWeight?.message}
                 control={control}
                 defaultValue={workflowTemplate?.differentialWeight || 1}
@@ -210,11 +212,11 @@ const WorkflowTemplateForm = ({ workflowTemplate = {}, timelyDeliverables, nodes
             </Grid>
             <Grid item xs={12}>
               <div className={classes.buttonContainer}>
-                <Button variant='contained' color='primary' onClick={handleSubmit(onSubmit)}>
+                <Button variant="contained" color="primary" onClick={handleSubmit(onSubmit)}>
                   Save
                 </Button>
                 {!isEmpty(workflowTemplate) && (
-                  <Button color='primary' variant='contained' className={classes.delete} onClick={deleteHandler}>
+                  <Button color="primary" variant="contained" className={classes.delete} onClick={deleteHandler}>
                     Delete
                   </Button>
                 )}
