@@ -9,6 +9,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import * as userAPI from 'services/api-user';
 import VektorTextField from 'components/UI/TextFields/VektorTextField';
 import { PASSWORD_VALID } from 'utils/constants/validations';
+import { errorCode2Message } from 'utils/helpers/errorCode2Message';
 import useLoading from 'utils/hooks/useLoading';
 import ContainedButton from 'components/UI/Buttons/ContainedButton';
 import { setErrorPopup, setErrorPopupText } from 'redux/actions/errorsActions';
@@ -51,7 +52,7 @@ const TYPES_INPUT = [
     VALUE: 'newPassword',
   },
   {
-    LABEL: 'Repear new password',
+    LABEL: 'Repeat new password',
     VALUE: 'repeatNewPassword',
   },
 ];
@@ -62,88 +63,42 @@ const ProfileForm = () => {
   const { changeLoadingStatus } = useLoading();
 
   const [errorMessage, setErrorMessage] = useState('');
-  const [showPassword, setShowPassword] = useState({
-    oldPassword: false,
-    newPassword: false,
-    repeatNewPassword: false,
-  });
+  const [showPassword, setShowPassword] = useState({ oldPassword: false, newPassword: false, repeatNewPassword: false });
 
-  const { control, handleSubmit, errors, reset } = useForm({
-    resolver: joiResolver(schema),
-  });
+  const { control, handleSubmit, errors, reset } = useForm({ resolver: joiResolver(schema) });
 
   const onSubmit = async (data) => {
     changeLoadingStatus(true);
-    try {
-      const { oldPassword = '', newPassword = '', repeatNewPassword = '' } = data;
-      let params = {
-        password: oldPassword,
-      };
+    const { oldPassword = '', newPassword = '', repeatNewPassword = '' } = data;
 
-      if (newPassword === repeatNewPassword) {
-        params = {
-          ...params,
-          newPassword: newPassword,
-        };
-        setErrorMessage('');
-      } else {
-        setErrorMessage('Passwords do not match');
-        return;
-      }
-      await userAPI.changeUserPassword(params);
-      dispatch(setErrorPopupText('Password was changed'));
-      dispatch(setErrorPopup(true));
-      reset({
-        oldPassword: '',
-        newPassword: '',
-        repeatNewPassword: '',
-      });
-      setShowPassword({
-        oldPassword: false,
-        newPassword: false,
-        repeatNewPassword: false,
-      });
-    } catch (error) {
-      if (error.response) {
-        const { data } = error.response;
-        const { code, message } = data;
-        setErrorMessage(message);
-        if (code) {
-          let messages = '';
-          switch (code) {
-            case LOCAL_CHANGE_PASSWORD_ERRORS.VALIDATION.CODE:
-              messages = LOCAL_CHANGE_PASSWORD_ERRORS.VALIDATION.TEXT;
-              break;
-            case LOCAL_CHANGE_PASSWORD_ERRORS.NO_PASSWORD.CODE:
-              messages = LOCAL_CHANGE_PASSWORD_ERRORS.NO_PASSWORD.TEXT;
-              break;
-            default:
-              messages = LOCAL_CHANGE_PASSWORD_ERRORS.DEFAULT.TEXT;
-              break;
-          }
-          dispatch(setErrorPopupText(messages));
-          dispatch(setErrorPopup(true));
-        }
-        reset({
-          oldPassword: '',
-          newPassword: '',
-          repeatNewPassword: '',
-        });
-        setShowPassword({
-          oldPassword: false,
-          newPassword: false,
-          repeatNewPassword: false,
-        });
-      }
+    if (newPassword !== repeatNewPassword) {
+      setErrorMessage('Passwords do not match');
+      return;
     }
+
+    const params = { password: oldPassword, newPassword };
+    setErrorMessage('');
+
+    await userAPI
+      .changeUserPassword(params)
+      .then(() => {
+        // toDo: update error popup - make it a generic popup, add types (INVISIBLE (i.e. false in current implementation), ERROR, INFO) + add action that combines setText and setPopup to simplify code
+        dispatch(setErrorPopupText('Password was changed'));
+        dispatch(setErrorPopup(true));
+      })
+      .catch((err) => {
+        dispatch(setErrorPopupText(errorCode2Message(err?.response?.data?.code, LOCAL_CHANGE_PASSWORD_ERRORS)));
+        dispatch(setErrorPopup(true));
+      });
+
+    reset({ oldPassword: '', newPassword: '', repeatNewPassword: '' });
+    setShowPassword({ oldPassword: false, newPassword: false, repeatNewPassword: false });
+
     changeLoadingStatus(false);
   };
 
   const handleClickShowPassword = (type) => {
-    setShowPassword({
-      ...showPassword,
-      [type]: !showPassword[type],
-    });
+    setShowPassword({ ...showPassword, [type]: !showPassword[type] });
   };
 
   const handleMouseDownPassword = (event) => {
