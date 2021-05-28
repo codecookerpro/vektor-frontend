@@ -1,7 +1,8 @@
 import * as TYPES from 'redux/types';
+import { POPUP_TYPE } from 'utils/constants/popupType';
 
 const initialState = {
-  popupType: '',
+  popupType: POPUP_TYPE.INACTIVE,
   popupText: '',
 };
 

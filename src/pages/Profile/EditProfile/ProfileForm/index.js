@@ -116,12 +116,13 @@ const ProfileForm = () => {
         </Typography>
         <form noValidate className={classes.form}>
           {TYPES_INPUT.map((input) => (
-            <Grid container spacing={6}>
+            <Grid container spacing={6} key={input.VALUE}>
               <Grid item xs={12} sm={6} md={3}>
                 <Controller
                   as={<VektorTextField />}
                   fullWidth
                   name={input.VALUE}
+                  id={input.VALUE}
                   type={showPassword[input.VALUE] ? 'text' : 'password'}
                   placeholder={input.LABEL}
                   error={errors[input.VALUE]?.message}

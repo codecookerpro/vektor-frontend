@@ -5,6 +5,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import { makeStyles } from '@material-ui/core/styles';
 import { setPopup } from 'redux/actions/popupActions';
 import { useDispatch, useSelector } from 'react-redux';
+import { POPUP_TYPE } from 'utils/constants/popupType';
 
 const useStyles = makeStyles((theme) => ({
   backDrop: {
@@ -33,16 +34,16 @@ const useStyles = makeStyles((theme) => ({
 const Popup = () => {
   const dispatch = useDispatch();
   const classes = useStyles();
-  const { popupType = '', popupText = '' } = useSelector((state) => state.popup);
+  const { popupType = POPUP_TYPE.INACTIVE, popupText = '' } = useSelector((state) => state.popup);
 
   const handleClose = async () => {
-    await dispatch(setPopup({ popupType: '', popupText: '' }));
+    await dispatch(setPopup({ popupType: POPUP_TYPE.INACTIVE, popupText: '' }));
   };
 
   return (
     <div>
       <Dialog
-        open={!!popupType.length}
+        open={popupType !== POPUP_TYPE.INACTIVE}
         onClose={handleClose}
         maxWidth="xs"
         fullWidth={false}
