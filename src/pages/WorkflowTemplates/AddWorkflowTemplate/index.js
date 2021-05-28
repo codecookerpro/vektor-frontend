@@ -12,7 +12,7 @@ const AddWorkflowTemplate = () => {
   const [timelyDeliverables, setTimelyDeliverables] = useState({});
   // nodes array for chart generation
   const [nodes, setNodes] = useState([]);
-  // just for test
+
   return (
     <>
       <PageHeader title={LINKS.ADD_WORKFLOW_TEMPLATE.TITLE} links={NAV_LINKS} />
