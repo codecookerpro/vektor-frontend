@@ -19,7 +19,7 @@ import { STRING_INPUT_VALID, SELECT_VALID, INTEGER_VALID } from 'utils/constants
 import LINKS from 'utils/constants/links';
 import useLoading from 'utils/hooks/useLoading';
 import { isEmpty } from 'utils/helpers/utility';
-import * as customNodeTypes from '../../../../utils/constants/reactflow/custom-node-types';
+import * as customNodeTypes from 'utils/constants/reactflow/custom-node-types';
 
 const useStyles = makeStyles((theme) => ({
   alert: {
@@ -71,7 +71,7 @@ const WorkflowTemplateForm = ({ workflowTemplate = {}, timelyDeliverables, nodes
   });
 
   const isDeliverablesValid = () => {
-    return nodes.filter((node) => node.type === customNodeTypes.INPUT).length === Object.keys(timelyDeliverables).length;
+    return nodes.filter((node) => node.type === customNodeTypes.INPUT_NODE).length === Object.keys(timelyDeliverables).length;
   };
 
   const getDeliverables = () => {
@@ -82,7 +82,7 @@ const WorkflowTemplateForm = ({ workflowTemplate = {}, timelyDeliverables, nodes
     let connectionLines = nodes.filter((node) => node.type === 'smoothstep');
 
     let deliverables = nodes
-      .filter((node) => node.type === customNodeTypes.INPUT)
+      .filter((node) => node.type === customNodeTypes.INPUT_NODE)
       .map((node) => {
         let currentNodeConnectionsWithChilds = connectionLines.filter((line) => line.source === node.id);
         let chartData = { ...node, connectionLines: currentNodeConnectionsWithChilds };
@@ -110,7 +110,7 @@ const WorkflowTemplateForm = ({ workflowTemplate = {}, timelyDeliverables, nodes
         name: data.name,
         organization: currentUser.permissionType === PERMISSION_TYPE.ADMIN ? data.organization : currentUser.organization,
         differentialWeight: data.differentialWeight,
-        deliverables: deliverables,
+        deliverables,
       };
 
       if (isEmpty(workflowTemplate)) {
@@ -178,7 +178,7 @@ const WorkflowTemplateForm = ({ workflowTemplate = {}, timelyDeliverables, nodes
                 defaultValue={workflowTemplate?.name || ''}
               />
             </Grid>
-            {currentUser.permissionType === PERMISSION_TYPE.ADMIN && (
+            {currentUser.permissions === PERMISSION_TYPE.ADMIN && (
               <Grid item xs={12} sm={6} md={4}>
                 <Controller
                   as={<FilterSelect />}

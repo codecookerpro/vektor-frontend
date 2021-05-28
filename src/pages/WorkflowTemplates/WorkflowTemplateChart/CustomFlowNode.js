@@ -108,19 +108,13 @@ export default memo(({ data }) => {
     <>
       <GlobalCss />
       <div onDoubleClick={(e) => handlePopUpClick(e)}>
-        <Handle type="target" style={{ background: '#557fb9' }} position="top" id={'top-' + data.id} className={classes.handle} />
-        <Handle type="target" style={{ background: '#557fb9' }} position="left" id={'left-' + data.id} className={classes.handle} />
+        <Handle type="target" style={{ background: '#557fb9' }} position="top" id={'top-' + data.id} />
+        <Handle type="target" style={{ background: '#557fb9' }} position="left" id={'left-' + data.id} />
         <div className={classes.nodeContent}>
-          {name ? (
-            <p className={classes.name}>{name}</p>
-          ) : (
-            <p className={classes.name}>
-              <small>Double-click to edit</small>
-            </p>
-          )}
+          <p className={classes.name}>{name || <small>Double-click to edit</small>}</p>
         </div>
-        <Handle type="source" style={{ background: '#f9037ede' }} position="bottom" id={'bottom-' + data.id} className={classes.handle} />
-        <Handle type="source" style={{ background: '#f9037ede' }} position="right" id={'right-' + data.id} className={classes.handle} />
+        <Handle type="source" style={{ background: '#f9037ede' }} position="bottom" id={'bottom-' + data.id} />
+        <Handle type="source" style={{ background: '#f9037ede' }} position="right" id={'right-' + data.id} />
         <Popper open={popperOpen} anchorEl={popperElement} className={classes.nodePopupContainer} transition>
           {({ TransitionProps }) => (
             <Fade {...TransitionProps}>

@@ -4,8 +4,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Plus } from 'react-feather';
 import ReactFlow, { removeElements, addEdge, MiniMap, Background } from 'react-flow-renderer';
 import CustomFlowNode from './CustomFlowNode';
-import * as customNodeTypes from '../../../utils/constants/reactflow/custom-node-types';
-import { CHART_CONFIGS } from '../../../utils/constants/reactflow/chart-configs';
+import * as customNodeTypes from 'utils/constants/reactflow/custom-node-types';
+import { CHART_CONFIGS } from 'utils/constants/reactflow/chart-configs';
 // to do, should be used for chart layout (horizontal, vertical)
 // import dagre from 'dagre';
 
@@ -56,7 +56,7 @@ const WorkflowTemplateChart = ({ timelyDeliverables, setTimelyDeliverables, node
   const node = (id, nodesCount) => {
     return {
       id: id,
-      type: customNodeTypes.INPUT,
+      type: customNodeTypes.INPUT_NODE,
       data: {
         id: id,
         // placeholder of node input
@@ -213,7 +213,6 @@ const WorkflowTemplateChart = ({ timelyDeliverables, setTimelyDeliverables, node
     setIsDraggable(!hasOpenedPopup);
     setPaneMoveable(!hasOpenedPopup);
     setZoomOnScroll(!hasOpenedPopup);
-    // eslint-disable-next-line
   }, [hasOpenedPopup]);
 
   return (
@@ -225,7 +224,7 @@ const WorkflowTemplateChart = ({ timelyDeliverables, setTimelyDeliverables, node
             elements={nodes}
             onConnect={handleConnectNodes}
             deleteKeyCode={46}
-            nodeTypes={{ [customNodeTypes.INPUT]: CustomFlowNode }}
+            nodeTypes={{ [customNodeTypes.INPUT_NODE]: CustomFlowNode }}
             arrowHeadColor="#4d84c0"
             zoomOnScroll={zoomOnScroll}
             nodesDraggable={isDraggable}
