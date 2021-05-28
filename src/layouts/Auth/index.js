@@ -4,7 +4,7 @@ import { CssBaseline } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 import { AUTH_BACKGROUND_IMAGE_PATH } from 'utils/constants/image-paths';
-import PopupError from 'components/UI/PopupError';
+import Popup from 'components/UI/Popup';
 
 const GlobalStyle = createGlobalStyle`
   html,
@@ -44,7 +44,7 @@ const Auth = ({ children }) => {
 
   return (
     <>
-      <PopupError />
+      <Popup />
       <CssBaseline />
       <GlobalStyle />
       <div className={classes.root}>

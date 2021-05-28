@@ -19,4 +19,8 @@ const deleteUser = async (params) => {
   return await axios.delete(`/api/users`, { params });
 };
 
-export { getUsers, createUser, updateUser, deleteUser };
+const changeUserPassword = async (params) => {
+  return await axios.post(`/api/users/change-password`, params);
+};
+
+export { getUsers, createUser, updateUser, deleteUser, changeUserPassword };

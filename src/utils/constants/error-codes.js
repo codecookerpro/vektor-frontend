@@ -9,15 +9,11 @@ export const GENERIC_ERRORS = {
 };
 
 export const LOCAL_SIGN_IN_ERRORS = {
-  VALIDATION: {
-    CODE: 102,
-    TEXT: 'Incorrect email or password',
-  },
-  NO_PASSWORD: {
-    CODE: 103,
-    TEXT: "Account has no password, use 'forgot password' to set a password",
-  },
-  DEFAULT: {
-    TEXT: 'Something wrong!',
-  },
+  102: 'Incorrect password',
+  103: "Account has no password, use 'forgot password' to set a password",
+};
+
+export const LOCAL_CHANGE_PASSWORD_ERRORS = {
+  ...LOCAL_SIGN_IN_ERRORS,
+  102: 'Incorrect Old password',
 };

@@ -7,6 +7,7 @@ import { isWidthUp } from '@material-ui/core/withWidth';
 import Header from './Header';
 import Footer from './Footer';
 import Sidebar from './Sidebar';
+import Popup from 'components/UI/Popup';
 
 const drawerWidth = 268;
 
@@ -64,6 +65,7 @@ const Dashboard = ({ children, routes, width }) => {
 
   return (
     <Root>
+      <Popup />
       <CssBaseline />
       <GlobalStyle />
       <Drawer>

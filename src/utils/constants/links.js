@@ -27,6 +27,10 @@ const LINKS = Object.freeze({
     TITLE: 'Overview',
     HREF: '/overview',
   },
+  EDIT_PROFILE: {
+    TITLE: 'Profile',
+    HREF: '/profile/edit',
+  },
   PROJECT_MANAGEMENT: {
     TITLE: 'Project Management',
     HREF: '/project-management',
