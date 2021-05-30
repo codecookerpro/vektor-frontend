@@ -27,7 +27,8 @@ const WorkflowTemplateChart = ({ timelyDeliverables, setTimelyDeliverables, node
   const [hasOpenedPopup, setHasOpenedPopup] = useState(false);
   const [markerSizesCustomized, setMarkerSizesCustomized] = useState(null);
   const [nodesConnectionsInfoParents, setNodesConnectionsInfoParents] = useState({});
-  const [nodesConnectionsInfoChilds, setNodesConnectionsInfoChilds] = useState({});
+  //setNodesConnectionsInfoChilds to setNodesConnectionsInfoChildren
+  const [nodesConnectionsInfoChilds, setNodesConnectionsInfoChildren] = useState({});
   const countRefTimelyDeliverables = useRef(timelyDeliverables);
   countRefTimelyDeliverables.current = timelyDeliverables;
   const countRefNodes = useRef(nodes);
@@ -89,14 +90,18 @@ const WorkflowTemplateChart = ({ timelyDeliverables, setTimelyDeliverables, node
     let currentSourceNodeChildNodes = nodesConnectionsInfoParents[params.source];
     // when the current node(source) have child nodes(target)
     // when node(target) is already child of the current node(source)
-    if (Array.isArray(currentSourceNodeChildNodes) && currentSourceNodeChildNodes.length && currentSourceNodeChildNodes.includes(params.target)) {
+    const targetIsSourceChild =
+      Array.isArray(currentSourceNodeChildNodes) && currentSourceNodeChildNodes.length && currentSourceNodeChildNodes.includes(params.target);
+    if (targetIsSourceChild) {
       return;
     }
 
     let currentTargetNodeChildNodes = nodesConnectionsInfoParents[params.target];
     // when the current node(target) have child nodes(target)
     // when the child node(target) is already parent of the current node(source)
-    if (Array.isArray(currentTargetNodeChildNodes) && currentTargetNodeChildNodes.length && currentTargetNodeChildNodes.includes(params.source)) {
+    const targetIsSourceParent =
+      Array.isArray(currentTargetNodeChildNodes) && currentTargetNodeChildNodes.length && currentTargetNodeChildNodes.includes(params.source);
+    if (targetIsSourceParent) {
       return;
     }
 
@@ -116,7 +121,8 @@ const WorkflowTemplateChart = ({ timelyDeliverables, setTimelyDeliverables, node
     }
 
     // when the current source have parents
-    if (Array.isArray(nodesConnectionsInfoChilds[params.source])) {
+    const sourceHasParents = Array.isArray(nodesConnectionsInfoChilds[params.source]);
+    if (sourceHasParents) {
       for (let parentId of nodesConnectionsInfoChilds[params.source]) {
         if (Array.isArray(nodesConnectionsInfoParents[parentId])) {
           if (!nodesConnectionsInfoParents[parentId].includes(params.target)) {
@@ -137,18 +143,16 @@ const WorkflowTemplateChart = ({ timelyDeliverables, setTimelyDeliverables, node
     if (Array.isArray(nodesConnectionsInfoChilds[params.target])) {
       parentNodes = [
         ...nodesConnectionsInfoChilds[params.target],
-        ...(Array.isArray(nodesConnectionsInfoChilds[params.source])
-          ? [...nodesConnectionsInfoChilds[params.source], params.source]
-          : [params.source]),
+        ...(sourceHasParents ? [...nodesConnectionsInfoChilds[params.source], params.source] : [params.source]),
       ];
       parentNodes = [...new Set(parentNodes)];
-    } else if (Array.isArray(nodesConnectionsInfoChilds[params.source])) {
+    } else if (sourceHasParents) {
       parentNodes = [...nodesConnectionsInfoChilds[params.source], params.source];
     } else {
       parentNodes = [params.source];
     }
 
-    // when the current target have childs, add current source as parent for each childs of target
+    // when the current target have children, add current source as parent for each child of target
     if (Array.isArray(nodesConnectionsInfoParents[params.target])) {
       for (let childId of nodesConnectionsInfoParents[params.target]) {
         if (Array.isArray(nodesConnectionsInfoChilds[childId])) {
@@ -161,7 +165,7 @@ const WorkflowTemplateChart = ({ timelyDeliverables, setTimelyDeliverables, node
       }
     }
 
-    setNodesConnectionsInfoChilds({
+    setNodesConnectionsInfoChildren({
       ...nodesConnectionsInfoChilds,
       [params.target]: parentNodes,
     });

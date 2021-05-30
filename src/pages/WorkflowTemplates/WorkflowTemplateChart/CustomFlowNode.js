@@ -7,6 +7,7 @@ import { Button } from '@material-ui/core';
 import NodeDialog from './NodeDialog';
 import CloseIcon from '@material-ui/icons/Close';
 import * as nodeDialogConfigs from 'utils/constants/reactflow/node-dialog-configs';
+import { CHART_CONFIGS } from 'utils/constants/reactflow/chart-configs';
 
 const useStyles = makeStyles((theme) => ({
   nodeContent: {
@@ -75,17 +76,17 @@ export default memo(({ data }) => {
     setIsDialogOpen(true);
     setDialogProps(nodeDialogConfigs.EDIT);
   };
-
+  //console.log('CHART_CONFIGS:',CHART_CONFIGS.handleColors.target);
   return (
     <>
       <div onDoubleClick={(e) => handlePopUpToggle(e)}>
-        <Handle type="target" style={{ background: '#557fb9' }} position="top" id={'top-' + data.id} />
-        <Handle type="target" style={{ background: '#557fb9' }} position="left" id={'left-' + data.id} />
+        <Handle type="target" style={{ background: CHART_CONFIGS.handleColors.target }} position="top" id={'top-' + data.id} />
+        <Handle type="target" style={{ background: CHART_CONFIGS.handleColors.target }} position="left" id={'left-' + data.id} />
         <div className={classes.nodeContent}>
           <p className={classes.name}>{name || <small>Double-click to edit</small>}</p>
         </div>
-        <Handle type="source" style={{ background: '#f9037ede' }} position="bottom" id={'bottom-' + data.id} />
-        <Handle type="source" style={{ background: '#f9037ede' }} position="right" id={'right-' + data.id} />
+        <Handle type="source" style={{ background: CHART_CONFIGS.handleColors.source }} position="bottom" id={'bottom-' + data.id} />
+        <Handle type="source" style={{ background: CHART_CONFIGS.handleColors.source }} position="right" id={'right-' + data.id} />
         <Popper open={isPopperOpen} anchorEl={popperElement} className={classes.nodePopupContainer} transition>
           {({ TransitionProps }) => (
             <Fade {...TransitionProps}>

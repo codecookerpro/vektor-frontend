@@ -89,7 +89,7 @@ const NodeDialog = ({
             <Button onClick={() => setIsDialogOpen(false)} color="primary" variant="contained" className={classes.nodePopupIgnoreButton}>
               {dialogProps && dialogProps.ignoreButton}
             </Button>
-            <Button onClick={handleDialogApprove} color="primary" variant="contained" color="primary" autoFocus>
+            <Button onClick={handleDialogApprove} color="primary" variant="contained" autoFocus>
               {dialogProps && dialogProps.proceedButton}
             </Button>
           </DialogActions>

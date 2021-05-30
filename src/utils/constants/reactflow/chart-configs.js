@@ -15,4 +15,8 @@ export const CHART_CONFIGS = {
       stroke: '#000',
     },
   },
+  handleColors: {
+    target: '#557fb9',
+    source: '#f9037ede',
+  },
 };
