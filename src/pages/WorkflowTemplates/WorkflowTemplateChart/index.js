@@ -27,8 +27,7 @@ const WorkflowTemplateChart = ({ timelyDeliverables, setTimelyDeliverables, node
   const [hasOpenedPopup, setHasOpenedPopup] = useState(false);
   const [markerSizesCustomized, setMarkerSizesCustomized] = useState(null);
   const [nodesConnectionsInfoParents, setNodesConnectionsInfoParents] = useState({});
-  //setNodesConnectionsInfoChilds to setNodesConnectionsInfoChildren
-  const [nodesConnectionsInfoChilds, setNodesConnectionsInfoChildren] = useState({});
+  const [nodesConnectionsInfoChildren, setNodesConnectionsInfoChildren] = useState({});
   const countRefTimelyDeliverables = useRef(timelyDeliverables);
   countRefTimelyDeliverables.current = timelyDeliverables;
   const countRefNodes = useRef(nodes);
@@ -121,9 +120,9 @@ const WorkflowTemplateChart = ({ timelyDeliverables, setTimelyDeliverables, node
     }
 
     // when the current source have parents
-    const sourceHasParents = Array.isArray(nodesConnectionsInfoChilds[params.source]);
+    const sourceHasParents = Array.isArray(nodesConnectionsInfoChildren[params.source]);
     if (sourceHasParents) {
-      for (let parentId of nodesConnectionsInfoChilds[params.source]) {
+      for (let parentId of nodesConnectionsInfoChildren[params.source]) {
         if (Array.isArray(nodesConnectionsInfoParents[parentId])) {
           if (!nodesConnectionsInfoParents[parentId].includes(params.target)) {
             nodesConnectionsInfoParents[parentId] = [...nodesConnectionsInfoParents[parentId], params.target];
@@ -140,14 +139,14 @@ const WorkflowTemplateChart = ({ timelyDeliverables, setTimelyDeliverables, node
     });
 
     let parentNodes = [];
-    if (Array.isArray(nodesConnectionsInfoChilds[params.target])) {
+    if (Array.isArray(nodesConnectionsInfoChildren[params.target])) {
       parentNodes = [
-        ...nodesConnectionsInfoChilds[params.target],
-        ...(sourceHasParents ? [...nodesConnectionsInfoChilds[params.source], params.source] : [params.source]),
+        ...nodesConnectionsInfoChildren[params.target],
+        ...(sourceHasParents ? [...nodesConnectionsInfoChildren[params.source], params.source] : [params.source]),
       ];
       parentNodes = [...new Set(parentNodes)];
     } else if (sourceHasParents) {
-      parentNodes = [...nodesConnectionsInfoChilds[params.source], params.source];
+      parentNodes = [...nodesConnectionsInfoChildren[params.source], params.source];
     } else {
       parentNodes = [params.source];
     }
@@ -155,18 +154,18 @@ const WorkflowTemplateChart = ({ timelyDeliverables, setTimelyDeliverables, node
     // when the current target have children, add current source as parent for each child of target
     if (Array.isArray(nodesConnectionsInfoParents[params.target])) {
       for (let childId of nodesConnectionsInfoParents[params.target]) {
-        if (Array.isArray(nodesConnectionsInfoChilds[childId])) {
-          if (!nodesConnectionsInfoChilds[childId].includes(params.source)) {
-            nodesConnectionsInfoChilds[childId] = [...nodesConnectionsInfoChilds[childId], params.source];
+        if (Array.isArray(nodesConnectionsInfoChildren[childId])) {
+          if (!nodesConnectionsInfoChildren[childId].includes(params.source)) {
+            nodesConnectionsInfoChildren[childId] = [...nodesConnectionsInfoChildren[childId], params.source];
           }
         } else {
-          nodesConnectionsInfoChilds[childId] = [params.source];
+          nodesConnectionsInfoChildren[childId] = [params.source];
         }
       }
     }
 
     setNodesConnectionsInfoChildren({
-      ...nodesConnectionsInfoChilds,
+      ...nodesConnectionsInfoChildren,
       [params.target]: parentNodes,
     });
 
