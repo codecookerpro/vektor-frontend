@@ -86,44 +86,47 @@ const WorkflowTemplateChart = ({ timelyDeliverables, setTimelyDeliverables, node
   };
 
   const handleConnectNodes = (params) => {
-    let currentSourceNodeChildNodes = nodesConnectionsInfoParents[params.source];
-    // when the current node(source) have child nodes(target)
-    // when node(target) is already child of the current node(source)
+    const currentSourceNodeChildNodes = nodesConnectionsInfoParents[params.source];
+    const currentTargetNodeChildNodes = nodesConnectionsInfoParents[params.target];
     const targetIsSourceChild =
       Array.isArray(currentSourceNodeChildNodes) && currentSourceNodeChildNodes.length && currentSourceNodeChildNodes.includes(params.target);
+    const currentTargetNodeChildFilled = Array.isArray(currentTargetNodeChildNodes);
+    const targetNodechildrenInfo = Array.isArray(nodesConnectionsInfoChildren[params.target]);
+    const sourceHasParents = Array.isArray(nodesConnectionsInfoChildren[params.source]);
+    const isNodesParents = Array.isArray(nodesConnectionsInfoParents[params.source]);
+    const targetIsSourceParent =
+      currentTargetNodeChildFilled && currentTargetNodeChildNodes.length && currentTargetNodeChildNodes.includes(params.source);
+
+    // when the current node(source) have child nodes(target)
+    // when node(target) is already child of the current node(source)
     if (targetIsSourceChild) {
       return;
     }
 
-    let currentTargetNodeChildNodes = nodesConnectionsInfoParents[params.target];
     // when the current node(target) have child nodes(target)
     // when the child node(target) is already parent of the current node(source)
-    const targetIsSourceParent =
-      Array.isArray(currentTargetNodeChildNodes) && currentTargetNodeChildNodes.length && currentTargetNodeChildNodes.includes(params.source);
     if (targetIsSourceParent) {
       return;
     }
 
     let childNodes = [];
-    if (Array.isArray(nodesConnectionsInfoParents[params.source])) {
+    if (isNodesParents) {
       childNodes = [
         ...nodesConnectionsInfoParents[params.source],
-        ...(Array.isArray(nodesConnectionsInfoParents[params.target])
-          ? [...nodesConnectionsInfoParents[params.target], params.target]
-          : [params.target]),
+        ...(currentTargetNodeChildFilled ? [...currentTargetNodeChildNodes, params.target] : [params.target]),
       ];
       childNodes = [...new Set(childNodes)];
-    } else if (Array.isArray(nodesConnectionsInfoParents[params.target])) {
-      childNodes = [...nodesConnectionsInfoParents[params.target], params.target];
+    } else if (currentTargetNodeChildFilled) {
+      childNodes = [...currentTargetNodeChildNodes, params.target];
     } else {
       childNodes = [params.target];
     }
 
     // when the current source have parents
-    const sourceHasParents = Array.isArray(nodesConnectionsInfoChildren[params.source]);
     if (sourceHasParents) {
       for (let parentId of nodesConnectionsInfoChildren[params.source]) {
-        if (Array.isArray(nodesConnectionsInfoParents[parentId])) {
+        let parentNodesConnectionInfo = Array.isArray(nodesConnectionsInfoParents[parentId]);
+        if (parentNodesConnectionInfo) {
           if (!nodesConnectionsInfoParents[parentId].includes(params.target)) {
             nodesConnectionsInfoParents[parentId] = [...nodesConnectionsInfoParents[parentId], params.target];
           }
@@ -139,7 +142,7 @@ const WorkflowTemplateChart = ({ timelyDeliverables, setTimelyDeliverables, node
     });
 
     let parentNodes = [];
-    if (Array.isArray(nodesConnectionsInfoChildren[params.target])) {
+    if (targetNodechildrenInfo) {
       parentNodes = [
         ...nodesConnectionsInfoChildren[params.target],
         ...(sourceHasParents ? [...nodesConnectionsInfoChildren[params.source], params.source] : [params.source]),
@@ -152,9 +155,10 @@ const WorkflowTemplateChart = ({ timelyDeliverables, setTimelyDeliverables, node
     }
 
     // when the current target have children, add current source as parent for each child of target
-    if (Array.isArray(nodesConnectionsInfoParents[params.target])) {
-      for (let childId of nodesConnectionsInfoParents[params.target]) {
-        if (Array.isArray(nodesConnectionsInfoChildren[childId])) {
+    if (currentTargetNodeChildFilled) {
+      for (let childId of currentTargetNodeChildNodes) {
+        let childNodesConnectionInfo = Array.isArray(nodesConnectionsInfoChildren[childId]);
+        if (childNodesConnectionInfo) {
           if (!nodesConnectionsInfoChildren[childId].includes(params.source)) {
             nodesConnectionsInfoChildren[childId] = [...nodesConnectionsInfoChildren[childId], params.source];
           }
