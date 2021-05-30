@@ -71,7 +71,7 @@ const WorkflowTemplateChart = ({ timelyDeliverables, setTimelyDeliverables, node
           });
           setNodes((updatedNodes) => removeElements(elementsToBeRemoved, updatedNodes));
         },
-        handleSwitchPopup: (val) => setHasOpenedPopup(val),
+        handleSwitchPopup: (isSet) => setHasOpenedPopup(isSet),
       },
       style: {
         border: '1.5px solid #4d84c0',
