@@ -55,12 +55,12 @@ const childRoutes = (Layout, routes, isAuthGuard) =>
   });
 
 const Routes = () => {
-  const checkDashboardRoutes = useAllowedRoutes(dashboardLayoutRoutes);
+  const allowedDashboardRoutes = useAllowedRoutes(dashboardLayoutRoutes);
   return (
     <Suspense fallback={<Loader />}>
       <Router>
         <Switch>
-          {childRoutes(DashboardLayout, checkDashboardRoutes, true)}
+          {childRoutes(DashboardLayout, allowedDashboardRoutes, true)}
           {childRoutes(AuthLayout, authLayoutRoutes, false)}
           <Redirect to={LINKS.OVERVIEW.HREF} />
           <Route

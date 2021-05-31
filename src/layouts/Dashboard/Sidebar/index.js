@@ -42,7 +42,7 @@ const SidebarSection = styled(Typography)`
 `;
 
 const Sidebar = ({ location, PaperProps = {} }) => {
-  const checkSidebarRoutes = useAllowedRoutes(routes);
+  const allowedSidebarRoutes = useAllowedRoutes(routes);
 
   const initOpenRoutes = () => {
     /* Open collapse element that matches current url */
@@ -78,7 +78,7 @@ const Sidebar = ({ location, PaperProps = {} }) => {
       <Scrollbar>
         <List disablePadding>
           <Items>
-            {checkSidebarRoutes.map((category, index) => (
+            {allowedSidebarRoutes.map((category, index) => (
               <React.Fragment key={index}>
                 {category.header && <SidebarSection>{category.header}</SidebarSection>}
 
