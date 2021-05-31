@@ -40,7 +40,7 @@ function ResetPassword() {
         newPassword: data.password,
       };
 
-      await authAPI.changePassword(params);
+      await authAPI.setPassword(params);
       history.push(LINKS.SIGN_IN.HREF);
     } catch (error) {
       if (error.response) {

@@ -16,6 +16,7 @@ import { setPopup } from 'redux/actions/popupActions';
 import { Visibility, VisibilityOff } from '@material-ui/icons';
 import { LOCAL_CHANGE_PASSWORD_ERRORS } from 'utils/constants/error-codes';
 import { POPUP_TYPE } from 'utils/constants/popupType';
+import { POPUP_TEXT } from 'utils/constants/popupText';
 
 const useStyles = makeStyles((theme) => ({
   alert: {
@@ -83,7 +84,7 @@ const ProfileForm = () => {
     await userAPI
       .changeUserPassword(params)
       .then(() => {
-        dispatch(setPopup({ popupType: POPUP_TYPE.INFO, popupText: 'Password was changed' }));
+        dispatch(setPopup({ popupType: POPUP_TYPE.INFO, popupText: POPUP_TEXT.INFO.CHANGE_PASSWORD }));
       })
       .catch((err) => {
         dispatch(setPopup({ popupType: POPUP_TYPE.ERROR, popupText: errorCode2Message(err?.response?.data?.code, LOCAL_CHANGE_PASSWORD_ERRORS) }));
