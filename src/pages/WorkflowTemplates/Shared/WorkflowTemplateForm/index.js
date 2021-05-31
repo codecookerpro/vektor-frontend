@@ -60,7 +60,7 @@ const WorkflowTemplateForm = ({ workflowTemplate = {}, timelyDeliverables, nodes
     differentialWeight: INTEGER_VALID,
   };
 
-  if (currentUser.permissionType === PERMISSION_TYPE.ADMIN) {
+  if (currentUser.permissions === PERMISSION_TYPE.ADMIN) {
     schemaForOrg.organization = SELECT_VALID;
   }
 
@@ -108,7 +108,7 @@ const WorkflowTemplateForm = ({ workflowTemplate = {}, timelyDeliverables, nodes
     try {
       let params = {
         name: data.name,
-        organization: currentUser.permissionType === PERMISSION_TYPE.ADMIN ? data.organization : currentUser.organization,
+        organization: currentUser.permissions === PERMISSION_TYPE.ADMIN ? data.organization : currentUser.organization,
         differentialWeight: data.differentialWeight,
         deliverables,
       };
