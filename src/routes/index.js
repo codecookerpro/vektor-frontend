@@ -9,13 +9,12 @@ import AuthGuard from 'utils/hocs/AuthGuard';
 import GuestGuard from 'utils/hocs/GuestGuard';
 import { dashboardLayoutRoutes, authLayoutRoutes } from 'utils/constants/routes';
 import LINKS from 'utils/constants/links';
+import useAllowedRoutes from 'utils/hooks/useAllowedRoutes';
 
 const childRoutes = (Layout, routes, isAuthGuard) =>
   routes.map(({ component: Component, children, path }, index) => {
     const Guard = isAuthGuard ? AuthGuard : GuestGuard;
-
     const output = [];
-
     if (Component) {
       output.push(
         <Route
@@ -55,23 +54,26 @@ const childRoutes = (Layout, routes, isAuthGuard) =>
     return output;
   });
 
-const Routes = () => (
-  <Suspense fallback={<Loader />}>
-    <Router>
-      <Switch>
-        {childRoutes(DashboardLayout, dashboardLayoutRoutes, true)}
-        {childRoutes(AuthLayout, authLayoutRoutes, false)}
-        <Redirect to={LINKS.OVERVIEW.HREF} />
-        <Route
-          render={() => (
-            <AuthLayout>
-              <Page404 />
-            </AuthLayout>
-          )}
-        />
-      </Switch>
-    </Router>
-  </Suspense>
-);
+const Routes = () => {
+  const allowedDashboardRoutes = useAllowedRoutes(dashboardLayoutRoutes);
+  return (
+    <Suspense fallback={<Loader />}>
+      <Router>
+        <Switch>
+          {childRoutes(DashboardLayout, allowedDashboardRoutes, true)}
+          {childRoutes(AuthLayout, authLayoutRoutes, false)}
+          <Redirect to={LINKS.OVERVIEW.HREF} />
+          <Route
+            render={() => (
+              <AuthLayout>
+                <Page404 />
+              </AuthLayout>
+            )}
+          />
+        </Switch>
+      </Router>
+    </Suspense>
+  );
+};
 
 export default memo(Routes);
