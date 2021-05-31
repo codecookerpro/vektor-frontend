@@ -91,9 +91,9 @@ const WorkflowTemplateChart = ({ timelyDeliverables, setTimelyDeliverables, node
     const targetIsSourceChild =
       Array.isArray(currentSourceNodeChildNodes) && currentSourceNodeChildNodes.length && currentSourceNodeChildNodes.includes(params.target);
     const currentTargetNodeChildFilled = Array.isArray(currentTargetNodeChildNodes);
-    const targetNodechildrenInfo = Array.isArray(nodesConnectionsInfoChildren[params.target]);
+    const targetNodeChildrenInfo = Array.isArray(nodesConnectionsInfoChildren[params.target]);
     const sourceHasParents = Array.isArray(nodesConnectionsInfoChildren[params.source]);
-    const isNodesParents = Array.isArray(nodesConnectionsInfoParents[params.source]);
+    const isNodeHasParents = Array.isArray(currentSourceNodeChildNodes);
     const targetIsSourceParent =
       currentTargetNodeChildFilled && currentTargetNodeChildNodes.length && currentTargetNodeChildNodes.includes(params.source);
 
@@ -109,29 +109,24 @@ const WorkflowTemplateChart = ({ timelyDeliverables, setTimelyDeliverables, node
       return;
     }
 
-    let childNodes = [];
-    if (isNodesParents) {
+    let childNodes = [params.target];
+    if (isNodeHasParents) {
       childNodes = [
-        ...nodesConnectionsInfoParents[params.source],
+        ...currentSourceNodeChildNodes,
         ...(currentTargetNodeChildFilled ? [...currentTargetNodeChildNodes, params.target] : [params.target]),
       ];
       childNodes = [...new Set(childNodes)];
     } else if (currentTargetNodeChildFilled) {
       childNodes = [...currentTargetNodeChildNodes, params.target];
-    } else {
-      childNodes = [params.target];
     }
 
     // when the current source have parents
     if (sourceHasParents) {
       for (let parentId of nodesConnectionsInfoChildren[params.source]) {
         let parentNodesConnectionInfo = Array.isArray(nodesConnectionsInfoParents[parentId]);
-        if (parentNodesConnectionInfo) {
-          if (!nodesConnectionsInfoParents[parentId].includes(params.target)) {
-            nodesConnectionsInfoParents[parentId] = [...nodesConnectionsInfoParents[parentId], params.target];
-          }
-        } else {
-          nodesConnectionsInfoParents[parentId] = [params.target];
+        nodesConnectionsInfoParents[parentId] = [params.target];
+        if (parentNodesConnectionInfo && !nodesConnectionsInfoParents[parentId].includes(params.target)) {
+          nodesConnectionsInfoParents[parentId] = [...nodesConnectionsInfoParents[parentId], params.target];
         }
       }
     }
@@ -141,8 +136,8 @@ const WorkflowTemplateChart = ({ timelyDeliverables, setTimelyDeliverables, node
       [params.source]: childNodes,
     });
 
-    let parentNodes = [];
-    if (targetNodechildrenInfo) {
+    let parentNodes = [params.source];
+    if (targetNodeChildrenInfo) {
       parentNodes = [
         ...nodesConnectionsInfoChildren[params.target],
         ...(sourceHasParents ? [...nodesConnectionsInfoChildren[params.source], params.source] : [params.source]),
@@ -150,20 +145,15 @@ const WorkflowTemplateChart = ({ timelyDeliverables, setTimelyDeliverables, node
       parentNodes = [...new Set(parentNodes)];
     } else if (sourceHasParents) {
       parentNodes = [...nodesConnectionsInfoChildren[params.source], params.source];
-    } else {
-      parentNodes = [params.source];
     }
 
     // when the current target have children, add current source as parent for each child of target
     if (currentTargetNodeChildFilled) {
       for (let childId of currentTargetNodeChildNodes) {
         let childNodesConnectionInfo = Array.isArray(nodesConnectionsInfoChildren[childId]);
-        if (childNodesConnectionInfo) {
-          if (!nodesConnectionsInfoChildren[childId].includes(params.source)) {
-            nodesConnectionsInfoChildren[childId] = [...nodesConnectionsInfoChildren[childId], params.source];
-          }
-        } else {
-          nodesConnectionsInfoChildren[childId] = [params.source];
+        nodesConnectionsInfoChildren[childId] = [params.source];
+        if (childNodesConnectionInfo && !nodesConnectionsInfoChildren[childId].includes(params.source)) {
+          nodesConnectionsInfoChildren[childId] = [...nodesConnectionsInfoChildren[childId], params.source];
         }
       }
     }
