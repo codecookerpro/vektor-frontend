@@ -3,5 +3,4 @@ export const POPUP_TEXT = {
     FORGOT_PASSWORD: 'Email was sent',
     CHANGE_PASSWORD: 'Password was changed',
   },
-  EMPTY: '',
 };
