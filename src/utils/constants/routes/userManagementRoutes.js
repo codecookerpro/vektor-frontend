@@ -19,6 +19,7 @@ const userManagementRoutes = Object.freeze({
   path: LINKS.USER_MANAGEMENT.HREF,
   icon: <User />,
   component: null,
+  role: LINKS.USER_MANAGEMENT.ROLE,
   children: [
     {
       path: LINKS.USERS.HREF,

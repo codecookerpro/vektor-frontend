@@ -10,6 +10,7 @@ import SidebarCategory from './SidebarCategory';
 import SidebarFooter from './SidebarFooter';
 import { sidebarRoutes as routes } from 'utils/constants/routes';
 import 'vendor/perfect-scrollbar.css';
+import useAllowedRoutes from 'utils/hooks/useAllowedRoutes';
 
 const Drawer = styled(MuiDrawer)`
   border-right: 0;
@@ -41,6 +42,8 @@ const SidebarSection = styled(Typography)`
 `;
 
 const Sidebar = ({ location, PaperProps = {} }) => {
+  const checkSidebarRoutes = useAllowedRoutes(routes);
+
   const initOpenRoutes = () => {
     /* Open collapse element that matches current url */
     const pathName = location.pathname;
@@ -51,7 +54,6 @@ const Sidebar = ({ location, PaperProps = {} }) => {
       const isActive = pathName.indexOf(route.path) === 0;
       const isOpen = route.open;
       const isHome = route.containsHome && pathName === '/';
-
       _routes = Object.assign({}, _routes, {
         [index]: isActive || isOpen || isHome,
       });
@@ -76,7 +78,7 @@ const Sidebar = ({ location, PaperProps = {} }) => {
       <Scrollbar>
         <List disablePadding>
           <Items>
-            {routes.map((category, index) => (
+            {checkSidebarRoutes.map((category, index) => (
               <React.Fragment key={index}>
                 {category.header && <SidebarSection>{category.header}</SidebarSection>}
 

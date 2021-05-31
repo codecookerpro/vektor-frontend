@@ -1,3 +1,5 @@
+import { PERMISSION_TYPE } from './permissions';
+
 const LINKS = Object.freeze({
   AUTH: {
     TITLE: 'Auth',
@@ -122,14 +124,17 @@ const LINKS = Object.freeze({
   USER_MANAGEMENT: {
     TITLE: 'User Management',
     HREF: '/user-management',
+    ROLE: [PERMISSION_TYPE.ADMIN],
   },
   USERS: {
     TITLE: 'Users',
     HREF: '/user-management/users',
+    ROLE: [PERMISSION_TYPE.ADMIN],
   },
   ADD_USER: {
     TITLE: 'New User',
     HREF: '/user-management/users/add',
+    ROLE: [PERMISSION_TYPE.ADMIN],
   },
   EDIT_USER: {
     TITLE: 'New User',
