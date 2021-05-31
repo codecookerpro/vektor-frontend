@@ -1,9 +1,10 @@
 import * as TYPES from 'redux/types';
 import { POPUP_TYPE } from 'utils/constants/popupType';
+import { EMPTY_STRING } from 'utils/constants/emptyString';
 
 const initialState = {
   popupType: POPUP_TYPE.INACTIVE,
-  popupText: '',
+  popupText: EMPTY_STRING,
 };
 
 export default function popupReducer(state = initialState, action) {

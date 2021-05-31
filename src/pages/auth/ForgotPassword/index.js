@@ -1,6 +1,6 @@
 import React, { memo, useState } from 'react';
-import { useHistory } from 'react-router-dom';
 import { useForm, Controller } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
 
 import { joiResolver } from '@hookform/resolvers/joi';
 import joi from 'joi';
@@ -12,15 +12,17 @@ import ContainedButton from 'components/UI/Buttons/ContainedButton';
 import LinkButton from 'components/UI/Buttons/LinkButton';
 import AuthWrapper, { authPageStyles } from '../Shared/AuthWrapper';
 import { EMAIL_VALID } from 'utils/constants/validations';
-import LINKS from 'utils/constants/links';
+import { setPopup } from 'redux/actions/popupActions';
+import { POPUP_TYPE } from 'utils/constants/popupType';
+import { POPUP_TEXT } from 'utils/constants/popupText';
 
 const schema = joi.object().keys({
   email: EMAIL_VALID,
 });
 
 function ForgotPassword() {
+  const dispatch = useDispatch();
   const classes = authPageStyles();
-  const history = useHistory();
 
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -33,9 +35,8 @@ function ForgotPassword() {
       const params = {
         email: data.email,
       };
-
       await authAPI.restorePassword(params);
-      history.push(LINKS.RESET_PASSWORD.HREF);
+      dispatch(setPopup({ popupType: POPUP_TYPE.INFO, popupText: POPUP_TEXT.INFO.FORGOT_PASSWORD }));
     } catch (error) {
       if (error.response) {
         const {
