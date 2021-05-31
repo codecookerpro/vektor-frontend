@@ -2,6 +2,7 @@ import React, { memo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { useForm, Controller } from 'react-hook-form';
+
 import { joiResolver } from '@hookform/resolvers/joi';
 import joi from 'joi';
 
@@ -18,6 +19,7 @@ import { STRING_INPUT_VALID, SELECT_VALID, INTEGER_VALID } from 'utils/constants
 import LINKS from 'utils/constants/links';
 import useLoading from 'utils/hooks/useLoading';
 import { isEmpty } from 'utils/helpers/utility';
+import * as customNodeTypes from 'utils/constants/reactflow/custom-node-types';
 
 const useStyles = makeStyles((theme) => ({
   alert: {
@@ -38,14 +40,16 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: 'auto',
     backgroundColor: theme.custom.palette.red,
   },
+  content: {
+    marginBottom: theme.spacing(6),
+  },
 }));
 
-const WorkflowTemplateForm = ({ workflowTemplate = {} }) => {
+const WorkflowTemplateForm = ({ workflowTemplate = {}, timelyDeliverables, nodes }) => {
   const classes = useStyles();
   const history = useHistory();
   const dispatch = useDispatch();
   const { changeLoadingStatus } = useLoading();
-
   const { results: organizations = [] } = useSelector((state) => state.organizations);
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -66,14 +70,47 @@ const WorkflowTemplateForm = ({ workflowTemplate = {} }) => {
     resolver: joiResolver(schema),
   });
 
+  const isDeliverablesValid = () => {
+    return nodes.filter((node) => node.type === customNodeTypes.INPUT_NODE).length === Object.keys(timelyDeliverables).length;
+  };
+
+  const getDeliverables = () => {
+    if (!isDeliverablesValid()) {
+      return false;
+    }
+
+    let connectionLines = nodes.filter((node) => node.type === 'smoothstep');
+
+    let deliverables = nodes
+      .filter((node) => node.type === customNodeTypes.INPUT_NODE)
+      .map((node) => {
+        let currentNodeConnectionsWithChilds = connectionLines.filter((line) => line.source === node.id);
+        let chartData = { ...node, connectionLines: currentNodeConnectionsWithChilds };
+
+        return {
+          name: timelyDeliverables[node.id].name,
+          chartData: chartData,
+        };
+      });
+
+    return deliverables;
+  };
+
   const onSubmit = async (data) => {
     changeLoadingStatus(true);
+    let deliverables = getDeliverables();
+    if (!deliverables) {
+      setErrorMessage('Deliverables are not valid.');
+      changeLoadingStatus(false);
+      return;
+    }
+
     try {
       let params = {
         name: data.name,
         organization: currentUser.permissionType === PERMISSION_TYPE.ADMIN ? data.organization : currentUser.organization,
         differentialWeight: data.differentialWeight,
-        deliverables: [],
+        deliverables,
       };
 
       if (isEmpty(workflowTemplate)) {
@@ -117,7 +154,7 @@ const WorkflowTemplateForm = ({ workflowTemplate = {} }) => {
   };
 
   return (
-    <Card>
+    <Card className={classes.content}>
       <CardContent>
         {errorMessage && (
           <Alert mt={2} mb={1} severity="warning" className={classes.alert}>
@@ -141,7 +178,7 @@ const WorkflowTemplateForm = ({ workflowTemplate = {} }) => {
                 defaultValue={workflowTemplate?.name || ''}
               />
             </Grid>
-            {currentUser.permissionType === PERMISSION_TYPE.ADMIN && (
+            {currentUser.permissions === PERMISSION_TYPE.ADMIN && (
               <Grid item xs={12} sm={6} md={4}>
                 <Controller
                   as={<FilterSelect />}
