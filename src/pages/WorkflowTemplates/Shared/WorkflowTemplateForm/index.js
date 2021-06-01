@@ -84,9 +84,9 @@ const WorkflowTemplateForm = ({ workflowTemplate = {}, timelyDeliverables, nodes
     let deliverables = nodes
       .filter((node) => node.type === customNodeTypes.INPUT_NODE)
       .map((node) => {
-        let currentNodeConnectionsWithChildren = connectionLines.filter((line) => line.source === node.id);
-        let predecessors = nodesConnectionsInfoChildren[node.id];
-        let chartData = { ...node, connectionLines: currentNodeConnectionsWithChildren };
+        const currentNodeConnectionsWithChildren = connectionLines.filter((line) => line.source === node.id);
+        const predecessors = nodesConnectionsInfoChildren[node.id];
+        const chartData = { ...node, connectionLines: currentNodeConnectionsWithChildren };
 
         return {
           name: timelyDeliverables[node.id].name,

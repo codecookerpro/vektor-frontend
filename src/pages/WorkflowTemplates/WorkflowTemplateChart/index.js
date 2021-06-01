@@ -62,8 +62,8 @@ const WorkflowTemplateChart = ({
     };
   };
   const node = (nodesCount) => {
-    let currentTimestamp = new Date().getTime();
-    let objectId = ObjectID(currentTimestamp).toHexString();
+    const currentTimestamp = new Date().getTime();
+    const objectId = ObjectID(currentTimestamp).toHexString();
     return {
       id: objectId,
       type: customNodeTypes.INPUT_NODE,
@@ -76,7 +76,7 @@ const WorkflowTemplateChart = ({
         },
         handleDeleteNode: (id, e) => {
           e.preventDefault();
-          let elementsToBeRemoved = countRefNodes.current.filter((node) => node.id === id);
+          const elementsToBeRemoved = countRefNodes.current.filter((node) => node.id === id);
           setNodes((updatedNodes) => removeElements(elementsToBeRemoved, updatedNodes));
         },
         handleSwitchPopup: (isSet) => setHasOpenedPopup(isSet),
