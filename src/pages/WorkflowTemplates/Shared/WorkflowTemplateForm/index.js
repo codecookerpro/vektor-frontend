@@ -45,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const WorkflowTemplateForm = ({ workflowTemplate = {}, timelyDeliverables, nodes }) => {
+const WorkflowTemplateForm = ({ workflowTemplate = {}, timelyDeliverables, nodes, nodesConnectionsInfoChildren }) => {
   const classes = useStyles();
   const history = useHistory();
   const dispatch = useDispatch();
@@ -70,12 +70,12 @@ const WorkflowTemplateForm = ({ workflowTemplate = {}, timelyDeliverables, nodes
     resolver: joiResolver(schema),
   });
 
-  const isDeliverablesValid = () => {
+  const areDeliverablesValid = () => {
     return nodes.filter((node) => node.type === customNodeTypes.INPUT_NODE).length === Object.keys(timelyDeliverables).length;
   };
 
   const getDeliverables = () => {
-    if (!isDeliverablesValid()) {
+    if (!areDeliverablesValid()) {
       return false;
     }
 
@@ -84,12 +84,14 @@ const WorkflowTemplateForm = ({ workflowTemplate = {}, timelyDeliverables, nodes
     let deliverables = nodes
       .filter((node) => node.type === customNodeTypes.INPUT_NODE)
       .map((node) => {
-        let currentNodeConnectionsWithChilds = connectionLines.filter((line) => line.source === node.id);
-        let chartData = { ...node, connectionLines: currentNodeConnectionsWithChilds };
+        let currentNodeConnectionsWithChildren = connectionLines.filter((line) => line.source === node.id);
+        let predecessors = nodesConnectionsInfoChildren[node.id];
+        let chartData = { ...node, connectionLines: currentNodeConnectionsWithChildren };
 
         return {
           name: timelyDeliverables[node.id].name,
-          chartData: chartData,
+          predecessors,
+          chartData,
         };
       });
 

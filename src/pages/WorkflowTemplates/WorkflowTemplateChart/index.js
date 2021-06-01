@@ -6,6 +6,7 @@ import ReactFlow, { removeElements, addEdge, MiniMap, Background } from 'react-f
 import CustomFlowNode from './CustomFlowNode';
 import * as customNodeTypes from 'utils/constants/reactflow/custom-node-types';
 import { CHART_CONFIGS } from 'utils/constants/reactflow/chart-configs';
+import ObjectID from 'bson-objectid';
 // to do, should be used for chart layout (horizontal, vertical)
 // import dagre from 'dagre';
 
@@ -19,15 +20,22 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const WorkflowTemplateChart = ({ timelyDeliverables, setTimelyDeliverables, nodes, setNodes }) => {
+const WorkflowTemplateChart = ({
+  timelyDeliverables,
+  setTimelyDeliverables,
+  nodes,
+  setNodes,
+  nodesConnectionsInfoParents,
+  setNodesConnectionsInfoParents,
+  nodesConnectionsInfoChildren,
+  setNodesConnectionsInfoChildren,
+}) => {
   const classes = useStyles();
   const [zoomOnScroll, setZoomOnScroll] = useState(true);
   const [isDraggable, setIsDraggable] = useState(true);
   const [paneMoveable, setPaneMoveable] = useState(true);
   const [hasOpenedPopup, setHasOpenedPopup] = useState(false);
   const [markerSizesCustomized, setMarkerSizesCustomized] = useState(null);
-  const [nodesConnectionsInfoParents, setNodesConnectionsInfoParents] = useState({});
-  const [nodesConnectionsInfoChildren, setNodesConnectionsInfoChildren] = useState({});
   const countRefTimelyDeliverables = useRef(timelyDeliverables);
   countRefTimelyDeliverables.current = timelyDeliverables;
   const countRefNodes = useRef(nodes);
@@ -53,12 +61,14 @@ const WorkflowTemplateChart = ({ timelyDeliverables, setTimelyDeliverables, node
       y: positionY,
     };
   };
-  const node = (id, nodesCount) => {
+  const node = (nodesCount) => {
+    let currentTimestamp = new Date().getTime();
+    let objectId = ObjectID(currentTimestamp).toHexString();
     return {
-      id: id,
+      id: objectId,
       type: customNodeTypes.INPUT_NODE,
       data: {
-        id: id,
+        id: objectId,
         // placeholder of node input
         label: CHART_CONFIGS.label,
         handleInputChange: (id, value) => {
@@ -66,9 +76,7 @@ const WorkflowTemplateChart = ({ timelyDeliverables, setTimelyDeliverables, node
         },
         handleDeleteNode: (id, e) => {
           e.preventDefault();
-          let elementsToBeRemoved = countRefNodes.current.filter((node) => {
-            return node.id === id;
-          });
+          let elementsToBeRemoved = countRefNodes.current.filter((node) => node.id === id);
           setNodes((updatedNodes) => removeElements(elementsToBeRemoved, updatedNodes));
         },
         handleSwitchPopup: (isSet) => setHasOpenedPopup(isSet),
@@ -234,7 +242,7 @@ const WorkflowTemplateChart = ({ timelyDeliverables, setTimelyDeliverables, node
           </ReactFlow>
           <Grid item xs={12}>
             <div className={classes.buttonContainer}>
-              <Button variant="contained" color="default" onClick={() => setNodes([...nodes, node((nodes.length + 1).toString(), nodes.length)])}>
+              <Button variant="contained" color="default" onClick={() => setNodes([...nodes, node(nodes.length)])}>
                 <Plus /> Add Deliverable
               </Button>
             </div>
