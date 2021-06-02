@@ -12,16 +12,22 @@ const AddWorkflowTemplate = () => {
   const [timelyDeliverables, setTimelyDeliverables] = useState({});
   // nodes array for chart generation
   const [nodes, setNodes] = useState([]);
+  const [nodesConnectionsInfoParents, setNodesConnectionsInfoParents] = useState({});
+  const [nodesConnectionsInfoChildren, setNodesConnectionsInfoChildren] = useState({});
 
   return (
     <>
       <PageHeader title={LINKS.ADD_WORKFLOW_TEMPLATE.TITLE} links={NAV_LINKS} />
-      <WorkflowTemplateForm timelyDeliverables={timelyDeliverables} nodes={nodes} />
+      <WorkflowTemplateForm timelyDeliverables={timelyDeliverables} nodes={nodes} nodesConnectionsInfoChildren={nodesConnectionsInfoChildren} />
       <WorkflowTemplateChart
         timelyDeliverables={timelyDeliverables}
         setTimelyDeliverables={setTimelyDeliverables}
         nodes={nodes}
         setNodes={setNodes}
+        nodesConnectionsInfoParents={nodesConnectionsInfoParents}
+        setNodesConnectionsInfoParents={setNodesConnectionsInfoParents}
+        nodesConnectionsInfoChildren={nodesConnectionsInfoChildren}
+        setNodesConnectionsInfoChildren={setNodesConnectionsInfoChildren}
       />
     </>
   );
