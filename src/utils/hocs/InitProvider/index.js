@@ -11,16 +11,17 @@ const InitProvider = () => {
   const { accessToken } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    const accessToken = localStorage.accessToken;
-    const refreshToken = localStorage.refreshToken;
+    const remembered = localStorage.accessToken && localStorage.refreshToken;
+    const accessToken = localStorage.accessToken || sessionStorage.accessToken;
+    const refreshToken = localStorage.refreshToken || sessionStorage.refreshToken;
     const currentUser = localStorage.currentUser;
 
     if (!!accessToken) {
-      dispatch(setAccessToken(accessToken));
+      dispatch(setAccessToken(accessToken, remembered));
     }
 
     if (!!refreshToken) {
-      dispatch(setRefreshToken(refreshToken));
+      dispatch(setRefreshToken(refreshToken, remembered));
     }
 
     if (!!currentUser) {
