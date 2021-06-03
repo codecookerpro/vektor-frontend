@@ -50,19 +50,21 @@ const ProjectForm = ({ project = {} }) => {
               />
             </Grid>
 
-            <Grid item xs={12} sm={6} md={3}>
-              <Controller
-                as={<FilterSelect keys={{ label: 'name', value: '_id' }} />}
-                fullWidth
-                name="organization"
-                label="Organization"
-                placeholder="Select organization"
-                items={organizations}
-                error={errors.organization?.message}
-                control={control}
-                defaultValue={project?.organization?.id || ''}
-              />
-            </Grid>
+            {isOrganizationVisible && (
+              <Grid item xs={12} sm={6} md={3}>
+                <Controller
+                  as={<FilterSelect keys={{ label: 'name', value: '_id' }} />}
+                  fullWidth
+                  name="organization"
+                  label="Organization"
+                  placeholder="Select organization"
+                  items={organizations}
+                  error={errors.organization?.message}
+                  control={control}
+                  defaultValue={project?.organization?.id || ''}
+                />
+              </Grid>
+            )}
 
             <Grid item xs={12} sm={6} md={isOrganizationVisible ? 3 : false}>
               <Controller
