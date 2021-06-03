@@ -42,18 +42,25 @@ const getProjects =
 
 const addProject = (project) => async (dispatch, getState) => {
   try {
-    const {
-      projects: { results },
-    } = getState();
+    let isCompleted = false;
+    const response = await projectAPI.createProject(project);
 
-    const newProjects = [project, ...results];
+    if (response) {
+      const {
+        projects: { results },
+      } = getState();
+      const { data } = response;
 
-    dispatch({
-      type: TYPES.FETCH_PROJECTS,
-      payload: {
-        results: newProjects,
-      },
-    });
+      dispatch({
+        type: TYPES.FETCH_PROJECTS,
+        payload: {
+          results: [data, ...results],
+        },
+      });
+      isCompleted = true;
+    }
+
+    return isCompleted;
   } catch (error) {
     console.log('[addProject] error => ', error);
   }
