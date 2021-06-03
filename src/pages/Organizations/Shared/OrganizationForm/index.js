@@ -1,5 +1,5 @@
 import React, { memo, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { useForm, Controller } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
@@ -9,17 +9,16 @@ import { Alert } from '@material-ui/lab';
 import { makeStyles } from '@material-ui/core/styles';
 
 import * as organizationAPI from 'services/api-organization';
-import { addOrganization, editOrganization, removeOrganization } from 'redux/actions/organizations';
+import { addOrganization, editOrganization, removeOrganization, setSelectedOrganization } from 'redux/actions/organizations';
 import VektorTextField from 'components/UI/TextFields/VektorTextField';
 import { STRING_INPUT_VALID } from 'utils/constants/validations';
 import LINKS from 'utils/constants/links';
 import { isEmpty } from 'utils/helpers/utility';
 import useLoading from 'utils/hooks/useLoading';
-import { Plus } from 'react-feather';
-import { checkObjectId } from 'utils/helpers/checkObjectId';
 import { setPopup } from 'redux/actions/popupActions';
 import { POPUP_TYPE } from 'utils/constants/popupType';
 import { errorCode2Message } from 'utils/helpers/errorCode2Message';
+import { LOCAL_ORGANIZATION_ERRORS } from 'utils/constants/error-codes';
 
 const useStyles = makeStyles((theme) => ({
   alert: {
@@ -58,23 +57,19 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-let departmentsValidate = joi.object().keys({
-  label: STRING_INPUT_VALID,
-  _id: STRING_INPUT_VALID,
-});
-
 const schema = joi.object().keys({
   name: STRING_INPUT_VALID,
-  departments: joi.array().items(departmentsValidate),
 });
 
-const OrganizationForm = ({ organization = {} }) => {
+const OrganizationForm = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const history = useHistory();
   const { changeLoadingStatus } = useLoading();
   const [errorMessage, setErrorMessage] = useState('');
-  const [departments, setDepartments] = useState(organization.departments || [{ label: '', _id: '' }]);
+  const { organization = {} } = useSelector((state) => {
+    return state.organizations;
+  });
   const { control, handleSubmit, errors } = useForm({
     resolver: joiResolver(schema),
   });
@@ -85,48 +80,26 @@ const OrganizationForm = ({ organization = {} }) => {
       let params = {
         name: data.name,
       };
-      let departments = data.departments;
-
       if (isEmpty(organization)) {
-        let createDepartments = departments.map(({ label }) => ({ label }));
-        params = {
-          mainId: organization._id,
-          ...params,
-          departments: createDepartments,
-        };
-        const response = await organizationAPI.createOrganization(params);
-        dispatch(addOrganization(response.data));
-      } else {
-        const response = departments.map(({ _id, label }) => {
-          let options = {
-            mainId: organization._id,
-            label,
-          };
-          if (checkObjectId(_id)) {
-            options = {
-              ...options,
-              _id,
-            };
-            return organizationAPI.updateOrganizationDepartment(options);
-          } else {
-            return organizationAPI.createOrganizationDepartment(options);
-          }
-        });
-        Promise.allSettled(response).then((results) => {
-          params = {
-            _id: organization._id,
-            ...params,
-          };
-          organizationAPI.updateOrganization(params).then((response) => {
-            dispatch(editOrganization(response.data));
+        await organizationAPI
+          .createOrganization(params)
+          .then((response) => {
+            dispatch(setSelectedOrganization(response.data));
+            dispatch(addOrganization(response.data));
+          })
+          .catch((err) => {
+            dispatch(setPopup({ popupType: POPUP_TYPE.ERROR, popupText: errorCode2Message(err?.response?.data?.code, LOCAL_ORGANIZATION_ERRORS) }));
           });
-          const rejected = results.filter((result) => result.status === 'rejected');
-          if (rejected.length > 0) {
-            dispatch(setPopup({ popupType: POPUP_TYPE.ERROR, popupText: errorCode2Message(100, []) }));
-          }
-        });
+      } else {
+        params = {
+          _id: organization._id,
+          ...params,
+        };
+        const response = await organizationAPI.updateOrganization(params);
+        dispatch(setSelectedOrganization(response.data));
+        dispatch(editOrganization(response.data));
       }
-      history.push(LINKS.ORGANIZATIONS.HREF);
+      // history.push(LINKS.ORGANIZATIONS.HREF);
     } catch (error) {
       if (error.response) {
         const {
@@ -155,11 +128,6 @@ const OrganizationForm = ({ organization = {} }) => {
     changeLoadingStatus(false);
   };
 
-  const addDepartment = () => {
-    const newDepartments = departments.concat([{ label: '', _id: '' }]);
-    setDepartments(newDepartments);
-  };
-
   return (
     <Card>
       <CardContent>
@@ -184,31 +152,6 @@ const OrganizationForm = ({ organization = {} }) => {
                 control={control}
                 defaultValue={organization?.name || ''}
               />
-            </Grid>
-            <Grid item xs={12} className={classes.departmentsBlock}>
-              <Typography color="textSecondary" className={classes.label}>
-                Departments
-              </Typography>
-              {departments.map((department, index) => (
-                <div key={index}>
-                  <Controller
-                    className={classes.departmentInput}
-                    as={<VektorTextField />}
-                    fullWidth
-                    name={`departments.${index}.label`}
-                    placeholder="Department"
-                    error={errors.departments?.[index]?.label?.message}
-                    control={control}
-                    defaultValue={department.label || ''}
-                  />
-                  <Controller defaultValue={department._id || `${index}`} control={control} name={`departments.${index}._id`} />
-                </div>
-              ))}
-              <div className={classes.departmentsBtn}>
-                <Button variant="outlined" color="primary" onClick={addDepartment}>
-                  <Plus /> Add another department
-                </Button>
-              </div>
             </Grid>
             <Grid item xs={12}>
               <div className={classes.buttonContainer}>

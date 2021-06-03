@@ -11,6 +11,11 @@ const organizationsReducer = (state = INITIAL_STATE, action) => {
         ...state,
         results: action.payload,
       };
+    case TYPES.SET_SELECTED_ORGANIZATION:
+      return {
+        ...state,
+        organization: action.payload,
+      };
     default:
       return state;
   }

@@ -83,4 +83,11 @@ const removeOrganization = (organization) => async (dispatch, getState) => {
   }
 };
 
-export { getOrganizations, addOrganization, editOrganization, removeOrganization };
+const setSelectedOrganization = (organization) => {
+  return {
+    type: TYPES.SET_SELECTED_ORGANIZATION,
+    payload: organization,
+  };
+};
+
+export { getOrganizations, addOrganization, editOrganization, removeOrganization, setSelectedOrganization };
