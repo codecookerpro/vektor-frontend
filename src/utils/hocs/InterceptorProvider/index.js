@@ -33,7 +33,7 @@ const InterceptorProvider = () => {
               break;
             case GENERIC_ERRORS.AUTH:
             case GENERIC_ERRORS.ACCESS_TOKEN_EXP:
-              const params = { refreshToken: localStorage.refreshToken };
+              const params = { refreshToken: localStorage.refreshToken || sessionStorage.refreshToken };
               const { accessToken, refreshToken, data: user } = await authAPI.refreshToken(params);
               dispatch(
                 setUserToken({
@@ -59,7 +59,7 @@ const InterceptorProvider = () => {
   useEffect(() => {
     axios.interceptors.request.use(
       (config) => {
-        const accessToken = localStorage.accessToken;
+        const accessToken = localStorage.accessToken || sessionStorage.accessToken;
         const passwordResetToken = localStorage.passwordResetToken;
         const authorization = accessToken ? accessToken : passwordResetToken ? passwordResetToken : '';
 

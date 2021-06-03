@@ -1,23 +1,35 @@
 import * as TYPES from 'redux/types';
 
 const setUserToken =
-  ({ accessToken, refreshToken, user }) =>
+  ({ accessToken, refreshToken, user, remember }) =>
   (dispatch) => {
-    dispatch(setAccessToken(accessToken));
-    dispatch(setRefreshToken(refreshToken));
+    dispatch(setAccessToken(accessToken, remember));
+    dispatch(setRefreshToken(refreshToken, remember));
     dispatch(setCurrentUser(user));
   };
 
-const setAccessToken = (accessToken) => {
-  localStorage.setItem('accessToken', accessToken);
+const setAccessToken = (accessToken, remember) => {
+  if (remember) {
+    localStorage.setItem('accessToken', accessToken);
+    sessionStorage.removeItem('accessToken');
+  } else {
+    sessionStorage.setItem('accessToken', accessToken);
+    localStorage.removeItem('accessToken');
+  }
   return {
     type: TYPES.SET_ACCESS_TOKEN,
     payload: accessToken,
   };
 };
 
-const setRefreshToken = (refreshToken) => {
-  localStorage.setItem('refreshToken', refreshToken);
+const setRefreshToken = (refreshToken, remember) => {
+  if (remember) {
+    localStorage.setItem('refreshToken', refreshToken);
+    sessionStorage.removeItem('refreshToken');
+  } else {
+    sessionStorage.setItem('refreshToken', refreshToken);
+    localStorage.removeItem('refreshToken');
+  }
   return {
     type: TYPES.SET_REFRESH_TOKEN,
     payload: refreshToken,
