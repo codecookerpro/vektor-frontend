@@ -58,17 +58,18 @@ export const useProjectFrom = () => {
 
   const onSubmit = (addNew) =>
     handleSubmit(async (data) => {
+      const { name, number, organization, assignedUsers, pm, supervisor } = data;
       const params = {
-        name: data.name,
-        number: data.number.toString(),
-        organization: data.organization,
+        name,
+        number,
+        organization,
         phases: [],
-        assignedUsers: data.assignedUsers,
-        ...(!isEmpty(data.pm) && {
-          projectManager: data.pm,
+        assignedUsers,
+        ...(!isEmpty(supervisor) && {
+          supervisor,
         }),
-        ...(!isEmpty(data.supervisor) && {
-          supervisor: data.supervisor,
+        ...(!isEmpty(pm) && {
+          projectManager: pm,
         }),
       };
 
