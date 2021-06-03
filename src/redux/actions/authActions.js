@@ -11,10 +11,10 @@ const setUserToken =
 const setAccessToken = (accessToken, remember) => {
   if (remember) {
     localStorage.setItem('accessToken', accessToken);
-    sessionStorage.setItem('accessToken', '');
+    sessionStorage.removeItem('accessToken');
   } else {
     sessionStorage.setItem('accessToken', accessToken);
-    localStorage.setItem('accessToken', '');
+    localStorage.removeItem('accessToken');
   }
   return {
     type: TYPES.SET_ACCESS_TOKEN,
@@ -25,10 +25,10 @@ const setAccessToken = (accessToken, remember) => {
 const setRefreshToken = (refreshToken, remember) => {
   if (remember) {
     localStorage.setItem('refreshToken', refreshToken);
-    sessionStorage.setItem('refreshToken', '');
+    sessionStorage.removeItem('refreshToken');
   } else {
     sessionStorage.setItem('refreshToken', refreshToken);
-    localStorage.setItem('refreshToken', '');
+    localStorage.removeItem('refreshToken');
   }
   return {
     type: TYPES.SET_REFRESH_TOKEN,
