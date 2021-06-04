@@ -24,7 +24,7 @@ function not(a, b) {
   return a.filter((value) => b.indexOf(value) === -1);
 }
 
-const UserTransfer = ({ users, onAssignedUsers }) => {
+const UserTransfer = ({ users, assignedUsers = [], onAssignedUsers }) => {
   const classes = useStyles();
   const [leftChecked, setLeftChecked] = useState([]);
   const [rightChecked, setRightChecked] = useState([]);
@@ -38,6 +38,10 @@ const UserTransfer = ({ users, onAssignedUsers }) => {
     setLeftChecked([]);
     setRightChecked([]);
   }, [users]);
+
+  useEffect(() => {
+    setRight(assignedUsers);
+  }, [assignedUsers]);
 
   useEffect(() => {
     onAssignedUsers(right);

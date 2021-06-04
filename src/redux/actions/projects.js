@@ -3,7 +3,7 @@ import * as projectAPI from 'services/api-project';
 import { isEmpty } from 'utils/helpers/utility';
 
 const getProjects =
-  ({ refresh = false, organization = '' }) =>
+  ({ refresh = false, organization = '' } = {}) =>
   async (dispatch, getState) => {
     try {
       const {

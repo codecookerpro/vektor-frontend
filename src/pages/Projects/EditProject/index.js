@@ -1,5 +1,6 @@
 import React, { memo, useState, useMemo, useEffect } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { Grid } from '@material-ui/core';
 
 import ContainedButton from 'components/UI/Buttons/ContainedButton';
@@ -20,17 +21,24 @@ const EditProject = () => {
   const { id } = useParams();
   const history = useHistory();
 
-  const [selectedOrganization, setSelectedOrganization] = useState('');
+  // const [selectedOrganization, setSelectedOrganization] = useState('');
 
-  const project = useMemo(() => results.find((item) => item.id === id), [id]);
+  const { results: projects } = useSelector(({ projects }) => projects);
 
-  useEffect(() => {
-    if (!isEmpty(project)) {
-      setSelectedOrganization(project.organization.id);
-    }
-  }, [project]);
+  const project = useMemo(() => projects.find((item) => item._id === id), [id, projects]);
 
-  const userList = useMemo(() => users?.filter((user) => user?.organization.id === selectedOrganization), [selectedOrganization]);
+  // useEffect(() => {
+  //   if (!isEmpty(project)) {
+  //     setSelectedOrganization(project.organization.id);
+  //   }
+  // }, [project]);
+
+  // useEffect(() => {
+  //   console.log(id);
+  //   console.log(project);
+  // }, [id, project]);
+
+  // const userList = useMemo(() => users?.filter((user) => user?.organization.id === selectedOrganization), [selectedOrganization]);
 
   const linkHandler = (href) => () => {
     history.push(href.replace(':id', id));
@@ -45,7 +53,12 @@ const EditProject = () => {
       />
       <Grid container spacing={6}>
         <Grid item xs={12}>
-          <ProjectForm users={userList} project={project} setSelectedOrganization={setSelectedOrganization} />
+          <ProjectForm
+            mode="EDITING"
+            // users={userList}
+            project={project}
+            // setSelectedOrganization={setSelectedOrganization}
+          />
         </Grid>
         <Grid item xs={12}>
           <StopDailyData project={project} />

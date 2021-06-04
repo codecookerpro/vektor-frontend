@@ -9,7 +9,7 @@ const NAV_LINKS = [LINKS.PROJECT_MANAGEMENT, LINKS.PROJECTS];
 const AddProject = () => (
   <>
     <PageHeader title={LINKS.ADD_PROJECT.TITLE} links={NAV_LINKS} />
-    <ProjectForm />
+    <ProjectForm mode="CREATION" />
   </>
 );
 

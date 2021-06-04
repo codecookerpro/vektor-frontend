@@ -10,11 +10,14 @@ import UserTransfer from 'parts/UserTransfer';
 import { useProjectFrom, useVisibilityBooleans } from './helpers';
 import { useStyles } from './styles';
 
-const ProjectForm = ({ project = {} }) => {
+const ProjectForm = ({ project = {}, mode }) => {
   const classes = useStyles();
-  const { errors, control, PMs, supervizors, filteresUsers, organization, handleAssignedUsers, onSubmit } = useProjectFrom();
-  const { isOrganizationVisible, isSupervizorVisible } = useVisibilityBooleans(organization);
+  const { errors, control, PMs, supervizors, filteresUsers, assignedUserList, organization, handleAssignedUsers, onSubmit, setCurrentOrganization } =
+    useProjectFrom(project, mode);
+  const { isOrganizationVisible, isSupervizorVisible } = useVisibilityBooleans(organization, mode);
   const { results: organizations } = useSelector(({ organizations }) => organizations);
+
+  console.log('allOrgs', organizations);
 
   return (
     <Card>
@@ -61,7 +64,8 @@ const ProjectForm = ({ project = {} }) => {
                   items={organizations}
                   error={errors.organization?.message}
                   control={control}
-                  defaultValue={project?.organization?.id || ''}
+                  onClick={({ target }) => setCurrentOrganization(target?.value)}
+                  defaultValue={project?.organization || ''}
                 />
               </Grid>
             )}
@@ -70,7 +74,7 @@ const ProjectForm = ({ project = {} }) => {
               <Controller
                 as={<FilterSelect keys={{ label: 'name', value: '_id' }} />}
                 fullWidth
-                name="pm"
+                name="projectManager"
                 label="PM"
                 placeholder="Select PM"
                 items={PMs}
@@ -95,7 +99,7 @@ const ProjectForm = ({ project = {} }) => {
               )}
             </Grid>
             <Grid item xs={12}>
-              <UserTransfer users={filteresUsers} onAssignedUsers={handleAssignedUsers} />
+              <UserTransfer users={filteresUsers} assignedUsers={assignedUserList} onAssignedUsers={handleAssignedUsers} />
             </Grid>
             <Grid item xs={12}>
               <div className={classes.buttonContainer}>
