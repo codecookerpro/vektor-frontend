@@ -24,7 +24,7 @@ function not(a, b) {
   return a.filter((value) => b.indexOf(value) === -1);
 }
 
-const UserTransfer = ({ users }) => {
+const UserTransfer = ({ users, onAssignedUsers }) => {
   const classes = useStyles();
   const [leftChecked, setLeftChecked] = useState([]);
   const [rightChecked, setRightChecked] = useState([]);
@@ -37,8 +37,11 @@ const UserTransfer = ({ users }) => {
     setRight([]);
     setLeftChecked([]);
     setRightChecked([]);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [users]);
+
+  useEffect(() => {
+    onAssignedUsers(right);
+  }, [right, onAssignedUsers]);
 
   const handleToggle = (value, side) => {
     const checked = side === 'left' ? leftChecked : rightChecked;

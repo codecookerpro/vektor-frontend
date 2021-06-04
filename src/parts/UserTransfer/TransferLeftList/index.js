@@ -50,14 +50,14 @@ function TransferLeftList({ items, selectedItems, chooseAll, selectItem }) {
           .map((item) => (
             <ListItem
               button
-              key={item.id}
+              key={item._id}
               role="listitem"
               onClick={handleToggle(item)}
               className={clsx({
-                [classes.selected]: selectedItems.findIndex((value) => item.id === value.id) !== -1,
+                [classes.selected]: selectedItems.findIndex((value) => item._id === value.id) !== -1,
               })}
             >
-              <ListItemText id={`transfer-list-item-${item.id}-label`} primary={item.name} />
+              <ListItemText id={`transfer-list-item-${item._id}-label`} primary={item.name} />
             </ListItem>
           ))}
       </List>

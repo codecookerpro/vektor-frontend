@@ -4,23 +4,30 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setAccessToken, setRefreshToken, setCurrentUser } from 'redux/actions/authActions';
 import { getUsers } from 'redux/actions/users';
 import { getOrganizations } from 'redux/actions/organizations';
+import { PERMISSION_TYPE } from 'utils/constants/permissions';
 
 const InitProvider = () => {
   const dispatch = useDispatch();
 
-  const { accessToken } = useSelector((state) => state.auth);
+  const { accessToken, permissions } = useSelector(({ auth }) => {
+    const { accessToken, currentUser } = auth;
+    const { permissions } = currentUser;
+
+    return { accessToken, permissions };
+  });
 
   useEffect(() => {
-    const accessToken = localStorage.accessToken;
-    const refreshToken = localStorage.refreshToken;
+    const remembered = localStorage.accessToken && localStorage.refreshToken;
+    const accessToken = localStorage.accessToken || sessionStorage.accessToken;
+    const refreshToken = localStorage.refreshToken || sessionStorage.refreshToken;
     const currentUser = localStorage.currentUser;
 
     if (!!accessToken) {
-      dispatch(setAccessToken(accessToken));
+      dispatch(setAccessToken(accessToken, remembered));
     }
 
     if (!!refreshToken) {
-      dispatch(setRefreshToken(refreshToken));
+      dispatch(setRefreshToken(refreshToken, remembered));
     }
 
     if (!!currentUser) {
@@ -31,7 +38,10 @@ const InitProvider = () => {
   useEffect(() => {
     if (accessToken) {
       dispatch(getUsers());
-      dispatch(getOrganizations());
+
+      if (permissions === PERMISSION_TYPE.ADMIN) {
+        dispatch(getOrganizations());
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [accessToken]);
