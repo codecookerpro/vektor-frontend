@@ -13,12 +13,13 @@ import VektorTextField from 'components/UI/TextFields/VektorTextField';
 import { STRING_INPUT_VALID } from 'utils/constants/validations';
 import { isEmpty } from 'utils/helpers/utility';
 import useLoading from 'utils/hooks/useLoading';
-import { Plus, Trash } from 'react-feather';
+import { Check, Plus, Trash } from 'react-feather';
 import { checkObjectId } from 'utils/helpers/checkObjectId';
 import { setPopup } from 'redux/actions/popupActions';
 import { POPUP_TYPE } from 'utils/constants/popupType';
 import { errorCode2Message } from 'utils/helpers/errorCode2Message';
 import { POPUP_TEXT } from 'utils/constants/popupText';
+import ContainedButton from '../../../../components/UI/Buttons/ContainedButton';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -47,6 +48,15 @@ const useStyles = makeStyles((theme) => ({
     borderColor: theme.custom.palette.red,
     '&hover': {
       borderColor: theme.custom.palette.red,
+    },
+  },
+  save: {
+    marginLeft: 'auto',
+    color: theme.custom.palette.lightGreen,
+    borderColor: theme.custom.palette.lightGreen,
+    marginRight: theme.spacing(2),
+    '&hover': {
+      borderColor: theme.custom.palette.lightGreen,
     },
   },
   departmentInput: {
@@ -101,44 +111,43 @@ const DepartmentForm = () => {
     resolver: joiResolver(schema),
   });
 
-  const onSubmit = async (data) => {
+  const onSubmit = (index) => async (data) => {
     changeLoadingStatus(true);
     try {
-      let params = {
-        name: data.name,
+      const { _id, label } = data.departments[index];
+      let options = {
+        mainId: organization._id,
+        label,
       };
-      const response = data.departments.map(({ _id, label }) => {
-        let options = {
-          mainId: organization._id,
-          label,
+      if (checkObjectId(_id)) {
+        options = {
+          ...options,
+          _id,
         };
-        if (checkObjectId(_id)) {
-          options = {
-            ...options,
-            _id,
-          };
-          return organizationAPI.updateOrganizationDepartment(options);
-        } else {
-          return organizationAPI.createOrganizationDepartment(options);
-        }
-      });
-      Promise.allSettled(response).then((results) => {
-        params = {
-          _id: organization._id,
-          ...params,
-        };
-        const lastResponse = results[results.length - 1].value.data;
-        dispatch(setSelectedOrganization(lastResponse));
-        dispatch(editOrganization(lastResponse));
-        const rejected = results.filter((result) => result.status === 'rejected');
-        if (rejected.length > 0) {
-          dispatch(setPopup({ popupType: POPUP_TYPE.ERROR, popupText: errorCode2Message(100, []) }));
-        } else {
-          dispatch(setPopup({ popupType: POPUP_TYPE.INFO, popupText: POPUP_TEXT.INFO.SAVE_DEPARTMENT }));
-        }
-      });
-      // }
-      // history.push(LINKS.ORGANIZATIONS.HREF);
+        await organizationAPI
+          .updateOrganizationDepartment(options)
+          .then((response) => {
+            dispatch(setPopup({ popupType: POPUP_TYPE.INFO, popupText: POPUP_TEXT.INFO.SAVE_DEPARTMENT }));
+            dispatch(editOrganization(response.data));
+            dispatch(setSelectedOrganization(response.data));
+            setDepartments(response.data.departments);
+          })
+          .catch((err) => {
+            dispatch(setPopup({ popupType: POPUP_TYPE.ERROR, popupText: errorCode2Message(100, []) }));
+          });
+      } else {
+        await organizationAPI
+          .createOrganizationDepartment(options)
+          .then((response) => {
+            dispatch(setPopup({ popupType: POPUP_TYPE.INFO, popupText: POPUP_TEXT.INFO.SAVE_DEPARTMENT }));
+            dispatch(editOrganization(response.data));
+            dispatch(setSelectedOrganization(response.data));
+            setDepartments(response.data.departments);
+          })
+          .catch((err) => {
+            dispatch(setPopup({ popupType: POPUP_TYPE.ERROR, popupText: errorCode2Message(100, []) }));
+          });
+      }
     } catch (error) {
       if (error.response) {
         const {
@@ -186,7 +195,6 @@ const DepartmentForm = () => {
     const newDepartmentsList = departments.concat([{ label: '', _id: '' }]);
     setDepartments(newDepartmentsList);
   };
-
   return (
     <Card className={classes.root}>
       <CardContent>
@@ -195,7 +203,7 @@ const DepartmentForm = () => {
             {errorMessage}
           </Alert>
         )}
-        <form noValidate className={classes.form} onSubmit={handleSubmit(onSubmit)}>
+        <form noValidate className={classes.form}>
           <Grid container spacing={6}>
             <Grid item xs={12} className={classes.departmentsBlock}>
               <Typography color="textSecondary" className={classes.label}>
@@ -209,7 +217,6 @@ const DepartmentForm = () => {
                       disabled={isEmpty(organization)}
                       as={<VektorTextField />}
                       fullWidth
-                      // id={department._id || index}
                       name={`departments.${index}.label`}
                       placeholder="Department"
                       error={errors.departments?.[index]?.label?.message}
@@ -218,12 +225,13 @@ const DepartmentForm = () => {
                     />
                     <Controller defaultValue={department._id || `${index}`} size="small" control={control} name={`departments.${index}._id`} />
                   </Grid>
-                  {/*{!isEmpty(organization) && (*/}
                   <div className={classes.deleteDepartment}>
+                    <Button variant="outlined" className={classes.save} size="small" onClick={handleSubmit(onSubmit(index))}>
+                      <Check />
+                    </Button>
                     <Button variant="outlined" className={classes.delete} size="small" onClick={() => deleteHandler(department, index)}>
                       <Trash />
                     </Button>
-                    {/*)}*/}
                   </div>
                 </div>
               ))}
@@ -231,20 +239,6 @@ const DepartmentForm = () => {
                 <Button variant="outlined" color="primary" onClick={handleSubmit(addDepartment)} disabled={isEmpty(organization)}>
                   <Plus /> Add another department
                 </Button>
-              </div>
-            </Grid>
-            <Grid item xs={12}>
-              <div className={classes.buttonContainer}>
-                {!isEmpty(organization) && (
-                  <Button variant="contained" color="primary" type="submit" disabled={isEmpty(organization)}>
-                    Save Changes
-                  </Button>
-                )}
-                {/*{!isEmpty(organization) && (*/}
-                {/*  <Button color="primary" variant="contained" className={classes.delete} onClick={deleteHandler}>*/}
-                {/*    Delete*/}
-                {/*  </Button>*/}
-                {/*)}*/}
               </div>
             </Grid>
           </Grid>
