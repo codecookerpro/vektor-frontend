@@ -7,19 +7,13 @@ import { Card, CardContent, Grid, Button, Typography } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 import { makeStyles } from '@material-ui/core/styles';
 
-import * as organizationAPI from 'services/api-organization';
-import { editOrganization, setSelectedOrganization } from 'redux/actions/organizations';
+import { editDepartment, addDepartment, deleteDepartment, setSelectedDepartments } from 'redux/actions/organizations';
 import VektorTextField from 'components/UI/TextFields/VektorTextField';
 import { STRING_INPUT_VALID } from 'utils/constants/validations';
 import { isEmpty } from 'utils/helpers/utility';
 import useLoading from 'utils/hooks/useLoading';
 import { Check, Plus, Trash } from 'react-feather';
 import { checkObjectId } from 'utils/helpers/checkObjectId';
-import { setPopup } from 'redux/actions/popupActions';
-import { POPUP_TYPE } from 'utils/constants/popupType';
-import { errorCode2Message } from 'utils/helpers/errorCode2Message';
-import { POPUP_TEXT } from 'utils/constants/popupText';
-import ContainedButton from '../../../../components/UI/Buttons/ContainedButton';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -103,9 +97,7 @@ const DepartmentForm = () => {
   const dispatch = useDispatch();
   const { changeLoadingStatus } = useLoading();
   const [errorMessage, setErrorMessage] = useState('');
-  const { organization = {} } = useSelector((state) => state.organizations);
-
-  const [departments, setDepartments] = useState(organization.departments || [{ label: '', _id: '' }]);
+  const { organization = {}, departments = [{ label: '', _id: '' }] } = useSelector((state) => state.organizations);
 
   const { control, handleSubmit, errors } = useForm({
     resolver: joiResolver(schema),
@@ -124,29 +116,9 @@ const DepartmentForm = () => {
           ...options,
           _id,
         };
-        await organizationAPI
-          .updateOrganizationDepartment(options)
-          .then((response) => {
-            dispatch(setPopup({ popupType: POPUP_TYPE.INFO, popupText: POPUP_TEXT.INFO.SAVE_DEPARTMENT }));
-            dispatch(editOrganization(response.data));
-            dispatch(setSelectedOrganization(response.data));
-            setDepartments(response.data.departments);
-          })
-          .catch((err) => {
-            dispatch(setPopup({ popupType: POPUP_TYPE.ERROR, popupText: errorCode2Message(100, []) }));
-          });
+        dispatch(editDepartment(options));
       } else {
-        await organizationAPI
-          .createOrganizationDepartment(options)
-          .then((response) => {
-            dispatch(setPopup({ popupType: POPUP_TYPE.INFO, popupText: POPUP_TEXT.INFO.SAVE_DEPARTMENT }));
-            dispatch(editOrganization(response.data));
-            dispatch(setSelectedOrganization(response.data));
-            setDepartments(response.data.departments);
-          })
-          .catch((err) => {
-            dispatch(setPopup({ popupType: POPUP_TYPE.ERROR, popupText: errorCode2Message(100, []) }));
-          });
+        dispatch(addDepartment(options));
       }
     } catch (error) {
       if (error.response) {
@@ -162,22 +134,19 @@ const DepartmentForm = () => {
   const deleteHandler = async (department, index) => {
     changeLoadingStatus(true);
     if (checkObjectId(department._id)) {
-      const response = await organizationAPI.deleteOrganizationDepartment({
+      const options = {
         _id: department._id,
         mainId: organization._id,
-      });
-      dispatch(editOrganization(response.data));
-      dispatch(setSelectedOrganization(response.data));
-      setDepartments(response.data.departments);
+      };
+      dispatch(deleteDepartment(options));
     } else {
       departments.splice(index, 1);
-      setDepartments(departments);
-      dispatch(setSelectedOrganization(organization));
+      dispatch(setSelectedDepartments(departments));
     }
     changeLoadingStatus(false);
   };
 
-  const addDepartment = async (data) => {
+  const createDepartment = async (data) => {
     let { departments = [] } = data;
     if (departments.length) {
       const { _id, label } = departments[departments.length - 1];
@@ -186,15 +155,13 @@ const DepartmentForm = () => {
         label,
       };
       if (!checkObjectId(_id)) {
-        const response = await organizationAPI.createOrganizationDepartment(options);
-        dispatch(editOrganization(response.data));
-        dispatch(setSelectedOrganization(response.data));
-        departments = response.data.departments;
+        dispatch(addDepartment(options));
       }
     }
     const newDepartmentsList = departments.concat([{ label: '', _id: '' }]);
-    setDepartments(newDepartmentsList);
+    dispatch(setSelectedDepartments(newDepartmentsList));
   };
+
   return (
     <Card className={classes.root}>
       <CardContent>
@@ -236,7 +203,7 @@ const DepartmentForm = () => {
                 </div>
               ))}
               <div className={classes.departmentsBtn}>
-                <Button variant="outlined" color="primary" onClick={handleSubmit(addDepartment)} disabled={isEmpty(organization)}>
+                <Button variant="outlined" color="primary" onClick={handleSubmit(createDepartment)} disabled={isEmpty(organization)}>
                   <Plus /> Add another department
                 </Button>
               </div>

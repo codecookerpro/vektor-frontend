@@ -6,7 +6,7 @@ import LinkButton from 'components/UI/Buttons/LinkButton';
 import VektorTableContainer from 'parts/Tables/VektorTableContainer';
 import * as TABLE_ENVIRONMENTS from 'utils/constants/table-environments';
 import LINKS from 'utils/constants/links';
-import { setSelectedOrganization } from '../../../../redux/actions/organizations';
+import { setSelectedDepartments, setSelectedOrganization } from 'redux/actions/organizations';
 
 const columns = [{ id: 'name', label: 'Name', minWidth: 130 }];
 
@@ -31,6 +31,7 @@ const OrganizationsTable = ({ selectedItems, setSelectedItems }) => {
 
   const clickHandler = (row) => {
     dispatch(setSelectedOrganization(row));
+    dispatch(setSelectedDepartments(row.departments));
   };
 
   return (

@@ -8,17 +8,12 @@ import { Card, CardContent, Grid, Button, Typography } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 import { makeStyles } from '@material-ui/core/styles';
 
-import * as organizationAPI from 'services/api-organization';
-import { addOrganization, editOrganization, removeOrganization, setSelectedOrganization } from 'redux/actions/organizations';
+import { createOrganization, removeOrganization, updateOrganization } from 'redux/actions/organizations';
 import VektorTextField from 'components/UI/TextFields/VektorTextField';
 import { STRING_INPUT_VALID } from 'utils/constants/validations';
 import LINKS from 'utils/constants/links';
 import { isEmpty } from 'utils/helpers/utility';
 import useLoading from 'utils/hooks/useLoading';
-import { setPopup } from 'redux/actions/popupActions';
-import { POPUP_TYPE } from 'utils/constants/popupType';
-import { errorCode2Message } from 'utils/helpers/errorCode2Message';
-import { LOCAL_ORGANIZATION_ERRORS } from 'utils/constants/error-codes';
 
 const useStyles = makeStyles((theme) => ({
   alert: {
@@ -81,25 +76,14 @@ const OrganizationForm = () => {
         name: data.name,
       };
       if (isEmpty(organization)) {
-        await organizationAPI
-          .createOrganization(params)
-          .then((response) => {
-            dispatch(setSelectedOrganization(response.data));
-            dispatch(addOrganization(response.data));
-          })
-          .catch((err) => {
-            dispatch(setPopup({ popupType: POPUP_TYPE.ERROR, popupText: errorCode2Message(err?.response?.data?.code, LOCAL_ORGANIZATION_ERRORS) }));
-          });
+        dispatch(createOrganization(params));
       } else {
         params = {
           _id: organization._id,
           ...params,
         };
-        const response = await organizationAPI.updateOrganization(params);
-        dispatch(setSelectedOrganization(response.data));
-        dispatch(editOrganization(response.data));
+        dispatch(updateOrganization(params));
       }
-      // history.push(LINKS.ORGANIZATIONS.HREF);
     } catch (error) {
       if (error.response) {
         const {
@@ -114,7 +98,6 @@ const OrganizationForm = () => {
   const deleteHandler = async () => {
     changeLoadingStatus(true);
     try {
-      await organizationAPI.deleteOrganization({ _id: organization._id });
       dispatch(removeOrganization(organization));
       history.push(LINKS.ORGANIZATIONS.HREF);
     } catch (error) {

@@ -7,7 +7,7 @@ import PageHeader from 'parts/PageHeader';
 import OrganizationActions from './OrganizationActions';
 import OrganizationsTable from './OrganizationsTable';
 import LINKS from 'utils/constants/links';
-import { setSelectedOrganization } from '../../../redux/actions/organizations';
+import { setSelectedDepartments, setSelectedOrganization } from 'redux/actions/organizations';
 import { useDispatch } from 'react-redux';
 
 const NAV_LINKS = [LINKS.USER_MANAGEMENT];
@@ -24,6 +24,7 @@ const OrganizationList = () => {
 
   const addHandler = useCallback(() => {
     dispatch(setSelectedOrganization({}));
+    dispatch(setSelectedDepartments([]));
     history.push(LINKS.ADD_ORGANIZATION.HREF);
   }, [history, dispatch]);
 

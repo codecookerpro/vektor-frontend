@@ -1,6 +1,11 @@
 import * as TYPES from 'redux/types';
 import * as organizationAPI from 'services/api-organization';
 import { isEmpty } from 'utils/helpers/utility';
+import { setPopup } from './popupActions';
+import { POPUP_TYPE } from 'utils/constants/popupType';
+import { POPUP_TEXT } from 'utils/constants/popupText';
+import { errorCode2Message } from 'utils/helpers/errorCode2Message';
+import { LOCAL_ORGANIZATION_ERRORS } from 'utils/constants/error-codes';
 
 const getOrganizations =
   (refresh = false) =>
@@ -68,6 +73,8 @@ const editOrganization = (organization) => async (dispatch, getState) => {
 
 const removeOrganization = (organization) => async (dispatch, getState) => {
   try {
+    await organizationAPI.deleteOrganization({ _id: organization._id });
+
     const {
       organizations: { results },
     } = getState();
@@ -83,6 +90,30 @@ const removeOrganization = (organization) => async (dispatch, getState) => {
   }
 };
 
+const createOrganization = (options) => async (dispatch) => {
+  await organizationAPI
+    .createOrganization(options)
+    .then((response) => {
+      dispatch(setSelectedOrganization(response.data));
+      dispatch(addOrganization(response.data));
+    })
+    .catch((err) => {
+      dispatch(setPopup({ popupType: POPUP_TYPE.ERROR, popupText: errorCode2Message(err?.response?.data?.code, LOCAL_ORGANIZATION_ERRORS) }));
+    });
+};
+
+const updateOrganization = (options) => async (dispatch) => {
+  await organizationAPI
+    .updateOrganization(options)
+    .then((response) => {
+      dispatch(setSelectedOrganization(response.data));
+      dispatch(editOrganization(response.data));
+    })
+    .catch((err) => {
+      dispatch(setPopup({ popupType: POPUP_TYPE.ERROR, popupText: errorCode2Message(100, []) }));
+    });
+};
+
 const setSelectedOrganization = (organization) => {
   return {
     type: TYPES.SET_SELECTED_ORGANIZATION,
@@ -90,4 +121,64 @@ const setSelectedOrganization = (organization) => {
   };
 };
 
-export { getOrganizations, addOrganization, editOrganization, removeOrganization, setSelectedOrganization };
+const setSelectedDepartments = (departments) => {
+  return {
+    type: TYPES.SET_SELECTED_DEPARTMENTS,
+    payload: departments,
+  };
+};
+
+const addDepartment = (options) => async (dispatch) => {
+  await organizationAPI
+    .createOrganizationDepartment(options)
+    .then((response) => {
+      dispatch(setPopup({ popupType: POPUP_TYPE.INFO, popupText: POPUP_TEXT.INFO.SAVE_DEPARTMENT }));
+      dispatch(editOrganization(response.data));
+      dispatch(setSelectedOrganization(response.data));
+      dispatch(setSelectedDepartments(response.data.departments));
+    })
+    .catch((err) => {
+      dispatch(setPopup({ popupType: POPUP_TYPE.ERROR, popupText: errorCode2Message(100, []) }));
+    });
+};
+
+const editDepartment = (options) => async (dispatch) => {
+  await organizationAPI
+    .updateOrganizationDepartment(options)
+    .then((response) => {
+      dispatch(setPopup({ popupType: POPUP_TYPE.INFO, popupText: POPUP_TEXT.INFO.SAVE_DEPARTMENT }));
+      dispatch(editOrganization(response.data));
+      dispatch(setSelectedOrganization(response.data));
+      dispatch(setSelectedDepartments(response.data.departments));
+    })
+    .catch((err) => {
+      dispatch(setPopup({ popupType: POPUP_TYPE.ERROR, popupText: errorCode2Message(100, []) }));
+    });
+};
+
+const deleteDepartment = (options) => async (dispatch) => {
+  await organizationAPI
+    .deleteOrganizationDepartment(options)
+    .then((response) => {
+      dispatch(editOrganization(response.data));
+      dispatch(setSelectedOrganization(response.data));
+      dispatch(setSelectedDepartments(response.data.departments));
+    })
+    .catch((err) => {
+      dispatch(setPopup({ popupType: POPUP_TYPE.ERROR, popupText: errorCode2Message(100, []) }));
+    });
+};
+
+export {
+  getOrganizations,
+  addOrganization,
+  editOrganization,
+  removeOrganization,
+  setSelectedOrganization,
+  editDepartment,
+  addDepartment,
+  deleteDepartment,
+  setSelectedDepartments,
+  updateOrganization,
+  createOrganization,
+};

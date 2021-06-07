@@ -2,6 +2,8 @@ import * as TYPES from 'redux/types';
 
 const INITIAL_STATE = Object.freeze({
   results: [],
+  organization: {},
+  departments: [],
 });
 
 const organizationsReducer = (state = INITIAL_STATE, action) => {
@@ -15,6 +17,11 @@ const organizationsReducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         organization: action.payload,
+      };
+    case TYPES.SET_SELECTED_DEPARTMENTS:
+      return {
+        ...state,
+        departments: action.payload,
       };
     default:
       return state;
