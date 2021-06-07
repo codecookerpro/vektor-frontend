@@ -37,7 +37,7 @@ function SignIn() {
       .login(data)
       .then((resp) => {
         const { accessToken, refreshToken, data: user } = resp;
-        dispatch(setUserToken({ accessToken, refreshToken, user }));
+        dispatch(setUserToken({ accessToken, refreshToken, user, remember }));
         history.push(LINKS.OVERVIEW.HREF);
       })
       .catch((err) => {
