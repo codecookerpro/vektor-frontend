@@ -52,7 +52,6 @@ const ReportsTable = () => {
     setSelectedItems(newSelectedItems);
   };
 
-  console.log(results);
   return (
     <Card>
       <CardContent>

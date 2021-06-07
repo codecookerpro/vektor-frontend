@@ -8,7 +8,8 @@ export const useVisibilityBooleans = (organization, mode) => {
 
   const isViewingMode = mode === PROJECT_MODES.VIEWING;
   const isCreationMode = mode === PROJECT_MODES.CREATION;
-  const isOrganizationVisible = isCreationMode && permissions === PERMISSION_TYPE.ADMIN;
+  const isEditingMode = mode === PROJECT_MODES.EDITING;
+  const isOrganizationVisible = (isCreationMode || isEditingMode) && permissions === PERMISSION_TYPE.ADMIN;
   const isSupervizorVisible = (isCreationMode && permissions !== PERMISSION_TYPE.SUPERVISOR && Boolean(organization)) || !isCreationMode;
 
   return { isOrganizationVisible, isSupervizorVisible, isViewingMode, isCreationMode };
