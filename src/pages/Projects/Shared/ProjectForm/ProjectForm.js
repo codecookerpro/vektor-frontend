@@ -7,23 +7,21 @@ import VektorTextField from 'components/UI/TextFields/VektorTextField';
 import FilterSelect from 'components/UI/Selects/FilterSelect';
 import UserTransfer from 'parts/UserTransfer';
 
-import { useProjectFrom, useVisibilityBooleans } from './helpers';
+import { useProjectFrom, useVisibilityBooleans, PROJECT_DEFAULT_VALUES } from './helpers';
 import { useStyles } from './styles';
 
-const ProjectForm = ({ project = {}, mode }) => {
+const ProjectForm = ({ project = PROJECT_DEFAULT_VALUES, mode }) => {
   const classes = useStyles();
   const { errors, control, PMs, supervizors, filteresUsers, assignedUserList, organization, handleAssignedUsers, onSubmit, setCurrentOrganization } =
     useProjectFrom(project, mode);
-  const { isOrganizationVisible, isSupervizorVisible } = useVisibilityBooleans(organization, mode);
+  const { isOrganizationVisible, isSupervizorVisible, isViewingMode, isCreationMode } = useVisibilityBooleans(organization, mode);
   const { results: organizations } = useSelector(({ organizations }) => organizations);
-
-  console.log('allOrgs', organizations);
 
   return (
     <Card>
       <CardContent>
         <Typography variant="h6" className={classes.name}>
-          {project?.name || 'New Project'}
+          {project.name || 'New Project'}
         </Typography>
 
         <form noValidate className={classes.form}>
@@ -37,7 +35,8 @@ const ProjectForm = ({ project = {}, mode }) => {
                 placeholder="Name"
                 error={errors.name?.message}
                 control={control}
-                defaultValue={project?.name || ''}
+                defaultValue={project.name}
+                disabled={isViewingMode}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -49,7 +48,8 @@ const ProjectForm = ({ project = {}, mode }) => {
                 placeholder="Number"
                 error={errors.number?.message}
                 control={control}
-                defaultValue={project?.number || ''}
+                defaultValue={project.number}
+                disabled={isViewingMode}
               />
             </Grid>
 
@@ -65,7 +65,8 @@ const ProjectForm = ({ project = {}, mode }) => {
                   error={errors.organization?.message}
                   control={control}
                   onClick={({ target }) => setCurrentOrganization(target?.value)}
-                  defaultValue={project?.organization || ''}
+                  defaultValue={project.organization}
+                  disabled={isViewingMode}
                 />
               </Grid>
             )}
@@ -80,7 +81,8 @@ const ProjectForm = ({ project = {}, mode }) => {
                 items={PMs}
                 error={errors.pm?.message}
                 control={control}
-                defaultValue={project?.pm || ''}
+                defaultValue={project.projectManager}
+                disabled={isViewingMode}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -94,21 +96,31 @@ const ProjectForm = ({ project = {}, mode }) => {
                   items={supervizors}
                   error={errors.supervisor?.message}
                   control={control}
-                  defaultValue={project?.supervisor || ''}
+                  defaultValue={project.supervisor}
+                  disabled={isViewingMode}
                 />
               )}
             </Grid>
             <Grid item xs={12}>
-              <UserTransfer users={filteresUsers} assignedUsers={assignedUserList} onAssignedUsers={handleAssignedUsers} />
+              <UserTransfer
+                users={filteresUsers}
+                assignedUsers={assignedUserList}
+                onAssignedUsers={handleAssignedUsers}
+                isViewingMode={isViewingMode}
+              />
             </Grid>
             <Grid item xs={12}>
               <div className={classes.buttonContainer}>
-                <Button variant="contained" color="primary" onClick={onSubmit(false)}>
-                  Save
-                </Button>
-                <Button color="primary" className={classes.addAnother} onClick={onSubmit(true)}>
-                  Save and add another
-                </Button>
+                {!isViewingMode && (
+                  <Button variant="contained" color="primary" onClick={onSubmit(false)}>
+                    Save
+                  </Button>
+                )}
+                {isCreationMode && (
+                  <Button color="primary" className={classes.addAnother} onClick={onSubmit(true)}>
+                    Save and add another
+                  </Button>
+                )}
               </div>
             </Grid>
           </Grid>

@@ -45,8 +45,7 @@ const InitProvider = () => {
         dispatch(getProjects({ organization }));
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [accessToken]);
+  }, [accessToken, organization, permissions]);
 
   return <div />;
 };

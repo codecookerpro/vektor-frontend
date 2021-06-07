@@ -5,13 +5,27 @@ const INITIAL_STATE = Object.freeze({
   organization: '',
 });
 
-const projectsReducer = (state = INITIAL_STATE, action) => {
-  switch (action.type) {
-    case TYPES.FETCH_PROJECTS:
+const projectsReducer = (state = INITIAL_STATE, { payload, type }) => {
+  switch (type) {
+    case TYPES.FETCH_PROJECTS: {
+      const { results, organization } = payload;
+
       return {
         ...state,
-        ...action.payload,
+        results,
+        organization,
       };
+    }
+    case TYPES.EDIT_PROJECT: {
+      const { _id: projectId } = payload;
+      const { results } = state;
+      const newResults = results.map((project) => (project._id === projectId ? payload : project));
+
+      return {
+        ...state,
+        results: newResults,
+      };
+    }
     default:
       return state;
   }

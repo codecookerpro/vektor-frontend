@@ -17,10 +17,15 @@ const useStyles = makeStyles((theme) => ({
   fullWidth: {
     width: '100%',
   },
+  disabledSelect: {
+    '& .MuiSelect-select.Mui-disabled': {
+      color: 'black',
+    },
+  },
 }));
 
 const FilterSelect = React.forwardRef(
-  ({ label, placeholder, items, error, fullWidth = false, keys = { label: 'LABEL', value: 'VALUE' }, className, ...rest }, ref) => {
+  ({ label, placeholder, items, error, fullWidth = false, keys = { label: 'LABEL', value: 'VALUE' }, className, value, ...rest }, ref) => {
     const classes = useStyles();
 
     return (
@@ -36,10 +41,12 @@ const FilterSelect = React.forwardRef(
         )}
         <Select
           ref={ref}
+          className={classes.disabledSelect}
           labelId="demo-simple-select-placeholder-label-label-1"
           id="demo-simple-select-placeholder-label"
           displayEmpty
           error={!!error}
+          value={value || ''}
           {...rest}
         >
           {placeholder && (
