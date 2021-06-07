@@ -7,6 +7,7 @@ import PageHeader from 'parts/PageHeader';
 import OrganizationForm from '../Shared/OrganizationForm';
 import LINKS from 'utils/constants/links';
 import { isEmpty } from 'utils/helpers/utility';
+import DepartmentForm from '../Shared/DepartmentForm';
 
 const NAV_LINKS = [LINKS.USER_MANAGEMENT, LINKS.ORGANIZATIONS];
 
@@ -28,7 +29,8 @@ const EditOrganization = () => {
         links={NAV_LINKS}
         leftElement={<ContainedButton onClick={historyHandler}>History</ContainedButton>}
       />
-      {!isEmpty(organization) && <OrganizationForm organization={organization} />}
+      {!isEmpty(organization) && <OrganizationForm />}
+      {!isEmpty(organization) && <DepartmentForm />}
     </>
   );
 };
