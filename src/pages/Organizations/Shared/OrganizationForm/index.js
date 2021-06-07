@@ -1,5 +1,5 @@
 import React, { memo, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { useForm, Controller } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
@@ -8,8 +8,7 @@ import { Card, CardContent, Grid, Button, Typography } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 import { makeStyles } from '@material-ui/core/styles';
 
-import * as organizationAPI from 'services/api-organization';
-import { addOrganization, editOrganization, removeOrganization } from 'redux/actions/organizations';
+import { createOrganization, removeOrganization, updateOrganization } from 'redux/actions/organizations';
 import VektorTextField from 'components/UI/TextFields/VektorTextField';
 import { STRING_INPUT_VALID } from 'utils/constants/validations';
 import LINKS from 'utils/constants/links';
@@ -31,9 +30,25 @@ const useStyles = makeStyles((theme) => ({
   buttonContainer: {
     display: 'flex',
   },
+  departmentsBtn: {
+    marginTop: theme.spacing(3),
+  },
   delete: {
     marginLeft: 'auto',
     backgroundColor: theme.custom.palette.red,
+  },
+  departmentInput: {
+    marginTop: theme.spacing(6),
+  },
+  departmentsBlock: {
+    marginBottom: theme.spacing(6),
+    marginTop: theme.spacing(6),
+    border: `1px solid ${theme.custom.palette.border}`,
+  },
+  label: {
+    fontSize: 12,
+    fontWeight: 'bold',
+    marginBottom: theme.spacing(2),
   },
 }));
 
@@ -41,14 +56,15 @@ const schema = joi.object().keys({
   name: STRING_INPUT_VALID,
 });
 
-const OrganizationForm = ({ organization = {} }) => {
+const OrganizationForm = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const history = useHistory();
   const { changeLoadingStatus } = useLoading();
-
   const [errorMessage, setErrorMessage] = useState('');
-
+  const { organization = {} } = useSelector((state) => {
+    return state.organizations;
+  });
   const { control, handleSubmit, errors } = useForm({
     resolver: joiResolver(schema),
   });
@@ -59,19 +75,15 @@ const OrganizationForm = ({ organization = {} }) => {
       let params = {
         name: data.name,
       };
-
       if (isEmpty(organization)) {
-        const response = await organizationAPI.createOrganization(params);
-        dispatch(addOrganization(response.data));
+        dispatch(createOrganization(params));
       } else {
         params = {
           _id: organization._id,
           ...params,
         };
-        const response = await organizationAPI.updateOrganization(params);
-        dispatch(editOrganization(response.data));
+        dispatch(updateOrganization(params));
       }
-      history.push(LINKS.ORGANIZATIONS.HREF);
     } catch (error) {
       if (error.response) {
         const {
@@ -86,7 +98,6 @@ const OrganizationForm = ({ organization = {} }) => {
   const deleteHandler = async () => {
     changeLoadingStatus(true);
     try {
-      await organizationAPI.deleteOrganization({ _id: organization._id });
       dispatch(removeOrganization(organization));
       history.push(LINKS.ORGANIZATIONS.HREF);
     } catch (error) {

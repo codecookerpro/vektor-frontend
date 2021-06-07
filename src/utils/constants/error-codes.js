@@ -17,3 +17,7 @@ export const LOCAL_CHANGE_PASSWORD_ERRORS = {
   ...LOCAL_SIGN_IN_ERRORS,
   102: 'Incorrect Old password',
 };
+
+export const LOCAL_ORGANIZATION_ERRORS = {
+  100: 'Organization already exist',
+};
