@@ -1,4 +1,4 @@
-export const CHART_CONFIGS = {
+const config = {
   label: 'Deliverable name',
   // below values units are pixels
   chartContainerHeight: 350,
@@ -8,10 +8,12 @@ export const CHART_CONFIGS = {
   defaultNodeMarginX: 15,
   // below line nodes configurations
   lineNodeParams: {
-    type: 'smoothstep',
+    type: 'custom',
     arrowHeadType: 'arrowclosed',
     style: {
       // line color
+      strokeWidth: 5,
+      pointerEvents: 'all',
       stroke: '#000',
     },
   },
@@ -20,3 +22,5 @@ export const CHART_CONFIGS = {
     source: '#f9037ede',
   },
 };
+
+export default config;
