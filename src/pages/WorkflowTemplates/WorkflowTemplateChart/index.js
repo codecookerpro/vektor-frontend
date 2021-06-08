@@ -125,7 +125,7 @@ const WorkflowTemplateChart = ({
         editable: true,
         handleInputChange,
         handleDeleteNode,
-        handleSwitchPopup: (isSet) => setHasOpenedPopup(isSet),
+        handleSwitchPopup: setHasOpenedPopup,
       },
       style: nodeStyle,
       position: position(nodeNum),
@@ -143,7 +143,7 @@ const WorkflowTemplateChart = ({
         },
       },
     };
-    setNodes(addEdge(newEdge, nodes));
+    setNodes(nodes => addEdge(newEdge, nodes));
   };
 
   const onLayout = (direction) => {
@@ -158,8 +158,22 @@ const WorkflowTemplateChart = ({
   }, [hasOpenedPopup]);
 
   useEffect(() => {
-    nodes = nodes.map(nd => ({ ...nd, data: { ...nd.data, editable } }));
-  });
+    nodes = nodes.map(node => {
+      node.data.editable = editable;
+
+      if (node.type === INPUT_NODE) {
+        node.data.handleDeleteNode = handleDeleteNode;
+        node.data.handleInputChange = handleInputChange;
+        node.data.handleSwitchPopup = setHasOpenedPopup;
+      } else {
+        node.data.removeEdge = () => {
+          setNodes((nds) => nds.filter((nd) => nd.target !== node.target || nd.source !== node.source));
+        };
+      }
+
+      return node;
+    });
+  }, [nodes]);
 
   return (
     <Card className={classes.root}>

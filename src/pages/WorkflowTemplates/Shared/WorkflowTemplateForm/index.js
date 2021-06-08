@@ -79,11 +79,12 @@ const WorkflowTemplateForm = ({ workflowTemplate = {}, nodes = [] }) => {
         const predecessors = connections
           .filter((conn) => conn.target === node.id)
           .map(conn => conn.source);
+        const edges = connections.filter((conn) => conn.target === node.id);
 
         return {
           name: node.data.label,
           predecessors,
-          chartData: node,
+          chartData: {...node, edges},
         };
       });
 
@@ -94,7 +95,7 @@ const WorkflowTemplateForm = ({ workflowTemplate = {}, nodes = [] }) => {
     changeLoadingStatus(true);
     const deliverables = getDeliverables();
 
-    if (deliverables.length == 0) {
+    if (deliverables.length === 0) {
       setErrorMessage('Deliverables are not valid.');
       changeLoadingStatus(false);
       return;
