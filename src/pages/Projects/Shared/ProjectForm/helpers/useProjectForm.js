@@ -17,7 +17,7 @@ export const useProjectFrom = (project, mode) => {
   const [filteresUsers, setFilteredUsers] = useState([]);
   const [assignedUserList, setAssignedUserList] = useState([]);
   const [PMs, setPMs] = useState([{ _id: project.projectManager, name: '---' }]);
-  const [supervizors, setSupervizors] = useState([{ _id: project.supervisor, name: '---' }]);
+  const [supervisors, setSupervisors] = useState([{ _id: project.supervisor, name: '---' }]);
 
   const dispatch = useDispatch();
   const history = useHistory();
@@ -38,12 +38,12 @@ export const useProjectFrom = (project, mode) => {
 
       const organizationUsers = users.filter((u) => u.organization === organization);
       const filteredPMs = organizationUsers.filter((u) => u.permissions === PERMISSION_TYPE.PROJECT_MANAGER);
-      const filteredSupervizors = organizationUsers.filter((u) => u.permissions === PERMISSION_TYPE.SUPERVISOR);
+      const filteredSupervisors = organizationUsers.filter((u) => u.permissions === PERMISSION_TYPE.SUPERVISOR);
 
       const pms = filteredPMs.length > 0 ? [...filteredPMs, { _id: '', name: '---' }] : [{ _id: projectManager, name: '---' }];
-      const supervizors = filteredSupervizors.length > 0 ? [...filteredSupervizors, { _id: '', name: '---' }] : [{ _id: supervisor, name: '---' }];
+      const supervisors = filteredSupervisors.length > 0 ? [...filteredSupervisors, { _id: '', name: '---' }] : [{ _id: supervisor, name: '---' }];
 
-      return { organizationUsers, pms, supervizors };
+      return { organizationUsers, pms, supervisors };
     },
     [project, users]
   );
@@ -61,13 +61,13 @@ export const useProjectFrom = (project, mode) => {
 
     const initialOrganization = permissions !== PERMISSION_TYPE.ADMIN ? organization : projectOrganization;
 
-    const { organizationUsers, pms, supervizors } = getBasicUserFiltering(initialOrganization);
+    const { organizationUsers, pms, supervisors } = getBasicUserFiltering(initialOrganization);
     const filteredUsers = organizationUsers.filter((u) => u.permissions === PERMISSION_TYPE.USER && !assignedUsers.includes(u._id));
     const assignedUserList = organizationUsers.filter((u) => assignedUsers.includes(u._id));
 
     setAssignedUserList(assignedUserList);
     setPMs(pms);
-    setSupervizors(supervizors);
+    setSupervisors(supervisors);
     setFilteredUsers(filteredUsers);
     reset({ name, number });
     setValue('projectManager', projectManager);
@@ -84,11 +84,11 @@ export const useProjectFrom = (project, mode) => {
   useEffect(() => {
     if (currentOrganization) {
       const { projectManager } = project;
-      const { organizationUsers, pms, supervizors } = getBasicUserFiltering(currentOrganization);
+      const { organizationUsers, pms, supervisors } = getBasicUserFiltering(currentOrganization);
       const filteredUsers = organizationUsers.filter((u) => u.permissions === PERMISSION_TYPE.USER);
 
       setPMs(pms);
-      setSupervizors(supervizors);
+      setSupervisors(supervisors);
       setFilteredUsers(filteredUsers);
 
       if (mode === PROJECT_MODES.CREATION) {
@@ -140,7 +140,7 @@ export const useProjectFrom = (project, mode) => {
     errors,
     control,
     PMs,
-    supervizors,
+    supervisors,
     filteresUsers,
     assignedUserList,
     organization: watchOrganization,

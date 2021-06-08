@@ -12,9 +12,9 @@ import { useStyles } from './styles';
 
 const ProjectForm = ({ project = PROJECT_DEFAULT_VALUES, mode }) => {
   const classes = useStyles();
-  const { errors, control, PMs, supervizors, filteresUsers, assignedUserList, organization, handleAssignedUsers, onSubmit, setCurrentOrganization } =
+  const { errors, control, PMs, supervisors, filteresUsers, assignedUserList, organization, handleAssignedUsers, onSubmit, setCurrentOrganization } =
     useProjectFrom(project, mode);
-  const { isOrganizationVisible, isSupervizorVisible, isViewingMode, isCreationMode } = useVisibilityBooleans(organization, mode);
+  const { isOrganizationVisible, isSupervisorVisible, isViewingMode, isCreationMode } = useVisibilityBooleans(organization, mode);
   const { results: organizations } = useSelector(({ organizations }) => organizations);
 
   return (
@@ -86,14 +86,14 @@ const ProjectForm = ({ project = PROJECT_DEFAULT_VALUES, mode }) => {
               />
             </Grid>
             <Grid item xs={12} sm={6}>
-              {isSupervizorVisible && (
+              {isSupervisorVisible && (
                 <Controller
                   as={<FilterSelect keys={{ label: 'name', value: '_id' }} />}
                   fullWidth
                   name="supervisor"
                   label="Supervisor"
                   placeholder="Select supervisor"
-                  items={supervizors}
+                  items={supervisors}
                   error={errors.supervisor?.message}
                   control={control}
                   defaultValue={project.supervisor}
