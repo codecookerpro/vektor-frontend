@@ -5,20 +5,19 @@ import { Plus } from 'react-feather';
 import ReactFlow, { removeElements, addEdge, MiniMap, Background, isNode } from 'react-flow-renderer';
 import CustomFlowNode from './CustomFlowNode';
 import CustomFlowEdge from './CustomFlowEdge';
-import * as elementTypes from 'utils/constants/reactflow/custom-node-types';
-import CHART_CONFIGS from 'utils/constants/reactflow/chart-configs';
+import { INPUT_NODE, CUSTOM_EDGE } from 'utils/constants/reactflow/custom-node-types';
+import {
+  arrowHeadColor,
+  chartContainerHeight,
+  nodeHeight,
+  nodeWidth,
+  defaultNodeMarginY,
+  defaultNodeMarginX,
+  edgeDefaultProps,
+  nodeStyle
+} from 'utils/constants/reactflow/chart-configs';
 import ObjectID from 'bson-objectid';
 import dagre from 'dagre';
-
-const { 
-  arrowHeadColor,
-  chartContainerHeight, 
-  nodeHeight, 
-  nodeWidth, 
-  defaultNodeMarginY, 
-  defaultNodeMarginX, 
-  lineNodeParams 
-} = CHART_CONFIGS;
 
 const useStyles = makeStyles(() => ({
   content: {
@@ -65,14 +64,16 @@ const getLayoutedElements = (elements, direction = 'TB') => {
   });
 };
 
-const WorkflowTemplateChart = ({ delivertables }) => {
+const WorkflowTemplateChart = ({
+  nodes = [],
+  editable = false,
+  setNodes = () => { }
+}) => {
   const classes = useStyles();
-  const [nodes, setNodes] = useState(delivertables || []);
   const [zoomOnScroll, setZoomOnScroll] = useState(true);
   const [isDraggable, setIsDraggable] = useState(true);
   const [paneMoveable, setPaneMoveable] = useState(true);
   const [hasOpenedPopup, setHasOpenedPopup] = useState(false);
-  const [arrowCustomized, setArrowCustomized] = useState(null);
 
   const position = (nodeNum) => {
     const nNumY = chartContainerHeight / (nodeHeight + defaultNodeMarginY);
@@ -92,12 +93,12 @@ const WorkflowTemplateChart = ({ delivertables }) => {
       nds.map((n) =>
         n.id === id
           ? {
-              ...n,
-              data: {
-                ...n.data,
-                label: value,
-              },
-            }
+            ...n,
+            data: {
+              ...n.data,
+              label: value,
+            },
+          }
           : n
       )
     );
@@ -118,22 +119,15 @@ const WorkflowTemplateChart = ({ delivertables }) => {
     const objectId = ObjectID(currentTimestamp).toHexString();
     return {
       id: objectId,
-      type: elementTypes.INPUT_NODE,
+      type: INPUT_NODE,
       data: {
-        id: objectId,
         label: null,
+        editable: true,
         handleInputChange,
         handleDeleteNode,
         handleSwitchPopup: (isSet) => setHasOpenedPopup(isSet),
       },
-      style: {
-        border: '1.5px solid #4d84c0',
-        borderRadius: '10px',
-        padding: '21px 0',
-        background: '#fff',
-        width: nodeWidth + 'px',
-        height: nodeHeight + 'px',
-      },
+      style: nodeStyle,
       position: position(nodeNum),
     };
   };
@@ -141,8 +135,9 @@ const WorkflowTemplateChart = ({ delivertables }) => {
   const onConnect = (conn) => {
     const newEdge = {
       ...conn,
-      ...lineNodeParams,
+      ...edgeDefaultProps,
       data: {
+        editable: true,
         removeEdge() {
           setNodes((nds) => nds.filter((nd) => nd.target !== conn.target || nd.source !== conn.source));
         },
@@ -156,29 +151,15 @@ const WorkflowTemplateChart = ({ delivertables }) => {
     setNodes(layoutedElements);
   };
 
-  const addDeliverable = () => {
-    setNodes([...nodes, makeNode()]);
-  };
-
-  // change the marker sizes, written custom code, because module doesn't have ability to do this
-  let marker = document.getElementById('react-flow__arrowclosed');
-
-  useEffect(() => {
-    if (arrowCustomized) {
-      return;
-    }
-    if (marker) {
-      marker.markerWidth.baseVal.value = 10;
-      marker.markerHeight.baseVal.value = 10;
-      setArrowCustomized(true);
-    }
-  }, [marker, arrowCustomized]);
-
   useEffect(() => {
     setIsDraggable(!hasOpenedPopup);
     setPaneMoveable(!hasOpenedPopup);
     setZoomOnScroll(!hasOpenedPopup);
   }, [hasOpenedPopup]);
+
+  useEffect(() => {
+    nodes = nodes.map(nd => ({ ...nd, data: { ...nd.data, editable } }));
+  });
 
   return (
     <Card className={classes.root}>
@@ -189,8 +170,8 @@ const WorkflowTemplateChart = ({ delivertables }) => {
           elementsSelectable={false}
           onConnect={onConnect}
           deleteKeyCode={46}
-          nodeTypes={{ [elementTypes.INPUT_NODE]: CustomFlowNode }}
-          edgeTypes={{ [elementTypes.CUSTOM_EDGE]: CustomFlowEdge }}
+          nodeTypes={{ [INPUT_NODE]: CustomFlowNode }}
+          edgeTypes={{ [CUSTOM_EDGE]: CustomFlowEdge }}
           arrowHeadColor={arrowHeadColor}
           zoomOnScroll={zoomOnScroll}
           nodesDraggable={isDraggable}
@@ -203,12 +184,14 @@ const WorkflowTemplateChart = ({ delivertables }) => {
         </ReactFlow>
       </CardContent>
       <CardActions>
-        <Grid container justify="space-between">
-          <Grid item xs={12} md={4}>
-            <Button variant="contained" color="default" onClick={addDeliverable}>
-              <Plus /> Add Deliverable
-            </Button>
-          </Grid>
+        <Grid container justify={editable ? "space-between" : "flex-end"}>
+          {editable ? (
+            <Grid item xs={12} md={4}>
+              <Button variant="contained" color="default" onClick={() => setNodes([...nodes, makeNode()])}>
+                <Plus /> Add Deliverable
+              </Button>
+            </Grid>
+          ) : null}
           <Grid item xs={12} md={4}>
             <Grid container justify="flex-end">
               <Grid item>
