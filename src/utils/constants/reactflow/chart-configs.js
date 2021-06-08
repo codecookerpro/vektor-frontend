@@ -1,4 +1,7 @@
-export const CHART_CONFIGS = {
+import { CUSTOM_EDGE } from 'utils/constants/reactflow/custom-node-types';
+
+const config = {
+  arrowHeadColor: '#4d84c0',
   label: 'Deliverable name',
   // below values units are pixels
   chartContainerHeight: 350,
@@ -8,10 +11,12 @@ export const CHART_CONFIGS = {
   defaultNodeMarginX: 15,
   // below line nodes configurations
   lineNodeParams: {
-    type: 'smoothstep',
+    type: CUSTOM_EDGE,
     arrowHeadType: 'arrowclosed',
     style: {
       // line color
+      strokeWidth: 5,
+      pointerEvents: 'all',
       stroke: '#000',
     },
   },
@@ -20,3 +25,5 @@ export const CHART_CONFIGS = {
     source: '#f9037ede',
   },
 };
+
+export default config;
