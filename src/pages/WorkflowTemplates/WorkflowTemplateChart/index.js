@@ -133,6 +133,28 @@ const WorkflowTemplateChart = ({
   };
 
   const onConnect = (conn) => {
+    const {source, target} = conn;
+    const connections = nodes.filter(el => el.type === CUSTOM_EDGE);
+
+    const checkCycle = (src, tar) => {
+      const children = connections.filter(cn => cn.source === tar).map(cn => cn.target);
+
+      if (children.includes(src)) {
+        return true;
+      }
+      else if (children.reduce((acc, ch) => acc || checkCycle(src, ch), false)) {
+        return true;
+      }
+
+      return false;
+    };
+
+    const doubled = connections.filter(cn => cn.source === source && cn.target === target).length;
+
+    if (checkCycle(source, target) || doubled) {
+      return;
+    }
+
     const newEdge = {
       ...conn,
       ...edgeDefaultProps,
