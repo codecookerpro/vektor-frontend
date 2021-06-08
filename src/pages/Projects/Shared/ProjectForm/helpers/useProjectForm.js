@@ -56,6 +56,42 @@ export const useProjectFrom = (project, mode) => {
     [setValue]
   );
 
+  const onSubmit = (addNew) =>
+    handleSubmit(async (data) => {
+      const { _id: projectId } = project;
+      const { name, number, organization, assignedUsers, projectManager, supervisor } = data;
+
+      const params = {
+        name,
+        number,
+        organization,
+        assignedUsers,
+        ...(!isEmpty(projectId) ? { _id: projectId } : { phases: [] }),
+        ...(!isEmpty(supervisor) ? { supervisor } : { supervisor: null }),
+        ...(!isEmpty(projectManager) ? { projectManager } : { projectManager: null }),
+      };
+
+      if (mode === PROJECT_MODES.CREATION) {
+        const isCompleted = await dispatch(addProject(params));
+
+        if (isCompleted) {
+          if (addNew) {
+            reset({
+              name: '',
+              number: '',
+              organization: '',
+              projectManager: '',
+              supervisor: '',
+            });
+          } else {
+            history.push(LINKS.PROJECTS.HREF);
+          }
+        }
+      } else {
+        dispatch(editProject(params));
+      }
+    });
+
   useEffect(() => {
     const { organization: projectOrganization, assignedUsers, name, number, projectManager, supervisor } = project;
 
@@ -99,42 +135,6 @@ export const useProjectFrom = (project, mode) => {
       setValue('projectManager', projectManager);
     }
   }, [currentOrganization, mode, permissions]);
-
-  const onSubmit = (addNew) =>
-    handleSubmit(async (data) => {
-      const { _id: projectId } = project;
-      const { name, number, organization, assignedUsers, projectManager, supervisor } = data;
-
-      const params = {
-        name,
-        number,
-        organization,
-        assignedUsers,
-        ...(!isEmpty(projectId) ? { _id: projectId } : { phases: [] }),
-        ...(!isEmpty(supervisor) ? { supervisor } : { supervisor: null }),
-        ...(!isEmpty(projectManager) ? { projectManager } : { projectManager: null }),
-      };
-
-      if (mode === PROJECT_MODES.CREATION) {
-        const isCompleted = await dispatch(addProject(params));
-
-        if (isCompleted) {
-          if (addNew) {
-            reset({
-              name: '',
-              number: '',
-              organization: '',
-              projectManager: '',
-              supervisor: '',
-            });
-          } else {
-            history.push(LINKS.PROJECTS.HREF);
-          }
-        }
-      } else {
-        await dispatch(editProject(params));
-      }
-    });
 
   return {
     errors,
