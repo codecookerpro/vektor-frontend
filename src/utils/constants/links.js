@@ -69,6 +69,10 @@ const LINKS = Object.freeze({
     TITLE: 'Project Phases',
     HREF: '/project-management/projects/edit/:id/phases',
   },
+  PROJECT_GANTT: {
+    TITLE: 'Project Gantt Sample',
+    HREF: '/project-management/projects/gantt-sample',
+  },
   SYSTEMS: {
     TITLE: 'Systems',
     HREF: '/project-management/systems',
