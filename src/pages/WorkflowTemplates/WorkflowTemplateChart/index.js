@@ -10,7 +10,15 @@ import CHART_CONFIGS from 'utils/constants/reactflow/chart-configs';
 import ObjectID from 'bson-objectid';
 import dagre from 'dagre';
 
-const { chartContainerHeight, nodeHeight, nodeWidth, defaultNodeMarginY, defaultNodeMarginX, lineNodeParams } = CHART_CONFIGS;
+const { 
+  arrowHeadColor,
+  chartContainerHeight, 
+  nodeHeight, 
+  nodeWidth, 
+  defaultNodeMarginY, 
+  defaultNodeMarginX, 
+  lineNodeParams 
+} = CHART_CONFIGS;
 
 const useStyles = makeStyles(() => ({
   content: {
@@ -183,7 +191,7 @@ const WorkflowTemplateChart = ({ delivertables }) => {
           deleteKeyCode={46}
           nodeTypes={{ [elementTypes.INPUT_NODE]: CustomFlowNode }}
           edgeTypes={{ [elementTypes.CUSTOM_EDGE]: CustomFlowEdge }}
-          arrowHeadColor="#4d84c0"
+          arrowHeadColor={arrowHeadColor}
           zoomOnScroll={zoomOnScroll}
           nodesDraggable={isDraggable}
           paneMoveable={paneMoveable}

@@ -1,6 +1,7 @@
 import { CUSTOM_EDGE } from 'utils/constants/reactflow/custom-node-types';
 
 const config = {
+  arrowHeadColor: '#4d84c0',
   label: 'Deliverable name',
   // below values units are pixels
   chartContainerHeight: 350,
