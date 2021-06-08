@@ -1,3 +1,5 @@
+import { CUSTOM_EDGE } from 'utils/constants/reactflow/custom-node-types';
+
 const config = {
   label: 'Deliverable name',
   // below values units are pixels
@@ -8,7 +10,7 @@ const config = {
   defaultNodeMarginX: 15,
   // below line nodes configurations
   lineNodeParams: {
-    type: 'custom',
+    type: CUSTOM_EDGE,
     arrowHeadType: 'arrowclosed',
     style: {
       // line color
