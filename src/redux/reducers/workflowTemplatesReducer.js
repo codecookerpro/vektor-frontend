@@ -11,6 +11,25 @@ const workflowTemplatesReducer = (state = INITIAL_STATE, action) => {
         ...state,
         results: action.payload,
       };
+
+    case TYPES.CREATE_WTD:
+      return {
+        ...state,
+        results: [...state.results, action.payload],
+      };
+
+    case TYPES.UPDATE_WTD:
+      return {
+        ...state,
+        results: state.results.map((wf) => (wf._id === action.payload._id ? action.payload : wf)),
+      };
+
+    case TYPES.REMOVE_WTD:
+      return {
+        ...state,
+        // results: state.results.map(wf => wf._id === action.payload._id ? action.payload : wf)
+      };
+
     default:
       return state;
   }

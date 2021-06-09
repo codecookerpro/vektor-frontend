@@ -1,4 +1,5 @@
 import React, { memo, useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import { Card, CardHeader, CardContent, CardActions, Button, Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Plus } from 'react-feather';
@@ -24,6 +25,7 @@ import {
   updateWorkflowTemplateDeliverable,
   deleteWorkflowTemplateDeliverable,
 } from 'services/api-workflow-template';
+import { createWTD, updateWTD, removeWTD } from 'redux/actions/workflowTemplates';
 
 const useStyles = makeStyles(() => ({
   content: {
@@ -72,6 +74,7 @@ const getLayoutedElements = (elements, direction = 'TB') => {
 
 const WorkflowTemplateChart = ({ nodes = [], editable = false, setNodes = () => {}, workflowTemplateId = null }) => {
   const classes = useStyles();
+  const dispatch = useDispatch();
   const [zoomOnScroll, setZoomOnScroll] = useState(true);
   const [isDraggable, setIsDraggable] = useState(true);
   const [paneMoveable, setPaneMoveable] = useState(true);
@@ -117,19 +120,19 @@ const WorkflowTemplateChart = ({ nodes = [], editable = false, setNodes = () => 
             ...node,
             edges: edges.filter((e) => e.target === node.id),
           },
-        });
+        }).then(({ data }) => dispatch(updateWTD(data)));
       }
 
       return nds;
     });
   };
 
-  const handleDeleteNode = async (id) => {
+  const handleDeleteNode = (id) => {
     if (editable && workflowTemplateId) {
-      await deleteWorkflowTemplateDeliverable({
+      deleteWorkflowTemplateDeliverable({
         mainId: workflowTemplateId,
         _id: nodes.find((n) => n.id === id).data._id,
-      });
+      }).then(({ data }) => dispatch(removeWTD(data)));
     }
 
     setNodes((nds) => {
@@ -146,7 +149,7 @@ const WorkflowTemplateChart = ({ nodes = [], editable = false, setNodes = () => 
       id: objectId,
       type: INPUT_NODE,
       data: {
-        label: null,
+        label,
         editable: true,
         handleInputChange,
         handleDeleteNode,
@@ -157,24 +160,24 @@ const WorkflowTemplateChart = ({ nodes = [], editable = false, setNodes = () => 
     };
 
     if (editable && workflowTemplateId) {
-      const {
-        data: { deliverables },
-      } = await createWorkflowTemplateDeliverable({
+      const { data } = await createWorkflowTemplateDeliverable({
         mainId: workflowTemplateId,
-        name: 'New Deliverable',
+        name: label,
         chartData: {
           ...node,
         },
       });
 
-      const createdId = deliverables.find((d) => d.chartData.id === node.id)._id;
+      dispatch(createWTD(data));
+
+      const createdId = data.deliverables.find((d) => d.chartData.id === node.id)._id;
       node.data._id = createdId;
     }
 
     return node;
   };
 
-  const onConnect = async (conn) => {
+  const onConnect = (conn) => {
     const { source, target } = conn;
     const connections = nodes.filter((el) => el.type === CUSTOM_EDGE);
 
@@ -215,13 +218,13 @@ const WorkflowTemplateChart = ({ nodes = [], editable = false, setNodes = () => 
       const node = updatedNodes.find((n) => n.id === target);
       const predecessors = updatedConns.filter((c) => c.target === node.id).map((c) => c.source);
 
-      await updateWorkflowTemplateDeliverable({
+      updateWorkflowTemplateDeliverable({
         mainId: workflowTemplateId,
         _id: node.data._id,
         name: node.data.label,
         predecessors,
         chartData: { ...node, edges },
-      });
+      }).then(({ data }) => dispatch(updateWTD(data)));
     }
 
     setNodes(updatedNodes);
@@ -248,7 +251,7 @@ const WorkflowTemplateChart = ({ nodes = [], editable = false, setNodes = () => 
           position: node.position,
           edges: edges.filter((e) => e.target === node.id),
         },
-      });
+      }).then(({ data }) => dispatch(updateWTD(data)));
     }
   };
 
@@ -282,7 +285,7 @@ const WorkflowTemplateChart = ({ nodes = [], editable = false, setNodes = () => 
                 name: tarNode.data.name,
                 predecessors,
                 chartData: { ...tarNode, edges },
-              });
+              }).then(({ data }) => dispatch(updateWTD(data)));
             }
 
             return nds;

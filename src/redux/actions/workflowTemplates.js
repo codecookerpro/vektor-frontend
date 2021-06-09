@@ -83,4 +83,19 @@ const removeWorkflowTemplate = (workflowTemplate) => async (dispatch, getState) 
   }
 };
 
-export { getWorkflowTemplates, addWorkflowTemplate, editWorkflowTemplate, removeWorkflowTemplate };
+const createWTD = (payload) => ({
+  type: TYPES.CREATE_WTD,
+  payload,
+});
+
+const updateWTD = (payload) => ({
+  type: TYPES.UPDATE_WTD,
+  payload,
+});
+
+const removeWTD = (payload) => ({
+  type: TYPES.REMOVE_WTD,
+  payload,
+});
+
+export { getWorkflowTemplates, addWorkflowTemplate, editWorkflowTemplate, removeWorkflowTemplate, createWTD, updateWTD, removeWTD };

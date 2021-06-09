@@ -25,7 +25,7 @@ const EditWorkflowTemplate = () => {
     dispatch(getWorkflowTemplates());
   }, [dispatch]);
 
-  const workflowTemplate = useMemo(() => results.find((item) => item._id === id), [id, results]);
+  const workflowTemplate = results.find((item) => item._id === id);
 
   const historyHandler = () => {
     history.push(LINKS.WORKFLOW_TEMPLATE_HISTORY.HREF.replace(':id', id));
