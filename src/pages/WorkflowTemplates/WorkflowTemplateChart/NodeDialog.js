@@ -31,18 +31,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const NodeDialog = ({
-  isDialogOpen,
-  setIsDialogOpen,
-  name,
-  setName,
-  label,
-  handleInputChange,
-  nodeId,
-  handlePopUpToggle,
-  dialogProps,
-  handleDeleteNode,
-}) => {
+const NodeDialog = ({ isDialogOpen, setIsDialogOpen, label, handleInputChange, nodeId, handlePopUpToggle, dialogProps, handleDeleteNode }) => {
   const classes = useStyles();
   const [nameTemp, setNameTemp] = useState(null);
 
@@ -51,7 +40,6 @@ const NodeDialog = ({
     setIsDialogOpen(false);
     handlePopUpToggle(e);
     if (dialogProps.type === 'edit') {
-      setName(nameTemp);
       handleInputChange(nodeId, nameTemp);
     } else if (dialogProps.type === 'delete') {
       handleDeleteNode(nodeId, e);
@@ -75,7 +63,7 @@ const NodeDialog = ({
               <TextField
                 onChange={(e) => setNameTemp(e.target.value)}
                 label={label}
-                defaultValue={name}
+                defaultValue={label}
                 multiline={true}
                 rows={2}
                 classes={{ root: classes.root }}

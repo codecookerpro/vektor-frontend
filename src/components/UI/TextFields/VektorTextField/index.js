@@ -17,9 +17,14 @@ const useStyles = makeStyles((theme) => ({
   fullWidth: {
     width: '100%',
   },
+  disabledTextField: {
+    '& .MuiInputBase-root.Mui-disabled': {
+      color: 'black',
+    },
+  },
 }));
 
-const VektorTextField = React.forwardRef(({ label, error, className, ...rest }, ref) => {
+const VektorTextField = React.forwardRef(({ label, error, className, value, ...rest }, ref) => {
   const classes = useStyles();
 
   return (
@@ -29,7 +34,7 @@ const VektorTextField = React.forwardRef(({ label, error, className, ...rest }, 
           {label}
         </Typography>
       )}
-      <TextField ref={ref} id="standard-helperText" error={!!error} {...rest} />
+      <TextField className={classes.disabledTextField} ref={ref} id="standard-helperText" error={!!error} value={value || ''} {...rest} />
       {!!error && (
         <Typography color="error" variant="caption" className={classes.error}>
           {error}

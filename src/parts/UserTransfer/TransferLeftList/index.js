@@ -62,9 +62,11 @@ function TransferLeftList({ items, selectedItems, chooseAll, selectItem }) {
           ))}
       </List>
       <CardActions disableSpacing>
-        <Button color="primary" onClick={chooseAll}>
-          Choose All <ArrowRight className={classes.arrowIcon} />
-        </Button>
+        {chooseAll && (
+          <Button color="primary" onClick={chooseAll}>
+            Choose All <ArrowRight className={classes.arrowIcon} />
+          </Button>
+        )}
       </CardActions>
     </Card>
   );

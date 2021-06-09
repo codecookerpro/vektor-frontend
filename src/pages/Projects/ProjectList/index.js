@@ -19,13 +19,16 @@ const ProjectList = () => {
   const history = useHistory();
 
   const { permissions } = useSelector(({ auth }) => auth.currentUser);
-  const isVisible = permissions === PERMISSION_TYPE.ADMIN || permissions === PERMISSION_TYPE.SUPERVISOR;
+  const isAddProjectButtonVisible = permissions === PERMISSION_TYPE.ADMIN || permissions === PERMISSION_TYPE.SUPERVISOR;
+  const isOrganizationFilterVisible = permissions === PERMISSION_TYPE.ADMIN;
 
   const [organization, setOrganization] = useState('');
 
   useEffect(() => {
-    dispatch(getProjects({ organization }));
-  }, [dispatch, organization]);
+    if (permissions === PERMISSION_TYPE.ADMIN) {
+      dispatch(getProjects({ organization }));
+    }
+  }, [organization, permissions]);
 
   const addHandler = useCallback(() => {
     history.push(LINKS.ADD_PROJECT.HREF);
@@ -39,8 +42,8 @@ const ProjectList = () => {
 
   return (
     <>
-      <PageHeader title={LINKS.PROJECTS.TITLE} links={NAV_LINKS} leftElement={isVisible && renderAddProjectButton()} />
-      <OrganizationFilter organization={organization} setOrganization={setOrganization} />
+      <PageHeader title={LINKS.PROJECTS.TITLE} links={NAV_LINKS} leftElement={isAddProjectButtonVisible && renderAddProjectButton()} />
+      {isOrganizationFilterVisible && <OrganizationFilter organization={organization} setOrganization={setOrganization} />}
       <ProjectsTable />
     </>
   );

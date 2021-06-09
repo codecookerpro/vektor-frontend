@@ -55,9 +55,11 @@ function TransferRightList({ items, selectedItems, removeAll, selectItem }) {
         ))}
       </List>
       <CardActions disableSpacing className={classes.actions}>
-        <Button color="primary" onClick={removeAll}>
-          <ArrowLeft className={classes.arrowIcon} /> Remove All
-        </Button>
+        {removeAll && (
+          <Button color="primary" onClick={removeAll}>
+            <ArrowLeft className={classes.arrowIcon} /> Remove All
+          </Button>
+        )}
       </CardActions>
     </Card>
   );

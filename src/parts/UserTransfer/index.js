@@ -24,7 +24,7 @@ function not(a, b) {
   return a.filter((value) => b.indexOf(value) === -1);
 }
 
-const UserTransfer = ({ users, onAssignedUsers }) => {
+const UserTransfer = ({ users, assignedUsers = [], onAssignedUsers, isViewingMode = false }) => {
   const classes = useStyles();
   const [leftChecked, setLeftChecked] = useState([]);
   const [rightChecked, setRightChecked] = useState([]);
@@ -38,6 +38,10 @@ const UserTransfer = ({ users, onAssignedUsers }) => {
     setLeftChecked([]);
     setRightChecked([]);
   }, [users]);
+
+  useEffect(() => {
+    setRight(assignedUsers);
+  }, [assignedUsers]);
 
   useEffect(() => {
     onAssignedUsers(right);
@@ -88,22 +92,26 @@ const UserTransfer = ({ users, onAssignedUsers }) => {
   return (
     <Grid container spacing={2} alignItems="center">
       <Grid item>
-        <TransferLeftList items={left} selectedItems={leftChecked} chooseAll={handleAllRight} selectItem={handleToggle} />
+        <TransferLeftList items={left} selectedItems={leftChecked} chooseAll={!isViewingMode && handleAllRight} selectItem={handleToggle} />
       </Grid>
       <Grid item>
         <Grid container direction="column" alignItems="center">
           <div className={classes.actions}>
-            <IconButton onClick={handleCheckedRight} disabled={leftChecked.length === 0} className={classes.arrowIcon}>
-              <ArrowRightCircle />
-            </IconButton>
-            <IconButton onClick={handleCheckedLeft} disabled={rightChecked.length === 0} className={classes.arrowIcon}>
-              <ArrowLeftCircle />
-            </IconButton>
+            {!isViewingMode && (
+              <>
+                <IconButton onClick={handleCheckedRight} disabled={leftChecked.length === 0} className={classes.arrowIcon}>
+                  <ArrowRightCircle />
+                </IconButton>
+                <IconButton onClick={handleCheckedLeft} disabled={rightChecked.length === 0} className={classes.arrowIcon}>
+                  <ArrowLeftCircle />
+                </IconButton>
+              </>
+            )}
           </div>
         </Grid>
       </Grid>
       <Grid item>
-        <TransferRightList items={right} selectedItems={rightChecked} removeAll={handleAllLeft} selectItem={handleToggle} />
+        <TransferRightList items={right} selectedItems={rightChecked} removeAll={!isViewingMode && handleAllLeft} selectItem={handleToggle} />
       </Grid>
     </Grid>
   );
