@@ -19,7 +19,7 @@ import { STRING_INPUT_VALID, SELECT_VALID, INTEGER_VALID } from 'utils/constants
 import LINKS from 'utils/constants/links';
 import useLoading from 'utils/hooks/useLoading';
 import { isEmpty } from 'utils/helpers/utility';
-import * as customNodeTypes from 'utils/constants/reactflow/custom-node-types';
+import { INPUT_NODE, CUSTOM_EDGE } from 'utils/constants/reactflow/custom-node-types';
 
 const useStyles = makeStyles((theme) => ({
   alert: {
@@ -45,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const WorkflowTemplateForm = ({ workflowTemplate = {}, timelyDeliverables, nodes, nodesConnectionsInfoChildren }) => {
+const WorkflowTemplateForm = ({ workflowTemplate = {}, nodes = [] }) => {
   const classes = useStyles();
   const history = useHistory();
   const dispatch = useDispatch();
@@ -70,28 +70,21 @@ const WorkflowTemplateForm = ({ workflowTemplate = {}, timelyDeliverables, nodes
     resolver: joiResolver(schema),
   });
 
-  const areDeliverablesValid = () => {
-    return nodes.filter((node) => node.type === customNodeTypes.INPUT_NODE).length === Object.keys(timelyDeliverables).length;
-  };
-
   const getDeliverables = () => {
-    if (!areDeliverablesValid()) {
-      return false;
-    }
+    const connections = nodes.filter((node) => node.type === CUSTOM_EDGE);
 
-    let connectionLines = nodes.filter((node) => node.type === 'smoothstep');
-
-    let deliverables = nodes
-      .filter((node) => node.type === customNodeTypes.INPUT_NODE)
+    const deliverables = nodes
+      .filter((node) => node.type === INPUT_NODE && node.data.label)
       .map((node) => {
-        const currentNodeConnectionsWithChildren = connectionLines.filter((line) => line.source === node.id);
-        const predecessors = nodesConnectionsInfoChildren[node.id];
-        const chartData = { ...node, connectionLines: currentNodeConnectionsWithChildren };
+        const predecessors = connections
+          .filter((conn) => conn.target === node.id)
+          .map(conn => conn.source);
+        const edges = connections.filter((conn) => conn.target === node.id);
 
         return {
-          name: timelyDeliverables[node.id].name,
+          name: node.data.label,
           predecessors,
-          chartData,
+          chartData: {...node, edges},
         };
       });
 
@@ -100,8 +93,9 @@ const WorkflowTemplateForm = ({ workflowTemplate = {}, timelyDeliverables, nodes
 
   const onSubmit = async (data) => {
     changeLoadingStatus(true);
-    let deliverables = getDeliverables();
-    if (!deliverables) {
+    const deliverables = getDeliverables();
+
+    if (deliverables.length === 0) {
       setErrorMessage('Deliverables are not valid.');
       changeLoadingStatus(false);
       return;
