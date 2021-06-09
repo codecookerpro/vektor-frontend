@@ -3,11 +3,14 @@ import { Card, CardContent } from '@material-ui/core';
 import FilterSelect from 'components/UI/Selects/FilterSelect';
 import { useSelector } from 'react-redux';
 import { useStyles } from './styles';
+import { PERMISSION_TYPE } from 'utils/constants/permissions';
 
 const SowFilters = ({ filter, setFilter }) => {
   const classes = useStyles();
   const { results: organizations = [] } = useSelector((state) => state.organizations);
   const { results: projects = [] } = useSelector((state) => state.projects);
+  const { permissions } = useSelector(({ auth }) => auth.currentUser);
+  const isOrganizationVisible = permissions === PERMISSION_TYPE.ADMIN;
 
   const initFilter = (data) => {
     return data.map((item) => ({ LABEL: item.name, VALUE: item._id }));
@@ -36,15 +39,17 @@ const SowFilters = ({ filter, setFilter }) => {
     <Card className={classes.root}>
       <CardContent className={classes.content}>
         <div className={classes.container}>
-          <FilterSelect
-            label="By organization"
-            placeholder="All organizations"
-            name="organization"
-            items={organizationFilter}
-            value={filter?.organization || ''}
-            onChange={inputHandler}
-            className={classes.input}
-          />
+          {isOrganizationVisible && (
+            <FilterSelect
+              label="By organization"
+              placeholder="All organizations"
+              name="organization"
+              items={organizationFilter}
+              value={filter?.organization || ''}
+              onChange={inputHandler}
+              className={classes.input}
+            />
+          )}
           <FilterSelect
             label="By project manager"
             placeholder="All project managers"
