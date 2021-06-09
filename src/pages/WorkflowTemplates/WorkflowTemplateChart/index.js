@@ -14,7 +14,7 @@ import {
   defaultNodeMarginY,
   defaultNodeMarginX,
   edgeDefaultProps,
-  nodeStyle
+  nodeStyle,
 } from 'utils/constants/reactflow/chart-configs';
 import ObjectID from 'bson-objectid';
 import dagre from 'dagre';
@@ -64,11 +64,7 @@ const getLayoutedElements = (elements, direction = 'TB') => {
   });
 };
 
-const WorkflowTemplateChart = ({
-  nodes = [],
-  editable = false,
-  setNodes = () => { }
-}) => {
+const WorkflowTemplateChart = ({ nodes = [], editable = false, setNodes = () => {} }) => {
   const classes = useStyles();
   const [zoomOnScroll, setZoomOnScroll] = useState(true);
   const [isDraggable, setIsDraggable] = useState(true);
@@ -93,12 +89,12 @@ const WorkflowTemplateChart = ({
       nds.map((n) =>
         n.id === id
           ? {
-            ...n,
-            data: {
-              ...n.data,
-              label: value,
-            },
-          }
+              ...n,
+              data: {
+                ...n.data,
+                label: value,
+              },
+            }
           : n
       )
     );
@@ -133,23 +129,22 @@ const WorkflowTemplateChart = ({
   };
 
   const onConnect = (conn) => {
-    const {source, target} = conn;
-    const connections = nodes.filter(el => el.type === CUSTOM_EDGE);
+    const { source, target } = conn;
+    const connections = nodes.filter((el) => el.type === CUSTOM_EDGE);
 
     const checkCycle = (src, tar) => {
-      const children = connections.filter(cn => cn.source === tar).map(cn => cn.target);
+      const children = connections.filter((cn) => cn.source === tar).map((cn) => cn.target);
 
       if (children.includes(src)) {
         return true;
-      }
-      else if (children.reduce((acc, ch) => acc || checkCycle(src, ch), false)) {
+      } else if (children.reduce((acc, ch) => acc || checkCycle(src, ch), false)) {
         return true;
       }
 
       return false;
     };
 
-    const doubled = connections.filter(cn => cn.source === source && cn.target === target).length;
+    const doubled = connections.filter((cn) => cn.source === source && cn.target === target).length;
 
     if (checkCycle(source, target) || doubled) {
       return;
@@ -165,7 +160,7 @@ const WorkflowTemplateChart = ({
         },
       },
     };
-    setNodes(nodes => addEdge(newEdge, nodes));
+    setNodes((nodes) => addEdge(newEdge, nodes));
   };
 
   const onLayout = (direction) => {
@@ -180,7 +175,7 @@ const WorkflowTemplateChart = ({
   }, [hasOpenedPopup]);
 
   useEffect(() => {
-    nodes = nodes.map(node => {
+    nodes = nodes.map((node) => {
       node.data.editable = editable;
 
       if (node.type === INPUT_NODE) {
@@ -220,7 +215,7 @@ const WorkflowTemplateChart = ({
         </ReactFlow>
       </CardContent>
       <CardActions>
-        <Grid container justify={editable ? "space-between" : "flex-end"}>
+        <Grid container justify={editable ? 'space-between' : 'flex-end'}>
           {editable ? (
             <Grid item xs={12} md={4}>
               <Button variant="contained" color="default" onClick={() => setNodes([...nodes, makeNode()])}>

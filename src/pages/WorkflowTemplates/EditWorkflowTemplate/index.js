@@ -36,11 +36,11 @@ const EditWorkflowTemplate = () => {
       return;
     }
 
-    const {deliverables} = workflowTemplate;
+    const { deliverables } = workflowTemplate;
     const nodes = deliverables.reduce((acc, deliverable) => {
-      const {id, type, data, style, position, edges} = deliverable.chartData;
+      const { id, type, data, style, position, edges } = deliverable.chartData;
       data.editable = true;
-      return [...acc, {id, type, data, style, position}, ...(edges || [])];
+      return [...acc, { id, type, data, style, position }, ...(edges || [])];
     }, []);
 
     setTimeout(() => setNodes(nodes));

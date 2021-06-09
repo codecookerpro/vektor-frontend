@@ -31,16 +31,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const NodeDialog = ({
-  isDialogOpen,
-  setIsDialogOpen,
-  label,
-  handleInputChange,
-  nodeId,
-  handlePopUpToggle,
-  dialogProps,
-  handleDeleteNode
-}) => {
+const NodeDialog = ({ isDialogOpen, setIsDialogOpen, label, handleInputChange, nodeId, handlePopUpToggle, dialogProps, handleDeleteNode }) => {
   const classes = useStyles();
   const [nameTemp, setNameTemp] = useState(null);
 

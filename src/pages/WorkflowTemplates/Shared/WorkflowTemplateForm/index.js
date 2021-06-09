@@ -76,15 +76,13 @@ const WorkflowTemplateForm = ({ workflowTemplate = {}, nodes = [] }) => {
     const deliverables = nodes
       .filter((node) => node.type === INPUT_NODE && node.data.label)
       .map((node) => {
-        const predecessors = connections
-          .filter((conn) => conn.target === node.id)
-          .map(conn => conn.source);
+        const predecessors = connections.filter((conn) => conn.target === node.id).map((conn) => conn.source);
         const edges = connections.filter((conn) => conn.target === node.id);
 
         return {
           name: node.data.label,
           predecessors,
-          chartData: {...node, edges},
+          chartData: { ...node, edges },
         };
       });
 
