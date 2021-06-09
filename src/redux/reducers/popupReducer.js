@@ -10,11 +10,15 @@ const initialState = {
 export default function popupReducer(state = initialState, action) {
   switch (action.type) {
     case TYPES.SET_POPUP:
-      const { popupType, popupText } = action.payload;
+      const { popupType, popupText, confirmText, cancelText, onCancel, onConfirm } = action.payload;
       return {
         ...state,
         popupType,
         popupText,
+        onConfirm,
+        onCancel,
+        confirmText,
+        cancelText,
       };
     default:
       return state;

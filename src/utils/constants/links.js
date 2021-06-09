@@ -98,8 +98,12 @@ const LINKS = Object.freeze({
     HREF: '/sows',
   },
   ADD_SOW: {
-    TITLE: 'Add SOW',
+    TITLE: 'Add New SOW',
     HREF: '/sows/add',
+  },
+  EDIT_SOW: {
+    TITLE: 'Edit SOW',
+    HREF: '/sows/edit/:id',
   },
   WORKFLOW_TEMPLATES: {
     TITLE: 'Workflow Templates',

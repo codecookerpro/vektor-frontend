@@ -35,11 +35,28 @@ const useStyles = makeStyles((theme) => ({
 const Popup = () => {
   const dispatch = useDispatch();
   const classes = useStyles();
-  const { popupType = POPUP_TYPE.INACTIVE, popupText = EMPTY_STRING } = useSelector((state) => state.popup);
+  const {
+    popupType = POPUP_TYPE.INACTIVE,
+    popupText = EMPTY_STRING,
+    onConfirm = async () => {},
+    onCancel = async () => {},
+    confirmText = 'Confirm',
+    cancelText = 'Cancel',
+  } = useSelector((state) => state.popup);
 
   const handleClose = async () => {
     await dispatch(setPopup({ popupType: POPUP_TYPE.INACTIVE, popupText: EMPTY_STRING }));
+    await onCancel();
   };
+
+  const handleConfirm = async () => {
+    await dispatch(setPopup({ popupType: POPUP_TYPE.INACTIVE, popupText: EMPTY_STRING }));
+    await onConfirm();
+  };
+
+  if (popupType === POPUP_TYPE.INACTIVE) {
+    return null;
+  }
 
   return (
     <div>
@@ -64,9 +81,20 @@ const Popup = () => {
           <DialogContentText className={classes.dialogContentText}>{popupText}</DialogContentText>
         </DialogContent>
         <DialogActions className={classes.actionButtons}>
-          <Button color="primary" variant="contained" onClick={handleClose}>
-            Okay, close
-          </Button>
+          {popupType === POPUP_TYPE.CONFIRM ? (
+            <>
+              <Button color="default" variant="contained" onClick={handleClose}>
+                {cancelText}
+              </Button>
+              <Button color="primary" variant="contained" onClick={handleConfirm}>
+                {confirmText}
+              </Button>
+            </>
+          ) : (
+            <Button color="primary" variant="contained" onClick={handleClose}>
+              Okay, close
+            </Button>
+          )}
         </DialogActions>
       </Dialog>
     </div>
