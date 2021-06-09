@@ -24,12 +24,6 @@ const workflowTemplatesReducer = (state = INITIAL_STATE, action) => {
         results: state.results.map((wf) => (wf._id === action.payload._id ? action.payload : wf)),
       };
 
-    case TYPES.REMOVE_WTD:
-      return {
-        ...state,
-        // results: state.results.map(wf => wf._id === action.payload._id ? action.payload : wf)
-      };
-
     default:
       return state;
   }

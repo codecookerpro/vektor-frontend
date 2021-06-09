@@ -25,7 +25,7 @@ import {
   updateWorkflowTemplateDeliverable,
   deleteWorkflowTemplateDeliverable,
 } from 'services/api-workflow-template';
-import { createWTD, updateWTD, removeWTD } from 'redux/actions/workflowTemplates';
+import { createWTD, updateWTD } from 'redux/actions/workflowTemplates';
 
 const useStyles = makeStyles(() => ({
   content: {
@@ -128,14 +128,14 @@ const WorkflowTemplateChart = ({ nodes = [], editable = false, setNodes = () => 
   };
 
   const handleDeleteNode = (id) => {
-    if (editable && workflowTemplateId) {
-      deleteWorkflowTemplateDeliverable({
-        mainId: workflowTemplateId,
-        _id: nodes.find((n) => n.id === id).data._id,
-      }).then(({ data }) => dispatch(removeWTD(data)));
-    }
-
     setNodes((nds) => {
+      if (editable && workflowTemplateId) {
+        deleteWorkflowTemplateDeliverable({
+          mainId: workflowTemplateId,
+          _id: nds.find((n) => n.id === id).data._id,
+        }).then(({ data }) => dispatch(updateWTD(data)));
+      }
+
       const nodeToRemove = nds.filter((nd) => nd.id === id);
       return removeElements(nodeToRemove, nds);
     });

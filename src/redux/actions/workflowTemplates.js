@@ -93,9 +93,4 @@ const updateWTD = (payload) => ({
   payload,
 });
 
-const removeWTD = (payload) => ({
-  type: TYPES.REMOVE_WTD,
-  payload,
-});
-
-export { getWorkflowTemplates, addWorkflowTemplate, editWorkflowTemplate, removeWorkflowTemplate, createWTD, updateWTD, removeWTD };
+export { getWorkflowTemplates, addWorkflowTemplate, editWorkflowTemplate, removeWorkflowTemplate, createWTD, updateWTD };
