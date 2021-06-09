@@ -18,8 +18,7 @@ const SowList = () => {
   const [selectedItems, setSelectedItems] = useState([]);
 
   const { permissions } = useSelector(({ auth }) => auth.currentUser);
-  const isVisible = permissions === PERMISSION_TYPE.ADMIN || permissions === PERMISSION_TYPE.SUPERVISOR;
-
+  const isVisible = [PERMISSION_TYPE.ADMIN, PERMISSION_TYPE.SUPERVISOR, PERMISSION_TYPE.PROJECT_MANAGER, PERMISSION_TYPE.USER].includes(permissions);
   useEffect(() => {
     dispatch(getSOWs(filter));
   }, [dispatch, filter]);
@@ -28,7 +27,7 @@ const SowList = () => {
     history.push(LINKS.ADD_SOW.HREF);
   }, [history]);
 
-  const renderAddProjectButton = () => (
+  const renderAddSowButton = () => (
     <ContainedButton onClick={addHandler}>
       <Plus /> Add SOW
     </ContainedButton>
@@ -36,7 +35,7 @@ const SowList = () => {
 
   return (
     <>
-      <PageHeader title={LINKS.SOWS.TITLE} leftElement={isVisible && renderAddProjectButton()} />
+      <PageHeader title={LINKS.SOWS.TITLE} leftElement={isVisible && renderAddSowButton()} />
       <SowFilters filter={filter} setFilter={setFilter} />
       <SowTable selectedItems={selectedItems} setSelectedItems={setSelectedItems} />
     </>

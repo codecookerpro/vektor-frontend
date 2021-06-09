@@ -7,7 +7,7 @@ const getSOWs =
     try {
       const params = {
         skip: 0,
-        limit: 10000,
+        limit: 10,
         filter,
       };
       const { data = [] } = await sowAPI.getSOWs(params);

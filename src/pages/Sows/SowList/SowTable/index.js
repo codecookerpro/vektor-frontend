@@ -25,6 +25,9 @@ const SowTable = ({ selectedItems, setSelectedItems }) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(TABLE_ENVIRONMENTS.ROWS_PER_PAGE);
   const [action, setAction] = useState('');
+  const startCurrentPage = page * rowsPerPage;
+  const finishCurrentPage = page * rowsPerPage + rowsPerPage;
+  const currentPages = rowsPerPage > 0 ? results.slice(startCurrentPage, finishCurrentPage) : results;
 
   const getOrganizationName = (_id) => {
     const organization = organizations.find((item) => item._id === _id);
@@ -50,6 +53,10 @@ const SowTable = ({ selectedItems, setSelectedItems }) => {
     setSelectedItems(newSelectedItems);
   };
 
+  const isSelected = (row) => {
+    return selectedItems.findIndex((value) => row.id === value.id) !== -1;
+  };
+
   return (
     <Card>
       <CardContent>
@@ -62,15 +69,11 @@ const SowTable = ({ selectedItems, setSelectedItems }) => {
           rowsPerPage={rowsPerPage}
           setRowsPerPage={setRowsPerPage}
         >
-          {(rowsPerPage > 0 ? results.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) : results).map((row) => (
+          {currentPages.map((row) => (
             <TableRow key={row._id}>
               <TableCell component="th" scope="row">
                 <div style={{ display: 'flex' }}>
-                  <Checkbox
-                    inputProps={{ 'aria-labelledby': `check-${row.id}` }}
-                    checked={selectedItems.findIndex((value) => row.id === value.id) !== -1}
-                    onChange={toggleHandler(row)}
-                  />
+                  <Checkbox inputProps={{ 'aria-labelledby': `check-${row.id}` }} checked={isSelected(row)} onChange={toggleHandler(row)} />
                 </div>
               </TableCell>
               <TableCell component="th" scope="row">
