@@ -10,6 +10,7 @@ import eventsReducer from './eventsReducer';
 import dashboardsReducer from './dashboardsReducer';
 import reportsReducer from './reportsReducer';
 import popupReducer from './popupReducer';
+import sowsReducer from './sowsReducer';
 
 export default combineReducers({
   loading: loadingReducer,
@@ -22,4 +23,5 @@ export default combineReducers({
   dashboards: dashboardsReducer,
   reports: reportsReducer,
   popup: popupReducer,
+  sows: sowsReducer,
 });

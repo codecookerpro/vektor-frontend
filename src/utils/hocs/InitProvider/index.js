@@ -5,6 +5,7 @@ import { setAccessToken, setRefreshToken, setCurrentUser } from 'redux/actions/a
 import { getUsers } from 'redux/actions/users';
 import { getOrganizations } from 'redux/actions/organizations';
 import { PERMISSION_TYPE } from 'utils/constants/permissions';
+import { getProjects } from 'redux/actions/projects';
 
 const InitProvider = () => {
   const dispatch = useDispatch();
@@ -41,6 +42,7 @@ const InitProvider = () => {
 
       if (permissions === PERMISSION_TYPE.ADMIN) {
         dispatch(getOrganizations());
+        dispatch(getProjects({}));
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
