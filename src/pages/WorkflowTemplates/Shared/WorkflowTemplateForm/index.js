@@ -20,6 +20,8 @@ import LINKS from 'utils/constants/links';
 import useLoading from 'utils/hooks/useLoading';
 import { isEmpty } from 'utils/helpers/utility';
 import { INPUT_NODE, CUSTOM_EDGE } from 'utils/constants/reactflow/custom-node-types';
+import { setPopup } from 'redux/actions/popupActions';
+import { POPUP_TYPE } from 'utils/constants/popupType';
 
 const useStyles = makeStyles((theme) => ({
   alert: {
@@ -130,21 +132,29 @@ const WorkflowTemplateForm = ({ workflowTemplate = {}, nodes = [] }) => {
     changeLoadingStatus(false);
   };
 
-  const deleteHandler = async () => {
+  const deleteHandler = () => {
     changeLoadingStatus(true);
-    try {
-      await workflowTemplateAPI.deleteWorkflowTemplate({ _id: workflowTemplate._id });
-      dispatch(removeWorkflowTemplate(workflowTemplate));
-      history.push(LINKS.WORKFLOW_TEMPLATES.HREF);
-    } catch (error) {
-      if (error.response) {
-        const {
-          data: { message },
-        } = error.response;
-        setErrorMessage(message);
-      }
-    }
-    changeLoadingStatus(false);
+    dispatch(
+      setPopup({
+        popupType: POPUP_TYPE.CONFIRM,
+        popupText: 'Are you sure you want to delete this template?',
+        onConfirm: async () => {
+          try {
+            await workflowTemplateAPI.deleteWorkflowTemplate({ _id: workflowTemplate._id });
+            dispatch(removeWorkflowTemplate(workflowTemplate));
+            history.push(LINKS.WORKFLOW_TEMPLATES.HREF);
+          } catch (error) {
+            if (error.response) {
+              const {
+                data: { message },
+              } = error.response;
+              setErrorMessage(message);
+            }
+          }
+          changeLoadingStatus(false);
+        },
+      })
+    );
   };
 
   return (
