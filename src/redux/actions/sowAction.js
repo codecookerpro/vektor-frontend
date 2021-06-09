@@ -7,7 +7,7 @@ const getSOWs =
     try {
       const params = {
         skip: pagination.skip || 0,
-        limit: pagination.skip || 1000,
+        limit: pagination.limit || 10,
         filter,
       };
       const { data = [] } = await sowAPI.getSOWs(params);
@@ -16,7 +16,7 @@ const getSOWs =
         payload: data,
       });
     } catch (error) {
-      console.log('[getOrganizations] error => ', error);
+      console.log('[getSOWs] error => ', error);
     }
   };
 

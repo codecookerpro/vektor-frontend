@@ -4,7 +4,6 @@ import { Card, CardContent, Checkbox, TableCell, TableRow } from '@material-ui/c
 
 import LinkButton from 'components/UI/Buttons/LinkButton';
 import VektorTableContainer from 'parts/Tables/VektorTableContainer';
-import * as TABLE_ENVIRONMENTS from 'utils/constants/table-environments';
 import LINKS from 'utils/constants/links';
 import SowActions from './SowActions';
 
@@ -18,16 +17,11 @@ const columns = [
   { id: 'vendorName', label: 'Vendor Name', minWidth: 170 },
 ];
 
-const SowTable = ({ selectedItems, setSelectedItems }) => {
+const SowTable = ({ selectedItems, setSelectedItems, page, setPage, rowsPerPage, setRowsPerPage }) => {
   const { results } = useSelector((state) => state.sows);
   const organizations = useSelector((state) => state.organizations.results);
   const projects = useSelector((state) => state.projects.results);
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(TABLE_ENVIRONMENTS.ROWS_PER_PAGE);
   const [action, setAction] = useState('');
-  const startCurrentPage = page * rowsPerPage;
-  const finishCurrentPage = page * rowsPerPage + rowsPerPage;
-  const currentPages = rowsPerPage > 0 ? results.slice(startCurrentPage, finishCurrentPage) : results;
 
   const getOrganizationName = (_id) => {
     const organization = organizations.find((item) => item._id === _id);
@@ -69,7 +63,7 @@ const SowTable = ({ selectedItems, setSelectedItems }) => {
           rowsPerPage={rowsPerPage}
           setRowsPerPage={setRowsPerPage}
         >
-          {currentPages.map((row) => (
+          {results.map((row) => (
             <TableRow key={row._id}>
               <TableCell component="th" scope="row">
                 <div style={{ display: 'flex' }}>

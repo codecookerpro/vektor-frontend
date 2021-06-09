@@ -36,7 +36,7 @@ const VektorTableFooter = ({ colSpan, rowCounts, page, setPage, rowsPerPage, set
     <TableFooter>
       <TableRow>
         <TablePagination
-          rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+          rowsPerPageOptions={[5, 10, 25, 50, 100]}
           colSpan={colSpan}
           count={rowCounts}
           rowsPerPage={rowsPerPage}
