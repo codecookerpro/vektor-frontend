@@ -2,12 +2,12 @@ import * as sowAPI from 'services/api-sow';
 import * as TYPES from 'redux/types';
 
 const getSOWs =
-  (filter = {}) =>
+  (filter = {}, pagination = {}) =>
   async (dispatch, getState) => {
     try {
       const params = {
-        skip: 0,
-        limit: 10,
+        skip: pagination.skip || 0,
+        limit: pagination.skip || 1000,
         filter,
       };
       const { data = [] } = await sowAPI.getSOWs(params);
