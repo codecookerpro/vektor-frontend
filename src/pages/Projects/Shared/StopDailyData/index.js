@@ -7,7 +7,7 @@ const StopDailyData = ({ project }) => {
   return (
     <Card>
       <CardContent>
-        <VektorCheckbox label="Finished" checked={project?.finished} />
+        <VektorCheckbox label="Finished" checked={project?.finished || false} />
         <Typography variant="body2" color="textSecondary">
           Stops daily data collection for chart plotting.
         </Typography>

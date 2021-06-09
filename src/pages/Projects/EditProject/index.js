@@ -1,5 +1,6 @@
-import React, { memo, useState, useMemo, useEffect } from 'react';
+import React, { memo, useMemo } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { Grid } from '@material-ui/core';
 
 import ContainedButton from 'components/UI/Buttons/ContainedButton';
@@ -10,9 +11,8 @@ import StopDailyData from '../Shared/StopDailyData';
 import ProjectSystemsTable from '../Shared/ProjectSystemsTable';
 import PhasesListView from '../Shared/PhasesListView';
 import LINKS from 'utils/constants/links';
-import users from 'utils/temp/users';
-import results from 'utils/temp/projects';
-import { isEmpty } from 'utils/helpers/utility';
+import { PROJECT_MODES } from 'utils/constants/projectModes';
+import { PERMISSION_TYPE } from 'utils/constants/permissions';
 
 const NAV_LINKS = [LINKS.PROJECT_MANAGEMENT, LINKS.PROJECTS];
 
@@ -20,17 +20,25 @@ const EditProject = () => {
   const { id } = useParams();
   const history = useHistory();
 
-  const [selectedOrganization, setSelectedOrganization] = useState('');
+  const { projects, permissions } = useSelector(({ projects, auth }) => {
+    const {
+      currentUser: { permissions },
+    } = auth;
+    const { results } = projects;
 
-  const project = useMemo(() => results.find((item) => item.id === id), [id]);
+    return { projects: results, permissions };
+  });
 
-  useEffect(() => {
-    if (!isEmpty(project)) {
-      setSelectedOrganization(project.organization.id);
+  const getMode = useMemo(() => {
+    switch (permissions) {
+      case PERMISSION_TYPE.SUPERVISOR:
+      case PERMISSION_TYPE.ADMIN:
+        return PROJECT_MODES.EDITING;
+      default:
+        return PROJECT_MODES.VIEWING;
     }
-  }, [project]);
-
-  const userList = useMemo(() => users?.filter((user) => user?.organization.id === selectedOrganization), [selectedOrganization]);
+  }, [permissions]);
+  const project = useMemo(() => projects.find((item) => item._id === id), [id, projects]);
 
   const linkHandler = (href) => () => {
     history.push(href.replace(':id', id));
@@ -45,7 +53,7 @@ const EditProject = () => {
       />
       <Grid container spacing={6}>
         <Grid item xs={12}>
-          <ProjectForm users={userList} project={project} setSelectedOrganization={setSelectedOrganization} />
+          <ProjectForm mode={getMode} project={project} />
         </Grid>
         <Grid item xs={12}>
           <StopDailyData project={project} />

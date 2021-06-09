@@ -4,16 +4,17 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setAccessToken, setRefreshToken, setCurrentUser } from 'redux/actions/authActions';
 import { getUsers } from 'redux/actions/users';
 import { getOrganizations } from 'redux/actions/organizations';
+import { getProjects } from 'redux/actions/projects';
 import { PERMISSION_TYPE } from 'utils/constants/permissions';
 
 const InitProvider = () => {
   const dispatch = useDispatch();
 
-  const { accessToken, permissions } = useSelector(({ auth }) => {
+  const { accessToken, permissions, organization } = useSelector(({ auth }) => {
     const { accessToken, currentUser } = auth;
-    const { permissions } = currentUser;
+    const { permissions, organization } = currentUser;
 
-    return { accessToken, permissions };
+    return { accessToken, permissions, organization };
   });
 
   useEffect(() => {
@@ -33,18 +34,19 @@ const InitProvider = () => {
     if (!!currentUser) {
       dispatch(setCurrentUser(JSON.parse(currentUser)));
     }
-  }, [dispatch]);
+  }, []);
 
   useEffect(() => {
     if (accessToken) {
       dispatch(getUsers());
-
       if (permissions === PERMISSION_TYPE.ADMIN) {
         dispatch(getOrganizations());
+        dispatch(getProjects());
+      } else {
+        dispatch(getProjects({ organization }));
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [accessToken]);
+  }, [accessToken, organization, permissions]);
 
   return <div />;
 };

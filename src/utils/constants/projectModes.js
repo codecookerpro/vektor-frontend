@@ -1,0 +1,5 @@
+export const PROJECT_MODES = {
+  EDITING: 'EDITING',
+  VIEWING: 'VIEWING',
+  CREATION: 'CREATION',
+};

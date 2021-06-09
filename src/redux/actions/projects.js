@@ -3,7 +3,7 @@ import * as projectAPI from 'services/api-project';
 import { isEmpty } from 'utils/helpers/utility';
 
 const getProjects =
-  ({ refresh = false, organization = '' }) =>
+  ({ refresh = false, organization = '' } = {}) =>
   async (dispatch, getState) => {
     try {
       const {
@@ -66,25 +66,19 @@ const addProject = (project) => async (dispatch, getState) => {
   }
 };
 
-const editProject = (project) => async (dispatch, getState) => {
+const editProject = (project) => async (dispatch) => {
   try {
-    const {
-      projects: { results },
-    } = getState();
+    let isCompleted = false;
+    const response = await projectAPI.updateProject(project);
 
-    const newProjects = results.map((item) => {
-      if (item._id === project._id) {
-        return project;
-      }
-      return item;
-    });
+    if (response) {
+      const { data: payload } = response;
 
-    dispatch({
-      type: TYPES.FETCH_PROJECTS,
-      payload: {
-        results: newProjects,
-      },
-    });
+      dispatch({ type: TYPES.EDIT_PROJECT, payload });
+      isCompleted = true;
+    }
+
+    return isCompleted;
   } catch (error) {
     console.log('[editProject] error => ', error);
   }
