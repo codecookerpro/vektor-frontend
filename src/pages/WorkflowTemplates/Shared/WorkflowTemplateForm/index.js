@@ -137,7 +137,7 @@ const WorkflowTemplateForm = ({ workflowTemplate = {}, nodes = [] }) => {
     dispatch(
       setPopup({
         popupType: POPUP_TYPE.CONFIRM,
-        popupText: 'Are you sure to delete this template?',
+        popupText: 'Are you sure you want to delete this template?',
         onConfirm: async () => {
           try {
             await workflowTemplateAPI.deleteWorkflowTemplate({ _id: workflowTemplate._id });
