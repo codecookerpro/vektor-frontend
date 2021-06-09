@@ -35,11 +35,7 @@ const useStyles = makeStyles((theme) => ({
   form: {
     marginBottom: theme.spacing(6),
   },
-  buttonContainer: {
-    display: 'flex',
-  },
   delete: {
-    marginLeft: 'auto',
     backgroundColor: theme.custom.palette.red,
   },
   content: {
@@ -47,13 +43,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const WorkflowTemplateForm = ({ workflowTemplate = {}, nodes = [] }) => {
+const WorkflowTemplateForm = ({ workflowTemplate = {}, nodes = [], onEdit = () => {} }) => {
   const classes = useStyles();
   const history = useHistory();
   const dispatch = useDispatch();
   const { changeLoadingStatus } = useLoading();
   const { results: organizations = [] } = useSelector((state) => state.organizations);
   const [errorMessage, setErrorMessage] = useState('');
+  const [editMode, setEditMode] = useState(false);
+
+  const formMode = isEmpty(workflowTemplate) ? 'create' : editMode ? 'update' : 'view';
 
   const currentUser = useSelector((state) => state.auth.currentUser);
 
@@ -102,22 +101,17 @@ const WorkflowTemplateForm = ({ workflowTemplate = {}, nodes = [] }) => {
     }
 
     try {
-      let params = {
+      const params = {
         name: data.name,
         organization: currentUser.permissions === PERMISSION_TYPE.ADMIN ? data.organization : currentUser.organization,
         differentialWeight: data.differentialWeight,
-        deliverables,
       };
 
       if (isEmpty(workflowTemplate)) {
-        const response = await workflowTemplateAPI.createWorkflowTemplate(params);
+        const response = await workflowTemplateAPI.createWorkflowTemplate({ ...params, deliverables });
         dispatch(addWorkflowTemplate(response.data));
       } else {
-        params = {
-          _id: workflowTemplate._id,
-          ...params,
-        };
-        const response = await workflowTemplateAPI.updateWorkflowTemplate(params);
+        const response = await workflowTemplateAPI.updateWorkflowTemplate({ ...params, _id: workflowTemplate._id });
         dispatch(editWorkflowTemplate(response.data));
       }
       history.push(LINKS.WORKFLOW_TEMPLATES.HREF);
@@ -157,6 +151,11 @@ const WorkflowTemplateForm = ({ workflowTemplate = {}, nodes = [] }) => {
     );
   };
 
+  const changeMode = (editable) => {
+    setEditMode(editable);
+    onEdit(editable);
+  };
+
   return (
     <Card className={classes.content}>
       <CardContent>
@@ -179,6 +178,7 @@ const WorkflowTemplateForm = ({ workflowTemplate = {}, nodes = [] }) => {
                 placeholder="Name"
                 error={errors.name?.message}
                 control={control}
+                disabled={formMode === 'view'}
                 defaultValue={workflowTemplate?.name || ''}
               />
             </Grid>
@@ -197,6 +197,7 @@ const WorkflowTemplateForm = ({ workflowTemplate = {}, nodes = [] }) => {
                   }}
                   error={errors.organization?.message}
                   control={control}
+                  disabled={formMode === 'view'}
                   defaultValue={workflowTemplate?.organization || ''}
                 />
               </Grid>
@@ -211,20 +212,42 @@ const WorkflowTemplateForm = ({ workflowTemplate = {}, nodes = [] }) => {
                 placeholder="Number"
                 error={errors.differentialWeight?.message}
                 control={control}
+                disabled={formMode === 'view'}
                 defaultValue={workflowTemplate?.differentialWeight || 1}
               />
             </Grid>
             <Grid item xs={12}>
-              <div className={classes.buttonContainer}>
-                <Button variant="contained" color="primary" onClick={handleSubmit(onSubmit)}>
-                  Save
-                </Button>
-                {!isEmpty(workflowTemplate) && (
-                  <Button color="primary" variant="contained" className={classes.delete} onClick={deleteHandler}>
-                    Delete
+              <Grid container justify="space-between">
+                {formMode == 'create' ? (
+                  <Grid item>
+                    <Button variant="contained" color="primary" onClick={handleSubmit(onSubmit)}>
+                      Save
+                    </Button>
+                  </Grid>
+                ) : formMode === 'update' ? (
+                  <>
+                    <Grid item>
+                      <Button variant="contained" color="primary" onClick={handleSubmit(onSubmit)}>
+                        SAVE CHANGES
+                      </Button>
+                    </Grid>
+                    <Grid item>
+                      <Button variant="contained" color="default" onClick={() => changeMode(false)}>
+                        CANCEL
+                      </Button>
+                    </Grid>
+                    <Grid item>
+                      <Button color="primary" variant="contained" className={classes.delete} onClick={deleteHandler}>
+                        DELETE
+                      </Button>
+                    </Grid>
+                  </>
+                ) : (
+                  <Button variant="contained" color="primary" onClick={() => changeMode(true)}>
+                    EDIT
                   </Button>
                 )}
-              </div>
+              </Grid>
             </Grid>
           </Grid>
         </form>

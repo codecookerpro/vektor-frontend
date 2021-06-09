@@ -9,7 +9,6 @@ import WorkflowTemplateChart from '../WorkflowTemplateChart';
 import WorkflowTemplateForm from '../Shared/WorkflowTemplateForm';
 import LINKS from 'utils/constants/links';
 import { isEmpty } from 'utils/helpers/utility';
-import { edgeDefaultProps } from 'utils/constants/reactflow/chart-configs';
 
 const NAV_LINKS = [LINKS.WORKFLOW_TEMPLATES];
 
@@ -18,6 +17,7 @@ const EditWorkflowTemplate = () => {
   const history = useHistory();
   const dispatch = useDispatch();
   const [nodes, setNodes] = useState([]);
+  const [editable, setEditable] = useState(false);
 
   const { results = [] } = useSelector((state) => state.workflowTemplates);
 
@@ -38,13 +38,19 @@ const EditWorkflowTemplate = () => {
 
     const { deliverables } = workflowTemplate;
     const nodes = deliverables.reduce((acc, deliverable) => {
-      const { id, type, data, style, position, edges } = deliverable.chartData;
-      data.editable = true;
-      return [...acc, { id, type, data, style, position }, ...(edges || [])];
+      const {
+        chartData: { id, type, data, style, position, edges },
+        _id,
+      } = deliverable;
+      return [
+        ...acc,
+        { id, type, data: { ...data, _id, editable }, style, position },
+        ...(edges ? edges.map((e) => ({ ...e, data: { ...e.data, editable } })) : []),
+      ];
     }, []);
 
     setTimeout(() => setNodes(nodes));
-  }, [workflowTemplate]);
+  }, [workflowTemplate, editable]);
 
   return (
     <>
@@ -55,8 +61,8 @@ const EditWorkflowTemplate = () => {
       />
       {isEmpty(workflowTemplate) || (
         <>
-          <WorkflowTemplateForm nodes={nodes} workflowTemplate={workflowTemplate} />
-          <WorkflowTemplateChart nodes={nodes} setNodes={setNodes} editable={true} />
+          <WorkflowTemplateForm nodes={nodes} workflowTemplate={workflowTemplate} onEdit={setEditable} />
+          <WorkflowTemplateChart nodes={nodes} setNodes={setNodes} editable={editable} workflowTemplateId={workflowTemplate._id} />
         </>
       )}
     </>

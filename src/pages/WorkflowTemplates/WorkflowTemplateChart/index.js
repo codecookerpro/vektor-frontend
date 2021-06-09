@@ -15,9 +15,15 @@ import {
   defaultNodeMarginX,
   edgeDefaultProps,
   nodeStyle,
+  label,
 } from 'utils/constants/reactflow/chart-configs';
 import ObjectID from 'bson-objectid';
 import dagre from 'dagre';
+import {
+  createWorkflowTemplateDeliverable,
+  updateWorkflowTemplateDeliverable,
+  deleteWorkflowTemplateDeliverable,
+} from 'services/api-workflow-template';
 
 const useStyles = makeStyles(() => ({
   content: {
@@ -64,7 +70,7 @@ const getLayoutedElements = (elements, direction = 'TB') => {
   });
 };
 
-const WorkflowTemplateChart = ({ nodes = [], editable = false, setNodes = () => {} }) => {
+const WorkflowTemplateChart = ({ nodes = [], editable = false, setNodes = () => {}, workflowTemplateId = null }) => {
   const classes = useStyles();
   const [zoomOnScroll, setZoomOnScroll] = useState(true);
   const [isDraggable, setIsDraggable] = useState(true);
@@ -85,8 +91,8 @@ const WorkflowTemplateChart = ({ nodes = [], editable = false, setNodes = () => 
   };
 
   const handleInputChange = (id, value) => {
-    setNodes((nds) =>
-      nds.map((n) =>
+    setNodes((nds) => {
+      nds = nds.map((n) =>
         n.id === id
           ? {
               ...n,
@@ -96,12 +102,35 @@ const WorkflowTemplateChart = ({ nodes = [], editable = false, setNodes = () => 
               },
             }
           : n
-      )
-    );
+      );
+
+      if (editable && workflowTemplateId) {
+        const edges = nds.filter((c) => c.type === CUSTOM_EDGE);
+        const node = nds.find((n) => n.id === id);
+
+        updateWorkflowTemplateDeliverable({
+          mainId: workflowTemplateId,
+          _id: node.data._id,
+          name: node.data.label,
+          predecessors: edges.filter((c) => c.target === node.id).map((c) => c.source),
+          chartData: {
+            ...node,
+            edges: edges.filter((e) => e.target === node.id),
+          },
+        });
+      }
+
+      return nds;
+    });
   };
 
-  const handleDeleteNode = (id, e) => {
-    e.preventDefault();
+  const handleDeleteNode = async (id) => {
+    if (editable && workflowTemplateId) {
+      await deleteWorkflowTemplateDeliverable({
+        mainId: workflowTemplateId,
+        _id: nodes.find((n) => n.id === id).data._id,
+      });
+    }
 
     setNodes((nds) => {
       const nodeToRemove = nds.filter((nd) => nd.id === id);
@@ -109,11 +138,11 @@ const WorkflowTemplateChart = ({ nodes = [], editable = false, setNodes = () => 
     });
   };
 
-  const makeNode = () => {
+  const makeNode = async () => {
     const nodeNum = nodes.length;
     const currentTimestamp = new Date().getTime();
     const objectId = ObjectID(currentTimestamp).toHexString();
-    return {
+    const node = {
       id: objectId,
       type: INPUT_NODE,
       data: {
@@ -126,9 +155,26 @@ const WorkflowTemplateChart = ({ nodes = [], editable = false, setNodes = () => 
       style: nodeStyle,
       position: position(nodeNum),
     };
+
+    if (editable && workflowTemplateId) {
+      const {
+        data: { deliverables },
+      } = await createWorkflowTemplateDeliverable({
+        mainId: workflowTemplateId,
+        name: 'New Deliverable',
+        chartData: {
+          ...node,
+        },
+      });
+
+      const createdId = deliverables.find((d) => d.chartData.id === node.id)._id;
+      node.data._id = createdId;
+    }
+
+    return node;
   };
 
-  const onConnect = (conn) => {
+  const onConnect = async (conn) => {
     const { source, target } = conn;
     const connections = nodes.filter((el) => el.type === CUSTOM_EDGE);
 
@@ -160,12 +206,50 @@ const WorkflowTemplateChart = ({ nodes = [], editable = false, setNodes = () => 
         },
       },
     };
-    setNodes((nodes) => addEdge(newEdge, nodes));
+
+    const updatedNodes = addEdge(newEdge, nodes);
+    const updatedConns = updatedNodes.filter((el) => el.type === CUSTOM_EDGE);
+
+    if (editable && workflowTemplateId) {
+      const edges = updatedConns.filter((c) => c.target === target);
+      const node = updatedNodes.find((n) => n.id === target);
+      const predecessors = updatedConns.filter((c) => c.target === node.id).map((c) => c.source);
+
+      await updateWorkflowTemplateDeliverable({
+        mainId: workflowTemplateId,
+        _id: node.data._id,
+        name: node.data.label,
+        predecessors,
+        chartData: { ...node, edges },
+      });
+    }
+
+    setNodes(updatedNodes);
   };
 
   const onLayout = (direction) => {
     const layoutedElements = getLayoutedElements(nodes, direction);
     setNodes(layoutedElements);
+  };
+
+  const onNodeDragStop = (e, node) => {
+    e.preventDefault();
+
+    if (editable && workflowTemplateId) {
+      const edges = nodes.filter((c) => c.type === CUSTOM_EDGE);
+
+      updateWorkflowTemplateDeliverable({
+        mainId: workflowTemplateId,
+        _id: node.data._id,
+        name: node.data.label,
+        predecessors: edges.filter((c) => c.target === node.id).map((c) => c.source),
+        chartData: {
+          ...nodes.find((n) => n.id === node.id),
+          position: node.position,
+          edges: edges.filter((e) => e.target === node.id),
+        },
+      });
+    }
   };
 
   useEffect(() => {
@@ -176,15 +260,33 @@ const WorkflowTemplateChart = ({ nodes = [], editable = false, setNodes = () => 
 
   useEffect(() => {
     nodes = nodes.map((node) => {
-      node.data.editable = editable;
-
       if (node.type === INPUT_NODE) {
         node.data.handleDeleteNode = handleDeleteNode;
         node.data.handleInputChange = handleInputChange;
         node.data.handleSwitchPopup = setHasOpenedPopup;
       } else {
         node.data.removeEdge = () => {
-          setNodes((nds) => nds.filter((nd) => nd.target !== node.target || nd.source !== node.source));
+          setNodes((nds) => {
+            const { source, target } = node;
+            nds = nds.filter((nd) => nd.target !== target || nd.source !== source);
+
+            if (editable && workflowTemplateId) {
+              const tarNode = nds.find((n) => n.id === target);
+              const conns = nds.filter((n) => n.type === CUSTOM_EDGE);
+              const predecessors = conns.filter((c) => c.target === tarNode.id).map((c) => c.source);
+              const edges = conns.filter((c) => c.target === tarNode.id);
+
+              updateWorkflowTemplateDeliverable({
+                mainId: workflowTemplateId,
+                _id: tarNode.data._id,
+                name: tarNode.data.name,
+                predecessors,
+                chartData: { ...tarNode, edges },
+              });
+            }
+
+            return nds;
+          });
         };
       }
 
@@ -200,12 +302,13 @@ const WorkflowTemplateChart = ({ nodes = [], editable = false, setNodes = () => 
           elements={nodes}
           elementsSelectable={false}
           onConnect={onConnect}
+          onNodeDragStop={onNodeDragStop}
           deleteKeyCode={46}
           nodeTypes={{ [INPUT_NODE]: CustomFlowNode }}
           edgeTypes={{ [CUSTOM_EDGE]: CustomFlowEdge }}
           arrowHeadColor={arrowHeadColor}
           zoomOnScroll={zoomOnScroll}
-          nodesDraggable={isDraggable}
+          nodesDraggable={isDraggable && editable}
           paneMoveable={paneMoveable}
           zoomOnDoubleClick={false}
         >
@@ -218,7 +321,7 @@ const WorkflowTemplateChart = ({ nodes = [], editable = false, setNodes = () => 
         <Grid container justify={editable ? 'space-between' : 'flex-end'}>
           {editable ? (
             <Grid item xs={12} md={4}>
-              <Button variant="contained" color="default" onClick={() => setNodes([...nodes, makeNode()])}>
+              <Button variant="contained" color="default" onClick={async () => setNodes([...nodes, await makeNode()])}>
                 <Plus /> Add Deliverable
               </Button>
             </Grid>
@@ -226,12 +329,12 @@ const WorkflowTemplateChart = ({ nodes = [], editable = false, setNodes = () => 
           <Grid item xs={12} md={4}>
             <Grid container justify="flex-end">
               <Grid item>
-                <Button size="small" color="primary" onClick={() => onLayout('TB')}>
+                <Button size="small" color="primary" onClick={() => onLayout('LR')}>
                   Vertial Layout
                 </Button>
               </Grid>
               <Grid item>
-                <Button size="small" color="primary" onClick={() => onLayout('LR')}>
+                <Button size="small" color="primary" onClick={() => onLayout('TB')}>
                   Horizontal Layout
                 </Button>
               </Grid>
