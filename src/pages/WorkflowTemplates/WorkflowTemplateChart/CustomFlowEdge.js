@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { getSmoothStepPath, getMarkerEnd } from 'react-flow-renderer';
 import EdgeDialog from './EdgeDialog';
 import { makeStyles } from '@material-ui/core/styles';
+import { arrowHeadColor } from 'utils/constants/reactflow/chart-configs';
 
 const useStyles = makeStyles(() => ({
   hoverPath: {
     strokeWidth: 15,
     opacity: 0,
-    stroke: 'grey',
+    stroke: arrowHeadColor,
     fill: 'none',
     pointerEvents: 'all',
     '&:hover': {
@@ -45,6 +46,12 @@ export default function CustomFlowEdge({
 
   const edgePath = getSmoothStepPath({ sourceX, sourceY, sourcePosition, targetX, targetY, targetPosition });
   const markerEnd = getMarkerEnd(arrowHeadType, markerEndId);
+
+  useEffect(() => {
+    const marker = document.getElementById('react-flow__arrowclosed');
+    marker.markerWidth.baseVal.value = 30;
+    marker.markerHeight.baseVal.value = 30;
+  });
 
   return (
     <>

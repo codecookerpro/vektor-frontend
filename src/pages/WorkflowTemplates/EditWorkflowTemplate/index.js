@@ -44,13 +44,13 @@ const EditWorkflowTemplate = () => {
       } = deliverable;
       return [
         ...acc,
-        { id, type, data: { ...data, _id, editable }, style, position },
-        ...(edges ? edges.map((e) => ({ ...e, data: { ...e.data, editable } })) : []),
+        { id, type, data: { ...data, _id, editable: true }, style, position },
+        ...(edges ? edges.map((e) => ({ ...e, data: { ...e.data, editable: true } })) : []),
       ];
     }, []);
 
     setTimeout(() => setNodes(nodes));
-  }, [workflowTemplate, editable]);
+  }, [workflowTemplate]);
 
   return (
     <>
@@ -62,7 +62,7 @@ const EditWorkflowTemplate = () => {
       {isEmpty(workflowTemplate) || (
         <>
           <WorkflowTemplateForm nodes={nodes} workflowTemplate={workflowTemplate} onEdit={setEditable} />
-          <WorkflowTemplateChart nodes={nodes} setNodes={setNodes} editable={editable} workflowTemplateId={workflowTemplate._id} />
+          <WorkflowTemplateChart nodes={nodes} setNodes={setNodes} editable={true} workflowTemplateId={workflowTemplate._id} />
         </>
       )}
     </>
