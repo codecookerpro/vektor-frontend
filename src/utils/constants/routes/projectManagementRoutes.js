@@ -16,6 +16,7 @@ const EditSystem = lazy(() => import(/* webpackChunkName: 'EditSystem' */ 'pages
 const SystemHistory = lazy(() => import(/* webpackChunkName: 'SystemHistory' */ 'pages/Systems/SystemHistory'));
 const DeliverableTrendChart = lazy(() => import(/* webpackChunkName: 'DeliverableTrendChart' */ 'pages/Systems/DeliverableTrendChart'));
 const ReportList = lazy(() => import(/* webpackChunkName: 'ReportList' */ 'pages/Reports'));
+const Gantt = lazy(() => import(/* webpackChunkName: 'Gantt' */ 'pages/Projects/Gantt'));
 
 const projectManagementRoutes = Object.freeze({
   id: LINKS.PROJECT_MANAGEMENT.TITLE,
@@ -103,6 +104,11 @@ const projectManagementRoutes = Object.freeze({
       path: LINKS.REPORTS.HREF,
       name: LINKS.REPORTS.TITLE,
       component: ReportList,
+    },
+    {
+      path: LINKS.PROJECT_GANTT.HREF,
+      name: LINKS.PROJECT_GANTT.TITLE,
+      component: Gantt,
     },
   ],
 });
