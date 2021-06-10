@@ -59,9 +59,10 @@ export default memo(({ id, data }) => {
   const [dialogProps, setDialogProps] = useState(null);
 
   const handlePopUpToggle = (e) => {
-    e.preventDefault();
-    setPopperElement(popperElement ? null : e.currentTarget);
-    data.handleSwitchPopup(popperElement ? null : e.currentTarget);
+    if (data.editable) {
+      setPopperElement(popperElement ? null : e.currentTarget);
+      data.handleSwitchPopup(popperElement ? null : e.currentTarget);
+    }
   };
 
   const handleDeleteNodes = (e) => {
@@ -78,7 +79,7 @@ export default memo(({ id, data }) => {
 
   return (
     <>
-      <div onDoubleClick={data.editable && handlePopUpToggle}>
+      <div onDoubleClick={handlePopUpToggle}>
         <Handle type="target" style={{ background: handleColors.target }} position="top" id={'top'} />
         <Handle type="target" style={{ background: handleColors.target }} position="left" id={'left'} />
         <div className={classes.nodeContent}>
@@ -90,11 +91,11 @@ export default memo(({ id, data }) => {
           {({ TransitionProps }) => (
             <Fade {...TransitionProps}>
               <div className={classes.nodePopup}>
-                <CloseIcon className={classes.nodePopupCloseIcon} onClick={(e) => handlePopUpToggle(e)} />
-                <Button variant="contained" color="primary" className={classes.nodePopupButton} onClick={(e) => handleEditNodes(e)}>
+                <CloseIcon className={classes.nodePopupCloseIcon} onClick={handlePopUpToggle} />
+                <Button variant="contained" color="primary" className={classes.nodePopupButton} onClick={handleEditNodes}>
                   Edit
                 </Button>
-                <Button variant="contained" color="default" onClick={(e) => handleDeleteNodes(e)}>
+                <Button variant="contained" color="default" onClick={handleDeleteNodes}>
                   Delete
                 </Button>
               </div>

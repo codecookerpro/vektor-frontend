@@ -1,4 +1,5 @@
 import React, { memo, useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import { Card, CardHeader, CardContent, CardActions, Button, Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Plus } from 'react-feather';
@@ -15,9 +16,16 @@ import {
   defaultNodeMarginX,
   edgeDefaultProps,
   nodeStyle,
+  label,
 } from 'utils/constants/reactflow/chart-configs';
 import ObjectID from 'bson-objectid';
 import dagre from 'dagre';
+import {
+  createWorkflowTemplateDeliverable,
+  updateWorkflowTemplateDeliverable,
+  deleteWorkflowTemplateDeliverable,
+} from 'services/api-workflow-template';
+import { createWTD, updateWTD } from 'redux/actions/workflowTemplates';
 
 const useStyles = makeStyles(() => ({
   content: {
@@ -31,8 +39,8 @@ const useStyles = makeStyles(() => ({
 const dagreGraph = new dagre.graphlib.Graph();
 dagreGraph.setDefaultEdgeLabel(() => ({}));
 
-const getLayoutedElements = (elements, direction = 'TB') => {
-  const isHorizontal = direction === 'LR';
+const getLayoutedElements = (elements, direction = 'v') => {
+  const isHorizontal = direction === 'h';
   dagreGraph.setGraph({ rankdir: direction });
 
   elements.forEach((el) => {
@@ -64,8 +72,9 @@ const getLayoutedElements = (elements, direction = 'TB') => {
   });
 };
 
-const WorkflowTemplateChart = ({ nodes = [], editable = false, setNodes = () => {} }) => {
+const WorkflowTemplateChart = ({ nodes = [], editable = false, setNodes = () => {}, workflowTemplateId = null }) => {
   const classes = useStyles();
+  const dispatch = useDispatch();
   const [zoomOnScroll, setZoomOnScroll] = useState(true);
   const [isDraggable, setIsDraggable] = useState(true);
   const [paneMoveable, setPaneMoveable] = useState(true);
@@ -84,9 +93,29 @@ const WorkflowTemplateChart = ({ nodes = [], editable = false, setNodes = () => 
     return { x, y };
   };
 
+  const nodeToDeliverable = (id, nodes) => {
+    const node = nodes.find((n) => n.id === id);
+    const edges = nodes.filter((c) => c.type === CUSTOM_EDGE);
+
+    if (!node || !workflowTemplateId) {
+      return null;
+    }
+
+    return {
+      mainId: workflowTemplateId,
+      _id: node.data._id,
+      name: node.data.label,
+      predecessors: edges.filter((c) => c.target === node.id).map((c) => c.source),
+      chartData: {
+        ...node,
+        edges: edges.filter((e) => e.target === node.id),
+      },
+    };
+  };
+
   const handleInputChange = (id, value) => {
-    setNodes((nds) =>
-      nds.map((n) =>
+    setNodes((nds) => {
+      nds = nds.map((n) =>
         n.id === id
           ? {
               ...n,
@@ -96,28 +125,47 @@ const WorkflowTemplateChart = ({ nodes = [], editable = false, setNodes = () => 
               },
             }
           : n
-      )
-    );
-  };
+      );
 
-  const handleDeleteNode = (id, e) => {
-    e.preventDefault();
+      if (editable && workflowTemplateId) {
+        updateWorkflowTemplateDeliverable(nodeToDeliverable(id, nds)).then(({ data }) => dispatch(updateWTD(data)));
+      }
 
-    setNodes((nds) => {
-      const nodeToRemove = nds.filter((nd) => nd.id === id);
-      return removeElements(nodeToRemove, nds);
+      return nds;
     });
   };
 
-  const makeNode = () => {
+  const handleDeleteNode = (id) => {
+    setNodes((nds) => {
+      const nodeToRemove = nds.filter((nd) => nd.id === id);
+      const removed = removeElements(nodeToRemove, nds);
+
+      if (editable && workflowTemplateId) {
+        deleteWorkflowTemplateDeliverable({
+          mainId: workflowTemplateId,
+          _id: nodeToRemove[0].data._id,
+        }).then(({ data }) => dispatch(updateWTD(data)));
+
+        nds
+          .filter((n) => n.source === id)
+          .forEach(({ target }) => {
+            updateWorkflowTemplateDeliverable(nodeToDeliverable(target, removed)).then(({ data }) => dispatch(updateWTD(data)));
+          });
+      }
+
+      return removed;
+    });
+  };
+
+  const makeNode = async () => {
     const nodeNum = nodes.length;
     const currentTimestamp = new Date().getTime();
     const objectId = ObjectID(currentTimestamp).toHexString();
-    return {
+    const node = {
       id: objectId,
       type: INPUT_NODE,
       data: {
-        label: null,
+        label: workflowTemplateId ? label : null,
         editable: true,
         handleInputChange,
         handleDeleteNode,
@@ -126,6 +174,23 @@ const WorkflowTemplateChart = ({ nodes = [], editable = false, setNodes = () => 
       style: nodeStyle,
       position: position(nodeNum),
     };
+
+    if (editable && workflowTemplateId) {
+      const { data } = await createWorkflowTemplateDeliverable({
+        mainId: workflowTemplateId,
+        name: label,
+        chartData: {
+          ...node,
+        },
+      });
+
+      dispatch(createWTD(data));
+
+      const createdId = data.deliverables.find((d) => d.chartData.id === node.id)._id;
+      node.data._id = createdId;
+    }
+
+    return node;
   };
 
   const onConnect = (conn) => {
@@ -160,12 +225,32 @@ const WorkflowTemplateChart = ({ nodes = [], editable = false, setNodes = () => 
         },
       },
     };
-    setNodes((nodes) => addEdge(newEdge, nodes));
+
+    const updatedNodes = addEdge(newEdge, nodes);
+
+    if (editable && workflowTemplateId) {
+      updateWorkflowTemplateDeliverable(nodeToDeliverable(target, updatedNodes)).then(({ data }) => dispatch(updateWTD(data)));
+    }
+
+    setNodes(updatedNodes);
   };
 
   const onLayout = (direction) => {
     const layoutedElements = getLayoutedElements(nodes, direction);
     setNodes(layoutedElements);
+  };
+
+  const onNodeDragStop = (e, node) => {
+    e.preventDefault();
+
+    if (editable && workflowTemplateId) {
+      updateWorkflowTemplateDeliverable(
+        nodeToDeliverable(
+          node.id,
+          nodes.map((n) => (n.id === node.id ? { ...n, position: node.position } : n))
+        )
+      ).then(({ data }) => dispatch(updateWTD(data)));
+    }
   };
 
   useEffect(() => {
@@ -176,15 +261,22 @@ const WorkflowTemplateChart = ({ nodes = [], editable = false, setNodes = () => 
 
   useEffect(() => {
     nodes = nodes.map((node) => {
-      node.data.editable = editable;
-
       if (node.type === INPUT_NODE) {
         node.data.handleDeleteNode = handleDeleteNode;
         node.data.handleInputChange = handleInputChange;
         node.data.handleSwitchPopup = setHasOpenedPopup;
       } else {
         node.data.removeEdge = () => {
-          setNodes((nds) => nds.filter((nd) => nd.target !== node.target || nd.source !== node.source));
+          setNodes((nds) => {
+            const { source, target } = node;
+            nds = nds.filter((nd) => nd.target !== target || nd.source !== source);
+
+            if (editable && workflowTemplateId) {
+              updateWorkflowTemplateDeliverable(nodeToDeliverable(target, nds)).then(({ data }) => dispatch(updateWTD(data)));
+            }
+
+            return nds;
+          });
         };
       }
 
@@ -200,12 +292,13 @@ const WorkflowTemplateChart = ({ nodes = [], editable = false, setNodes = () => 
           elements={nodes}
           elementsSelectable={false}
           onConnect={onConnect}
+          onNodeDragStop={onNodeDragStop}
           deleteKeyCode={46}
           nodeTypes={{ [INPUT_NODE]: CustomFlowNode }}
           edgeTypes={{ [CUSTOM_EDGE]: CustomFlowEdge }}
           arrowHeadColor={arrowHeadColor}
           zoomOnScroll={zoomOnScroll}
-          nodesDraggable={isDraggable}
+          nodesDraggable={isDraggable && editable}
           paneMoveable={paneMoveable}
           zoomOnDoubleClick={false}
         >
@@ -218,7 +311,7 @@ const WorkflowTemplateChart = ({ nodes = [], editable = false, setNodes = () => 
         <Grid container justify={editable ? 'space-between' : 'flex-end'}>
           {editable ? (
             <Grid item xs={12} md={4}>
-              <Button variant="contained" color="default" onClick={() => setNodes([...nodes, makeNode()])}>
+              <Button variant="contained" color="default" onClick={async () => setNodes([...nodes, await makeNode()])}>
                 <Plus /> Add Deliverable
               </Button>
             </Grid>
@@ -226,12 +319,12 @@ const WorkflowTemplateChart = ({ nodes = [], editable = false, setNodes = () => 
           <Grid item xs={12} md={4}>
             <Grid container justify="flex-end">
               <Grid item>
-                <Button size="small" color="primary" onClick={() => onLayout('TB')}>
+                <Button size="small" color="primary" onClick={() => onLayout('v')}>
                   Vertial Layout
                 </Button>
               </Grid>
               <Grid item>
-                <Button size="small" color="primary" onClick={() => onLayout('LR')}>
+                <Button size="small" color="primary" onClick={() => onLayout('h')}>
                   Horizontal Layout
                 </Button>
               </Grid>

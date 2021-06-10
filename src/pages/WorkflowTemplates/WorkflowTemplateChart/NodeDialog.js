@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
 
 const NodeDialog = ({ isDialogOpen, setIsDialogOpen, label, handleInputChange, nodeId, handlePopUpToggle, dialogProps, handleDeleteNode }) => {
   const classes = useStyles();
-  const [nameTemp, setNameTemp] = useState(null);
+  const [nameTemp, setNameTemp] = useState(label);
 
   const handleDialogApprove = (e) => {
     e.preventDefault();

@@ -33,7 +33,9 @@ export default function CustomFlowEdge({
   const classes = useStyles();
 
   const toggleDialog = () => {
-    setToggled(true);
+    if (data.editable) {
+      setToggled(true);
+    }
   };
 
   const deleteEdge = () => {
@@ -47,7 +49,7 @@ export default function CustomFlowEdge({
   return (
     <>
       <path id={id} style={style} className="react-flow__edge-path" d={edgePath} markerEnd={markerEnd} />
-      <path className={classes.hoverPath} d={edgePath} onDoubleClick={data.editable && toggleDialog} />
+      <path className={classes.hoverPath} d={edgePath} onDoubleClick={toggleDialog} />
       <EdgeDialog setToggled={setToggled} toggled={toggled} onDelete={deleteEdge} />
     </>
   );
