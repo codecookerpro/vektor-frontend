@@ -133,6 +133,7 @@ const UserForm = ({ user = {} }) => {
             <Grid item xs={12} sm={6} md={3}>
               <Controller
                 as={<VektorTextField />}
+                id="email"
                 fullWidth
                 name="email"
                 label="Email"
@@ -162,6 +163,7 @@ const UserForm = ({ user = {} }) => {
             <Grid item xs={12} sm={6} md={3}>
               <Controller
                 as={<VektorTextField />}
+                id="name"
                 fullWidth
                 name="name"
                 label="Name"
@@ -187,6 +189,7 @@ const UserForm = ({ user = {} }) => {
             <Grid item xs={12} sm={6} md={3}>
               <Controller
                 as={<VektorTextField />}
+                id="password"
                 fullWidth
                 name="password"
                 label="Password"
