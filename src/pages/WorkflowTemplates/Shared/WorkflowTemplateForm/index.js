@@ -22,6 +22,7 @@ import { isEmpty } from 'utils/helpers/utility';
 import { INPUT_NODE, CUSTOM_EDGE } from 'utils/constants/reactflow/custom-node-types';
 import { setPopup } from 'redux/actions/popupActions';
 import { POPUP_TYPE } from 'utils/constants/popupType';
+import { FORM_MODE } from 'utils/constants';
 
 const useStyles = makeStyles((theme) => ({
   alert: {
@@ -52,7 +53,7 @@ const WorkflowTemplateForm = ({ workflowTemplate = {}, nodes = [], onEdit = () =
   const [errorMessage, setErrorMessage] = useState('');
   const [editMode, setEditMode] = useState(false);
 
-  const formMode = isEmpty(workflowTemplate) ? 'create' : editMode ? 'update' : 'view';
+  const formMode = isEmpty(workflowTemplate) ? FORM_MODE.create : editMode ? FORM_MODE.update : FORM_MODE.view;
 
   const currentUser = useSelector((state) => state.auth.currentUser);
 
@@ -178,7 +179,7 @@ const WorkflowTemplateForm = ({ workflowTemplate = {}, nodes = [], onEdit = () =
                 placeholder="Name"
                 error={errors.name?.message}
                 control={control}
-                disabled={formMode === 'view'}
+                disabled={formMode === FORM_MODE.view}
                 defaultValue={workflowTemplate?.name || ''}
               />
             </Grid>
@@ -197,7 +198,7 @@ const WorkflowTemplateForm = ({ workflowTemplate = {}, nodes = [], onEdit = () =
                   }}
                   error={errors.organization?.message}
                   control={control}
-                  disabled={formMode === 'view'}
+                  disabled={formMode === FORM_MODE.view}
                   defaultValue={workflowTemplate?.organization || ''}
                 />
               </Grid>
@@ -212,19 +213,19 @@ const WorkflowTemplateForm = ({ workflowTemplate = {}, nodes = [], onEdit = () =
                 placeholder="Number"
                 error={errors.differentialWeight?.message}
                 control={control}
-                disabled={formMode === 'view'}
+                disabled={formMode === FORM_MODE.view}
                 defaultValue={workflowTemplate?.differentialWeight || 1}
               />
             </Grid>
             <Grid item xs={12}>
               <Grid container justify="space-between">
-                {formMode == 'create' ? (
+                {formMode == FORM_MODE.create ? (
                   <Grid item>
                     <Button variant="contained" color="primary" onClick={handleSubmit(onSubmit)}>
                       Save
                     </Button>
                   </Grid>
-                ) : formMode === 'update' ? (
+                ) : formMode === FORM_MODE.update ? (
                   <>
                     <Grid item>
                       <Button variant="contained" color="primary" onClick={handleSubmit(onSubmit)}>
