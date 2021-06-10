@@ -39,8 +39,8 @@ const useStyles = makeStyles(() => ({
 const dagreGraph = new dagre.graphlib.Graph();
 dagreGraph.setDefaultEdgeLabel(() => ({}));
 
-const getLayoutedElements = (elements, direction = 'TB') => {
-  const isHorizontal = direction === 'LR';
+const getLayoutedElements = (elements, direction = 'v') => {
+  const isHorizontal = direction === 'h';
   dagreGraph.setGraph({ rankdir: direction });
 
   elements.forEach((el) => {
@@ -93,6 +93,26 @@ const WorkflowTemplateChart = ({ nodes = [], editable = false, setNodes = () => 
     return { x, y };
   };
 
+  const nodeToDeliverable = (id, nodes) => {
+    const node = nodes.find((n) => n.id === id);
+    const edges = nodes.filter((c) => c.type === CUSTOM_EDGE);
+
+    if (!node || !workflowTemplateId) {
+      return null;
+    }
+
+    return {
+      mainId: workflowTemplateId,
+      _id: node.data._id,
+      name: node.data.label,
+      predecessors: edges.filter((c) => c.target === node.id).map((c) => c.source),
+      chartData: {
+        ...node,
+        edges: edges.filter((e) => e.target === node.id),
+      },
+    };
+  };
+
   const handleInputChange = (id, value) => {
     setNodes((nds) => {
       nds = nds.map((n) =>
@@ -108,19 +128,7 @@ const WorkflowTemplateChart = ({ nodes = [], editable = false, setNodes = () => 
       );
 
       if (editable && workflowTemplateId) {
-        const edges = nds.filter((c) => c.type === CUSTOM_EDGE);
-        const node = nds.find((n) => n.id === id);
-
-        updateWorkflowTemplateDeliverable({
-          mainId: workflowTemplateId,
-          _id: node.data._id,
-          name: node.data.label,
-          predecessors: edges.filter((c) => c.target === node.id).map((c) => c.source),
-          chartData: {
-            ...node,
-            edges: edges.filter((e) => e.target === node.id),
-          },
-        }).then(({ data }) => dispatch(updateWTD(data)));
+        updateWorkflowTemplateDeliverable(nodeToDeliverable(id, nds)).then(({ data }) => dispatch(updateWTD(data)));
       }
 
       return nds;
@@ -129,15 +137,23 @@ const WorkflowTemplateChart = ({ nodes = [], editable = false, setNodes = () => 
 
   const handleDeleteNode = (id) => {
     setNodes((nds) => {
+      const nodeToRemove = nds.filter((nd) => nd.id === id);
+      const removed = removeElements(nodeToRemove, nds);
+
       if (editable && workflowTemplateId) {
         deleteWorkflowTemplateDeliverable({
           mainId: workflowTemplateId,
-          _id: nds.find((n) => n.id === id).data._id,
+          _id: nodeToRemove[0].data._id,
         }).then(({ data }) => dispatch(updateWTD(data)));
+
+        nds
+          .filter((n) => n.source === id)
+          .forEach(({ target }) => {
+            updateWorkflowTemplateDeliverable(nodeToDeliverable(target, removed)).then(({ data }) => dispatch(updateWTD(data)));
+          });
       }
 
-      const nodeToRemove = nds.filter((nd) => nd.id === id);
-      return removeElements(nodeToRemove, nds);
+      return removed;
     });
   };
 
@@ -211,20 +227,9 @@ const WorkflowTemplateChart = ({ nodes = [], editable = false, setNodes = () => 
     };
 
     const updatedNodes = addEdge(newEdge, nodes);
-    const updatedConns = updatedNodes.filter((el) => el.type === CUSTOM_EDGE);
 
     if (editable && workflowTemplateId) {
-      const edges = updatedConns.filter((c) => c.target === target);
-      const node = updatedNodes.find((n) => n.id === target);
-      const predecessors = updatedConns.filter((c) => c.target === node.id).map((c) => c.source);
-
-      updateWorkflowTemplateDeliverable({
-        mainId: workflowTemplateId,
-        _id: node.data._id,
-        name: node.data.label,
-        predecessors,
-        chartData: { ...node, edges },
-      }).then(({ data }) => dispatch(updateWTD(data)));
+      updateWorkflowTemplateDeliverable(nodeToDeliverable(target, updatedNodes)).then(({ data }) => dispatch(updateWTD(data)));
     }
 
     setNodes(updatedNodes);
@@ -239,19 +244,12 @@ const WorkflowTemplateChart = ({ nodes = [], editable = false, setNodes = () => 
     e.preventDefault();
 
     if (editable && workflowTemplateId) {
-      const edges = nodes.filter((c) => c.type === CUSTOM_EDGE);
-
-      updateWorkflowTemplateDeliverable({
-        mainId: workflowTemplateId,
-        _id: node.data._id,
-        name: node.data.label,
-        predecessors: edges.filter((c) => c.target === node.id).map((c) => c.source),
-        chartData: {
-          ...nodes.find((n) => n.id === node.id),
-          position: node.position,
-          edges: edges.filter((e) => e.target === node.id),
-        },
-      }).then(({ data }) => dispatch(updateWTD(data)));
+      updateWorkflowTemplateDeliverable(
+        nodeToDeliverable(
+          node.id,
+          nodes.map((n) => (n.id === node.id ? { ...n, position: node.position } : n))
+        )
+      ).then(({ data }) => dispatch(updateWTD(data)));
     }
   };
 
@@ -274,18 +272,7 @@ const WorkflowTemplateChart = ({ nodes = [], editable = false, setNodes = () => 
             nds = nds.filter((nd) => nd.target !== target || nd.source !== source);
 
             if (editable && workflowTemplateId) {
-              const tarNode = nds.find((n) => n.id === target);
-              const conns = nds.filter((n) => n.type === CUSTOM_EDGE);
-              const predecessors = conns.filter((c) => c.target === tarNode.id).map((c) => c.source);
-              const edges = conns.filter((c) => c.target === tarNode.id);
-
-              updateWorkflowTemplateDeliverable({
-                mainId: workflowTemplateId,
-                _id: tarNode.data._id,
-                name: tarNode.data.name,
-                predecessors,
-                chartData: { ...tarNode, edges },
-              }).then(({ data }) => dispatch(updateWTD(data)));
+              updateWorkflowTemplateDeliverable(nodeToDeliverable(target, nds)).then(({ data }) => dispatch(updateWTD(data)));
             }
 
             return nds;
@@ -332,12 +319,12 @@ const WorkflowTemplateChart = ({ nodes = [], editable = false, setNodes = () => 
           <Grid item xs={12} md={4}>
             <Grid container justify="flex-end">
               <Grid item>
-                <Button size="small" color="primary" onClick={() => onLayout('LR')}>
+                <Button size="small" color="primary" onClick={() => onLayout('v')}>
                   Vertial Layout
                 </Button>
               </Grid>
               <Grid item>
-                <Button size="small" color="primary" onClick={() => onLayout('TB')}>
+                <Button size="small" color="primary" onClick={() => onLayout('h')}>
                   Horizontal Layout
                 </Button>
               </Grid>
