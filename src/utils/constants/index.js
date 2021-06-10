@@ -1,5 +1,3 @@
-import keyMirror from 'keymirror';
-
 export * from './emptyString';
 export * from './equipment-categories';
 export * from './equipment-types';
@@ -14,8 +12,8 @@ export * from './projectModes';
 export * from './table-environments';
 export * from './validations';
 
-export const FORM_MODE = keyMirror({
-  create: null,
-  update: null,
-  view: null,
-});
+export const FORM_MODE = {
+  create: 'create',
+  update: 'update',
+  view: 'view',
+};

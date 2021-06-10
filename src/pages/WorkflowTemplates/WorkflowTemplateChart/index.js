@@ -165,7 +165,7 @@ const WorkflowTemplateChart = ({ nodes = [], editable = false, setNodes = () => 
       id: objectId,
       type: INPUT_NODE,
       data: {
-        label,
+        label: workflowTemplateId ? label : null,
         editable: true,
         handleInputChange,
         handleDeleteNode,
