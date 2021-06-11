@@ -1,9 +1,10 @@
 import React, { memo, useState } from 'react';
-import { Handle } from 'react-flow-renderer';
+import { Handle, Position } from 'react-flow-renderer';
 import Popper from '@material-ui/core/Popper';
 import Fade from '@material-ui/core/Fade';
 import { makeStyles } from '@material-ui/core/styles';
 import { Button } from '@material-ui/core';
+import { IDENTIFIERS, TYPE } from 'utils/constants/reactflow/custom-node-types';
 import NodeDialog from './NodeDialog';
 import CloseIcon from '@material-ui/icons/Close';
 import * as nodeDialogConfigs from 'utils/constants/reactflow/node-dialog-configs';
@@ -80,16 +81,69 @@ export default memo(({ id, data }) => {
     setDialogProps(nodeDialogConfigs.EDIT);
   };
 
+  const handleMargin = 15;
   return (
     <>
       <div onDoubleClick={handlePopUpToggle}>
-        <Handle type="target" style={{ background: handleColors.target }} position="top" id={'top'} />
-        <Handle type="target" style={{ background: handleColors.target }} position="left" id={'left'} />
+        <Handle
+          type={TYPE.TARGET}
+          style={{ background: handleColors.target, marginTop: `-${handleMargin}px` }}
+          position={Position.Left}
+          id={IDENTIFIERS.TARGET_LEFT}
+        />
+
+        <Handle
+          type={TYPE.TARGET}
+          style={{ background: handleColors.target, marginLeft: `${handleMargin}px` }}
+          position={Position.Top}
+          id={IDENTIFIERS.TARGET_TOP}
+        />
+
+        <Handle
+          type={TYPE.TARGET}
+          style={{ background: handleColors.target, marginTop: `${handleMargin}px` }}
+          position={Position.Right}
+          id={IDENTIFIERS.TARGET_RIGHT}
+        />
+
+        <Handle
+          type={TYPE.TARGET}
+          style={{ background: handleColors.target, marginLeft: `-${handleMargin}px` }}
+          position={Position.Bottom}
+          id={IDENTIFIERS.TARGET_BOTTOM}
+        />
+        <Handle
+          type={TYPE.SOURCE}
+          style={{ background: handleColors.source, marginTop: `${handleMargin}px` }}
+          position={Position.Left}
+          id={IDENTIFIERS.SOURCE_LEFT}
+        />
+
+        <Handle
+          type={TYPE.SOURCE}
+          style={{ background: handleColors.source, marginLeft: `-${handleMargin}px` }}
+          position={Position.Top}
+          id={IDENTIFIERS.SOURCE_TOP}
+        />
+
+        <Handle
+          type={TYPE.SOURCE}
+          style={{ background: handleColors.source, marginTop: `-${handleMargin}px` }}
+          position={Position.Right}
+          id={IDENTIFIERS.SOURCE_RIGHT}
+        />
+
+        <Handle
+          type={TYPE.SOURCE}
+          style={{ background: handleColors.source, marginLeft: `${handleMargin}px` }}
+          position={Position.Bottom}
+          id={IDENTIFIERS.SOURCE_BOTTOM}
+        />
+
         <div className={classes.nodeContent}>
           <p className={classes.name}>{data.label || <small>Double-click to edit</small>}</p>
         </div>
-        <Handle type="source" style={{ background: handleColors.source }} position="bottom" id={'bottom'} />
-        <Handle type="source" style={{ background: handleColors.source }} position="right" id={'right'} />
+
         <Popper open={isPopperOpen} anchorEl={popperElement} className={classes.nodePopupContainer} transition>
           {({ TransitionProps }) => (
             <Fade {...TransitionProps}>

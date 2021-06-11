@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { getSmoothStepPath, getMarkerEnd } from 'react-flow-renderer';
+import { getMarkerEnd } from 'react-flow-renderer';
+import { getSmoothStepPathPatched } from './helper';
 import EdgeDialog from './EdgeDialog';
 import { makeStyles } from '@material-ui/core/styles';
 import { arrowHeadColor } from 'utils/constants/reactflow/chart-configs';
@@ -44,7 +45,7 @@ export default function CustomFlowEdge({
     data.removeEdge(data);
   };
 
-  const edgePath = getSmoothStepPath({ sourceX, sourceY, sourcePosition, targetX, targetY, targetPosition });
+  const edgePath = getSmoothStepPathPatched({ sourceX, sourceY, targetX, targetY, targetPosition, sourcePosition });
   const markerEnd = getMarkerEnd(arrowHeadType, markerEndId);
 
   useEffect(() => {
