@@ -26,6 +26,7 @@ import {
   deleteWorkflowTemplateDeliverable,
 } from 'services/api-workflow-template';
 import { createWTD, updateWTD } from 'redux/actions/workflowTemplates';
+import { LAYOUT_DIR } from 'utils/constants';
 
 const maxChartHeight = window.innerHeight - 617;
 const chartHeight = maxChartHeight > chartContainerHeight ? maxChartHeight : chartContainerHeight;
@@ -42,8 +43,8 @@ const useStyles = makeStyles(() => ({
 const dagreGraph = new dagre.graphlib.Graph();
 dagreGraph.setDefaultEdgeLabel(() => ({}));
 
-const getLayoutedElements = (elements, direction = 'TB') => {
-  const isHorizontal = direction === 'LR';
+const getLayoutedElements = (elements, direction = LAYOUT_DIR.vertical) => {
+  const isHorizontal = direction === LAYOUT_DIR.horizontal;
   dagreGraph.setGraph({ rankdir: direction });
 
   elements.forEach((el) => {
@@ -322,12 +323,12 @@ const WorkflowTemplateChart = ({ nodes = [], editable = true, setNodes = () => {
           <Grid item xs={12} md={4}>
             <Grid container justify="flex-end">
               <Grid item>
-                <Button size="small" color="primary" onClick={() => onLayout('TB')}>
+                <Button size="small" color="primary" onClick={() => onLayout(LAYOUT_DIR.vertical)}>
                   Vertical Layout
                 </Button>
               </Grid>
               <Grid item>
-                <Button size="small" color="primary" onClick={() => onLayout('LR')}>
+                <Button size="small" color="primary" onClick={() => onLayout(LAYOUT_DIR.horizontal)}>
                   Horizontal Layout
                 </Button>
               </Grid>
