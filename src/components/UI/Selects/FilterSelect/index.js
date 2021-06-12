@@ -43,7 +43,7 @@ const FilterSelect = React.forwardRef(
           ref={ref}
           className={classes.disabledSelect}
           labelId="demo-simple-select-placeholder-label-label-1"
-          id="demo-simple-select-placeholder-label"
+          id={`demo-simple-select-placeholder-label-${value}`}
           displayEmpty
           error={!!error}
           value={value || ''}

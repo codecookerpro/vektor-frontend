@@ -31,3 +31,32 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
 To learn React, check out the [React documentation](https://reactjs.org/).
+
+## React:
+
+`All the necessary business logic should be encapsulated!!!`
+For Business Logic encapsulation use:
+
+- hook (preferable) - _It's not required to be a reused hook. Create a separate file for each hook._
+- HOC - _It's not required to be a reused HOC. Create a separate file for each HOC._
+- helper-functions - _It's not required to be a reused helper-function. Create a separate file, if a helper function is huge._
+
+## Full component/page structure:
+
+```
+ComponentName.jsx       - component/page name
+index.js                - file for export. Export component parts for quick access.
+constants.js            - place constans here
+helpers / helpers.js    - Create a folder, if there are lots of helpers. Create a file if they are few or they iclude some rows.
+  index.js                - ile for export
+  useHelper.js            - hook
+  helperFunc.js           - helper function
+  withHelper.js           - HOC
+components              - folder for auxiliary components, then the structure is the same.
+  index.js
+  AnyComponent
+    AnyComponent.jsx
+    types.js
+    index.js
+    ...
+```
