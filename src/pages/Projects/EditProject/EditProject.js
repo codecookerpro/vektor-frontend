@@ -7,7 +7,7 @@ import PageHeader from 'parts/PageHeader';
 import DetailLinkCard from 'parts/DetailLinkCard';
 import ProjectForm from '../Shared/ProjectForm';
 import StopDailyData from '../Shared/StopDailyData';
-import ProjectSystemsTable from '../Shared/ProjectSystemsTable';
+import MetaSystemTable from '../../MetaSystems/Shared/MetaSystemTable';
 import PhasesListView from '../Shared/PhasesListView';
 import LINKS from 'utils/constants/links';
 
@@ -15,8 +15,7 @@ import { NAV_LINKS } from './constants';
 import { useEditProjectLogic } from './helpers';
 
 const EditProject = () => {
-  const { project, isPhasesVisible, getMode, onClickButton } = useEditProjectLogic();
-  console.log(project);
+  const { project, isPhasesVisible, getMode, onClickButton, metaSystems } = useEditProjectLogic();
 
   return (
     <>
@@ -51,7 +50,7 @@ const EditProject = () => {
           </Grid>
         </Grid>
         <Grid item xs={12}>
-          <ProjectSystemsTable />
+          <MetaSystemTable records={metaSystems} />
         </Grid>
       </Grid>
     </>

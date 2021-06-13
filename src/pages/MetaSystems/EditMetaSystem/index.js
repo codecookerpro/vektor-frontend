@@ -1,24 +1,38 @@
-import React, { memo, useMemo } from 'react';
+import React, { memo, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 import { Grid } from '@material-ui/core';
 
 import PageHeader from 'parts/PageHeader';
-import SystemForm from '../Shared/MetaSystemForm';
+import MetaSystemForm from '../Shared/MetaSystemForm';
 import LINKS from 'utils/constants/links';
-import results from 'utils/temp/systems';
+import { FORM_MODE } from 'utils/constants';
+import { readMetaSystem } from 'redux/actions/metaSystem';
 
-const NAV_LINKS = [LINKS.PROJECT_MANAGEMENT, LINKS.SYSTEMS];
+const NAV_LINKS = [LINKS.PROJECT_MANAGEMENT, LINKS.PROJECTS];
 
 const EditMetaSystem = () => {
-  const { id } = useParams();
-  const system = useMemo(() => results.find((item) => item.id === id), [id]);
+  const { project, system } = useParams();
+  const dispatch = useDispatch();
+  const metaSystem = useSelector(({ projects: { metaSystems } }) => {
+    if (metaSystems[project]) {
+      return metaSystems[project].find((ms) => ms._id === system);
+    }
+    return null;
+  });
+
+  useEffect(() => dispatch(readMetaSystem(project)), [dispatch, project]);
+
+  if (!metaSystem) {
+    return null;
+  }
 
   return (
     <>
-      <PageHeader title={LINKS.EDIT_SYSTEM.TITLE} links={NAV_LINKS} />
+      <PageHeader title={LINKS.EDIT_META_SYSTEM.TITLE} links={NAV_LINKS} />
       <Grid container spacing={6}>
         <Grid item xs={12}>
-          <SystemForm system={system} />
+          <MetaSystemForm system={metaSystem} mode={FORM_MODE.update} />
         </Grid>
       </Grid>
     </>

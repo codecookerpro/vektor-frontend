@@ -1,11 +1,10 @@
-import React, { memo, useState } from 'react';
+import React, { memo } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useForm, Controller } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
 import joi from 'joi';
-import { Card, CardContent, Grid, Button, Box, Typography } from '@material-ui/core';
-import { Alert } from '@material-ui/lab';
+import { Card, CardContent, Grid, Button, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 import VektorTextField from 'components/UI/TextFields/VektorTextField';
@@ -13,8 +12,10 @@ import FilterSelect from 'components/UI/Selects/FilterSelect';
 import { STRING_INPUT_VALID, SELECT_VALID } from 'utils/constants/validations';
 import { EQUIPMENT_TYPE, EQUIPMENT_TYPES } from 'utils/constants/equipment-types';
 import { EQUIPMENT_CATEGORIES, EQUIPMENT_CATEGORY_TYPE } from 'utils/constants/equipment-categories';
-import { createMetaSystem } from 'redux/actions/metaSystem';
+import { createMetaSystem, updateMetaSystem, deleteMetaSystem } from 'redux/actions/metaSystem';
 import { FORM_MODE } from 'utils/constants';
+import { setPopup } from 'redux/actions/popupActions';
+import { POPUP_TYPE } from 'utils/constants/popupType';
 
 const useStyles = makeStyles((theme) => ({
   alert: {
@@ -31,9 +32,12 @@ const useStyles = makeStyles((theme) => ({
   buttonContainer: {
     display: 'flex',
   },
-  delete: {
+  deleteButton: {
     marginLeft: 'auto',
     backgroundColor: theme.custom.palette.red,
+  },
+  cancelButton: {
+    marginLeft: theme.spacing(4),
   },
 }));
 
@@ -54,48 +58,47 @@ const MetaSystemForm = ({ mode = FORM_MODE.create, system = {} }) => {
   const history = useHistory();
   const dispatch = useDispatch();
   const organizations = useSelector((state) => state.organizations.results);
-
-  const [errorMessage, setErrorMessage] = useState('');
-
   const { control, handleSubmit, errors } = useForm({
     resolver: joiResolver(schema),
   });
 
   const onSubmit = (data) => {
-    try {
-      const params = {
-        name: data.name,
-        equipmentCategory: data.equipmentCategory,
-        equipmentType: data.equipmentType,
-        equipmentName: data.equipmentName,
-        equipmentNumber: data.equipmentNumber,
-        project: id,
-        organization: data.organization,
-        productCode: data.productCode,
-        site: data.site,
-      };
+    const params = {
+      name: data.name,
+      equipmentCategory: data.equipmentCategory,
+      equipmentType: data.equipmentType,
+      equipmentName: data.equipmentName,
+      equipmentNumber: data.equipmentNumber,
+      project: id,
+      productCode: data.productCode,
+      site: data.site,
+    };
 
-      if (mode === FORM_MODE.create) {
-        dispatch(createMetaSystem(params, () => history.goBack()));
-      }
-    } catch (error) {
-      if (error.response) {
-        const {
-          data: { message },
-        } = error.response;
-        setErrorMessage(message);
-      }
+    if (mode === FORM_MODE.create) {
+      dispatch(createMetaSystem({ ...params, organization: data.organization }));
+    } else if (mode === FORM_MODE.update) {
+      dispatch(updateMetaSystem({ ...params, _id: system._id }));
     }
+
+    history.goBack();
+  };
+
+  const handleDelete = () => {
+    dispatch(
+      setPopup({
+        popupType: POPUP_TYPE.CONFIRM,
+        popupText: 'Are you sure you want to delete this system?',
+        onConfirm: () => {
+          dispatch(deleteMetaSystem(system.project, system._id));
+          history.goBack();
+        },
+      })
+    );
   };
 
   return (
     <Card>
       <CardContent>
-        {errorMessage && (
-          <Alert mt={2} mb={1} severity="warning" className={classes.alert}>
-            {errorMessage}
-          </Alert>
-        )}
         <Typography variant="h6" className={classes.name}>
           {system.name || 'New System'}
         </Typography>
@@ -105,6 +108,7 @@ const MetaSystemForm = ({ mode = FORM_MODE.create, system = {} }) => {
               <Controller
                 as={<VektorTextField />}
                 fullWidth
+                id="name"
                 name="name"
                 label="Name"
                 placeholder="Name"
@@ -123,7 +127,7 @@ const MetaSystemForm = ({ mode = FORM_MODE.create, system = {} }) => {
                 items={EQUIPMENT_CATEGORIES}
                 error={errors.equipmentCategory?.message}
                 control={control}
-                defaultValue={system.equipment?.category || EQUIPMENT_CATEGORY_TYPE.CUSTOM}
+                defaultValue={system.equipmentCategory || EQUIPMENT_CATEGORY_TYPE.CUSTOM}
               />
             </Grid>
             <Grid item xs={12} sm={6} md={4}>
@@ -136,37 +140,40 @@ const MetaSystemForm = ({ mode = FORM_MODE.create, system = {} }) => {
                 items={EQUIPMENT_TYPES}
                 error={errors.equipmentType?.message}
                 control={control}
-                defaultValue={system.equipment?.type || EQUIPMENT_TYPE.PROCESS}
+                defaultValue={system.equipmentType || EQUIPMENT_TYPE.PROCESS}
               />
             </Grid>
             <Grid item xs={12} sm={6} md={3}>
               <Controller
                 as={<VektorTextField />}
                 fullWidth
+                id="equipmentName"
                 name="equipmentName"
                 label="Equipment Name"
                 placeholder="Equipment Name"
                 error={errors.equipmentName?.message}
                 control={control}
-                defaultValue={system.equipment?.name || ''}
+                defaultValue={system.equipmentName || ''}
               />
             </Grid>
             <Grid item xs={12} sm={6} md={3}>
               <Controller
                 as={<VektorTextField />}
                 fullWidth
+                id="equipmentNumber"
                 name="equipmentNumber"
                 label="Equipment Number"
                 placeholder="Equipment Number"
                 error={errors.equipmentNumber?.message}
                 control={control}
-                defaultValue={system.equipment?.number || ''}
+                defaultValue={system.equipmentNumber || ''}
               />
             </Grid>
             <Grid item xs={12} sm={6} md={3}>
               <Controller
                 as={<VektorTextField />}
                 fullWidth
+                id="productCode"
                 name="productCode"
                 label="Product Code"
                 placeholder="Product Code"
@@ -196,6 +203,7 @@ const MetaSystemForm = ({ mode = FORM_MODE.create, system = {} }) => {
               <Controller
                 as={<VektorTextField />}
                 fullWidth
+                id="site"
                 name="site"
                 label="Site"
                 placeholder="Site"
@@ -210,11 +218,14 @@ const MetaSystemForm = ({ mode = FORM_MODE.create, system = {} }) => {
                 <Button variant="contained" color="primary" onClick={handleSubmit(onSubmit)}>
                   Save Changes
                 </Button>
-                <Box ml={2}>
-                  <Button variant="contained" color="default" onClick={() => history.goBack()}>
-                    Cancel
+                <Button variant="contained" color="default" className={classes.cancelButton} onClick={() => history.goBack()}>
+                  Cancel
+                </Button>
+                {mode === FORM_MODE.update ? (
+                  <Button variant="contained" color="default" className={classes.deleteButton} onClick={handleDelete}>
+                    Delete
                   </Button>
-                </Box>
+                ) : null}
               </div>
             </Grid>
           </Grid>
