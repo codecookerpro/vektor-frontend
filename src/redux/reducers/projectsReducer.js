@@ -44,6 +44,10 @@ const projectsReducer = (state = INITIAL_STATE, { payload, type }) => {
       return {
         ...state,
         results: state.results.map((p) => (p._id === project ? { ...p, metaSystems: [...p.metaSystems, _id] } : p)),
+        metaSystems: {
+          ...state.metaSystems,
+          [project]: [...state.metaSystems[project], payload],
+        },
       };
     }
     case TYPES.UPDATE_META_SYSTEM: {

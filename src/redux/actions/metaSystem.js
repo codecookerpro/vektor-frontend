@@ -13,7 +13,6 @@ export const createMetaSystem = (params) => (dispatch) => {
         type: CREATE_META_SYSTEM,
         payload: data,
       });
-      dispatch(readMetaSystem(data.project));
     })
     .catch((err) => console.error('[createMetaSystem] error => ', err));
 };
