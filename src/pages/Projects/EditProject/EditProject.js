@@ -1,5 +1,6 @@
 import React, { memo } from 'react';
 import { Grid } from '@material-ui/core';
+import { Plus } from 'react-feather';
 
 import ContainedButton from 'components/UI/Buttons/ContainedButton';
 import PageHeader from 'parts/PageHeader';
@@ -39,7 +40,14 @@ const EditProject = () => {
           </Grid>
         )}
         <Grid item xs={12}>
-          <DetailLinkCard title="System Trend Chart" onDetail={onClickButton(LINKS.SYSTEM_TREND_CHART.HREF)} />
+          <Grid container justify="space-between" alignItems="center">
+            <Grid item xs={8}>
+              <DetailLinkCard title="System Trend Chart" onDetail={onClickButton(LINKS.SYSTEM_TREND_CHART.HREF)} />
+            </Grid>
+            <ContainedButton onClick={onClickButton(LINKS.ADD_META_SYSTEM.HREF)}>
+              <Plus /> Add System
+            </ContainedButton>
+          </Grid>
         </Grid>
         <Grid item xs={12}>
           <ProjectSystemsTable />
