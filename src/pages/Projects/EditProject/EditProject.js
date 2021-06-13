@@ -16,6 +16,7 @@ import { useEditProjectLogic } from './helpers';
 
 const EditProject = () => {
   const { project, isPhasesVisible, getMode, onClickButton } = useEditProjectLogic();
+  console.log(project);
 
   return (
     <>
@@ -44,7 +45,7 @@ const EditProject = () => {
             <Grid item xs={8}>
               <DetailLinkCard title="System Trend Chart" onDetail={onClickButton(LINKS.SYSTEM_TREND_CHART.HREF)} />
             </Grid>
-            <ContainedButton onClick={onClickButton(LINKS.ADD_META_SYSTEM.HREF)}>
+            <ContainedButton onClick={onClickButton(LINKS.ADD_META_SYSTEM.HREF.replace(':id', project?._id))}>
               <Plus /> Add System
             </ContainedButton>
           </Grid>

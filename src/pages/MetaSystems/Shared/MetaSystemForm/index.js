@@ -1,5 +1,6 @@
 import React, { memo, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import { useForm, Controller } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
 import joi from 'joi';
@@ -10,11 +11,10 @@ import { makeStyles } from '@material-ui/core/styles';
 import VektorTextField from 'components/UI/TextFields/VektorTextField';
 import FilterSelect from 'components/UI/Selects/FilterSelect';
 import { STRING_INPUT_VALID, SELECT_VALID } from 'utils/constants/validations';
-import LINKS from 'utils/constants/links';
 import { EQUIPMENT_TYPE, EQUIPMENT_TYPES } from 'utils/constants/equipment-types';
 import { EQUIPMENT_CATEGORIES, EQUIPMENT_CATEGORY_TYPE } from 'utils/constants/equipment-categories';
-import projects from 'utils/temp/projects';
-import workflowTemplates from 'utils/temp/workflow-templates';
+import { createAction } from 'redux/actions/metaSystem';
+import { FORM_MODE } from 'utils/constants';
 
 const useStyles = makeStyles((theme) => ({
   alert: {
@@ -43,15 +43,14 @@ const schema = joi.object().keys({
   equipmentType: SELECT_VALID,
   equipmentName: STRING_INPUT_VALID,
   equipmentNumber: STRING_INPUT_VALID,
-  project: SELECT_VALID,
-  workflow: SELECT_VALID,
-  productCode: STRING_INPUT_VALID,
   site: STRING_INPUT_VALID,
 });
 
-const MetaSystemForm = ({ system = {} }) => {
+const MetaSystemForm = ({ mode = FORM_MODE.create, system = {} }) => {
+  const { id } = useParams();
   const classes = useStyles();
   const history = useHistory();
+  const dispatch = useDispatch();
 
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -59,7 +58,7 @@ const MetaSystemForm = ({ system = {} }) => {
     resolver: joiResolver(schema),
   });
 
-  const onSubmit = (addNew) => async (data) => {
+  const onSubmit = (data) => {
     try {
       const params = {
         name: data.name,
@@ -67,26 +66,14 @@ const MetaSystemForm = ({ system = {} }) => {
         equipmentType: data.equipmentType,
         equipmentName: data.equipmentName,
         equipmentNumber: data.equipmentNumber,
-        project: data.project,
-        workflow: data.workflow,
+        project: id,
         productCode: data.productCode,
         site: data.site,
       };
 
-      if (addNew) {
-        reset({
-          name: '',
-          equipmentCategory: '',
-          equipmentType: '',
-          equipmentName: '',
-          equipmentNumber: '',
-          project: '',
-          workflow: '',
-          productCode: '',
-          site: '',
-        });
-      } else {
-        history.push(LINKS.SYSTEMS.HREF);
+      if (mode === FORM_MODE.create) {
+        dispatch(createAction(params));
+        history.goBack();
       }
     } catch (error) {
       if (error.response) {
@@ -107,7 +94,7 @@ const MetaSystemForm = ({ system = {} }) => {
           </Alert>
         )}
         <Typography variant="h6" className={classes.name}>
-          {system?.name || 'New System'}
+          {system.name || 'New System'}
         </Typography>
         <form noValidate className={classes.form}>
           <Grid container spacing={6}>
@@ -120,7 +107,7 @@ const MetaSystemForm = ({ system = {} }) => {
                 placeholder="Name"
                 error={errors.name?.message}
                 control={control}
-                defaultValue={system?.name || ''}
+                defaultValue={system.name || ''}
               />
             </Grid>
             <Grid item xs={12} sm={6} md={4}>
@@ -133,7 +120,7 @@ const MetaSystemForm = ({ system = {} }) => {
                 items={EQUIPMENT_CATEGORIES}
                 error={errors.equipmentCategory?.message}
                 control={control}
-                defaultValue={system?.equipment?.category || EQUIPMENT_CATEGORY_TYPE.CUSTOM}
+                defaultValue={system.equipment?.category || EQUIPMENT_CATEGORY_TYPE.CUSTOM}
               />
             </Grid>
             <Grid item xs={12} sm={6} md={4}>
@@ -146,7 +133,7 @@ const MetaSystemForm = ({ system = {} }) => {
                 items={EQUIPMENT_TYPES}
                 error={errors.equipmentType?.message}
                 control={control}
-                defaultValue={system?.equipment?.type || EQUIPMENT_TYPE.PROCESS}
+                defaultValue={system.equipment?.type || EQUIPMENT_TYPE.PROCESS}
               />
             </Grid>
             <Grid item xs={12} sm={6} md={3}>
@@ -158,7 +145,7 @@ const MetaSystemForm = ({ system = {} }) => {
                 placeholder="Equipment Name"
                 error={errors.equipmentName?.message}
                 control={control}
-                defaultValue={system?.equipment?.name || ''}
+                defaultValue={system.equipment?.name || ''}
               />
             </Grid>
             <Grid item xs={12} sm={6} md={3}>
@@ -170,7 +157,7 @@ const MetaSystemForm = ({ system = {} }) => {
                 placeholder="Equipment Number"
                 error={errors.equipmentNumber?.message}
                 control={control}
-                defaultValue={system?.equipment?.number || ''}
+                defaultValue={system.equipment?.number || ''}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -182,12 +169,12 @@ const MetaSystemForm = ({ system = {} }) => {
                 placeholder="Site"
                 error={errors.site?.message}
                 control={control}
-                defaultValue={system?.site || ''}
+                defaultValue={system.site || ''}
               />
             </Grid>
             <Grid item xs={12}>
               <div className={classes.buttonContainer}>
-                <Button variant="contained" color="primary" onClick={handleSubmit(onSubmit(false))}>
+                <Button variant="contained" color="primary" onClick={handleSubmit(onSubmit)}>
                   Save Changes
                 </Button>
               </div>
