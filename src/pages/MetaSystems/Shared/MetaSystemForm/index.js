@@ -1,10 +1,10 @@
 import React, { memo, useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useForm, Controller } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
 import joi from 'joi';
-import { Card, CardContent, Grid, Button, Typography } from '@material-ui/core';
+import { Card, CardContent, Grid, Button, Box, Typography } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -13,7 +13,7 @@ import FilterSelect from 'components/UI/Selects/FilterSelect';
 import { STRING_INPUT_VALID, SELECT_VALID } from 'utils/constants/validations';
 import { EQUIPMENT_TYPE, EQUIPMENT_TYPES } from 'utils/constants/equipment-types';
 import { EQUIPMENT_CATEGORIES, EQUIPMENT_CATEGORY_TYPE } from 'utils/constants/equipment-categories';
-import { createAction } from 'redux/actions/metaSystem';
+import { createMetaSystem } from 'redux/actions/metaSystem';
 import { FORM_MODE } from 'utils/constants';
 
 const useStyles = makeStyles((theme) => ({
@@ -43,7 +43,9 @@ const schema = joi.object().keys({
   equipmentType: SELECT_VALID,
   equipmentName: STRING_INPUT_VALID,
   equipmentNumber: STRING_INPUT_VALID,
+  organization: SELECT_VALID,
   site: STRING_INPUT_VALID,
+  productCode: STRING_INPUT_VALID,
 });
 
 const MetaSystemForm = ({ mode = FORM_MODE.create, system = {} }) => {
@@ -51,10 +53,11 @@ const MetaSystemForm = ({ mode = FORM_MODE.create, system = {} }) => {
   const classes = useStyles();
   const history = useHistory();
   const dispatch = useDispatch();
+  const organizations = useSelector((state) => state.organizations.results);
 
   const [errorMessage, setErrorMessage] = useState('');
 
-  const { control, handleSubmit, errors, reset } = useForm({
+  const { control, handleSubmit, errors } = useForm({
     resolver: joiResolver(schema),
   });
 
@@ -67,13 +70,13 @@ const MetaSystemForm = ({ mode = FORM_MODE.create, system = {} }) => {
         equipmentName: data.equipmentName,
         equipmentNumber: data.equipmentNumber,
         project: id,
+        organization: data.organization,
         productCode: data.productCode,
         site: data.site,
       };
 
       if (mode === FORM_MODE.create) {
-        dispatch(createAction(params));
-        history.goBack();
+        dispatch(createMetaSystem(params, () => history.goBack()));
       }
     } catch (error) {
       if (error.response) {
@@ -160,7 +163,36 @@ const MetaSystemForm = ({ mode = FORM_MODE.create, system = {} }) => {
                 defaultValue={system.equipment?.number || ''}
               />
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12} sm={6} md={3}>
+              <Controller
+                as={<VektorTextField />}
+                fullWidth
+                name="productCode"
+                label="Product Code"
+                placeholder="Product Code"
+                error={errors.productCode?.message}
+                control={control}
+                defaultValue={system.productCode}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} md={3}>
+              <Controller
+                as={<FilterSelect />}
+                fullWidth
+                name="organization"
+                label="Organization"
+                placeholder="Select Organization"
+                items={organizations}
+                keys={{
+                  label: 'name',
+                  value: '_id',
+                }}
+                error={errors.organization?.message}
+                control={control}
+                defaultValue={system.organization}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} md={3}>
               <Controller
                 as={<VektorTextField />}
                 fullWidth
@@ -172,11 +204,17 @@ const MetaSystemForm = ({ mode = FORM_MODE.create, system = {} }) => {
                 defaultValue={system.site || ''}
               />
             </Grid>
+
             <Grid item xs={12}>
               <div className={classes.buttonContainer}>
                 <Button variant="contained" color="primary" onClick={handleSubmit(onSubmit)}>
                   Save Changes
                 </Button>
+                <Box ml={2}>
+                  <Button variant="contained" color="default" onClick={() => history.goBack()}>
+                    Cancel
+                  </Button>
+                </Box>
               </div>
             </Grid>
           </Grid>
