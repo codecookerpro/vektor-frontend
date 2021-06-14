@@ -134,7 +134,7 @@ export const useProjectFrom = (project, mode) => {
       }
       setValue('projectManager', projectManager);
     }
-  }, [currentOrganization, mode, permissions]);
+  }, [currentOrganization, mode, permissions, _id, getBasicUserFiltering, project, setValue]);
 
   return {
     errors,

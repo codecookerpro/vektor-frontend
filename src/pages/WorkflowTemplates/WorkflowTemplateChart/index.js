@@ -246,28 +246,32 @@ const WorkflowTemplateChart = ({ nodes = [], editable = true, setNodes = () => {
       bodyStyleRef.current = document.body.style;
       boardStyleRef.current = board.style;
 
-      fullScreenButton.addEventListener(
-        'click',
-        (e) => {
-          e.stopPropagation();
-          e.preventDefault();
+      fullScreenButton.onclick = (e) => {
+        e.stopPropagation();
+        e.preventDefault();
 
-          if (fullscreen) {
-            document.body.style = bodyStyleRef.current;
-            board.style = boardStyleRef.current;
-          } else {
-            document.body.style.overflow = 'hidden';
-            board.style.position = 'absolute';
-            board.style.zIndex = 9999999;
-            board.style.top = '0px';
-            board.style.left = '0px';
-            board.style.background = 'white';
-          }
+        if (fullscreen) {
+          document.body.style = bodyStyleRef.current;
+          board.style = boardStyleRef.current;
+        } else {
+          document.body.style.overflow = 'hidden';
+          board.style.position = 'absolute';
+          board.style.zIndex = 9999999;
+          board.style.top = '0px';
+          board.style.left = '0px';
+          board.style.background = 'white';
+        }
 
-          setFullscreen(!fullscreen);
-        },
-        { once: true }
-      );
+        setFullscreen(!fullscreen);
+      };
+
+      window.onkeydown = (e) => {
+        if (fullscreen && e.key === 'Escape') {
+          document.body.style = bodyStyleRef.current;
+          board.style = boardStyleRef.current;
+          setFullscreen(false);
+        }
+      };
     }
   });
 

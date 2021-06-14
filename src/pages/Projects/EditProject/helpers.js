@@ -24,7 +24,7 @@ export const useEditProjectLogic = () => {
     return { projects: results, permissions, metaSystems: metaSystems[id] };
   });
 
-  useEffect(() => dispatch(readMetaSystem(id)), [id]);
+  useEffect(() => dispatch(readMetaSystem(id)), [dispatch, id]);
 
   const project = useMemo(() => projects.find((item) => item._id === id), [id, projects]);
   const getMode = useMemo(() => {
