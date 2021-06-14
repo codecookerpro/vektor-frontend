@@ -11,6 +11,11 @@ const sowsReducer = (state = INITIAL_STATE, action) => {
         ...state,
         results: action.payload,
       };
+    case TYPES.SET_SELECTED_SOW:
+      return {
+        ...state,
+        sow: action.payload,
+      };
     default:
       return state;
   }

@@ -29,6 +29,7 @@ const SowForm = ({ mode }) => {
     resolver: joiResolver(schema),
     shouldUnregister: false,
   });
+  const { sow } = useSelector(({ sows }) => sows);
   const [notRequiredField, setNotRequiredField] = useState({});
   const [project, setProject] = useState({});
 
@@ -45,23 +46,22 @@ const SowForm = ({ mode }) => {
     await dispatch(addSOW(params));
     history.push(LINKS.SOWS.HREF);
   };
-  console.log('error', errors);
 
   return (
     <>
       <form noValidate className={classes.form} onSubmit={handleSubmit(onSubmit)}>
         <NewSow
           mode={mode}
-          sow={{}}
+          sow={sow}
           control={control}
           errors={errors}
           project={project}
           setProject={setProject}
           isOrganizationVisible={isOrganizationVisible}
         />
-        <InitiationPhase mode={mode} sow={{}} title={SOW_FORM_PHASE.INITIATION_PHASE} setNotRequiredField={setNotRequiredField} />
-        <IntakePhase mode={mode} sow={{}} title={SOW_FORM_PHASE.INTAKE_PHASE} setNotRequiredField={setNotRequiredField} />
-        <IproSubmit mode={mode} sow={{}} title={SOW_FORM_PHASE.IPRO_SUBMIT} setNotRequiredField={setNotRequiredField} />
+        <InitiationPhase mode={mode} sow={sow} title={SOW_FORM_PHASE.INITIATION_PHASE} setNotRequiredField={setNotRequiredField} />
+        <IntakePhase mode={mode} sow={sow} title={SOW_FORM_PHASE.INTAKE_PHASE} setNotRequiredField={setNotRequiredField} />
+        <IproSubmit mode={mode} sow={sow} title={SOW_FORM_PHASE.IPRO_SUBMIT} setNotRequiredField={setNotRequiredField} />
         <div className={classes.buttonContainer}>
           <Button variant="contained" color="primary" type="submit">
             Save

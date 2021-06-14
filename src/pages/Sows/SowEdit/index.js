@@ -1,9 +1,17 @@
-import { memo } from 'react';
-import { useStyles } from './styles';
+import React, { memo } from 'react';
 
-const SowEdit = () => {
-  const classes = useStyles();
-  return <main className={classes.root}>Sow Edit Page</main>;
-};
+import PageHeader from 'parts/PageHeader';
+import SowForm from '../Shared/SowForm';
+import LINKS from 'utils/constants/links';
+import { PROJECT_MODES } from 'utils/constants/projectModes';
 
-export default memo(SowEdit);
+const NAV_LINKS = [LINKS.SOWS];
+
+const SowAdd = () => (
+  <>
+    <PageHeader title={LINKS.EDIT_SOW.TITLE} links={NAV_LINKS} />
+    <SowForm mode={PROJECT_MODES.EDITING} />
+  </>
+);
+
+export default memo(SowAdd);

@@ -1,11 +1,12 @@
 import React, { memo, useCallback, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Card, CardContent, Checkbox, TableCell, TableRow } from '@material-ui/core';
 
 import LinkButton from 'components/UI/Buttons/LinkButton';
 import VektorTableContainer from 'parts/Tables/VektorTableContainer';
 import LINKS from 'utils/constants/links';
 import SowActions from './SowActions';
+import { setSelectedSOW } from '../../../../redux/actions/sowAction';
 
 const columns = [
   { id: 'Checkbox', label: 'checkbox', minWidth: 100 },
@@ -18,6 +19,7 @@ const columns = [
 ];
 
 const SowTable = ({ selectedItems, setSelectedItems, page, setPage, rowsPerPage, setRowsPerPage }) => {
+  const dispatch = useDispatch();
   const { results } = useSelector((state) => state.sows);
   const organizations = useSelector((state) => state.organizations.results);
   const projects = useSelector((state) => state.projects.results);
@@ -50,6 +52,11 @@ const SowTable = ({ selectedItems, setSelectedItems, page, setPage, rowsPerPage,
   const isSelected = (row) => {
     return selectedItems.findIndex((value) => row.id === value.id) !== -1;
   };
+
+  const setSow = async (sow) => {
+    await dispatch(setSelectedSOW(sow));
+  };
+
   return (
     <Card>
       <CardContent>
@@ -70,7 +77,9 @@ const SowTable = ({ selectedItems, setSelectedItems, page, setPage, rowsPerPage,
                 </div>
               </TableCell>
               <TableCell component="th" scope="row">
-                <LinkButton to={LINKS.EDIT_SOW.HREF.replace(':id', row._id)}>{getOrganizationName(row.organization)}</LinkButton>
+                <LinkButton to={LINKS.EDIT_SOW.HREF.replace(':id', row._id)} onClick={() => setSow(row)}>
+                  {getOrganizationName(row.organization)}
+                </LinkButton>
               </TableCell>
               <TableCell>{row.name}</TableCell>
               <TableCell>{row.metaSystem}</TableCell>

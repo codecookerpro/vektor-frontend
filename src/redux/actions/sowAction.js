@@ -39,4 +39,11 @@ const addSOW = (sow) => async (dispatch, getState) => {
   }
 };
 
-export { getSOWs, addSOW };
+const setSelectedSOW = (sow) => {
+  return {
+    type: TYPES.SET_SELECTED_SOW,
+    payload: sow,
+  };
+};
+
+export { getSOWs, addSOW, setSelectedSOW };
