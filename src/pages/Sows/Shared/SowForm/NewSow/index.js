@@ -1,4 +1,4 @@
-import React, { memo, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import { useStyles } from './styles';
 import { Card, CardContent, Grid, Typography } from '@material-ui/core';
 import { Controller } from 'react-hook-form';
@@ -11,6 +11,17 @@ const NewSow = ({ mode, sow = {}, control, errors, isOrganizationVisible }) => {
   const { results: projects, organization } = useSelector(({ projects }) => projects);
   const { results: organizations } = useSelector(({ organizations }) => organizations);
   const [filterSystems, setFilterSystems] = useState([]);
+
+  useEffect(() => {
+    if (!isOrganizationVisible) {
+      let filterSystem = [];
+      projects.forEach((project) => {
+        const { name, metaSystems, _id } = project;
+        filterSystem = [...filterSystem, ...metaSystems.map((system) => ({ name: `${name}-${system}`, id: `${system}/${_id}` }))];
+      });
+      setFilterSystems(filterSystem);
+    }
+  }, [isOrganizationVisible]);
 
   const setCurrentOrganization = (event) => {
     const filterProjects = projects.filter((project) => project.organization === event);
