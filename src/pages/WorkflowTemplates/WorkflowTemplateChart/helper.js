@@ -162,10 +162,7 @@ export const nodeToDeliverable = (nodeId, nodes, mainId) => {
 
 export const deliverablesToElements = (deliverables) =>
   deliverables.reduce((acc, deliverable) => {
-    let {
-      chartData: { id, type, data, position, edges },
-      _id,
-    } = deliverable;
+    let { chartData: { id, type, data, position, edges } = {}, _id } = deliverable;
     edges = edges
       ? edges.map((e) => ({
           ...e,

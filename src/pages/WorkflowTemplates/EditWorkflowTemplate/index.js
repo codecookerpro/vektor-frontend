@@ -32,7 +32,7 @@ const EditWorkflowTemplate = () => {
   };
 
   useEffect(() => {
-    if (isEmpty(workflowTemplate)) {
+    if (isEmpty(workflowTemplate) || isEmpty(workflowTemplate.deliverables)) {
       return;
     }
 
