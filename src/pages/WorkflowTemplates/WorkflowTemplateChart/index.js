@@ -1,9 +1,9 @@
-import React, { memo, useState, useEffect } from 'react';
+import React, { memo, useState, useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { Card, CardHeader, CardContent, CardActions, Button, Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Plus } from 'react-feather';
-import ReactFlow, { removeElements, addEdge, MiniMap, Background, isNode } from 'react-flow-renderer';
+import ReactFlow, { removeElements, addEdge, MiniMap, Background, isNode, Controls } from 'react-flow-renderer';
 import CustomFlowNode from './CustomFlowNode';
 import CustomFlowEdge from './CustomFlowEdge';
 import { INPUT_NODE, CUSTOM_EDGE, IDENTIFIERS } from 'utils/constants/reactflow/custom-node-types';
@@ -84,6 +84,9 @@ const WorkflowTemplateChart = ({ nodes = [], editable = true, setNodes = () => {
   const [isDraggable, setIsDraggable] = useState(true);
   const [paneMoveable, setPaneMoveable] = useState(true);
   const [hasOpenedPopup, setHasOpenedPopup] = useState(false);
+  const [fullscreen, setFullscreen] = useState(false);
+  const bodyStyleRef = useRef(null);
+  const boardStyleRef = useRef(null);
 
   const handleInputChange = (id, value) => {
     setNodes((nds) => {
@@ -235,6 +238,39 @@ const WorkflowTemplateChart = ({ nodes = [], editable = true, setNodes = () => {
     setZoomOnScroll(!hasOpenedPopup);
   }, [hasOpenedPopup]);
 
+  useEffect(() => {
+    const fullScreenButton = document.getElementsByClassName('react-flow__controls-button react-flow__controls-fitview')[0];
+    const board = document.getElementsByClassName('react-flow')[0];
+
+    if (fullScreenButton && board) {
+      bodyStyleRef.current = document.body.style;
+      boardStyleRef.current = board.style;
+
+      fullScreenButton.addEventListener(
+        'click',
+        (e) => {
+          e.stopPropagation();
+          e.preventDefault();
+
+          if (fullscreen) {
+            document.body.style = bodyStyleRef.current;
+            board.style = boardStyleRef.current;
+          } else {
+            document.body.style.overflow = 'hidden';
+            board.style.position = 'absolute';
+            board.style.zIndex = 9999999;
+            board.style.top = '0px';
+            board.style.left = '0px';
+            board.style.background = 'white';
+          }
+
+          setFullscreen(!fullscreen);
+        },
+        { once: true }
+      );
+    }
+  });
+
   return (
     <Card className={classes.root}>
       <CardHeader title="Workflow Template Chart" />
@@ -254,6 +290,7 @@ const WorkflowTemplateChart = ({ nodes = [], editable = true, setNodes = () => {
           zoomOnDoubleClick={false}
         >
           <MiniMap />
+          <Controls />
           <Background gap={12} size={0.5} />
           <Background gap={16} />
         </ReactFlow>
