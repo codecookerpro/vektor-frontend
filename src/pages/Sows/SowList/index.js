@@ -21,6 +21,7 @@ const SowList = () => {
   const [rowsPerPage, setRowsPerPage] = useState(TABLE_ENVIRONMENTS.ROWS_PER_PAGE);
   const { permissions } = useSelector(({ auth }) => auth.currentUser);
   const isVisible = [PERMISSION_TYPE.ADMIN, PERMISSION_TYPE.SUPERVISOR, PERMISSION_TYPE.PROJECT_MANAGER, PERMISSION_TYPE.USER].includes(permissions);
+  const isOrganizationVisible = permissions === PERMISSION_TYPE.ADMIN;
 
   useEffect(() => {
     const skip = page * rowsPerPage;
@@ -52,6 +53,7 @@ const SowList = () => {
         setPage={setPage}
         rowsPerPage={rowsPerPage}
         setRowsPerPage={setRowsPerPage}
+        isOrganizationVisible={isOrganizationVisible}
       />
     </>
   );

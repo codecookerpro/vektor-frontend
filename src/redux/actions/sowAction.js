@@ -20,4 +20,23 @@ const getSOWs =
     }
   };
 
-export { getSOWs };
+const addSOW = (sow) => async (dispatch, getState) => {
+  try {
+    const response = await sowAPI.createSOW(sow);
+
+    if (response) {
+      const {
+        sows: { results },
+      } = getState();
+      const { data } = response;
+      await dispatch({
+        type: TYPES.FETCH_SOWS,
+        payload: [data, ...results],
+      });
+    }
+  } catch (error) {
+    console.log('[addSOW] error => ', error);
+  }
+};
+
+export { getSOWs, addSOW };
