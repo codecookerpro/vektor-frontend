@@ -19,6 +19,6 @@ export const FORM_MODE = {
 };
 
 export const LAYOUT_DIR = {
-  horizontal: 'TB',
-  vertical: 'LR',
+  vertical: 'TB',
+  horizontal: 'LR',
 };
