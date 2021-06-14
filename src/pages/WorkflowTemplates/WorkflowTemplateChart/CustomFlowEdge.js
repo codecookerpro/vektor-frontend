@@ -45,7 +45,7 @@ export default function CustomFlowEdge({
     data.removeEdge(data);
   };
 
-  const edgePath = getSmoothStepPathPatched({ sourceX, sourceY, targetX, targetY, targetPosition, sourcePosition });
+  const edgePath = getSmoothStepPathPatched({ sourceX, sourceY, targetX, targetY, targetPosition, sourcePosition, borderRadius: 8 });
   const markerEnd = getMarkerEnd(arrowHeadType, markerEndId);
 
   useEffect(() => {

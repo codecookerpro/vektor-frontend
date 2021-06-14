@@ -82,60 +82,62 @@ export default memo(({ id, data }) => {
   };
 
   const handleMargin = 15;
+  const targetStyles = { background: handleColors.target, height: '9px', width: '9px', borderRadius: '50%' };
+  const sourceStyles = { background: handleColors.source, height: '9px', width: '9px', borderRadius: '50%' };
   return (
     <>
       <div onDoubleClick={handlePopUpToggle}>
         <Handle
           type={TYPE.TARGET}
-          style={{ background: handleColors.target, marginTop: `-${handleMargin}px` }}
+          style={{ ...targetStyles, marginLeft: '-2px', marginTop: `-${handleMargin}px` }}
           position={Position.Left}
           id={IDENTIFIERS.TARGET_LEFT}
         />
 
         <Handle
           type={TYPE.TARGET}
-          style={{ background: handleColors.target, marginLeft: `${handleMargin}px` }}
+          style={{ ...targetStyles, marginTop: '-2px', marginLeft: `${handleMargin}px` }}
           position={Position.Top}
           id={IDENTIFIERS.TARGET_TOP}
         />
 
         <Handle
           type={TYPE.TARGET}
-          style={{ background: handleColors.target, marginTop: `${handleMargin}px` }}
+          style={{ ...targetStyles, marginRight: '-1px', marginTop: `${handleMargin}px` }}
           position={Position.Right}
           id={IDENTIFIERS.TARGET_RIGHT}
         />
 
         <Handle
           type={TYPE.TARGET}
-          style={{ background: handleColors.target, marginLeft: `-${handleMargin}px` }}
+          style={{ ...targetStyles, marginBottom: '-1px', marginLeft: `-${handleMargin}px` }}
           position={Position.Bottom}
           id={IDENTIFIERS.TARGET_BOTTOM}
         />
         <Handle
           type={TYPE.SOURCE}
-          style={{ background: handleColors.source, marginTop: `${handleMargin}px` }}
+          style={{ ...sourceStyles, marginLeft: '-2px', marginTop: `${handleMargin}px` }}
           position={Position.Left}
           id={IDENTIFIERS.SOURCE_LEFT}
         />
 
         <Handle
           type={TYPE.SOURCE}
-          style={{ background: handleColors.source, marginLeft: `-${handleMargin}px` }}
+          style={{ ...sourceStyles, marginTop: '-2px', marginLeft: `-${handleMargin}px` }}
           position={Position.Top}
           id={IDENTIFIERS.SOURCE_TOP}
         />
 
         <Handle
           type={TYPE.SOURCE}
-          style={{ background: handleColors.source, marginTop: `-${handleMargin}px` }}
+          style={{ ...sourceStyles, marginRight: '-1px', marginTop: `-${handleMargin}px` }}
           position={Position.Right}
           id={IDENTIFIERS.SOURCE_RIGHT}
         />
 
         <Handle
           type={TYPE.SOURCE}
-          style={{ background: handleColors.source, marginLeft: `${handleMargin}px` }}
+          style={{ ...sourceStyles, marginBottom: '-1px', marginLeft: `${handleMargin}px` }}
           position={Position.Bottom}
           id={IDENTIFIERS.SOURCE_BOTTOM}
         />
