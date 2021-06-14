@@ -235,31 +235,6 @@ const WorkflowTemplateChart = ({ nodes = [], editable = true, setNodes = () => {
     setZoomOnScroll(!hasOpenedPopup);
   }, [hasOpenedPopup]);
 
-  useEffect(() => {
-    nodes = nodes.map((node) => {
-      if (node.type === INPUT_NODE) {
-        node.data.handleDeleteNode = handleDeleteNode;
-        node.data.handleInputChange = handleInputChange;
-        node.data.handleSwitchPopup = setHasOpenedPopup;
-      } else {
-        node.data.removeEdge = () => {
-          setNodes((nds) => {
-            const { source, target } = node;
-            nds = nds.filter((nd) => nd.target !== target || nd.source !== source);
-
-            if (editable && workflowTemplateId) {
-              updateWorkflowTemplateDeliverable(nodeToDeliverable(target, nds)).then(({ data }) => dispatch(updateWTD(data)));
-            }
-
-            return nds;
-          });
-        };
-      }
-
-      return node;
-    });
-  }, [nodes]);
-
   return (
     <Card className={classes.root}>
       <CardHeader title="Workflow Template Chart" />

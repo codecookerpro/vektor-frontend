@@ -9,6 +9,7 @@ import {
   defaultNodeMarginX,
   defaultNodeMarginY,
   chartContainerHeight,
+  edgeDefaultProps,
 } from 'utils/constants/reactflow/chart-configs';
 import { INPUT_NODE, CUSTOM_EDGE, IDENTIFIERS } from 'utils/constants/reactflow/custom-node-types';
 import { LAYOUT_DIR } from 'utils/constants';
@@ -112,26 +113,79 @@ export function getSmoothStepPathPatched({
 const maxChartHeight = window.innerHeight - 617;
 export const chartHeight = maxChartHeight > chartContainerHeight ? maxChartHeight : chartContainerHeight;
 
-export const nodeToDeliverable = (id, nodes, mainId) => {
-  const node = nodes.find((n) => n.id === id);
+export const nodeToDeliverable = (nodeId, nodes, mainId) => {
+  const node = nodes.find((n) => n.id === nodeId);
   const nodeIds = nodes.filter((el) => el.type === INPUT_NODE).map((nd) => nd.id);
-  const edges = nodes.filter((c) => c.type === CUSTOM_EDGE).filter(({ source, target }) => nodeIds.includes(source) && nodeIds.includes(target));
+  const edges = nodes
+    .filter((c) => c.type === CUSTOM_EDGE)
+    .filter(({ source, target }) => nodeIds.includes(source) && nodeIds.includes(target))
+    .map((c) => ({
+      id: c.id,
+      source: c.source,
+      sourceHandle: c.sourceHandle,
+      target: c.target,
+      targetHandle: c.targetHandle,
+    }));
 
-  if (!node || !mainId) {
+  if (!node) {
     return null;
   }
 
-  return {
-    mainId,
-    _id: node.data._id,
+  const {
+    id,
+    type,
+    position,
+    data: { label },
+  } = node;
+  const deliverable = {
     name: node.data.label,
     predecessors: edges.filter((c) => c.target === node.id).map((c) => c.source),
     chartData: {
-      ...node,
+      id,
+      type,
+      position,
+      data: { label },
       edges: edges.filter((e) => e.target === node.id),
     },
   };
+
+  if (mainId) {
+    deliverable.mainId = mainId;
+  }
+
+  if (node.data._id) {
+    deliverable._id = node.data._id;
+  }
+
+  return deliverable;
 };
+
+export const deliverablesToElements = (deliverables) =>
+  deliverables.reduce((acc, deliverable) => {
+    let {
+      chartData: { id, type, data, position, edges },
+      _id,
+    } = deliverable;
+    edges = edges
+      ? edges.map((e) => ({
+          ...e,
+          ...edgeDefaultProps,
+          data: {
+            ...e.data,
+            editable: true,
+          },
+        }))
+      : [];
+    const node = {
+      id,
+      type,
+      position,
+      data: { ...data, _id, editable: true },
+      style: nodeStyle,
+    };
+
+    return [...acc, node, ...edges];
+  }, []);
 
 export const position = (nodeNum) => {
   const nNumY = chartHeight / (nodeHeight + defaultNodeMarginY);
@@ -207,7 +261,7 @@ export const validateElements = (nodes, eventHandlers) => {
       if (node.type === INPUT_NODE) {
         node.data.handleDeleteNode = eventHandlers.handleDeleteNode;
         node.data.handleInputChange = eventHandlers.handleInputChange;
-        node.data.handleSwitchPopup = eventHandlers.setHasOpenedPopup;
+        node.data.handleSwitchPopup = eventHandlers.handleSwitchPopup;
       } else {
         node.data.handleRemoveEdge = eventHandlers.handleRemoveEdge(node);
       }
