@@ -1,5 +1,5 @@
 import joi from 'joi';
-import { SELECT_VALID, STRING_INPUT_VALID } from '../../../../utils/constants/validations';
+import { SELECT_VALID, STRING_INPUT_VALID } from 'utils/constants/validations';
 
 const setSchema = (visible) =>
   visible

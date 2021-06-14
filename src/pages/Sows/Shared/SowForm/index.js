@@ -20,6 +20,7 @@ const SowForm = ({ mode }) => {
   const history = useHistory();
   const dispatch = useDispatch();
 
+  const { organization: defaultOrganization } = useSelector(({ projects }) => projects);
   const { permissions } = useSelector(({ auth }) => auth.currentUser);
   const isOrganizationVisible = permissions === PERMISSION_TYPE.ADMIN;
 
@@ -34,7 +35,8 @@ const SowForm = ({ mode }) => {
   const [project, setProject] = useState({});
 
   const onSubmit = async (data) => {
-    const { name, organization, metaSystem } = data;
+    const { name, metaSystem } = data;
+    const organization = isOrganizationVisible ? data.organization : defaultOrganization;
     const arraySystemProject = metaSystem.split('/');
     const params = {
       name,

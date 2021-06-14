@@ -1,19 +1,13 @@
 import React, { memo } from 'react';
 import { useStyles } from './styles';
 import { Card, CardContent, Grid, TextField, Typography } from '@material-ui/core';
+import inputHandler from '../inputHandler';
 
 const InitiationPhase = ({ mode, sow = {}, title, setNotRequiredField }) => {
   const classes = useStyles();
 
-  const inputHandler = (event) => {
-    const { value, name } = event.target;
-    setNotRequiredField((prev) => ({
-      ...prev,
-      [title.value]: {
-        ...prev[title.value],
-        [name]: value,
-      },
-    }));
+  const onChange = (e) => {
+    inputHandler(e, setNotRequiredField, title);
   };
 
   return (
@@ -28,8 +22,8 @@ const InitiationPhase = ({ mode, sow = {}, title, setNotRequiredField }) => {
               fullWidth
               name="contractName"
               label="Full Contract Name"
-              onChange={inputHandler}
-              defaultValue={sow?.[title.value]?.contactName || ''}
+              onChange={onChange}
+              defaultValue={sow?.[title.value]?.contractName || ''}
             />
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
@@ -37,8 +31,8 @@ const InitiationPhase = ({ mode, sow = {}, title, setNotRequiredField }) => {
               fullWidth
               name="contractType"
               label="Contract Type"
-              onChange={inputHandler}
-              defaultValue={sow?.[title.value]?.contactType || ''}
+              onChange={onChange}
+              defaultValue={sow?.[title.value]?.contractType || ''}
             />
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
@@ -46,7 +40,7 @@ const InitiationPhase = ({ mode, sow = {}, title, setNotRequiredField }) => {
               fullWidth
               name="processSteps"
               label="Process Steps"
-              onChange={inputHandler}
+              onChange={onChange}
               defaultValue={sow?.[title.value]?.processSteps || ''}
             />
           </Grid>
@@ -59,51 +53,51 @@ const InitiationPhase = ({ mode, sow = {}, title, setNotRequiredField }) => {
               InputLabelProps={{
                 shrink: true,
               }}
-              onChange={inputHandler}
+              onChange={onChange}
               defaultValue={sow?.[title.value]?.dateDesired || ''}
             />
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
-            <TextField fullWidth name="ownerBrm" label="Owner/BRM" onChange={inputHandler} defaultValue={sow?.[title.value]?.ownerBrm || ''} />
+            <TextField fullWidth name="ownerBrm" label="Owner/BRM" onChange={onChange} defaultValue={sow?.[title.value]?.ownerBrm || ''} />
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
             <TextField
               fullWidth
               name="projectManager"
               label="? Project Manager"
-              onChange={inputHandler}
+              onChange={onChange}
               defaultValue={sow?.[title.value]?.projectManager || ''}
             />
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
-            <TextField fullWidth name="vendorName" label="Vendor Name" onChange={inputHandler} defaultValue={sow?.[title.value]?.vendorName || ''} />
+            <TextField fullWidth name="vendorName" label="Vendor Name" onChange={onChange} defaultValue={sow?.[title.value]?.vendorName || ''} />
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
             <TextField
               fullWidth
               name="costCenterCodeDesc"
               label="Cost Center Code-Desc"
-              onChange={inputHandler}
+              onChange={onChange}
               defaultValue={sow?.[title.value]?.costCenterCodeDesc || ''}
             />
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
-            <TextField fullWidth name="abac" label="ABAC" onChange={inputHandler} defaultValue={sow?.[title.value]?.abac || ''} />
+            <TextField fullWidth name="abac" label="ABAC" onChange={onChange} defaultValue={sow?.[title.value]?.abac || ''} />
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
-            <TextField fullWidth name="infoSec" label="InfoSec" onChange={inputHandler} defaultValue={sow?.[title.value]?.infoSec || ''} />
+            <TextField fullWidth name="infoSec" label="InfoSec" onChange={onChange} defaultValue={sow?.[title.value]?.infoSec || ''} />
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
-            <TextField fullWidth name="cdaNda" label="CDA/NDA" onChange={inputHandler} defaultValue={sow?.[title.value]?.cdaNda || ''} />
+            <TextField fullWidth name="cdaNda" label="CDA/NDA" onChange={onChange} defaultValue={sow?.[title.value]?.cdaNda || ''} />
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
             <TextField
               fullWidth
               name="capitalExpense"
               label="Capital Expense"
-              onChange={inputHandler}
+              onChange={onChange}
               defaultValue={sow?.[title.value]?.capitalExpense || ''}
             />
           </Grid>
@@ -113,7 +107,7 @@ const InitiationPhase = ({ mode, sow = {}, title, setNotRequiredField }) => {
               fullWidth
               name="operationalExpense"
               label="Operational Expense"
-              onChange={inputHandler}
+              onChange={onChange}
               defaultValue={sow?.[title.value]?.operationalExpense || ''}
             />
           </Grid>
@@ -122,7 +116,7 @@ const InitiationPhase = ({ mode, sow = {}, title, setNotRequiredField }) => {
               fullWidth
               name="sowRagStatus"
               label="SOW RAG Status"
-              onChange={inputHandler}
+              onChange={onChange}
               defaultValue={sow?.[title.value]?.sowRagStatus || ''}
             />
           </Grid>
@@ -131,12 +125,12 @@ const InitiationPhase = ({ mode, sow = {}, title, setNotRequiredField }) => {
               fullWidth
               name="licenseContract"
               label="? License Contract"
-              onChange={inputHandler}
+              onChange={onChange}
               defaultValue={sow?.[title.value]?.licenseContract || ''}
             />
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
-            <TextField fullWidth name="comments" label="Comments" onChange={inputHandler} defaultValue={sow?.[title.value]?.comments || ''} />
+            <TextField fullWidth name="comments" label="Comments" onChange={onChange} defaultValue={sow?.[title.value]?.comments || ''} />
           </Grid>
         </Grid>
       </CardContent>

@@ -1,19 +1,13 @@
 import React, { memo } from 'react';
 import { useStyles } from './styles';
 import { Card, CardContent, Grid, TextField, Typography } from '@material-ui/core';
+import inputHandler from '../inputHandler';
 
 const IproSubmit = ({ mode, sow = {}, title, setNotRequiredField }) => {
   const classes = useStyles();
 
-  const inputHandler = (event) => {
-    const { value, name } = event.target;
-    setNotRequiredField((prev) => ({
-      ...prev,
-      [title.value]: {
-        ...prev[title.value],
-        [name]: value,
-      },
-    }));
+  const onChange = (e) => {
+    inputHandler(e, setNotRequiredField, title);
   };
 
   return (
@@ -28,8 +22,8 @@ const IproSubmit = ({ mode, sow = {}, title, setNotRequiredField }) => {
               fullWidth
               name="contractName"
               label="Full Contract Name"
-              onChange={inputHandler}
-              defaultValue={sow?.[title.value]?.contactName || ''}
+              onChange={onChange}
+              defaultValue={sow?.[title.value]?.contractName || ''}
             />
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
@@ -37,8 +31,8 @@ const IproSubmit = ({ mode, sow = {}, title, setNotRequiredField }) => {
               fullWidth
               name="contractType"
               label="Contract Type"
-              onChange={inputHandler}
-              defaultValue={sow?.[title.value]?.contactType || ''}
+              onChange={onChange}
+              defaultValue={sow?.[title.value]?.contractType || ''}
             />
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
@@ -46,7 +40,7 @@ const IproSubmit = ({ mode, sow = {}, title, setNotRequiredField }) => {
               fullWidth
               name="processSteps"
               label="Process Steps"
-              onChange={inputHandler}
+              onChange={onChange}
               defaultValue={sow?.[title.value]?.processSteps || ''}
             />
           </Grid>
@@ -59,7 +53,7 @@ const IproSubmit = ({ mode, sow = {}, title, setNotRequiredField }) => {
               InputLabelProps={{
                 shrink: true,
               }}
-              onChange={inputHandler}
+              onChange={onChange}
               defaultValue={sow?.[title.value]?.dateDesired || ''}
             />
           </Grid>
@@ -69,7 +63,7 @@ const IproSubmit = ({ mode, sow = {}, title, setNotRequiredField }) => {
               fullWidth
               name="capitalExpense"
               label="Capital Expense"
-              onChange={inputHandler}
+              onChange={onChange}
               defaultValue={sow?.[title.value]?.capitalExpense || ''}
             />
           </Grid>
@@ -78,7 +72,7 @@ const IproSubmit = ({ mode, sow = {}, title, setNotRequiredField }) => {
               fullWidth
               name="operationalExpense"
               label="Operational Expense"
-              onChange={inputHandler}
+              onChange={onChange}
               defaultValue={sow?.[title.value]?.operationalExpense || ''}
             />
           </Grid>
@@ -87,7 +81,7 @@ const IproSubmit = ({ mode, sow = {}, title, setNotRequiredField }) => {
               fullWidth
               name="sowRagStatus"
               label="SOW RAG Status"
-              onChange={inputHandler}
+              onChange={onChange}
               defaultValue={sow?.[title.value]?.sowRagStatus || ''}
             />
           </Grid>
@@ -96,36 +90,30 @@ const IproSubmit = ({ mode, sow = {}, title, setNotRequiredField }) => {
               fullWidth
               name="licenseContract"
               label="License Contract"
-              onChange={inputHandler}
+              onChange={onChange}
               defaultValue={sow?.[title.value]?.licenseContract || ''}
             />
           </Grid>
 
           <Grid item xs={12} sm={6} md={6}>
-            <TextField fullWidth name="comments" label="Comments" onChange={inputHandler} defaultValue={sow?.[title.value]?.comments || ''} />
+            <TextField fullWidth name="comments" label="Comments" onChange={onChange} defaultValue={sow?.[title.value]?.comments || ''} />
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
-            <TextField
-              fullWidth
-              name="iProReqNumber"
-              label="iPro Req#"
-              onChange={inputHandler}
-              defaultValue={sow?.[title.value]?.iProReqNumber || ''}
-            />
+            <TextField fullWidth name="iProReqNumber" label="iPro Req#" onChange={onChange} defaultValue={sow?.[title.value]?.iProReqNumber || ''} />
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
-            <TextField fullWidth name="poNumber" label="PO#" onChange={inputHandler} defaultValue={sow?.[title.value]?.poNumber || ''} />
+            <TextField fullWidth name="poNumber" label="PO#" onChange={onChange} defaultValue={sow?.[title.value]?.poNumber || ''} />
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
-            <TextField fullWidth name="poStatus" label="PO Status" onChange={inputHandler} defaultValue={sow?.[title.value]?.poStatus || ''} />
+            <TextField fullWidth name="poStatus" label="PO Status" onChange={onChange} defaultValue={sow?.[title.value]?.poStatus || ''} />
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
             <TextField
               fullWidth
               name="contractNumber"
               label="Contract Number"
-              onChange={inputHandler}
+              onChange={onChange}
               defaultValue={sow?.[title.value]?.contractNumber || ''}
             />
           </Grid>
@@ -138,7 +126,7 @@ const IproSubmit = ({ mode, sow = {}, title, setNotRequiredField }) => {
               InputLabelProps={{
                 shrink: true,
               }}
-              onChange={inputHandler}
+              onChange={onChange}
               defaultValue={sow?.[title.value]?.contractStartDate || ''}
             />
           </Grid>
@@ -151,7 +139,7 @@ const IproSubmit = ({ mode, sow = {}, title, setNotRequiredField }) => {
               InputLabelProps={{
                 shrink: true,
               }}
-              onChange={inputHandler}
+              onChange={onChange}
               defaultValue={sow?.[title.value]?.contractExpirationDate || ''}
             />
           </Grid>

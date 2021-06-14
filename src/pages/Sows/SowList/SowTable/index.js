@@ -6,24 +6,16 @@ import LinkButton from 'components/UI/Buttons/LinkButton';
 import VektorTableContainer from 'parts/Tables/VektorTableContainer';
 import LINKS from 'utils/constants/links';
 import SowActions from './SowActions';
+import setColumn from './setColumn';
 import { setSelectedSOW } from '../../../../redux/actions/sowAction';
 
-const columns = [
-  { id: 'Checkbox', label: 'checkbox', minWidth: 100 },
-  { id: 'organization', label: 'Organization', minWidth: 170 },
-  { id: 'name', label: 'Name', minWidth: 170 },
-  { id: 'system', label: 'System', minWidth: 170 },
-  { id: 'fullContactName', label: 'Full Contact Name', minWidth: 170 },
-  { id: 'projectName', label: 'Project Name', minWidth: 170 },
-  { id: 'vendorName', label: 'Vendor Name', minWidth: 170 },
-];
-
-const SowTable = ({ selectedItems, setSelectedItems, page, setPage, rowsPerPage, setRowsPerPage }) => {
+const SowTable = ({ selectedItems, setSelectedItems, page, setPage, rowsPerPage, setRowsPerPage, isOrganizationVisible }) => {
   const dispatch = useDispatch();
   const { results } = useSelector((state) => state.sows);
   const organizations = useSelector((state) => state.organizations.results);
   const projects = useSelector((state) => state.projects.results);
   const [action, setAction] = useState('');
+  const columns = setColumn(isOrganizationVisible);
 
   const getOrganizationName = (_id) => {
     const organization = organizations.find((item) => item._id === _id);
@@ -76,12 +68,22 @@ const SowTable = ({ selectedItems, setSelectedItems, page, setPage, rowsPerPage,
                   <Checkbox inputProps={{ 'aria-labelledby': `check-${row.id}` }} checked={isSelected(row)} onChange={toggleHandler(row)} />
                 </div>
               </TableCell>
-              <TableCell component="th" scope="row">
-                <LinkButton to={LINKS.EDIT_SOW.HREF.replace(':id', row._id)} onClick={() => setSow(row)}>
-                  {getOrganizationName(row.organization)}
-                </LinkButton>
+              {isOrganizationVisible && (
+                <TableCell component="th" scope="row">
+                  <LinkButton to={LINKS.EDIT_SOW.HREF.replace(':id', row._id)} onClick={() => setSow(row)}>
+                    {getOrganizationName(row.organization)}
+                  </LinkButton>
+                </TableCell>
+              )}
+              <TableCell>
+                {isOrganizationVisible ? (
+                  row.name
+                ) : (
+                  <LinkButton to={LINKS.EDIT_SOW.HREF.replace(':id', row._id)} onClick={() => setSow(row)}>
+                    {row.name}
+                  </LinkButton>
+                )}
               </TableCell>
-              <TableCell>{row.name}</TableCell>
               <TableCell>{row.metaSystem}</TableCell>
               <TableCell>{row?.fullContactName || '-'}</TableCell>
               <TableCell>{getProjectName(row.project)}</TableCell>
