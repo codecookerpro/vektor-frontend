@@ -1,7 +1,7 @@
 import { CUSTOM_EDGE } from 'utils/constants/reactflow/custom-node-types';
 
 export const arrowHeadColor = '#4d84c0';
-export const label = 'Deliverable name';
+export const label = 'Deliverable';
 export const chartContainerHeight = 350;
 export const nodeHeight = 70;
 export const defaultNodeMarginY = 15;
@@ -21,14 +21,13 @@ export const edgeDefaultProps = {
   type: CUSTOM_EDGE,
   arrowHeadType: 'arrowclosed',
   style: {
-    // line color
-    strokeWidth: 3,
+    strokeWidth: 1,
     pointerEvents: 'all',
-    stroke: '#000',
+    stroke: arrowHeadColor,
   },
 };
 
 export const handleColors = {
   target: '#557fb9',
-  source: '#f9037ede',
+  source: '#f9037e',
 };

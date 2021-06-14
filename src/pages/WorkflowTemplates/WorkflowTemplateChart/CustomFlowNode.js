@@ -49,6 +49,9 @@ const useStyles = makeStyles(() => ({
     left: '100%',
     cursor: 'pointer',
   },
+  handle: {
+    background: handleColors.source,
+  },
 }));
 
 export default memo(({ id, data }) => {
