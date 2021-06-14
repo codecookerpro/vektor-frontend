@@ -6,10 +6,10 @@ import VektorTextField from 'components/UI/TextFields/VektorTextField';
 import FilterSelect from 'components/UI/Selects/FilterSelect';
 import { useSelector } from 'react-redux';
 
-const NewSow = ({ mode, sow = {}, control, errors }) => {
+const NewSow = ({ mode, sow = {}, control, errors, isOrganizationVisible }) => {
   const classes = useStyles();
+  const { results: projects, organization } = useSelector(({ projects }) => projects);
   const { results: organizations } = useSelector(({ organizations }) => organizations);
-  const { results: projects } = useSelector(({ projects }) => projects);
   const [filterSystems, setFilterSystems] = useState([]);
 
   const setCurrentOrganization = (event) => {
@@ -42,23 +42,23 @@ const NewSow = ({ mode, sow = {}, control, errors }) => {
             />
           </Grid>
 
-          {/*{isOrganizationVisible && (*/}
-          <Grid item xs={12} sm={6} md={4}>
-            <Controller
-              as={<FilterSelect />}
-              fullWidth
-              name="organization"
-              label="Organization"
-              placeholder="Select organization"
-              keys={{ label: 'name', value: '_id' }}
-              items={organizations}
-              error={errors.organization?.message}
-              control={control}
-              onClick={({ target }) => setCurrentOrganization(target?.value)}
-              defaultValue={sow?.organization || ''}
-            />
-          </Grid>
-          {/*)}*/}
+          {isOrganizationVisible && (
+            <Grid item xs={12} sm={6} md={4}>
+              <Controller
+                as={<FilterSelect />}
+                fullWidth
+                name="organization"
+                label="Organization"
+                placeholder="Select organization"
+                keys={{ label: 'name', value: '_id' }}
+                items={organizations}
+                error={errors.organization?.message}
+                control={control}
+                onClick={({ target }) => setCurrentOrganization(target?.value)}
+                defaultValue={sow?.organization || isOrganizationVisible ? '' : organization}
+              />
+            </Grid>
+          )}
 
           <Grid item xs={12} sm={6} md={4}>
             <Controller
