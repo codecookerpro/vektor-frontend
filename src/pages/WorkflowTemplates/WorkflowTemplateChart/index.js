@@ -121,7 +121,7 @@ const WorkflowTemplateChart = ({ nodes = [], editable = true, setNodes = () => {
       nds = nds.filter((nd) => nd.target !== target || nd.source !== source);
 
       if (editable && workflowTemplateId) {
-        updateWorkflowTemplateDeliverable(nodeToDeliverable(target, nds)).then(({ data }) => dispatch(updateWTD(data)));
+        updateWorkflowTemplateDeliverable(nodeToDeliverable(target, nds, workflowTemplateId)).then(({ data }) => dispatch(updateWTD(data)));
       }
 
       return nds;
