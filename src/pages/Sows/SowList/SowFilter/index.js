@@ -12,22 +12,6 @@ const SowFilters = ({ filter, setFilter }) => {
   const { permissions } = useSelector(({ auth }) => auth.currentUser);
   const isOrganizationVisible = permissions === PERMISSION_TYPE.ADMIN;
 
-  const initFilter = (data) => {
-    return data.map((item) => ({ LABEL: item.name, VALUE: item._id }));
-  };
-  const [organizationFilter, setOrganizationFilter] = useState(() => initFilter(organizations));
-  const [projectFilter, setProjectFilter] = useState(() => initFilter(projects));
-
-  useEffect(() => {
-    const filterOrganizations = organizations.map((organization) => ({ LABEL: organization.name, VALUE: organization._id }));
-    setOrganizationFilter(filterOrganizations);
-  }, [setOrganizationFilter, organizations]);
-
-  useEffect(() => {
-    const filterProjects = projects.map((project) => ({ LABEL: project.name, VALUE: project._id }));
-    setProjectFilter(filterProjects);
-  }, [setProjectFilter, projects]);
-
   const inputHandler = (event) => {
     setFilter((prev) => ({
       ...prev,
@@ -44,7 +28,11 @@ const SowFilters = ({ filter, setFilter }) => {
               label="By organization"
               placeholder="All organizations"
               name="organization"
-              items={organizationFilter}
+              items={organizations}
+              keys={{
+                label: 'name',
+                value: '_id',
+              }}
               value={filter?.organization || ''}
               onChange={inputHandler}
               className={classes.input}
@@ -67,7 +55,11 @@ const SowFilters = ({ filter, setFilter }) => {
             label="By project name"
             placeholder="All project name"
             name="project"
-            items={projectFilter}
+            items={projects}
+            keys={{
+              label: 'name',
+              value: '_id',
+            }}
             value={filter?.project || ''}
             onChange={inputHandler}
             className={classes.input}

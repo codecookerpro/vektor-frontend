@@ -50,7 +50,6 @@ const SowTable = ({ selectedItems, setSelectedItems, page, setPage, rowsPerPage,
   const isSelected = (row) => {
     return selectedItems.findIndex((value) => row.id === value.id) !== -1;
   };
-
   return (
     <Card>
       <CardContent>
