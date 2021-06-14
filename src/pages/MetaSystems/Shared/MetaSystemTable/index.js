@@ -28,10 +28,10 @@ const MetaSystemTable = ({ records = [] }) => {
                 <LinkButton to={LINKS.EDIT_META_SYSTEM.HREF.replace(':project', row.project).replace(':system', row._id)}>{row.name}</LinkButton>
               </TableCell>
               <TableCell>{row.mainSystem.calculated.totalPlannedHours}</TableCell>
-              <TableCell>{row.mainSystem.calculated.PV * 100}%</TableCell>
-              <TableCell>{row.mainSystem.calculated.status * 100}%</TableCell>
-              <TableCell>{row.mainSystem.calculated.totalWorkedHours * 100}%</TableCell>
-              <TableCell>{row.mainSystem.calculated.EV * 100}%</TableCell>
+              <TableCell>{row.mainSystem.calculated.PV}%</TableCell>
+              <TableCell>{row.mainSystem.calculated.status}%</TableCell>
+              <TableCell>{row.mainSystem.calculated.totalWorkedHours}</TableCell>
+              <TableCell>{row.mainSystem.calculated.EV}%</TableCell>
             </TableRow>
           ))}
         </VektorSubTableContainer>

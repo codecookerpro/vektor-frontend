@@ -90,7 +90,7 @@ const LINKS = Object.freeze({
     HREF: '/project-management/systems/edit/:id/history',
   },
   ADD_META_SYSTEM: {
-    TITLE: 'Add MetaSystem',
+    TITLE: 'Add System',
     HREF: '/project-management/projects/edit/:id/meta-system/add',
   },
   EDIT_META_SYSTEM: {

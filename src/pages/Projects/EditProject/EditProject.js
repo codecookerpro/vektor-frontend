@@ -7,7 +7,7 @@ import PageHeader from 'parts/PageHeader';
 import DetailLinkCard from 'parts/DetailLinkCard';
 import ProjectForm from '../Shared/ProjectForm';
 import StopDailyData from '../Shared/StopDailyData';
-import MetaSystemTable from '../../MetaSystems/Shared/MetaSystemTable';
+import MetaSystemTable from 'pages/MetaSystems/Shared/MetaSystemTable';
 import PhasesListView from '../Shared/PhasesListView';
 import LINKS from 'utils/constants/links';
 
