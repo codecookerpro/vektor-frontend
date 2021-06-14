@@ -7,18 +7,7 @@ import ReactFlow, { removeElements, addEdge, MiniMap, Background, isNode, Contro
 import CustomFlowNode from './CustomFlowNode';
 import CustomFlowEdge from './CustomFlowEdge';
 import { INPUT_NODE, CUSTOM_EDGE, IDENTIFIERS } from 'utils/constants/reactflow/custom-node-types';
-import {
-  arrowHeadColor,
-  chartContainerHeight,
-  nodeHeight,
-  nodeWidth,
-  defaultNodeMarginY,
-  defaultNodeMarginX,
-  edgeDefaultProps,
-  nodeStyle,
-  label,
-} from 'utils/constants/reactflow/chart-configs';
-import ObjectID from 'bson-objectid';
+import { arrowHeadColor, chartContainerHeight, nodeHeight, nodeWidth, edgeDefaultProps, label } from 'utils/constants/reactflow/chart-configs';
 import dagre from 'dagre';
 import {
   createWorkflowTemplateDeliverable,
