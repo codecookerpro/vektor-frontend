@@ -6,6 +6,10 @@ import inputHandler from '../inputHandler';
 const IntakePhase = ({ mode, sow = {}, title, setNotRequiredField }) => {
   const classes = useStyles();
 
+  const onChange = (e) => {
+    inputHandler(e, setNotRequiredField, title);
+  };
+
   return (
     <Card className={classes.root}>
       <CardContent>
@@ -18,7 +22,7 @@ const IntakePhase = ({ mode, sow = {}, title, setNotRequiredField }) => {
               fullWidth
               name="contractName"
               label="Full Contract Name"
-              onChange={(e) => inputHandler(e, setNotRequiredField, title)}
+              onChange={onChange}
               defaultValue={sow?.[title.value]?.contractName || ''}
             />
           </Grid>
@@ -27,7 +31,7 @@ const IntakePhase = ({ mode, sow = {}, title, setNotRequiredField }) => {
               fullWidth
               name="contractType"
               label="Contract Type"
-              onChange={(e) => inputHandler(e, setNotRequiredField, title)}
+              onChange={onChange}
               defaultValue={sow?.[title.value]?.contractType || ''}
             />
           </Grid>
@@ -36,7 +40,7 @@ const IntakePhase = ({ mode, sow = {}, title, setNotRequiredField }) => {
               fullWidth
               name="processSteps"
               label="Process Steps"
-              onChange={(e) => inputHandler(e, setNotRequiredField, title)}
+              onChange={onChange}
               defaultValue={sow?.[title.value]?.processSteps || ''}
             />
           </Grid>
@@ -49,7 +53,7 @@ const IntakePhase = ({ mode, sow = {}, title, setNotRequiredField }) => {
               InputLabelProps={{
                 shrink: true,
               }}
-              onChange={(e) => inputHandler(e, setNotRequiredField, title)}
+              onChange={onChange}
               defaultValue={sow?.[title.value]?.dateDesired || ''}
             />
           </Grid>
@@ -59,7 +63,7 @@ const IntakePhase = ({ mode, sow = {}, title, setNotRequiredField }) => {
               fullWidth
               name="capitalExpense"
               label="Capital Expense"
-              onChange={(e) => inputHandler(e, setNotRequiredField, title)}
+              onChange={onChange}
               defaultValue={sow?.[title.value]?.capitalExpense || ''}
             />
           </Grid>
@@ -68,7 +72,7 @@ const IntakePhase = ({ mode, sow = {}, title, setNotRequiredField }) => {
               fullWidth
               name="operationalExpense"
               label="Operational Expense"
-              onChange={(e) => inputHandler(e, setNotRequiredField, title)}
+              onChange={onChange}
               defaultValue={sow?.[title.value]?.operationalExpense || ''}
             />
           </Grid>
@@ -77,7 +81,7 @@ const IntakePhase = ({ mode, sow = {}, title, setNotRequiredField }) => {
               fullWidth
               name="sowRagStatus"
               label="SOW RAG Status"
-              onChange={(e) => inputHandler(e, setNotRequiredField, title)}
+              onChange={onChange}
               defaultValue={sow?.[title.value]?.sowRagStatus || ''}
             />
           </Grid>
@@ -86,28 +90,16 @@ const IntakePhase = ({ mode, sow = {}, title, setNotRequiredField }) => {
               fullWidth
               name="licenseContract"
               label="License Contract"
-              onChange={(e) => inputHandler(e, setNotRequiredField, title)}
+              onChange={onChange}
               defaultValue={sow?.[title.value]?.licenseContract || ''}
             />
           </Grid>
 
           <Grid item xs={12} sm={6} md={9}>
-            <TextField
-              fullWidth
-              name="comments"
-              label="Comments"
-              onChange={(e) => inputHandler(e, setNotRequiredField, title)}
-              defaultValue={sow?.[title.value]?.comments || ''}
-            />
+            <TextField fullWidth name="comments" label="Comments" onChange={onChange} defaultValue={sow?.[title.value]?.comments || ''} />
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
-            <TextField
-              fullWidth
-              name="msaNumber"
-              label="MSA#"
-              onChange={(e) => inputHandler(e, setNotRequiredField, title)}
-              defaultValue={sow?.[title.value]?.msaExpiration || ''}
-            />
+            <TextField fullWidth name="msaNumber" label="MSA#" onChange={onChange} defaultValue={sow?.[title.value]?.msaExpiration || ''} />
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
@@ -115,36 +107,18 @@ const IntakePhase = ({ mode, sow = {}, title, setNotRequiredField }) => {
               fullWidth
               name="msaExpiration"
               label="MSA Expiration"
-              onChange={(e) => inputHandler(e, setNotRequiredField, title)}
+              onChange={onChange}
               defaultValue={sow?.[title.value]?.msaExpiration || ''}
             />
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
-            <TextField
-              fullWidth
-              name="fid"
-              label="FID"
-              onChange={(e) => inputHandler(e, setNotRequiredField, title)}
-              defaultValue={sow?.[title.value]?.fid || ''}
-            />
+            <TextField fullWidth name="fid" label="FID" onChange={onChange} defaultValue={sow?.[title.value]?.fid || ''} />
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
-            <TextField
-              fullWidth
-              name="fidCodeDesc"
-              label="FID Code-Desc"
-              onChange={(e) => inputHandler(e, setNotRequiredField, title)}
-              defaultValue={sow?.[title.value]?.fidCodeDesc || ''}
-            />
+            <TextField fullWidth name="fidCodeDesc" label="FID Code-Desc" onChange={onChange} defaultValue={sow?.[title.value]?.fidCodeDesc || ''} />
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
-            <TextField
-              fullWidth
-              name="pvidNumber"
-              label="PVID#"
-              onChange={(e) => inputHandler(e, setNotRequiredField, title)}
-              defaultValue={sow?.[title.value]?.pvidNumber || ''}
-            />
+            <TextField fullWidth name="pvidNumber" label="PVID#" onChange={onChange} defaultValue={sow?.[title.value]?.pvidNumber || ''} />
           </Grid>
         </Grid>
       </CardContent>
