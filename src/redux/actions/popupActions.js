@@ -1,4 +1,5 @@
 import * as TYPES from 'redux/types';
+import { POPUP_TYPE } from 'utils/constants/popupType';
 
 const setPopup = (popup) => {
   return {
@@ -7,4 +8,12 @@ const setPopup = (popup) => {
   };
 };
 
-export { setPopup };
+const showError = (msg) => ({
+  type: TYPES.SET_POPUP,
+  payload: {
+    popupType: POPUP_TYPE.ERROR,
+    popupText: msg,
+  },
+});
+
+export { setPopup, showError };

@@ -1,22 +1,30 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { PROJECT_MODES } from 'utils/constants/projectModes';
 import { PERMISSION_TYPE } from 'utils/constants/permissions';
+import { readMetaSystem } from 'redux/actions/metaSystem';
 
 export const useEditProjectLogic = () => {
   const { id } = useParams();
   const history = useHistory();
+  const dispatch = useDispatch();
 
-  const { projects, permissions } = useSelector(({ projects, auth }) => {
+  const {
+    projects,
+    permissions,
+    metaSystems = [],
+  } = useSelector(({ projects, auth }) => {
     const {
       currentUser: { permissions },
     } = auth;
-    const { results } = projects;
+    const { results, metaSystems } = projects;
 
-    return { projects: results, permissions };
+    return { projects: results, permissions, metaSystems: metaSystems[id] };
   });
+
+  useEffect(() => dispatch(readMetaSystem(id)), [id]);
 
   const project = useMemo(() => projects.find((item) => item._id === id), [id, projects]);
   const getMode = useMemo(() => {
@@ -34,5 +42,5 @@ export const useEditProjectLogic = () => {
     history.push(href.replace(':id', id));
   };
 
-  return { project, isPhasesVisible, getMode, onClickButton };
+  return { project, isPhasesVisible, getMode, onClickButton, metaSystems };
 };
