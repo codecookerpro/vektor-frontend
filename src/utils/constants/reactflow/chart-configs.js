@@ -28,6 +28,6 @@ export const edgeDefaultProps = {
 };
 
 export const handleColors = {
-  target: '#557fb9',
-  source: '#f9037e',
+  target: '#6283B6',
+  source: '#99BD6B',
 };
