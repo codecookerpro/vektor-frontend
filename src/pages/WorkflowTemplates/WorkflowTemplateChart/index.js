@@ -6,7 +6,7 @@ import { Plus } from 'react-feather';
 import ReactFlow, { removeElements, addEdge, MiniMap, Background, isNode } from 'react-flow-renderer';
 import CustomFlowNode from './CustomFlowNode';
 import CustomFlowEdge from './CustomFlowEdge';
-import { INPUT_NODE, CUSTOM_EDGE } from 'utils/constants/reactflow/custom-node-types';
+import { INPUT_NODE, CUSTOM_EDGE, IDENTIFIERS } from 'utils/constants/reactflow/custom-node-types';
 import {
   arrowHeadColor,
   chartContainerHeight,
@@ -60,16 +60,16 @@ const getLayoutedElements = (elements, direction = LAYOUT_DIR.vertical) => {
   return elements.map((el) => {
     if (isNode(el)) {
       const nodeWithPosition = dagreGraph.node(el.id);
-      el.targetPosition = isHorizontal ? 'left' : 'top';
-      el.sourcePosition = isHorizontal ? 'right' : 'bottom';
+      el.targetPosition = isHorizontal ? IDENTIFIERS.TARGET_LEFT : IDENTIFIERS.TARGET_TOP;
+      el.sourcePosition = isHorizontal ? IDENTIFIERS.SOURCE_RIGHT : IDENTIFIERS.SOURCE_BOTTOM;
 
       el.position = {
         x: nodeWithPosition.x - nodeWidth / 2 + Math.random() / 1000,
         y: nodeWithPosition.y - nodeHeight / 2,
       };
     } else {
-      el.targetHandle = isHorizontal ? 'left' : 'top';
-      el.sourceHandle = isHorizontal ? 'right' : 'bottom';
+      el.targetHandle = isHorizontal ? IDENTIFIERS.TARGET_LEFT : IDENTIFIERS.TARGET_TOP;
+      el.sourceHandle = isHorizontal ? IDENTIFIERS.SOURCE_RIGHT : IDENTIFIERS.SOURCE_BOTTOM;
     }
 
     return el;

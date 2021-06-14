@@ -219,7 +219,7 @@ const WorkflowTemplateForm = ({ workflowTemplate = {}, nodes = [], onEdit = () =
             </Grid>
             <Grid item xs={12}>
               <Grid container justify="space-between">
-                {formMode == FORM_MODE.create ? (
+                {formMode === FORM_MODE.create ? (
                   <Grid item>
                     <Button variant="contained" color="primary" onClick={handleSubmit(onSubmit)}>
                       Save
