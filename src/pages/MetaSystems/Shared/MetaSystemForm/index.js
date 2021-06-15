@@ -228,7 +228,7 @@ const MetaSystemForm = ({ mode = FORM_MODE.view, system = {}, setFormMode = () =
                   <Button variant="contained" color="primary" onClick={() => setFormMode(FORM_MODE.update)}>
                     EDIT
                   </Button>
-                ) : mode === FORM_MODE.update ? (
+                ) : (
                   <>
                     <Button variant="contained" color="primary" onClick={handleSubmit(onSubmit)}>
                       SAVE CHANGES
@@ -237,7 +237,7 @@ const MetaSystemForm = ({ mode = FORM_MODE.view, system = {}, setFormMode = () =
                       CANCEL
                     </Button>
                   </>
-                ) : null}
+                )}
                 {mode === FORM_MODE.update ? (
                   <Button variant="contained" color="primary" className={classes.deleteButton} onClick={handleDelete}>
                     DELETE
