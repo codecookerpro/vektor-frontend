@@ -11,7 +11,7 @@ import { setSelectedSOW } from '../../../../redux/actions/sowAction';
 
 const SowTable = ({ selectedItems, setSelectedItems, page, setPage, rowsPerPage, setRowsPerPage, isOrganizationVisible }) => {
   const dispatch = useDispatch();
-  const { results } = useSelector((state) => state.sows);
+  const { results, pagination } = useSelector((state) => state.sows);
   const organizations = useSelector((state) => state.organizations.results);
   const projects = useSelector((state) => state.projects.results);
   const [action, setAction] = useState('');
@@ -55,7 +55,7 @@ const SowTable = ({ selectedItems, setSelectedItems, page, setPage, rowsPerPage,
         <SowActions action={action} setAction={setAction} onAction={actionHandler} />
         <VektorTableContainer
           columns={columns}
-          rowCounts={results.length}
+          rowCounts={pagination.count || results.length}
           page={page}
           setPage={setPage}
           rowsPerPage={rowsPerPage}
@@ -85,9 +85,9 @@ const SowTable = ({ selectedItems, setSelectedItems, page, setPage, rowsPerPage,
                 )}
               </TableCell>
               <TableCell>{row.metaSystem}</TableCell>
-              <TableCell>{row?.fullContactName || '-'}</TableCell>
+              <TableCell>{row?.initiationPhase?.contractName || '-'}</TableCell>
               <TableCell>{getProjectName(row.project)}</TableCell>
-              <TableCell>{row?.vendorName || '-'}</TableCell>
+              <TableCell>{row?.initiationPhase?.vendorName || '-'}</TableCell>
             </TableRow>
           ))}
         </VektorTableContainer>

@@ -9,11 +9,14 @@ import InitiationPhase from './InitiationPhase';
 import IntakePhase from './IntakePhase';
 import IproSubmit from './IproSubmit';
 import { SOW_FORM_PHASE } from 'utils/constants/sowFormPhase';
-import LINKS from 'utils/constants/links';
 import { useStyles } from './styles';
-import { addSOW } from 'redux/actions/sowAction';
+import { addSOW, editSOW } from 'redux/actions/sowAction';
 import { PERMISSION_TYPE } from 'utils/constants/permissions';
 import setSchema from './setSchema';
+import { PROJECT_MODES } from 'utils/constants/projectModes';
+import AttachmentsPhase from './AttachmentsPhase';
+import { isEmpty } from 'utils/helpers/utility';
+import LINKS from 'utils/constants/links';
 
 const SowForm = ({ mode }) => {
   const classes = useStyles();
@@ -24,31 +27,47 @@ const SowForm = ({ mode }) => {
   const { permissions } = useSelector(({ auth }) => auth.currentUser);
   const isOrganizationVisible = permissions === PERMISSION_TYPE.ADMIN;
 
-  const schema = setSchema(isOrganizationVisible);
+  const schema = setSchema(isOrganizationVisible && mode === PROJECT_MODES.CREATION);
 
   const { control, handleSubmit, errors } = useForm({
     resolver: joiResolver(schema),
     shouldUnregister: false,
   });
   const { sow } = useSelector(({ sows }) => sows);
-  const [notRequiredField, setNotRequiredField] = useState({});
+  const [notRequiredField, setNotRequiredField] = useState({
+    initiationPhase: sow?.initiationPhase,
+    intakePhase: sow?.intakePhase,
+    iProSubmit: sow?.iProSubmit,
+  });
   const [project, setProject] = useState({});
 
   const onSubmit = async (data) => {
     const { name, metaSystem } = data;
-    const organization = isOrganizationVisible ? data.organization : defaultOrganization;
     const arraySystemProject = metaSystem.split('/');
-    const params = {
-      name,
-      organization,
-      metaSystem: arraySystemProject[0],
-      project: arraySystemProject[1],
-      ...notRequiredField,
-    };
-    await dispatch(addSOW(params));
+    if (isEmpty(sow)) {
+      const organization = isOrganizationVisible ? data.organization : defaultOrganization;
+      const params = {
+        name,
+        organization,
+        metaSystem: arraySystemProject[0],
+        project: arraySystemProject[1],
+        ...notRequiredField,
+      };
+      await dispatch(addSOW(params));
+    } else {
+      const { organization, _id } = sow;
+      const params = {
+        _id,
+        name,
+        organization,
+        metaSystem: arraySystemProject[0],
+        project: arraySystemProject[1],
+        ...notRequiredField,
+      };
+      await dispatch(editSOW(params));
+    }
     history.push(LINKS.SOWS.HREF);
   };
-
   return (
     <>
       <form noValidate className={classes.form} onSubmit={handleSubmit(onSubmit)}>
@@ -61,9 +80,12 @@ const SowForm = ({ mode }) => {
           setProject={setProject}
           isOrganizationVisible={isOrganizationVisible}
         />
-        <InitiationPhase mode={mode} sow={sow} title={SOW_FORM_PHASE.INITIATION_PHASE} setNotRequiredField={setNotRequiredField} />
-        <IntakePhase mode={mode} sow={sow} title={SOW_FORM_PHASE.INTAKE_PHASE} setNotRequiredField={setNotRequiredField} />
-        <IproSubmit mode={mode} sow={sow} title={SOW_FORM_PHASE.IPRO_SUBMIT} setNotRequiredField={setNotRequiredField} />
+        <InitiationPhase sow={sow} title={SOW_FORM_PHASE.INITIATION_PHASE} setNotRequiredField={setNotRequiredField} />
+        {mode === PROJECT_MODES.EDITING && <AttachmentsPhase sow={sow} title={SOW_FORM_PHASE.INITIATION_PHASE_ATTACHMENTS} />}
+        <IntakePhase sow={sow} title={SOW_FORM_PHASE.INTAKE_PHASE} setNotRequiredField={setNotRequiredField} />
+        {mode === PROJECT_MODES.EDITING && <AttachmentsPhase sow={sow} title={SOW_FORM_PHASE.INTAKE_PHASE_ATTACHMENTS} />}
+        <IproSubmit sow={sow} title={SOW_FORM_PHASE.IPRO_SUBMIT} setNotRequiredField={setNotRequiredField} />
+        {mode === PROJECT_MODES.EDITING && <AttachmentsPhase sow={sow} title={SOW_FORM_PHASE.IPRO_SUBMIT_ATTACHMENTS} />}
         <div className={classes.buttonContainer}>
           <Button variant="contained" color="primary" type="submit">
             Save
