@@ -78,9 +78,11 @@ const ProjectPhasesTable = ({ activeAction, editingPhase, phases, onActionClick,
                 />
               </TableCell>
               <TableCell>
-                <IconButton aria-label="edit" onClick={onEditClick(phase.orderIndex)}>
-                  {!isEditing(phase.orderIndex) ? <EditIcon /> : <CheckCircleIcon />}
-                </IconButton>
+                {onActionClick && (
+                  <IconButton aria-label="edit" onClick={onEditClick(phase.orderIndex)}>
+                    {!isEditing(phase.orderIndex) ? <EditIcon /> : <CheckCircleIcon />}
+                  </IconButton>
+                )}
               </TableCell>
             </TableRow>
           ))}
