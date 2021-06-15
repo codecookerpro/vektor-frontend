@@ -1,4 +1,0 @@
-export const FORM_MODES = {
-  EDITING: 'EDITING',
-  CREATION: 'CREATION',
-};

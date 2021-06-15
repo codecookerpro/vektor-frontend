@@ -5,7 +5,7 @@ import { Controller } from 'react-hook-form';
 import VektorTextField from 'components/UI/TextFields/VektorTextField';
 import FilterSelect from 'components/UI/Selects/FilterSelect';
 import { useSelector } from 'react-redux';
-import { FORM_MODES } from 'utils/constants/formModes';
+import { FORM_MODE } from 'utils/constants';
 
 const NewSow = ({ mode, sow = {}, control, errors, isOrganizationVisible }) => {
   const classes = useStyles();
@@ -14,7 +14,7 @@ const NewSow = ({ mode, sow = {}, control, errors, isOrganizationVisible }) => {
   const [filterSystems, setFilterSystems] = useState([]);
 
   useEffect(() => {
-    if (mode === FORM_MODES.EDITING) {
+    if (mode === FORM_MODE.update) {
       setCurrentOrganization(sow.organization);
     }
   }, [sow]);
@@ -60,7 +60,7 @@ const NewSow = ({ mode, sow = {}, control, errors, isOrganizationVisible }) => {
             />
           </Grid>
 
-          {isOrganizationVisible && mode === FORM_MODES.CREATION && (
+          {isOrganizationVisible && mode === FORM_MODE.create && (
             <Grid item xs={12} sm={6} md={4}>
               <Controller
                 as={<FilterSelect />}
