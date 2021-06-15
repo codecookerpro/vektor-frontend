@@ -1,2 +1,2 @@
-export { default as useProjectPhases } from './useProjectPhases';
+export { default as useProjectPhasesEditing } from './useProjectPhasesEditing';
 export { getNavLinks } from './helpers';

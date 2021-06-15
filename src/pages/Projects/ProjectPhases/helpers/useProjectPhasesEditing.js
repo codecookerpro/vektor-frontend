@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 import { createProjectPhase, updateProjectPhase, deleteProjectPhase } from 'redux/actions/projects';
 import { ACTIONS } from 'pages/Projects/helpers';
 
-const useProjectPhases = () => {
+const useProjectPhasesEditing = () => {
   const dispatch = useDispatch();
   const { id } = useParams();
 
@@ -112,4 +112,4 @@ const useProjectPhases = () => {
   };
 };
 
-export default useProjectPhases;
+export default useProjectPhasesEditing;

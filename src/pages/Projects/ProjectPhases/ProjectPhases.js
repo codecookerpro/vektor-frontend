@@ -3,16 +3,18 @@ import { Grid, TextField, IconButton } from '@material-ui/core';
 import DoneIcon from '@material-ui/icons/Done';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
+import { useSelector } from 'react-redux';
 
 import PageHeader from 'parts/PageHeader';
 import LINKS from 'utils/constants/links';
 import ProjectPhasesTable from '../Shared/ProjectPhasesTable';
 import PhaseBox from '../Shared/PhasesListView/PhaseBox';
 import ItemsDragLayer from '../Shared/PhasesListView/ItemsDragLayer';
+import { PERMISSION_TYPE } from 'utils/constants/permissions';
 
 import { ACTIONS_DATA } from './constants';
 import useStyles from './styles';
-import { useProjectPhases, getNavLinks } from './helpers';
+import { useProjectPhasesEditing, getNavLinks } from './helpers';
 
 const ProjectPhases = () => {
   const { phaseHeader } = useStyles();
@@ -28,7 +30,10 @@ const ProjectPhases = () => {
     onActionClick,
     onHeaderClick,
     setEditingPhase,
-  } = useProjectPhases();
+  } = useProjectPhasesEditing();
+
+  const { permissions } = useSelector(({ auth }) => auth.currentUser);
+  const isEditingVisible = permissions !== PERMISSION_TYPE.USER && permissions !== PERMISSION_TYPE.VIEWER;
 
   const renderTitleComponent = useCallback(
     (orderIndex, arrayIndex, name) =>
@@ -58,16 +63,18 @@ const ProjectPhases = () => {
                   <PhaseBox
                     orderIndex={orderIndex}
                     name={renderTitleComponent(orderIndex, idx, name)}
-                    phaseActions={ACTIONS_DATA}
+                    phaseActions={isEditingVisible && ACTIONS_DATA}
                     fields={[]}
                     moveItem={() => null}
                     onActionClick={onActionClick}
                   />
                 </Grid>
               ))}
-              <Grid item xs={12} sm={6} md={3}>
-                <PhaseBox name="+ Add new phase" fields={[]} moveItem={() => null} onHeaderClick={onHeaderClick} />
-              </Grid>
+              {isEditingVisible && (
+                <Grid item xs={12} sm={6} md={3}>
+                  <PhaseBox name="+ Add new phase" fields={[]} moveItem={() => null} onHeaderClick={onHeaderClick} />
+                </Grid>
+              )}
             </Grid>
           </DndProvider>
         </Grid>
@@ -77,7 +84,7 @@ const ProjectPhases = () => {
             editingPhase={editingPhase}
             phases={phases}
             setEditingPhase={setEditingPhase}
-            onActionClick={onActionClick}
+            onActionClick={isEditingVisible && onActionClick}
             onChangePhase={onChangePhase}
           />
         </Grid>
