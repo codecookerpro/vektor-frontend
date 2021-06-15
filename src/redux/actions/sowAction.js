@@ -6,7 +6,6 @@ const getSOWs =
   (filter = {}, pagination = {}) =>
   async (dispatch, getState) => {
     try {
-      console.log('pagination', pagination);
       const params = {
         skip: pagination.skip || 0,
         limit: pagination.limit || 10,
@@ -84,7 +83,6 @@ const addSOWFile = (params) => async (dispatch, getState) => {
 
 const removeSOWFile = (params) => async (dispatch, getState) => {
   try {
-    console.log('params', params);
     await sowAPI.deleteSOWFileUrl(params);
     dispatch(getSOWs());
   } catch (error) {
