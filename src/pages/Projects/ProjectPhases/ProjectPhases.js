@@ -10,9 +10,8 @@ import LINKS from 'utils/constants/links';
 import ProjectPhasesTable from '../Shared/ProjectPhasesTable';
 import PhaseBox from '../Shared/PhasesListView/PhaseBox';
 import ItemsDragLayer from '../Shared/PhasesListView/ItemsDragLayer';
-import { PERMISSION_TYPE } from 'utils/constants/permissions';
 
-import { ACTIONS_DATA } from './constants';
+import { ACTIONS_DATA, ALLOWED_ROLES } from './constants';
 import useStyles from './styles';
 import { useProjectPhasesEditing, getNavLinks } from './helpers';
 
@@ -33,7 +32,7 @@ const ProjectPhases = () => {
   } = useProjectPhasesEditing();
 
   const { permissions } = useSelector(({ auth }) => auth.currentUser);
-  const isEditingVisible = permissions !== PERMISSION_TYPE.USER && permissions !== PERMISSION_TYPE.VIEWER;
+  const isEditingVisible = ALLOWED_ROLES.includes(permissions);
 
   const renderTitleComponent = useCallback(
     (orderIndex, arrayIndex, name) =>
