@@ -3,7 +3,7 @@ import { Card, CardHeader, CardContent } from '@material-ui/core';
 import WorkflowGraph from 'parts/WorkflowGraph';
 import ContainedButton from 'components/UI/Buttons/ContainedButton';
 
-const DeliverableGraph = () => {
+const DeliverableGraph = ({ deliverables }) => {
   const [toggled, toggleGraph] = useState(false);
 
   return (

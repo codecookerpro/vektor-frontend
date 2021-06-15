@@ -121,16 +121,21 @@ export const nodeToDeliverable = (nodeId, nodes, mainId) => {
     id,
     type,
     position,
-    data: { label },
+    data: { label, start, end, completion, status, plannedHours, workedHours },
   } = node;
   const deliverable = {
-    name: node.data.label,
+    name: label,
+    start,
+    end,
+    completion,
+    status,
+    plannedHours,
+    workedHours,
     predecessors: edges.filter((c) => c.target === node.id).map((c) => c.source),
     chartData: {
       id,
       type,
       position,
-      data: { label },
       edges: edges.filter((e) => e.target === node.id),
     },
   };
@@ -151,7 +156,7 @@ export const elementsToDeliverables = (elements) =>
 
 export const deliverablesToElements = (deliverables) =>
   deliverables.reduce((acc, deliverable) => {
-    let { chartData: { id, type, data, position, edges } = {}, _id } = deliverable;
+    let { chartData: { id, type, position, edges } = {}, _id, name, start, end, completion, status, plannedHours, workedHours } = deliverable;
     edges = edges
       ? edges.map((e) => ({
           ...e,
@@ -166,7 +171,7 @@ export const deliverablesToElements = (deliverables) =>
       id,
       type,
       position,
-      data: { ...data, _id, editable: true },
+      data: { _id, label: name, start, end, completion, status, plannedHours, workedHours, editable: true },
       style: NODE_PROPS.style,
     };
 

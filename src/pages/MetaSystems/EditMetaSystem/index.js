@@ -37,7 +37,7 @@ const EditMetaSystem = () => {
             <MetaSystemForm system={metaSystem} mode={formMode} setFormMode={setFormMode} />
           </Grid>
           <Grid item xs={12}>
-            <DeliverableGraph />
+            <DeliverableGraph deliverables={metaSystem.mainSystem.deliverables} />
           </Grid>
           <Grid item xs={12}>
             <DeliverableTable deliverables={metaSystem.mainSystem.deliverables} />
