@@ -10,12 +10,8 @@ const EditProject = lazy(() => import(/* webpackChunkName: 'EditProject' */ 'pag
 const SystemTrendChart = lazy(() => import(/* webpackChunkName: 'SystemTrendChart' */ 'pages/Projects/SystemTrendChart'));
 const ProjectHistory = lazy(() => import(/* webpackChunkName: 'ProjectHistory' */ 'pages/Projects/ProjectHistory'));
 const ProjectPhases = lazy(() => import(/* webpackChunkName: 'ProjectPhases' */ 'pages/Projects/ProjectPhases'));
-const SystemList = lazy(() => import(/* webpackChunkName: 'SystemList' */ 'pages/Systems/SystemList'));
-const AddSystem = lazy(() => import(/* webpackChunkName: 'AddSystem' */ 'pages/Systems/AddSystem'));
-const EditSystem = lazy(() => import(/* webpackChunkName: 'EditSystem' */ 'pages/Systems/EditSystem'));
 const AddMetaSystem = lazy(() => import(/* webpackChunkName: 'AddMetaSystem' */ 'pages/MetaSystems/AddMetaSystem'));
 const EditMetaSystem = lazy(() => import(/* webpackChunkName: 'EditMetaSystem' */ 'pages/MetaSystems/EditMetaSystem'));
-const SystemHistory = lazy(() => import(/* webpackChunkName: 'SystemHistory' */ 'pages/Systems/SystemHistory'));
 const DeliverableTrendChart = lazy(() => import(/* webpackChunkName: 'DeliverableTrendChart' */ 'pages/Systems/DeliverableTrendChart'));
 const ReportList = lazy(() => import(/* webpackChunkName: 'ReportList' */ 'pages/Reports'));
 const Gantt = lazy(() => import(/* webpackChunkName: 'Gantt' */ 'pages/Projects/Gantt'));
