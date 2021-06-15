@@ -3,6 +3,7 @@ import * as TYPES from 'redux/types';
 const INITIAL_STATE = Object.freeze({
   results: [],
   organization: '',
+  metaSystems: {},
 });
 
 const projectsReducer = (state = INITIAL_STATE, { payload, type }) => {
@@ -24,6 +25,73 @@ const projectsReducer = (state = INITIAL_STATE, { payload, type }) => {
       return {
         ...state,
         results: newResults,
+      };
+    }
+    case TYPES.FETCH_META_SYSTEMS: {
+      const { data, project } = payload;
+
+      return {
+        ...state,
+        metaSystems: {
+          ...state.metaSystems,
+          [project]: data,
+        },
+      };
+    }
+    case TYPES.CREATE_META_SYSTEM: {
+      const { project, _id } = payload;
+
+      return {
+        ...state,
+        results: state.results.map((p) => (p._id === project ? { ...p, metaSystems: [...p.metaSystems, _id] } : p)),
+        metaSystems: {
+          ...state.metaSystems,
+          [project]: [...state.metaSystems[project], payload],
+        },
+      };
+    }
+    case TYPES.UPDATE_META_SYSTEM: {
+      const { _id, name, equipmentCategory, equipmentType, equipmentName, equipmentNumber, project, productCode, site } = payload;
+
+      return {
+        ...state,
+        metaSystems: {
+          ...state.metaSystems,
+          [project]: state.metaSystems[project].map((ms) =>
+            ms._id === _id
+              ? {
+                  ...ms,
+                  name,
+                  equipmentCategory,
+                  equipmentType,
+                  equipmentName,
+                  equipmentNumber,
+                  project,
+                  productCode,
+                  site,
+                }
+              : ms
+          ),
+        },
+      };
+    }
+    case TYPES.DELETE_META_SYSTEM: {
+      const { project, system } = payload;
+
+      return {
+        ...state,
+        metaSystems: {
+          ...state.metaSystems,
+          [project]: state.metaSystems[project].filter((ms) => ms._id !== system),
+        },
+        results: state.results.map((p) =>
+          p._id === project
+            ? {
+                ...p,
+                metaSystems: p.metaSystems.filter((msid) => msid !== system),
+              }
+            : p
+        ),
       };
     }
     default:

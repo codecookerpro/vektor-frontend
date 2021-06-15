@@ -103,4 +103,58 @@ const removeProject = (project) => async (dispatch, getState) => {
   }
 };
 
-export { getProjects, addProject, editProject, removeProject };
+const createProjectPhase = (phase) => async (dispatch) => {
+  try {
+    let isCompleted = false;
+    const response = await projectAPI.createProjectPhase(phase);
+
+    if (response) {
+      const { data: payload } = response;
+
+      dispatch({ type: TYPES.EDIT_PROJECT, payload });
+      isCompleted = true;
+    }
+
+    return isCompleted;
+  } catch (error) {
+    console.log('[editProject] error => ', error);
+  }
+};
+
+const updateProjectPhase = (phase) => async (dispatch) => {
+  try {
+    let isCompleted = false;
+    const response = await projectAPI.updateProjectPhase(phase);
+
+    if (response) {
+      const { data: payload } = response;
+
+      dispatch({ type: TYPES.EDIT_PROJECT, payload });
+      isCompleted = true;
+    }
+
+    return isCompleted;
+  } catch (error) {
+    console.log('[editProject] error => ', error);
+  }
+};
+
+const deleteProjectPhase = (phase) => async (dispatch) => {
+  try {
+    let isCompleted = false;
+    const response = await projectAPI.deleteProjectPhase(phase);
+
+    if (response) {
+      const { data: payload } = response;
+
+      dispatch({ type: TYPES.EDIT_PROJECT, payload });
+      isCompleted = true;
+    }
+
+    return isCompleted;
+  } catch (error) {
+    console.log('[editProject] error => ', error);
+  }
+};
+
+export { getProjects, addProject, editProject, removeProject, createProjectPhase, updateProjectPhase, deleteProjectPhase };

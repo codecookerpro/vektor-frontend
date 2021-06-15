@@ -13,9 +13,12 @@ const ProjectPhases = lazy(() => import(/* webpackChunkName: 'ProjectPhases' */ 
 const SystemList = lazy(() => import(/* webpackChunkName: 'SystemList' */ 'pages/Systems/SystemList'));
 const AddSystem = lazy(() => import(/* webpackChunkName: 'AddSystem' */ 'pages/Systems/AddSystem'));
 const EditSystem = lazy(() => import(/* webpackChunkName: 'EditSystem' */ 'pages/Systems/EditSystem'));
+const AddMetaSystem = lazy(() => import(/* webpackChunkName: 'AddMetaSystem' */ 'pages/MetaSystems/AddMetaSystem'));
+const EditMetaSystem = lazy(() => import(/* webpackChunkName: 'EditMetaSystem' */ 'pages/MetaSystems/EditMetaSystem'));
 const SystemHistory = lazy(() => import(/* webpackChunkName: 'SystemHistory' */ 'pages/Systems/SystemHistory'));
 const DeliverableTrendChart = lazy(() => import(/* webpackChunkName: 'DeliverableTrendChart' */ 'pages/Systems/DeliverableTrendChart'));
 const ReportList = lazy(() => import(/* webpackChunkName: 'ReportList' */ 'pages/Reports'));
+const Gantt = lazy(() => import(/* webpackChunkName: 'Gantt' */ 'pages/Projects/Gantt'));
 
 const projectManagementRoutes = Object.freeze({
   id: LINKS.PROJECT_MANAGEMENT.TITLE,
@@ -94,6 +97,18 @@ const projectManagementRoutes = Object.freeze({
       isNotSlide: true,
     },
     {
+      path: LINKS.ADD_META_SYSTEM.HREF,
+      name: LINKS.ADD_META_SYSTEM.TITLE,
+      component: AddMetaSystem,
+      isNotSlide: true,
+    },
+    {
+      path: LINKS.EDIT_META_SYSTEM.HREF,
+      name: LINKS.EDIT_META_SYSTEM.TITLE,
+      component: EditMetaSystem,
+      isNotSlide: true,
+    },
+    {
       path: LINKS.DELIVERABLE_TREND_CHART.HREF,
       name: LINKS.DELIVERABLE_TREND_CHART.TITLE,
       component: DeliverableTrendChart,
@@ -103,6 +118,11 @@ const projectManagementRoutes = Object.freeze({
       path: LINKS.REPORTS.HREF,
       name: LINKS.REPORTS.TITLE,
       component: ReportList,
+    },
+    {
+      path: LINKS.PROJECT_GANTT.HREF,
+      name: LINKS.PROJECT_GANTT.TITLE,
+      component: Gantt,
     },
   ],
 });

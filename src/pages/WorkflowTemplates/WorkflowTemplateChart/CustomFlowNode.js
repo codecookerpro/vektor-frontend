@@ -1,9 +1,10 @@
 import React, { memo, useState } from 'react';
-import { Handle } from 'react-flow-renderer';
+import { Handle, Position } from 'react-flow-renderer';
 import Popper from '@material-ui/core/Popper';
 import Fade from '@material-ui/core/Fade';
 import { makeStyles } from '@material-ui/core/styles';
 import { Button } from '@material-ui/core';
+import { IDENTIFIERS, TYPE } from 'utils/constants/reactflow/custom-node-types';
 import NodeDialog from './NodeDialog';
 import CloseIcon from '@material-ui/icons/Close';
 import * as nodeDialogConfigs from 'utils/constants/reactflow/node-dialog-configs';
@@ -49,6 +50,9 @@ const useStyles = makeStyles(() => ({
     left: '100%',
     cursor: 'pointer',
   },
+  handle: {
+    background: handleColors.source,
+  },
 }));
 
 export default memo(({ id, data }) => {
@@ -59,9 +63,10 @@ export default memo(({ id, data }) => {
   const [dialogProps, setDialogProps] = useState(null);
 
   const handlePopUpToggle = (e) => {
-    e.preventDefault();
-    setPopperElement(popperElement ? null : e.currentTarget);
-    data.handleSwitchPopup(popperElement ? null : e.currentTarget);
+    if (data.editable) {
+      setPopperElement(popperElement ? null : e.currentTarget);
+      data.handleSwitchPopup(popperElement ? null : e.currentTarget);
+    }
   };
 
   const handleDeleteNodes = (e) => {
@@ -76,25 +81,80 @@ export default memo(({ id, data }) => {
     setDialogProps(nodeDialogConfigs.EDIT);
   };
 
+  const handleMargin = 15;
+  const targetStyles = { background: handleColors.target, height: '9px', width: '9px', borderRadius: '50%' };
+  const sourceStyles = { background: handleColors.source, height: '9px', width: '9px', borderRadius: '50%' };
   return (
     <>
-      <div onDoubleClick={data.editable && handlePopUpToggle}>
-        <Handle type="target" style={{ background: handleColors.target }} position="top" id={'top'} />
-        <Handle type="target" style={{ background: handleColors.target }} position="left" id={'left'} />
+      <div onDoubleClick={handlePopUpToggle}>
+        <Handle
+          type={TYPE.TARGET}
+          style={{ ...targetStyles, marginLeft: '-2px', marginTop: `-${handleMargin}px` }}
+          position={Position.Left}
+          id={IDENTIFIERS.TARGET_LEFT}
+        />
+
+        <Handle
+          type={TYPE.TARGET}
+          style={{ ...targetStyles, marginTop: '-2px', marginLeft: `${handleMargin}px` }}
+          position={Position.Top}
+          id={IDENTIFIERS.TARGET_TOP}
+        />
+
+        <Handle
+          type={TYPE.TARGET}
+          style={{ ...targetStyles, marginRight: '-1px', marginTop: `${handleMargin}px` }}
+          position={Position.Right}
+          id={IDENTIFIERS.TARGET_RIGHT}
+        />
+
+        <Handle
+          type={TYPE.TARGET}
+          style={{ ...targetStyles, marginBottom: '-1px', marginLeft: `-${handleMargin}px` }}
+          position={Position.Bottom}
+          id={IDENTIFIERS.TARGET_BOTTOM}
+        />
+        <Handle
+          type={TYPE.SOURCE}
+          style={{ ...sourceStyles, marginLeft: '-2px', marginTop: `${handleMargin}px` }}
+          position={Position.Left}
+          id={IDENTIFIERS.SOURCE_LEFT}
+        />
+
+        <Handle
+          type={TYPE.SOURCE}
+          style={{ ...sourceStyles, marginTop: '-2px', marginLeft: `-${handleMargin}px` }}
+          position={Position.Top}
+          id={IDENTIFIERS.SOURCE_TOP}
+        />
+
+        <Handle
+          type={TYPE.SOURCE}
+          style={{ ...sourceStyles, marginRight: '-1px', marginTop: `-${handleMargin}px` }}
+          position={Position.Right}
+          id={IDENTIFIERS.SOURCE_RIGHT}
+        />
+
+        <Handle
+          type={TYPE.SOURCE}
+          style={{ ...sourceStyles, marginBottom: '-1px', marginLeft: `${handleMargin}px` }}
+          position={Position.Bottom}
+          id={IDENTIFIERS.SOURCE_BOTTOM}
+        />
+
         <div className={classes.nodeContent}>
           <p className={classes.name}>{data.label || <small>Double-click to edit</small>}</p>
         </div>
-        <Handle type="source" style={{ background: handleColors.source }} position="bottom" id={'bottom'} />
-        <Handle type="source" style={{ background: handleColors.source }} position="right" id={'right'} />
+
         <Popper open={isPopperOpen} anchorEl={popperElement} className={classes.nodePopupContainer} transition>
           {({ TransitionProps }) => (
             <Fade {...TransitionProps}>
               <div className={classes.nodePopup}>
-                <CloseIcon className={classes.nodePopupCloseIcon} onClick={(e) => handlePopUpToggle(e)} />
-                <Button variant="contained" color="primary" className={classes.nodePopupButton} onClick={(e) => handleEditNodes(e)}>
+                <CloseIcon className={classes.nodePopupCloseIcon} onClick={handlePopUpToggle} />
+                <Button variant="contained" color="primary" className={classes.nodePopupButton} onClick={handleEditNodes}>
                   Edit
                 </Button>
-                <Button variant="contained" color="default" onClick={(e) => handleDeleteNodes(e)}>
+                <Button variant="contained" color="default" onClick={handleDeleteNodes}>
                   Delete
                 </Button>
               </div>

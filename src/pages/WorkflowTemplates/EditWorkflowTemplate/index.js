@@ -1,4 +1,4 @@
-import React, { memo, useMemo, useEffect, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useHistory } from 'react-router-dom';
 
@@ -9,7 +9,7 @@ import WorkflowTemplateChart from '../WorkflowTemplateChart';
 import WorkflowTemplateForm from '../Shared/WorkflowTemplateForm';
 import LINKS from 'utils/constants/links';
 import { isEmpty } from 'utils/helpers/utility';
-import { edgeDefaultProps } from 'utils/constants/reactflow/chart-configs';
+import { deliverablesToElements } from '../WorkflowTemplateChart/helper';
 
 const NAV_LINKS = [LINKS.WORKFLOW_TEMPLATES];
 
@@ -25,23 +25,19 @@ const EditWorkflowTemplate = () => {
     dispatch(getWorkflowTemplates());
   }, [dispatch]);
 
-  const workflowTemplate = useMemo(() => results.find((item) => item._id === id), [id, results]);
+  const workflowTemplate = results.find((item) => item._id === id);
 
   const historyHandler = () => {
     history.push(LINKS.WORKFLOW_TEMPLATE_HISTORY.HREF.replace(':id', id));
   };
 
   useEffect(() => {
-    if (isEmpty(workflowTemplate)) {
+    if (isEmpty(workflowTemplate) || isEmpty(workflowTemplate.deliverables)) {
       return;
     }
 
     const { deliverables } = workflowTemplate;
-    const nodes = deliverables.reduce((acc, deliverable) => {
-      const { id, type, data, style, position, edges } = deliverable.chartData;
-      data.editable = true;
-      return [...acc, { id, type, data, style, position }, ...(edges || [])];
-    }, []);
+    const nodes = deliverablesToElements(deliverables);
 
     setTimeout(() => setNodes(nodes));
   }, [workflowTemplate]);
@@ -56,7 +52,7 @@ const EditWorkflowTemplate = () => {
       {isEmpty(workflowTemplate) || (
         <>
           <WorkflowTemplateForm nodes={nodes} workflowTemplate={workflowTemplate} />
-          <WorkflowTemplateChart nodes={nodes} setNodes={setNodes} editable={true} />
+          <WorkflowTemplateChart nodes={nodes} setNodes={setNodes} editable={true} workflowTemplateId={workflowTemplate._id} />
         </>
       )}
     </>

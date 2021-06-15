@@ -4,11 +4,9 @@ import { Card, CardContent, TableCell, TableRow, Typography } from '@material-ui
 import LinkButton from 'components/UI/Buttons/LinkButton';
 import VektorSubTableContainer from 'parts/Tables/VektorSubTableContainer';
 import LINKS from 'utils/constants/links';
-import results from 'utils/temp/systems';
 
 const columns = [
   { id: 'name', label: 'Name', minWidth: 170 },
-  { id: 'workflow', label: 'Workflow', minWidth: 170 },
   { id: 'totalHours', label: 'Total Planned Hours', minWidth: 100 },
   { id: 'pv', label: 'PV', minWidth: 100 },
   { id: 'status', label: 'Status', minWidth: 100 },
@@ -16,7 +14,7 @@ const columns = [
   { id: 'ev', label: 'EV', minWidth: 100 },
 ];
 
-const ProjectSystemsTable = () => {
+const MetaSystemTable = ({ records = [] }) => {
   return (
     <Card>
       <CardContent>
@@ -24,17 +22,16 @@ const ProjectSystemsTable = () => {
           Systems
         </Typography>
         <VektorSubTableContainer columns={columns}>
-          {results.map((row) => (
-            <TableRow key={row.id}>
+          {records.map((row) => (
+            <TableRow key={row._id}>
               <TableCell component="th" scope="row">
-                <LinkButton to={LINKS.EDIT_SYSTEM.HREF.replace(':id', row.id)}>{row.name}</LinkButton>
+                <LinkButton to={LINKS.EDIT_META_SYSTEM.HREF.replace(':project', row.project).replace(':system', row._id)}>{row.name}</LinkButton>
               </TableCell>
-              <TableCell>{row.workflow.name || ''}</TableCell>
-              <TableCell>{row.totalHours}</TableCell>
-              <TableCell>{row.pv * 100}%</TableCell>
-              <TableCell>{row.status * 100}%</TableCell>
-              <TableCell>{row.effort * 100}%</TableCell>
-              <TableCell>{row.ev * 100}%</TableCell>
+              <TableCell>{row.mainSystem.calculated.totalPlannedHours}</TableCell>
+              <TableCell>{row.mainSystem.calculated.PV}%</TableCell>
+              <TableCell>{row.mainSystem.calculated.status}%</TableCell>
+              <TableCell>{row.mainSystem.calculated.totalWorkedHours}</TableCell>
+              <TableCell>{row.mainSystem.calculated.EV}%</TableCell>
             </TableRow>
           ))}
         </VektorSubTableContainer>
@@ -43,4 +40,4 @@ const ProjectSystemsTable = () => {
   );
 };
 
-export default memo(ProjectSystemsTable);
+export default memo(MetaSystemTable);

@@ -34,7 +34,7 @@ const VektorTextField = React.forwardRef(({ label, error, className, value, ...r
           {label}
         </Typography>
       )}
-      <TextField className={classes.disabledTextField} ref={ref} id="standard-helperText" error={!!error} value={value || ''} {...rest} />
+      <TextField className={classes.disabledTextField} ref={ref} id={`standard-helperText-${value}`} error={!!error} value={value || ''} {...rest} />
       {!!error && (
         <Typography color="error" variant="caption" className={classes.error}>
           {error}

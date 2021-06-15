@@ -9,6 +9,7 @@ const useStyles = makeStyles(() => ({
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
+    paddingTop: '24px',
   },
   title: {
     fontSize: 17,

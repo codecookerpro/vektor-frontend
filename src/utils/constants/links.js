@@ -69,6 +69,10 @@ const LINKS = Object.freeze({
     TITLE: 'Project Phases',
     HREF: '/project-management/projects/edit/:id/phases',
   },
+  PROJECT_GANTT: {
+    TITLE: 'Project Gantt Sample',
+    HREF: '/project-management/projects/gantt-sample',
+  },
   SYSTEMS: {
     TITLE: 'Systems',
     HREF: '/project-management/systems',
@@ -84,6 +88,14 @@ const LINKS = Object.freeze({
   SYSTEM_HISTORY: {
     TITLE: 'System History',
     HREF: '/project-management/systems/edit/:id/history',
+  },
+  ADD_META_SYSTEM: {
+    TITLE: 'Add System',
+    HREF: '/project-management/projects/edit/:id/meta-system/add',
+  },
+  EDIT_META_SYSTEM: {
+    TITLE: 'Edit System',
+    HREF: '/project-management/projects/edit/:project/meta-system/edit/:system',
   },
   DELIVERABLE_TREND_CHART: {
     TITLE: 'Deliverable Trend Chart',

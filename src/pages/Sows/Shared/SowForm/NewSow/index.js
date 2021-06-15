@@ -28,7 +28,7 @@ const NewSow = ({ mode, sow = {}, control, errors, isOrganizationVisible }) => {
       });
       setFilterSystems(filterSystem);
     }
-  }, [isOrganizationVisible]);
+  }, [isOrganizationVisible, projects]);
 
   const setCurrentOrganization = (event) => {
     const filterProjects = projects.filter((project) => project.organization === event);

@@ -1,13 +1,15 @@
-import React, { useState } from 'react';
-import { getSmoothStepPath, getMarkerEnd } from 'react-flow-renderer';
+import React, { useEffect, useState } from 'react';
+import { getMarkerEnd } from 'react-flow-renderer';
+import { getSmoothStepPathPatched } from './helper';
 import EdgeDialog from './EdgeDialog';
 import { makeStyles } from '@material-ui/core/styles';
+import { arrowHeadColor } from 'utils/constants/reactflow/chart-configs';
 
 const useStyles = makeStyles(() => ({
   hoverPath: {
     strokeWidth: 15,
     opacity: 0,
-    stroke: 'grey',
+    stroke: arrowHeadColor,
     fill: 'none',
     pointerEvents: 'all',
     '&:hover': {
@@ -33,21 +35,29 @@ export default function CustomFlowEdge({
   const classes = useStyles();
 
   const toggleDialog = () => {
-    setToggled(true);
+    if (data.editable) {
+      setToggled(true);
+    }
   };
 
   const deleteEdge = () => {
     setToggled(false);
-    data.removeEdge(data);
+    data.handleRemoveEdge(data);
   };
 
-  const edgePath = getSmoothStepPath({ sourceX, sourceY, sourcePosition, targetX, targetY, targetPosition });
+  const edgePath = getSmoothStepPathPatched({ sourceX, sourceY, targetX, targetY, targetPosition, sourcePosition, borderRadius: 8 });
   const markerEnd = getMarkerEnd(arrowHeadType, markerEndId);
+
+  useEffect(() => {
+    const marker = document.getElementById('react-flow__arrowclosed');
+    marker.markerWidth.baseVal.value = 30;
+    marker.markerHeight.baseVal.value = 30;
+  });
 
   return (
     <>
       <path id={id} style={style} className="react-flow__edge-path" d={edgePath} markerEnd={markerEnd} />
-      <path className={classes.hoverPath} d={edgePath} onDoubleClick={data.editable && toggleDialog} />
+      <path className={classes.hoverPath} d={edgePath} onDoubleClick={toggleDialog} />
       <EdgeDialog setToggled={setToggled} toggled={toggled} onDelete={deleteEdge} />
     </>
   );

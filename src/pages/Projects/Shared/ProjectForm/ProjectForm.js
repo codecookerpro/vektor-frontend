@@ -28,6 +28,7 @@ const ProjectForm = ({ project = PROJECT_DEFAULT_VALUES, mode }) => {
           <Grid container spacing={6}>
             <Grid item xs={12} sm={6}>
               <Controller
+                id="name"
                 as={<VektorTextField />}
                 fullWidth
                 name="name"
@@ -41,6 +42,7 @@ const ProjectForm = ({ project = PROJECT_DEFAULT_VALUES, mode }) => {
             </Grid>
             <Grid item xs={12} sm={6}>
               <Controller
+                id="number"
                 as={<VektorTextField />}
                 fullWidth
                 name="number"
@@ -56,6 +58,7 @@ const ProjectForm = ({ project = PROJECT_DEFAULT_VALUES, mode }) => {
             {isOrganizationVisible && (
               <Grid item xs={12} sm={6} md={3}>
                 <Controller
+                  id="organization"
                   as={<FilterSelect keys={{ label: 'name', value: '_id' }} />}
                   fullWidth
                   name="organization"
@@ -73,6 +76,7 @@ const ProjectForm = ({ project = PROJECT_DEFAULT_VALUES, mode }) => {
 
             <Grid item xs={12} sm={6} md={isOrganizationVisible ? 3 : false}>
               <Controller
+                id="projectManager"
                 as={<FilterSelect keys={{ label: 'name', value: '_id' }} />}
                 fullWidth
                 name="projectManager"
@@ -88,6 +92,7 @@ const ProjectForm = ({ project = PROJECT_DEFAULT_VALUES, mode }) => {
             <Grid item xs={12} sm={6}>
               {isSupervisorVisible && (
                 <Controller
+                  id="supervisor"
                   as={<FilterSelect keys={{ label: 'name', value: '_id' }} />}
                   fullWidth
                   name="supervisor"
