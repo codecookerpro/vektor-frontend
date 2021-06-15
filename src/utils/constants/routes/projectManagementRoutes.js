@@ -74,29 +74,6 @@ const projectManagementRoutes = Object.freeze({
       isNotSlide: true,
     },
     {
-      path: LINKS.SYSTEMS.HREF,
-      name: LINKS.SYSTEMS.TITLE,
-      component: SystemList,
-    },
-    {
-      path: LINKS.ADD_SYSTEM.HREF,
-      name: LINKS.ADD_SYSTEM.TITLE,
-      component: AddSystem,
-      isNotSlide: true,
-    },
-    {
-      path: LINKS.EDIT_SYSTEM.HREF,
-      name: LINKS.EDIT_SYSTEM.TITLE,
-      component: EditSystem,
-      isNotSlide: true,
-    },
-    {
-      path: LINKS.SYSTEM_HISTORY.HREF,
-      name: LINKS.SYSTEM_HISTORY.TITLE,
-      component: SystemHistory,
-      isNotSlide: true,
-    },
-    {
       path: LINKS.ADD_META_SYSTEM.HREF,
       name: LINKS.ADD_META_SYSTEM.TITLE,
       component: AddMetaSystem,
