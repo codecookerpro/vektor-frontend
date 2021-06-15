@@ -61,6 +61,7 @@ const SystemForm = ({ system = {} }) => {
 
   const onSubmit = (addNew) => async (data) => {
     try {
+      // eslint-disable-next-line
       const params = {
         name: data.name,
         equipmentCategory: data.equipmentCategory,

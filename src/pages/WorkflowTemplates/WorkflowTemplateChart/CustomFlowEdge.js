@@ -42,7 +42,7 @@ export default function CustomFlowEdge({
 
   const deleteEdge = () => {
     setToggled(false);
-    data.removeEdge(data);
+    data.handleRemoveEdge(data);
   };
 
   const edgePath = getSmoothStepPathPatched({ sourceX, sourceY, targetX, targetY, targetPosition, sourcePosition, borderRadius: 8 });

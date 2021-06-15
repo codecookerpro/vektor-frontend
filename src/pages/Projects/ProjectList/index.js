@@ -28,7 +28,7 @@ const ProjectList = () => {
     if (permissions === PERMISSION_TYPE.ADMIN) {
       dispatch(getProjects({ organization }));
     }
-  }, [organization, permissions]);
+  }, [dispatch, organization, permissions]);
 
   const addHandler = useCallback(() => {
     history.push(LINKS.ADD_PROJECT.HREF);
