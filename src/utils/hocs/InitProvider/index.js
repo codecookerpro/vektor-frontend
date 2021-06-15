@@ -34,7 +34,7 @@ const InitProvider = () => {
     if (!!currentUser) {
       dispatch(setCurrentUser(JSON.parse(currentUser)));
     }
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     if (accessToken) {
@@ -46,7 +46,7 @@ const InitProvider = () => {
         dispatch(getProjects({ organization }));
       }
     }
-  }, [accessToken, organization, permissions]);
+  }, [dispatch, accessToken, organization, permissions]);
 
   return <div />;
 };

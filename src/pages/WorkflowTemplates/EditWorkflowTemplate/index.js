@@ -9,6 +9,7 @@ import WorkflowTemplateChart from '../WorkflowTemplateChart';
 import WorkflowTemplateForm from '../Shared/WorkflowTemplateForm';
 import LINKS from 'utils/constants/links';
 import { isEmpty } from 'utils/helpers/utility';
+import { deliverablesToElements } from '../WorkflowTemplateChart/helper';
 
 const NAV_LINKS = [LINKS.WORKFLOW_TEMPLATES];
 
@@ -17,7 +18,6 @@ const EditWorkflowTemplate = () => {
   const history = useHistory();
   const dispatch = useDispatch();
   const [nodes, setNodes] = useState([]);
-  const [editable, setEditable] = useState(false);
 
   const { results = [] } = useSelector((state) => state.workflowTemplates);
 
@@ -32,22 +32,12 @@ const EditWorkflowTemplate = () => {
   };
 
   useEffect(() => {
-    if (isEmpty(workflowTemplate)) {
+    if (isEmpty(workflowTemplate) || isEmpty(workflowTemplate.deliverables)) {
       return;
     }
 
     const { deliverables } = workflowTemplate;
-    const nodes = deliverables.reduce((acc, deliverable) => {
-      const {
-        chartData: { id, type, data, style, position, edges },
-        _id,
-      } = deliverable;
-      return [
-        ...acc,
-        { id, type, data: { ...data, _id, editable: true }, style, position },
-        ...(edges ? edges.map((e) => ({ ...e, data: { ...e.data, editable: true } })) : []),
-      ];
-    }, []);
+    const nodes = deliverablesToElements(deliverables);
 
     setTimeout(() => setNodes(nodes));
   }, [workflowTemplate]);
@@ -61,7 +51,7 @@ const EditWorkflowTemplate = () => {
       />
       {isEmpty(workflowTemplate) || (
         <>
-          <WorkflowTemplateForm nodes={nodes} workflowTemplate={workflowTemplate} onEdit={setEditable} />
+          <WorkflowTemplateForm nodes={nodes} workflowTemplate={workflowTemplate} />
           <WorkflowTemplateChart nodes={nodes} setNodes={setNodes} editable={true} workflowTemplateId={workflowTemplate._id} />
         </>
       )}
