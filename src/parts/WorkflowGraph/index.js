@@ -11,9 +11,10 @@ import {
   createWorkflowTemplateDeliverable as createAPI,
   updateWorkflowTemplateDeliverable as updateAPI,
   deleteWorkflowTemplateDeliverable as deleteAPI,
+  updateWTDPosition as updatePositionAPI,
 } from 'services/api-workflow-template';
 import { createWTD, updateWTD } from 'redux/actions/workflowTemplates';
-import { nodeToDeliverable, validateElements, makeNode, getLayoutedElements } from './helper';
+import { nodeToDeliverable, validateElements, makeNode, getLayoutedElements, elementsToDeliverables } from './helper';
 
 const useStyles = makeStyles((theme) => ({
   graphContent: {
@@ -166,6 +167,11 @@ const WorkflowGraph = ({ elements = [], editable = true, setElements = () => {},
   const handleLayout = (direction) => {
     const layoutedElements = getLayoutedElements(elements, direction);
     setElements(layoutedElements);
+
+    if (editable && templateId) {
+      const deliverables = elementsToDeliverables(layoutedElements).map(({ _id, chartData }) => ({ _id, chartData }));
+      updatePositionAPI({ _id: templateId, deliverables }).then(({ data }) => dispatch(updateWTD(data)));
+    }
   };
 
   const handleNodeDragStop = (e, node) => {

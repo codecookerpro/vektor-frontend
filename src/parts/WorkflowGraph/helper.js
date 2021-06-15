@@ -151,8 +151,8 @@ export const nodeToDeliverable = (nodeId, nodes, mainId) => {
   return deliverable;
 };
 
-export const elementsToDeliverables = (elements) =>
-  elements.filter((el) => el.type === ELEMENT_TYPES.node).map((node) => nodeToDeliverable(node.id, elements));
+export const elementsToDeliverables = (elements, templateId) =>
+  elements.filter((el) => el.type === ELEMENT_TYPES.node).map((node) => nodeToDeliverable(node.id, elements, templateId));
 
 export const deliverablesToElements = (deliverables) =>
   deliverables.reduce((acc, deliverable) => {
