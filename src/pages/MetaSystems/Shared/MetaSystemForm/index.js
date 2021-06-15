@@ -52,7 +52,7 @@ const schema = joi.object().keys({
   productCode: STRING_INPUT_VALID,
 });
 
-const MetaSystemForm = ({ mode = FORM_MODE.create, system = {} }) => {
+const MetaSystemForm = ({ mode = FORM_MODE.view, system = {}, setFormMode = () => {} }) => {
   const { id } = useParams();
   const classes = useStyles();
   const history = useHistory();
@@ -61,6 +61,7 @@ const MetaSystemForm = ({ mode = FORM_MODE.create, system = {} }) => {
   const { control, handleSubmit, errors } = useForm({
     resolver: joiResolver(schema),
   });
+  const fieldsDisabled = mode === FORM_MODE.view;
 
   const onSubmit = (data) => {
     const params = {
@@ -76,11 +77,11 @@ const MetaSystemForm = ({ mode = FORM_MODE.create, system = {} }) => {
 
     if (mode === FORM_MODE.create) {
       dispatch(createMetaSystem({ ...params, organization: data.organization }));
+      history.goBack();
     } else if (mode === FORM_MODE.update) {
       dispatch(updateMetaSystem({ ...params, _id: system._id }));
+      setFormMode(FORM_MODE.view);
     }
-
-    history.goBack();
   };
 
   const handleDelete = () => {
@@ -108,6 +109,7 @@ const MetaSystemForm = ({ mode = FORM_MODE.create, system = {} }) => {
               <Controller
                 as={<VektorTextField />}
                 fullWidth
+                disabled={fieldsDisabled}
                 id="name"
                 name="name"
                 label="Name"
@@ -121,6 +123,7 @@ const MetaSystemForm = ({ mode = FORM_MODE.create, system = {} }) => {
               <Controller
                 as={<FilterSelect />}
                 fullWidth
+                disabled={fieldsDisabled}
                 name="equipmentCategory"
                 label="Equipment Category"
                 placeholder="Select Category"
@@ -134,6 +137,7 @@ const MetaSystemForm = ({ mode = FORM_MODE.create, system = {} }) => {
               <Controller
                 as={<FilterSelect />}
                 fullWidth
+                disabled={fieldsDisabled}
                 name="equipmentType"
                 label="Equipment Type"
                 placeholder="Select Type"
@@ -147,6 +151,7 @@ const MetaSystemForm = ({ mode = FORM_MODE.create, system = {} }) => {
               <Controller
                 as={<VektorTextField />}
                 fullWidth
+                disabled={fieldsDisabled}
                 id="equipmentName"
                 name="equipmentName"
                 label="Equipment Name"
@@ -160,6 +165,7 @@ const MetaSystemForm = ({ mode = FORM_MODE.create, system = {} }) => {
               <Controller
                 as={<VektorTextField />}
                 fullWidth
+                disabled={fieldsDisabled}
                 id="equipmentNumber"
                 name="equipmentNumber"
                 label="Equipment Number"
@@ -173,6 +179,7 @@ const MetaSystemForm = ({ mode = FORM_MODE.create, system = {} }) => {
               <Controller
                 as={<VektorTextField />}
                 fullWidth
+                disabled={fieldsDisabled}
                 id="productCode"
                 name="productCode"
                 label="Product Code"
@@ -186,6 +193,7 @@ const MetaSystemForm = ({ mode = FORM_MODE.create, system = {} }) => {
               <Controller
                 as={<FilterSelect />}
                 fullWidth
+                disabled={fieldsDisabled}
                 name="organization"
                 label="Organization"
                 placeholder="Select Organization"
@@ -203,6 +211,7 @@ const MetaSystemForm = ({ mode = FORM_MODE.create, system = {} }) => {
               <Controller
                 as={<VektorTextField />}
                 fullWidth
+                disabled={fieldsDisabled}
                 id="site"
                 name="site"
                 label="Site"
@@ -215,15 +224,23 @@ const MetaSystemForm = ({ mode = FORM_MODE.create, system = {} }) => {
 
             <Grid item xs={12}>
               <div className={classes.buttonContainer}>
-                <Button variant="contained" color="primary" onClick={handleSubmit(onSubmit)}>
-                  Save Changes
-                </Button>
-                <Button variant="contained" color="default" className={classes.cancelButton} onClick={() => history.goBack()}>
-                  Cancel
-                </Button>
+                {mode === FORM_MODE.view ? (
+                  <Button variant="contained" color="primary" onClick={() => setFormMode(FORM_MODE.update)}>
+                    EDIT
+                  </Button>
+                ) : mode === FORM_MODE.update ? (
+                  <>
+                    <Button variant="contained" color="primary" onClick={handleSubmit(onSubmit)}>
+                      SAVE CHANGES
+                    </Button>
+                    <Button variant="contained" color="default" className={classes.cancelButton} onClick={() => history.goBack()}>
+                      CANCEL
+                    </Button>
+                  </>
+                ) : null}
                 {mode === FORM_MODE.update ? (
-                  <Button variant="contained" color="default" className={classes.deleteButton} onClick={handleDelete}>
-                    Delete
+                  <Button variant="contained" color="primary" className={classes.deleteButton} onClick={handleDelete}>
+                    DELETE
                   </Button>
                 ) : null}
               </div>

@@ -19,11 +19,10 @@ import { STRING_INPUT_VALID, SELECT_VALID, INTEGER_VALID } from 'utils/constants
 import LINKS from 'utils/constants/links';
 import useLoading from 'utils/hooks/useLoading';
 import { isEmpty } from 'utils/helpers/utility';
-import { INPUT_NODE } from 'utils/constants/reactflow/custom-node-types';
 import { setPopup } from 'redux/actions/popupActions';
 import { POPUP_TYPE } from 'utils/constants/popupType';
 import { FORM_MODE } from 'utils/constants';
-import { nodeToDeliverable } from 'pages/WorkflowTemplates/WorkflowTemplateChart/helper';
+import { elementsToDeliverables } from 'parts/WorkflowGraph/helper';
 
 const useStyles = makeStyles((theme) => ({
   alert: {
@@ -75,7 +74,7 @@ const WorkflowTemplateForm = ({ workflowTemplate = {}, nodes = [], onEdit = () =
 
   const onSubmit = async (data) => {
     changeLoadingStatus(true);
-    const deliverables = nodes.filter((node) => node.type === INPUT_NODE && node.data.label).map((node) => nodeToDeliverable(node.id, nodes));
+    const deliverables = elementsToDeliverables(nodes);
 
     if (deliverables.length === 0) {
       setErrorMessage('Deliverables are not valid.');

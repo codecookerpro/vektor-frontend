@@ -1,18 +1,7 @@
 import { Position } from 'react-flow-renderer';
 import dagre from 'dagre';
 import { isNode } from 'react-flow-renderer';
-import {
-  nodeHeight,
-  nodeWidth,
-  nodeStyle,
-  label,
-  defaultNodeMarginX,
-  defaultNodeMarginY,
-  chartContainerHeight,
-  edgeDefaultProps,
-} from 'utils/constants/reactflow/chart-configs';
-import { INPUT_NODE, CUSTOM_EDGE, IDENTIFIERS } from 'utils/constants/reactflow/custom-node-types';
-import { LAYOUT_DIR } from 'utils/constants';
+import { GRAPH_PROPS, NODE_PROPS, EDGE_PROPS, LAYOUT_DIRS, ELEMENT_TYPES, IDENTIFIERS } from './constants';
 import ObjectID from 'bson-objectid';
 
 const bottomLeftCorner = (x, y, size) => `L ${x},${y - size}Q ${x},${y} ${x + size},${y}`;
@@ -110,14 +99,11 @@ export function getSmoothStepPathPatched({
   return `M ${sourceX},${sourceY}${firstCornerPath}${secondCornerPath}L ${targetX},${targetY}`;
 }
 
-const maxChartHeight = window.innerHeight - 617;
-export const chartHeight = maxChartHeight > chartContainerHeight ? maxChartHeight : chartContainerHeight;
-
 export const nodeToDeliverable = (nodeId, nodes, mainId) => {
   const node = nodes.find((n) => n.id === nodeId);
-  const nodeIds = nodes.filter((el) => el.type === INPUT_NODE).map((nd) => nd.id);
+  const nodeIds = nodes.filter((el) => el.type === ELEMENT_TYPES.node).map((nd) => nd.id);
   const edges = nodes
-    .filter((c) => c.type === CUSTOM_EDGE)
+    .filter((c) => c.type === ELEMENT_TYPES.edge)
     .filter(({ source, target }) => nodeIds.includes(source) && nodeIds.includes(target))
     .map((c) => ({
       id: c.id,
@@ -160,13 +146,16 @@ export const nodeToDeliverable = (nodeId, nodes, mainId) => {
   return deliverable;
 };
 
+export const elementsToDeliverables = (elements) =>
+  elements.filter((el) => el.type === ELEMENT_TYPES.node).map((node) => nodeToDeliverable(node.id, elements));
+
 export const deliverablesToElements = (deliverables) =>
   deliverables.reduce((acc, deliverable) => {
     let { chartData: { id, type, data, position, edges } = {}, _id } = deliverable;
     edges = edges
       ? edges.map((e) => ({
           ...e,
-          ...edgeDefaultProps,
+          ...EDGE_PROPS,
           data: {
             ...e.data,
             editable: true,
@@ -178,20 +167,20 @@ export const deliverablesToElements = (deliverables) =>
       type,
       position,
       data: { ...data, _id, editable: true },
-      style: nodeStyle,
+      style: NODE_PROPS.style,
     };
 
     return [...acc, node, ...edges];
   }, []);
 
-export const position = (nodeNum) => {
-  const nNumY = chartHeight / (nodeHeight + defaultNodeMarginY);
+export const position = (num) => {
+  const nNumY = GRAPH_PROPS.height / (NODE_PROPS.height + NODE_PROPS.marginY);
 
-  let x = (nodeNum + 1) / nNumY >= 1 ? Math.floor((nodeNum + 1) / nNumY) * (nodeWidth + defaultNodeMarginX) : 0;
-  let y = nodeNum === 0 ? defaultNodeMarginY : (((nodeNum + 1) % nNumY) - 1) * (nodeHeight + defaultNodeMarginY) + defaultNodeMarginY;
+  let x = (num + 1) / nNumY >= 1 ? Math.floor((num + 1) / nNumY) * (NODE_PROPS.width + NODE_PROPS.marginX) : 0;
+  let y = num === 0 ? NODE_PROPS.marginY : (((num + 1) % nNumY) - 1) * (NODE_PROPS.height + NODE_PROPS.marginY) + NODE_PROPS.marginY;
 
-  if ((nodeNum + 1) % nNumY === 0) {
-    y = defaultNodeMarginY;
+  if ((num + 1) % nNumY === 0) {
+    y = NODE_PROPS.marginY;
   }
 
   return { x, y };
@@ -200,13 +189,13 @@ export const position = (nodeNum) => {
 const dagreGraph = new dagre.graphlib.Graph();
 dagreGraph.setDefaultEdgeLabel(() => ({}));
 
-export const getLayoutedElements = (elements, direction = LAYOUT_DIR.vertical) => {
-  const isHorizontal = direction === LAYOUT_DIR.horizontal;
+export const getLayoutedElements = (elements, direction = LAYOUT_DIRS.vertical) => {
+  const isHorizontal = direction === LAYOUT_DIRS.horizontal;
   dagreGraph.setGraph({ rankdir: direction });
 
   elements.forEach((el) => {
     if (isNode(el)) {
-      dagreGraph.setNode(el.id, { width: nodeWidth, height: nodeHeight });
+      dagreGraph.setNode(el.id, { width: NODE_PROPS.width, height: NODE_PROPS.height });
     } else {
       dagreGraph.setEdge(el.source, el.target);
     }
@@ -221,8 +210,8 @@ export const getLayoutedElements = (elements, direction = LAYOUT_DIR.vertical) =
       el.sourcePosition = isHorizontal ? IDENTIFIERS.SOURCE_RIGHT : IDENTIFIERS.SOURCE_BOTTOM;
 
       el.position = {
-        x: nodeWithPosition.x - nodeWidth / 2 + Math.random() / 1000,
-        y: nodeWithPosition.y - nodeHeight / 2,
+        x: nodeWithPosition.x - NODE_PROPS.width / 2 + Math.random() / 1000,
+        y: nodeWithPosition.y - NODE_PROPS.height / 2,
       };
     } else {
       el.targetHandle = isHorizontal ? IDENTIFIERS.TARGET_LEFT : IDENTIFIERS.TARGET_TOP;
@@ -238,13 +227,13 @@ export const makeNode = (nodeNum, mainId, eventHandlers) => {
   const objectId = ObjectID(currentTimestamp).toHexString();
   const node = {
     id: objectId,
-    type: INPUT_NODE,
+    type: ELEMENT_TYPES.node,
     data: {
-      label: mainId ? label : null,
+      label: mainId ? NODE_PROPS.label : null,
       editable: true,
       ...eventHandlers,
     },
-    style: nodeStyle,
+    style: NODE_PROPS.style,
     position: position(nodeNum),
   };
 
@@ -252,10 +241,10 @@ export const makeNode = (nodeNum, mainId, eventHandlers) => {
 };
 
 export const validateElements = (nodes, eventHandlers) => {
-  const nodeIds = nodes.filter((el) => el.type === INPUT_NODE).map((nd) => nd.id);
+  const nodeIds = nodes.filter((el) => el.type === ELEMENT_TYPES.node).map((nd) => nd.id);
   const elements = nodes
     .map((node) => {
-      if (node.type === INPUT_NODE) {
+      if (node.type === ELEMENT_TYPES.node) {
         node.data.handleDeleteNode = eventHandlers.handleDeleteNode;
         node.data.handleInputChange = eventHandlers.handleInputChange;
         node.data.handleSwitchPopup = eventHandlers.handleSwitchPopup;
@@ -266,7 +255,7 @@ export const validateElements = (nodes, eventHandlers) => {
       return node;
     })
     .filter((el) => {
-      if (el.type === INPUT_NODE) {
+      if (el.type === ELEMENT_TYPES.node) {
         return true;
       } else if (nodeIds.includes(el.source) && nodeIds.includes(el.target)) {
         return true;
