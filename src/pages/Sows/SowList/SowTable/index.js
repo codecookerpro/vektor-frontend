@@ -7,7 +7,7 @@ import VektorTableContainer from 'parts/Tables/VektorTableContainer';
 import LINKS from 'utils/constants/links';
 import SowActions from './SowActions';
 import setColumn from './setColumn';
-import { setSelectedSOW } from '../../../../redux/actions/sowAction';
+import { setSelectedSOW } from 'redux/actions/sowAction';
 
 const SowTable = ({ selectedItems, setSelectedItems, page, setPage, rowsPerPage, setRowsPerPage, isOrganizationVisible }) => {
   const dispatch = useDispatch();

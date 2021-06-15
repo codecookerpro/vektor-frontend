@@ -13,7 +13,7 @@ import { useStyles } from './styles';
 import { addSOW, editSOW } from 'redux/actions/sowAction';
 import { PERMISSION_TYPE } from 'utils/constants/permissions';
 import setSchema from './setSchema';
-import { PROJECT_MODES } from 'utils/constants/projectModes';
+import { FORM_MODES } from 'utils/constants/formModes';
 import AttachmentsPhase from './AttachmentsPhase';
 import { isEmpty } from 'utils/helpers/utility';
 import LINKS from 'utils/constants/links';
@@ -27,7 +27,7 @@ const SowForm = ({ mode }) => {
   const { permissions } = useSelector(({ auth }) => auth.currentUser);
   const isOrganizationVisible = permissions === PERMISSION_TYPE.ADMIN;
 
-  const schema = setSchema(isOrganizationVisible && mode === PROJECT_MODES.CREATION);
+  const schema = setSchema(isOrganizationVisible && mode === FORM_MODES.CREATION);
 
   const { control, handleSubmit, errors } = useForm({
     resolver: joiResolver(schema),
@@ -81,11 +81,11 @@ const SowForm = ({ mode }) => {
           isOrganizationVisible={isOrganizationVisible}
         />
         <InitiationPhase sow={sow} title={SOW_FORM_PHASE.INITIATION_PHASE} setNotRequiredField={setNotRequiredField} />
-        {mode === PROJECT_MODES.EDITING && <AttachmentsPhase sow={sow} title={SOW_FORM_PHASE.INITIATION_PHASE_ATTACHMENTS} />}
+        {mode === FORM_MODES.EDITING && <AttachmentsPhase sow={sow} title={SOW_FORM_PHASE.INITIATION_PHASE_ATTACHMENTS} />}
         <IntakePhase sow={sow} title={SOW_FORM_PHASE.INTAKE_PHASE} setNotRequiredField={setNotRequiredField} />
-        {mode === PROJECT_MODES.EDITING && <AttachmentsPhase sow={sow} title={SOW_FORM_PHASE.INTAKE_PHASE_ATTACHMENTS} />}
+        {mode === FORM_MODES.EDITING && <AttachmentsPhase sow={sow} title={SOW_FORM_PHASE.INTAKE_PHASE_ATTACHMENTS} />}
         <IproSubmit sow={sow} title={SOW_FORM_PHASE.IPRO_SUBMIT} setNotRequiredField={setNotRequiredField} />
-        {mode === PROJECT_MODES.EDITING && <AttachmentsPhase sow={sow} title={SOW_FORM_PHASE.IPRO_SUBMIT_ATTACHMENTS} />}
+        {mode === FORM_MODES.EDITING && <AttachmentsPhase sow={sow} title={SOW_FORM_PHASE.IPRO_SUBMIT_ATTACHMENTS} />}
         <div className={classes.buttonContainer}>
           <Button variant="contained" color="primary" type="submit">
             Save
