@@ -1,16 +1,24 @@
-import React, { memo } from 'react';
-import { Card, CardContent, Typography } from '@material-ui/core';
+import React, { memo, useState } from 'react';
+import { Card, CardHeader, CardContent } from '@material-ui/core';
+import WorkflowGraph from 'parts/WorkflowGraph';
+import ContainedButton from 'components/UI/Buttons/ContainedButton';
 
-const DeliverableTable = () => {
+const DeliverableGraph = () => {
+  const [toggled, toggleGraph] = useState(false);
+
   return (
     <Card>
-      <CardContent>
-        <Typography variant="h5" color="textPrimary" gutterBottom>
-          Deliverables
-        </Typography>
-      </CardContent>
+      <CardHeader
+        title="Deliverables Graph"
+        action={<ContainedButton onClick={() => toggleGraph(!toggled)}>{toggled ? 'Hide Graph' : 'See Graph'}</ContainedButton>}
+      />
+      {toggled ? (
+        <CardContent>
+          <WorkflowGraph editable={false} />
+        </CardContent>
+      ) : null}
     </Card>
   );
 };
 
-export default memo(DeliverableTable);
+export default memo(DeliverableGraph);

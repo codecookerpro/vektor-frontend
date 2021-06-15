@@ -1,6 +1,6 @@
 import React, { memo, useState, useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
-import { Button, Grid, Box, CardContent } from '@material-ui/core';
+import { Button, Grid, Box } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Plus } from 'react-feather';
 import ReactFlow, { removeElements, addEdge, MiniMap, Background, Controls } from 'react-flow-renderer';
@@ -19,7 +19,9 @@ const useStyles = makeStyles((theme) => ({
   graphContent: {
     height: GRAPH_PROPS.height + 'px',
   },
-  graphContainer: {},
+  graphContainer: {
+    // padding: '0px 15px 15px 15px'
+  },
   buttonContainer: {
     marginTop: theme.spacing(1),
   },
@@ -224,7 +226,7 @@ const WorkflowGraph = ({ elements = [], editable = true, setElements = () => {},
   });
 
   return (
-    <CardContent className={classes.graphContainer}>
+    <Box className={classes.graphContainer}>
       <Box className={classes.graphContent}>
         <ReactFlow
           elements={validateElements(elements, eventHandlers)}
@@ -269,7 +271,7 @@ const WorkflowGraph = ({ elements = [], editable = true, setElements = () => {},
           </Grid>
         </Grid>
       </Grid>
-    </CardContent>
+    </Box>
   );
 };
 
