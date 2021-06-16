@@ -3,7 +3,7 @@ import { useStyles } from './styles';
 import { Card, CardContent, Grid, TextField, Typography } from '@material-ui/core';
 import inputHandler from '../inputHandler';
 
-const InitiationPhase = ({ mode, sow = {}, title, setNotRequiredField }) => {
+const InitiationPhase = ({ sow = {}, title, setNotRequiredField }) => {
   const classes = useStyles();
 
   const onChange = (e) => {
@@ -65,7 +65,7 @@ const InitiationPhase = ({ mode, sow = {}, title, setNotRequiredField }) => {
             <TextField
               fullWidth
               name="projectManager"
-              label="? Project Manager"
+              label="Project Manager"
               onChange={onChange}
               defaultValue={sow?.[title.value]?.projectManager || ''}
             />
@@ -124,7 +124,7 @@ const InitiationPhase = ({ mode, sow = {}, title, setNotRequiredField }) => {
             <TextField
               fullWidth
               name="licenseContract"
-              label="? License Contract"
+              label="License Contract"
               onChange={onChange}
               defaultValue={sow?.[title.value]?.licenseContract || ''}
             />

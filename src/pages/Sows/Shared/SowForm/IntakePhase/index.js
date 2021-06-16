@@ -3,7 +3,7 @@ import { useStyles } from './styles';
 import { Card, CardContent, Grid, TextField, Typography } from '@material-ui/core';
 import inputHandler from '../inputHandler';
 
-const IntakePhase = ({ mode, sow = {}, title, setNotRequiredField }) => {
+const IntakePhase = ({ sow = {}, title, setNotRequiredField }) => {
   const classes = useStyles();
 
   const onChange = (e) => {
@@ -99,7 +99,7 @@ const IntakePhase = ({ mode, sow = {}, title, setNotRequiredField }) => {
             <TextField fullWidth name="comments" label="Comments" onChange={onChange} defaultValue={sow?.[title.value]?.comments || ''} />
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
-            <TextField fullWidth name="msaNumber" label="MSA#" onChange={onChange} defaultValue={sow?.[title.value]?.msaExpiration || ''} />
+            <TextField fullWidth name="msaNumber" label="MSA#" onChange={onChange} defaultValue={sow?.[title.value]?.msaNumber || ''} />
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
