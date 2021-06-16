@@ -4,24 +4,24 @@ const INITIAL_STATE = Object.freeze({
   results: [],
 });
 
-const workflowTemplatesReducer = (state = INITIAL_STATE, action) => {
-  switch (action.type) {
+const workflowTemplatesReducer = (state = INITIAL_STATE, { type, payload }) => {
+  switch (type) {
     case TYPES.FETCH_WORKFLOW_TEMPLATES:
       return {
         ...state,
-        results: action.payload,
+        results: payload,
       };
 
     case TYPES.CREATE_WTD:
       return {
         ...state,
-        results: [...state.results, action.payload],
+        results: [...state.results, payload],
       };
 
     case TYPES.UPDATE_WTD:
       return {
         ...state,
-        results: state.results.map((wf) => (wf._id === action.payload._id ? action.payload : wf)),
+        results: state.results.map((wf) => (wf._id === payload._id ? payload : wf)),
       };
 
     default:

@@ -1,7 +1,8 @@
 import React, { memo, useEffect, useState, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { Grid, Dialog, DialogTitle, DialogContent, DialogActions } from '@material-ui/core';
+import { Grid, Button } from '@material-ui/core';
+import { Dialog, DialogTitle, DialogContent, DialogActions } from 'components/UI/VektorDialog';
 
 import PageHeader from 'parts/PageHeader';
 import MetaSystemForm from '../Shared/MetaSystemForm';
@@ -29,6 +30,11 @@ const EditMetaSystem = () => {
   const title = useMemo(() => (formMode === FORM_MODE.view ? 'View System' : LINKS.EDIT_META_SYSTEM.TITLE), [formMode]);
 
   useEffect(() => dispatch(readMetaSystem(project)), [dispatch, project]);
+  useEffect(() => {
+    if (formMode === FORM_MODE.update && metaSystem) {
+      setInitDlgShow(true);
+    }
+  }, [formMode, metaSystem]);
 
   return (
     <>
@@ -46,20 +52,23 @@ const EditMetaSystem = () => {
           </Grid>
         </Grid>
       )}
-      {/* <Dialog open={initDlgShow} onClose={() => setInitDlgShow(false)} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
-        <DialogTitle id="alert-dialog-title" className={classes.titleText}>
-          Delete Connector
-        </DialogTitle>
+      <Dialog
+        open={initDlgShow}
+        onClose={() => setInitDlgShow(false)}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">Delete Connector</DialogTitle>
         <DialogContent>Are you sure to delete this connector?</DialogContent>
-        <DialogActions className={classes.actions}>
-          <Button onClick={() => setToggled(false)} color="primary" variant="contained">
+        <DialogActions>
+          <Button color="primary" variant="contained">
             Cancel
           </Button>
-          <Button onClick={onDelete} color="primary" variant="contained" className={classes.deleteButton} autoFocus>
+          <Button color="primary" variant="contained" autoFocus>
             Delete
           </Button>
         </DialogActions>
-      </Dialog> */}
+      </Dialog>
     </>
   );
 };
