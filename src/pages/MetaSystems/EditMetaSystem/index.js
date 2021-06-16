@@ -1,14 +1,14 @@
 import React, { memo, useEffect, useState, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { Grid, Button } from '@material-ui/core';
-import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from 'components/UI/VektorDialog';
-import { ColorButton } from 'components/UI/Buttons';
+import { Grid } from '@material-ui/core';
 
 import PageHeader from 'parts/PageHeader';
 import MetaSystemForm from '../Shared/MetaSystemForm';
 import DeliverableGraph from '../Shared/DeliverableGraph';
 import DeliverableTable from '../Shared/DeliverableTable';
+import InitDialog from '../Shared/InitDialog';
+import SelectDialog from '../Shared/SelectDialog';
 
 import LINKS from 'utils/constants/links';
 import { FORM_MODE } from 'utils/constants';
@@ -17,25 +17,48 @@ import { readMetaSystem } from 'redux/actions/metaSystem';
 const NAV_LINKS = [LINKS.PROJECT_MANAGEMENT, LINKS.PROJECTS];
 
 const EditMetaSystem = () => {
-  const { project, system } = useParams();
+  const { project: projectId, system: systemId } = useParams();
   const dispatch = useDispatch();
   const [formMode, setFormMode] = useState(FORM_MODE.view);
-  const [initDlgShow, setInitDlgShow] = useState(false);
-  const [selectDlgShow, setSelectDlgShow] = useState(false);
-  const metaSystem = useSelector(({ projects: { metaSystems } }) => {
-    if (metaSystems[project]) {
-      return metaSystems[project].find((ms) => ms._id === system);
-    }
-    return null;
-  });
-  const title = useMemo(() => (formMode === FORM_MODE.view ? 'View System' : LINKS.EDIT_META_SYSTEM.TITLE), [formMode]);
+  const [initDlg, showInitDlg] = useState(false);
+  const [selectDlg, showSelectDlg] = useState(false);
 
-  useEffect(() => dispatch(readMetaSystem(project)), [dispatch, project]);
+  const { metaSystem } = useSelector(({ projects: { metaSystems, results } }) => {
+    const project = results.find((p) => p._id === projectId);
+    const systems = metaSystems[projectId];
+    const metaSystem = systems ? systems.find((ms) => ms._id === systemId) : null;
+
+    return { project, metaSystem };
+  });
+
+  const title = useMemo(() => {
+    if (formMode === FORM_MODE.view) {
+      return 'View System';
+    } else {
+      return LINKS.EDIT_META_SYSTEM.TITLE;
+    }
+  }, [formMode]);
+
+  useEffect(() => dispatch(readMetaSystem(projectId)), [dispatch, projectId]);
+
   useEffect(() => {
     if (formMode === FORM_MODE.update && metaSystem) {
-      setInitDlgShow(true);
+      showInitDlg(true);
     }
   }, [formMode, metaSystem]);
+
+  const handleInitDlgClose = () => showInitDlg(false);
+  const handleWithTemplate = () => {
+    showInitDlg(false);
+    showSelectDlg(true);
+  };
+  const handleFromScratch = () => {
+    showInitDlg(false);
+  };
+  const handleSelectDlgClose = () => showSelectDlg(false);
+  const handleSelectTemplate = (template) => {
+    console.log(template);
+  };
 
   return (
     <>
@@ -53,23 +76,8 @@ const EditMetaSystem = () => {
           </Grid>
         </Grid>
       )}
-      <Dialog
-        open={initDlgShow}
-        onClose={() => setInitDlgShow(false)}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">Deliverables Initialization</DialogTitle>
-        <DialogContent>
-          <DialogContentText>Do you want to intialize deliverables with template?</DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <ColorButton colour="red" autoFocus>
-            Yes, with template
-          </ColorButton>
-          <ColorButton colour="purple">No, from scratch</ColorButton>
-        </DialogActions>
-      </Dialog>
+      <InitDialog open={initDlg} onClose={handleInitDlgClose} onTemplate={handleWithTemplate} onScratch={handleFromScratch} />
+      <SelectDialog open={selectDlg} onClose={handleSelectDlgClose} onSelect={handleSelectTemplate} />
     </>
   );
 };

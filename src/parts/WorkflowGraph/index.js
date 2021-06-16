@@ -3,7 +3,8 @@ import { useDispatch } from 'react-redux';
 import { Button, Grid, Box } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Plus } from 'react-feather';
-import ReactFlow, { removeElements, addEdge, MiniMap, Background, Controls } from 'react-flow-renderer';
+import ReactFlow, { removeElements, addEdge, MiniMap, Background, Controls, /*useStoreActions,*/ ReactFlowProvider } from 'react-flow-renderer';
+
 import CustomFlowNode from './CustomFlowNode';
 import CustomFlowEdge from './CustomFlowEdge';
 import { GRAPH_PROPS, NODE_PROPS, EDGE_PROPS, LAYOUT_DIRS, ELEMENT_TYPES } from './constants';
@@ -31,6 +32,7 @@ const useStyles = makeStyles((theme) => ({
 const WorkflowGraph = ({ elements = [], editable = true, setElements = () => {}, templateId = null }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
+
   const [zoomOnScroll, setZoomOnScroll] = useState(true);
   const [isDraggable, setIsDraggable] = useState(true);
   const [paneMoveable, setPaneMoveable] = useState(true);
@@ -38,6 +40,9 @@ const WorkflowGraph = ({ elements = [], editable = true, setElements = () => {},
   const [fullscreen, setFullscreen] = useState(false);
   const bodyStyleRef = useRef(null);
   const boardStyleRef = useRef(null);
+
+  // const fitViewAction = useStoreActions(actions => actions.fitView);
+  // useEffect(() => fitViewAction({ padding: 0.5 }), [fitView, fitViewAction]);
 
   const handleInputChange = (id, value) => {
     setElements((els) => {
@@ -234,49 +239,51 @@ const WorkflowGraph = ({ elements = [], editable = true, setElements = () => {},
   return (
     <Box className={classes.graphContainer}>
       <Box className={classes.graphContent}>
-        <ReactFlow
-          elements={validateElements(elements, eventHandlers)}
-          elementsSelectable={false}
-          onConnect={handleConnect}
-          onNodeDragStop={handleNodeDragStop}
-          deleteKeyCode={46}
-          nodeTypes={{ [ELEMENT_TYPES.node]: CustomFlowNode }}
-          edgeTypes={{ [ELEMENT_TYPES.edge]: CustomFlowEdge }}
-          arrowHeadColor={GRAPH_PROPS.arrowHeadColor}
-          zoomOnScroll={zoomOnScroll}
-          nodesDraggable={isDraggable && editable}
-          paneMoveable={paneMoveable}
-          zoomOnDoubleClick={false}
-        >
-          <MiniMap />
-          <Controls />
-          <Background gap={12} size={0.5} />
-          <Background gap={16} />
-        </ReactFlow>
+        <ReactFlowProvider>
+          <ReactFlow
+            elements={validateElements(elements, eventHandlers)}
+            elementsSelectable={false}
+            onConnect={handleConnect}
+            onNodeDragStop={handleNodeDragStop}
+            deleteKeyCode={46}
+            nodeTypes={{ [ELEMENT_TYPES.node]: CustomFlowNode }}
+            edgeTypes={{ [ELEMENT_TYPES.edge]: CustomFlowEdge }}
+            arrowHeadColor={GRAPH_PROPS.arrowHeadColor}
+            zoomOnScroll={zoomOnScroll}
+            nodesDraggable={isDraggable && editable}
+            paneMoveable={paneMoveable}
+            zoomOnDoubleClick={false}
+          >
+            <MiniMap />
+            <Controls />
+            <Background gap={12} size={0.5} />
+            <Background gap={16} />
+          </ReactFlow>
+        </ReactFlowProvider>
       </Box>
-      <Grid container justify={editable ? 'space-between' : 'flex-end'} className={classes.buttonContainer}>
-        {editable ? (
+      {editable ? (
+        <Grid container justify={editable ? 'space-between' : 'flex-end'} className={classes.buttonContainer}>
           <Grid item xs={12} md={4}>
             <Button variant="contained" color="default" onClick={handleCreateDeliverable}>
               <Plus /> Add Deliverable
             </Button>
           </Grid>
-        ) : null}
-        <Grid item xs={12} md={4}>
-          <Grid container justify="flex-end">
-            <Grid item>
-              <Button size="small" color="primary" onClick={() => handleLayout(LAYOUT_DIRS.vertical)}>
-                Vertical Layout
-              </Button>
-            </Grid>
-            <Grid item>
-              <Button size="small" color="primary" onClick={() => handleLayout(LAYOUT_DIRS.horizontal)}>
-                Horizontal Layout
-              </Button>
+          <Grid item xs={12} md={4}>
+            <Grid container justify="flex-end">
+              <Grid item>
+                <Button size="small" color="primary" onClick={() => handleLayout(LAYOUT_DIRS.vertical)}>
+                  Vertical Layout
+                </Button>
+              </Grid>
+              <Grid item>
+                <Button size="small" color="primary" onClick={() => handleLayout(LAYOUT_DIRS.horizontal)}>
+                  Horizontal Layout
+                </Button>
+              </Grid>
             </Grid>
           </Grid>
         </Grid>
-      </Grid>
+      ) : null}
     </Box>
   );
 };

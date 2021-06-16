@@ -4,8 +4,9 @@ import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    justifyContent: 'center',
+    justifyContent: (p) => p.justify,
     marginBottom: theme.spacing(5),
+    paddingRight: theme.spacing(5),
   },
 }));
 

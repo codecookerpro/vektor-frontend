@@ -35,8 +35,8 @@ export const EDGE_PROPS = Object.freeze({
 });
 
 export const LAYOUT_DIRS = Object.freeze({
-  vertical: 'TB',
-  horizontal: 'LR',
+  vertical: 'LR',
+  horizontal: 'TB',
 });
 
 export const HANDLE_COLORS = Object.freeze({
