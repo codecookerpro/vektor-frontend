@@ -124,6 +124,8 @@ export const nodeToDeliverable = (nodeId, nodes, mainId) => {
     data: { label, start, end, completion, status, plannedHours, workedHours },
   } = node;
   const deliverable = {
+    _id: id,
+    mainId,
     name: label,
     start,
     end,
@@ -133,20 +135,11 @@ export const nodeToDeliverable = (nodeId, nodes, mainId) => {
     workedHours,
     predecessors: edges.filter((c) => c.target === node.id).map((c) => c.source),
     chartData: {
-      id,
       type,
       position,
       edges: edges.filter((e) => e.target === node.id),
     },
   };
-
-  if (mainId) {
-    deliverable.mainId = mainId;
-  }
-
-  if (node.data._id) {
-    deliverable._id = node.data._id;
-  }
 
   return deliverable;
 };
@@ -156,7 +149,7 @@ export const elementsToDeliverables = (elements, templateId) =>
 
 export const deliverablesToElements = (deliverables) =>
   deliverables.reduce((acc, deliverable) => {
-    let { chartData: { id, type, position, edges } = {}, _id, name, start, end, completion, status, plannedHours, workedHours } = deliverable;
+    let { chartData: { type, position, edges } = {}, _id, name, start, end, completion, status, plannedHours, workedHours } = deliverable;
     edges = edges
       ? edges.map((e) => ({
           ...e,
@@ -168,10 +161,10 @@ export const deliverablesToElements = (deliverables) =>
         }))
       : [];
     const node = {
-      id,
+      id: _id,
       type,
       position,
-      data: { _id, label: name, start, end, completion, status, plannedHours, workedHours, editable: true },
+      data: { label: name, start, end, completion, status, plannedHours, workedHours, editable: true },
       style: NODE_PROPS.style,
     };
 
@@ -227,14 +220,14 @@ export const getLayoutedElements = (elements, direction = LAYOUT_DIRS.vertical) 
   });
 };
 
-export const makeNode = (nodeNum, mainId, eventHandlers) => {
+export const makeNode = (nodeNum, label, eventHandlers) => {
   const currentTimestamp = new Date().getTime();
   const objectId = ObjectID(currentTimestamp).toHexString();
   const node = {
     id: objectId,
     type: ELEMENT_TYPES.node,
     data: {
-      label: mainId ? NODE_PROPS.label : null,
+      label,
       editable: true,
       ...eventHandlers,
     },

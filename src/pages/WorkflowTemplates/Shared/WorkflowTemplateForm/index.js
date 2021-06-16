@@ -74,7 +74,7 @@ const WorkflowTemplateForm = ({ workflowTemplate = {}, nodes = [], onEdit = () =
 
   const onSubmit = async (data) => {
     changeLoadingStatus(true);
-    const deliverables = elementsToDeliverables(nodes);
+    const deliverables = elementsToDeliverables(nodes).filter((d) => d.name);
 
     if (deliverables.length === 0) {
       setErrorMessage('Deliverables are not valid.');

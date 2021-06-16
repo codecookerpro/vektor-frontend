@@ -98,7 +98,7 @@ const WorkflowGraph = ({ elements = [], editable = true, setElements = () => {},
   };
 
   const createDeliverable = async () => {
-    const newNode = makeNode(elements.length, templateId, eventHandlers);
+    const newNode = makeNode(elements.length, templateId ? NODE_PROPS.label : null, eventHandlers);
 
     if (editable && templateId) {
       const { data } = await createAPI({

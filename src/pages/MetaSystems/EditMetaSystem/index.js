@@ -1,7 +1,7 @@
 import React, { memo, useEffect, useState, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { Grid } from '@material-ui/core';
+import { Grid, Dialog, DialogTitle, DialogContent, DialogActions } from '@material-ui/core';
 
 import PageHeader from 'parts/PageHeader';
 import MetaSystemForm from '../Shared/MetaSystemForm';
@@ -18,6 +18,8 @@ const EditMetaSystem = () => {
   const { project, system } = useParams();
   const dispatch = useDispatch();
   const [formMode, setFormMode] = useState(FORM_MODE.view);
+  const [initDlgShow, setInitDlgShow] = useState(false);
+  const [selectDlgShow, setSelectDlgShow] = useState(false);
   const metaSystem = useSelector(({ projects: { metaSystems } }) => {
     if (metaSystems[project]) {
       return metaSystems[project].find((ms) => ms._id === system);
@@ -44,6 +46,20 @@ const EditMetaSystem = () => {
           </Grid>
         </Grid>
       )}
+      {/* <Dialog open={initDlgShow} onClose={() => setInitDlgShow(false)} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
+        <DialogTitle id="alert-dialog-title" className={classes.titleText}>
+          Delete Connector
+        </DialogTitle>
+        <DialogContent>Are you sure to delete this connector?</DialogContent>
+        <DialogActions className={classes.actions}>
+          <Button onClick={() => setToggled(false)} color="primary" variant="contained">
+            Cancel
+          </Button>
+          <Button onClick={onDelete} color="primary" variant="contained" className={classes.deleteButton} autoFocus>
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog> */}
     </>
   );
 };
