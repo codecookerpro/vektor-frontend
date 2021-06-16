@@ -2,7 +2,8 @@ import React, { memo, useEffect, useState, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { Grid, Button } from '@material-ui/core';
-import { Dialog, DialogTitle, DialogContent, DialogActions } from 'components/UI/VektorDialog';
+import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from 'components/UI/VektorDialog';
+import { ColorButton } from 'components/UI/Buttons';
 
 import PageHeader from 'parts/PageHeader';
 import MetaSystemForm from '../Shared/MetaSystemForm';
@@ -59,12 +60,15 @@ const EditMetaSystem = () => {
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">Delete Connector</DialogTitle>
-        <DialogContent>Are you sure to delete this connector?</DialogContent>
+        <DialogContent>
+          <DialogContentText>Are you sure you want to delete this connector?</DialogContentText>
+        </DialogContent>
         <DialogActions>
+          <ColorButton colour="red">Color Button</ColorButton>
           <Button color="primary" variant="contained">
             Cancel
           </Button>
-          <Button color="primary" variant="contained" autoFocus>
+          <Button color="secondary" variant="contained" autoFocus>
             Delete
           </Button>
         </DialogActions>
