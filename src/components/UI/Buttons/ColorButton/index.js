@@ -5,10 +5,10 @@ import { grey as defaultColor } from '@material-ui/core/colors';
 
 const ColorButton = withStyles((theme) => ({
   root: {
-    color: (p) => theme.palette.getContrastText(colors[p.colour] ? colors[p.colour][700] : defaultColor[300]),
-    backgroundColor: (p) => (colors[p.colour] ? colors[p.colour][700] : defaultColor[300]),
+    color: ({ colour: c, level: l = 700 }) => theme.palette.getContrastText(colors[c] ? colors[c][l] : defaultColor[300]),
+    backgroundColor: ({ colour: c, level: l = 700 }) => (colors[c] ? colors[c][l] : defaultColor[300]),
     '&:hover': {
-      backgroundColor: (p) => (colors[p.colour] ? colors[p.colour][900] : defaultColor[500]),
+      backgroundColor: ({ colour: c, level: l = 700 }) => (colors[c] ? colors[c][l + 200] : defaultColor[500]),
     },
   },
 }))(Button);

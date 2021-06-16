@@ -59,18 +59,15 @@ const EditMetaSystem = () => {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">Delete Connector</DialogTitle>
+        <DialogTitle id="alert-dialog-title">Deliverables Initialization</DialogTitle>
         <DialogContent>
-          <DialogContentText>Are you sure you want to delete this connector?</DialogContentText>
+          <DialogContentText>Do you want to intialize deliverables with template?</DialogContentText>
         </DialogContent>
         <DialogActions>
-          <ColorButton colour="red">Color Button</ColorButton>
-          <Button color="primary" variant="contained">
-            Cancel
-          </Button>
-          <Button color="secondary" variant="contained" autoFocus>
-            Delete
-          </Button>
+          <ColorButton colour="red" autoFocus>
+            Yes, with template
+          </ColorButton>
+          <ColorButton colour="purple">No, from scratch</ColorButton>
         </DialogActions>
       </Dialog>
     </>
