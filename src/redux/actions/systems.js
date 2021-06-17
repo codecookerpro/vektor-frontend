@@ -1,5 +1,5 @@
 import * as TYPES from 'redux/types';
-import * as systemAPI from 'services/api-system';
+import * as metaSystemAPI from 'services/api-meta-system';
 
 const getSystemHistory =
   (projectId, refresh = false) =>
@@ -17,7 +17,7 @@ const getSystemHistory =
         filter: { project: projectId },
       };
 
-      const response = await systemAPI.getSystemHistory(params);
+      const response = await metaSystemAPI.getSystemHistory(params);
 
       if (response) {
         const { data } = response;
