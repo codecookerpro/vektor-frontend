@@ -8,6 +8,7 @@ const INITIAL_STATE = Object.freeze({
     total: 10,
   },
   sow: {},
+  fileUrl: '',
 });
 
 const sowsReducer = (state = INITIAL_STATE, action) => {
@@ -23,6 +24,11 @@ const sowsReducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         sow: action.payload,
+      };
+    case TYPES.SET_SOW_FILE_URL:
+      return {
+        ...state,
+        fileUrl: action.payload,
       };
     default:
       return state;

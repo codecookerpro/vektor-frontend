@@ -13,6 +13,9 @@ export const useStyles = makeStyles((theme) => ({
     color: theme.custom.palette.red,
     padding: theme.spacing(0),
   },
+  replace: {
+    paddingTop: theme.spacing(0),
+  },
   fileRow: {
     display: 'flex',
     alignItems: 'center',
