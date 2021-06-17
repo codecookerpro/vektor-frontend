@@ -8,7 +8,7 @@ import { addSOWFile, getSOWFile, removeSOWFile } from 'redux/actions/sowAction';
 const AttachmentsPhase = ({ sow = {}, title }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const filterAttachment = sow.attachments.filter((file) => file.phase === title.parentPhase);
+  const filterAttachment = sow?.attachments.filter((file) => file.phase === title.parentPhase);
 
   const onChange = (e) => {
     const params = {
@@ -27,11 +27,12 @@ const AttachmentsPhase = ({ sow = {}, title }) => {
     dispatch(removeSOWFile(params));
   };
 
-  const downloadFile = (file) => {
+  const downloadFile = async (file) => {
     const params = {
       fileName: file.fileName,
     };
-    dispatch(getSOWFile(params));
+    const fileUrl = await dispatch(getSOWFile(params));
+    window.open(fileUrl);
   };
 
   return (

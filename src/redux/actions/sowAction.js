@@ -92,7 +92,7 @@ const removeSOWFile = (params) => async (dispatch, getState) => {
 const getSOWFile = (params) => async (dispatch, getState) => {
   try {
     const { url } = await sowAPI.getSOWFile(params);
-    window.open(url);
+    return url;
   } catch (error) {
     console.log('[getSOWFile] error => ', error);
   }
