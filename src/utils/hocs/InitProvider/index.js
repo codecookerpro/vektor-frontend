@@ -5,7 +5,6 @@ import { setAccessToken, setRefreshToken, setCurrentUser } from 'redux/actions/a
 import { getUsers } from 'redux/actions/users';
 import { getOrganizations } from 'redux/actions/organizations';
 import { getProjects } from 'redux/actions/projects';
-import { getSystemHistory } from 'redux/actions/systems';
 import { PERMISSION_TYPE } from 'utils/constants/permissions';
 
 const InitProvider = () => {
