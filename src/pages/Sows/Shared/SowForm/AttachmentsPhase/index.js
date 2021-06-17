@@ -1,14 +1,14 @@
 import React, { memo } from 'react';
 import { useStyles } from './styles';
 import { Button, Card, CardContent, Grid, Typography } from '@material-ui/core';
-import { Paperclip, Plus } from 'react-feather';
+import { Download, Paperclip, Plus } from 'react-feather';
 import { useDispatch } from 'react-redux';
-import { addSOWFile, removeSOWFile } from 'redux/actions/sowAction';
+import { addSOWFile, getSOWFile, removeSOWFile } from 'redux/actions/sowAction';
 
 const AttachmentsPhase = ({ sow = {}, title }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const filterAttachment = sow.attachments.filter((file) => file.phase === title.parentPhase);
+  const filterAttachment = sow?.attachments.filter((file) => file.phase === title.parentPhase);
 
   const onChange = (e) => {
     const params = {
@@ -27,6 +27,14 @@ const AttachmentsPhase = ({ sow = {}, title }) => {
     dispatch(removeSOWFile(params));
   };
 
+  const downloadFile = async (file) => {
+    const params = {
+      fileName: file.fileName,
+    };
+    const fileUrl = await dispatch(getSOWFile(params));
+    window.open(fileUrl);
+  };
+
   return (
     <Card className={classes.root}>
       <CardContent>
@@ -35,24 +43,37 @@ const AttachmentsPhase = ({ sow = {}, title }) => {
         </Typography>
         <Grid container spacing={6}>
           {filterAttachment.map((file) => (
-            <>
+            <React.Fragment key={file._id}>
               <Grid item xs={6}>
                 <div className={classes.fileRow}>
                   <Paperclip />
                   <span className={classes.fileName}>{file.fileName}</span>
                 </div>
               </Grid>
-              <Grid item xs={2} className={classes.fileName}>
+              <Grid item xs={1} className={classes.replace}>
+                <Button size="small" onClick={() => downloadFile(file)}>
+                  <Download />
+                </Button>
+              </Grid>
+
+              <Grid item xs={2}>
                 <Button className={classes.delete} size="small" onClick={() => deleteFile(file)}>
                   Remove
                 </Button>
               </Grid>
-            </>
+            </React.Fragment>
           ))}
           <Grid item xs={12}>
             <Button component="label">
               <Plus /> Add another Attachment
-              <input type="file" onChange={onChange} hidden />
+              <input
+                type="file"
+                onChange={onChange}
+                onClick={({ target }) => {
+                  target.value = null;
+                }}
+                hidden
+              />
             </Button>
           </Grid>
         </Grid>
