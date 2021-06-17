@@ -2,7 +2,7 @@ import { useEffect, useMemo } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { PROJECT_MODES } from 'utils/constants/projectModes';
+import { PROJECT_MODES } from '../constants';
 import { PERMISSION_TYPE } from 'utils/constants/permissions';
 import { readMetaSystem } from 'redux/actions/metaSystem';
 

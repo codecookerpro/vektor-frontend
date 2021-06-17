@@ -8,7 +8,6 @@ export * from './links';
 export * from './permissions';
 export * from './popupText';
 export * from './popupType';
-export * from './projectModes';
 export * from './table-environments';
 export * from './validations';
 

@@ -5,7 +5,7 @@ import { joiResolver } from '@hookform/resolvers/joi';
 import { useHistory } from 'react-router-dom';
 
 import { PERMISSION_TYPE } from 'utils/constants/permissions';
-import { PROJECT_MODES } from 'utils/constants/projectModes';
+import { PROJECT_MODES } from 'pages/Projects/constants';
 import LINKS from 'utils/constants/links';
 import { isEmpty } from 'utils/helpers/utility';
 import { addProject, editProject } from 'redux/actions/projects';
