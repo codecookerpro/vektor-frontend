@@ -8,6 +8,7 @@ import PageHeader from 'parts/PageHeader';
 import UserForm from '../Shared/UserForm';
 import LINKS from 'utils/constants/links';
 import { isEmpty } from 'utils/helpers/utility';
+import { FORM_MODE } from 'utils/constants';
 
 const NAV_LINKS = [LINKS.USER_MANAGEMENT, LINKS.USERS];
 
@@ -31,7 +32,7 @@ const EditUser = () => {
   return (
     <>
       <PageHeader title={LINKS.EDIT_USER.TITLE} links={NAV_LINKS} leftElement={<ContainedButton onClick={historyHandler}>History</ContainedButton>} />
-      {!isEmpty(user) && <UserForm user={user} />}
+      {!isEmpty(user) && <UserForm user={user} mode={FORM_MODE.update} />}
     </>
   );
 };
