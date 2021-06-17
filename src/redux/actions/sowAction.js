@@ -89,4 +89,13 @@ const removeSOWFile = (params) => async (dispatch, getState) => {
   }
 };
 
-export { getSOWs, addSOW, setSelectedSOW, addSOWFile, removeSOWFile, editSOW };
+const getSOWFile = (params) => async (dispatch, getState) => {
+  try {
+    const { url } = await sowAPI.getSOWFile(params);
+    window.open(url);
+  } catch (error) {
+    console.log('[getSOWFile] error => ', error);
+  }
+};
+
+export { getSOWs, addSOW, setSelectedSOW, addSOWFile, removeSOWFile, editSOW, getSOWFile };

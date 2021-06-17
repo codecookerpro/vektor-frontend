@@ -24,7 +24,10 @@ const createSOWFile = async (params) => {
 };
 
 const getSOWFile = async (data) => {
-  return await axios.get('/api/sows/file', { data });
+  const params = {
+    get_json: JSON.stringify(data),
+  };
+  return await axios.get('/api/sows/file', { params });
 };
 
 const deleteSOWFileUrl = async (params) => {
