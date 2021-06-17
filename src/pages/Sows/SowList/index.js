@@ -4,7 +4,7 @@ import { Plus } from 'react-feather';
 import { useHistory } from 'react-router-dom';
 
 import SowTable from './SowTable';
-import { getSOWs } from 'redux/actions/sowAction';
+import { getSOWs, setSelectedSOW } from 'redux/actions/sowAction';
 import SowFilters from './SowFilter';
 import PageHeader from 'parts/PageHeader';
 import LINKS from 'utils/constants/links';
@@ -30,6 +30,7 @@ const SowList = () => {
       limit: rowsPerPage,
     };
     dispatch(getSOWs(filter, pagination));
+    dispatch(setSelectedSOW({}));
   }, [dispatch, filter, page, rowsPerPage]);
 
   const addHandler = useCallback(() => {

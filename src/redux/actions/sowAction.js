@@ -10,10 +10,21 @@ const getSOWs =
         limit: pagination.limit || 10,
         filter,
       };
-      const { data = [] } = await sowAPI.getSOWs(params);
+      const response = await sowAPI.getSOWs(params);
+      const { data = [] } = response;
+      const {
+        sows: { sow },
+      } = getState();
+      if (sow && sow._id) {
+        const filterSow = data.filter((item) => item._id === sow._id);
+        await dispatch({
+          type: TYPES.SET_SELECTED_SOW,
+          payload: filterSow[0],
+        });
+      }
       await dispatch({
         type: TYPES.FETCH_SOWS,
-        payload: data,
+        payload: response,
       });
     } catch (error) {
       console.log('[getSOWs] error => ', error);
@@ -39,4 +50,43 @@ const addSOW = (sow) => async (dispatch, getState) => {
   }
 };
 
-export { getSOWs, addSOW };
+const editSOW = (sow) => async (dispatch, getState) => {
+  try {
+    await sowAPI.updateSOW(sow);
+    dispatch(getSOWs());
+  } catch (error) {
+    console.log('[updateSOW] error => ', error);
+  }
+};
+
+const setSelectedSOW = (sow) => {
+  return {
+    type: TYPES.SET_SELECTED_SOW,
+    payload: sow,
+  };
+};
+
+const addSOWFile = (params) => async (dispatch, getState) => {
+  try {
+    const { _id, file, phase } = params;
+    let formData = new FormData();
+    formData.append('_id', _id);
+    formData.append('phase', phase);
+    formData.append('file', file, file.name);
+    await sowAPI.createSOWFile(formData);
+    dispatch(getSOWs());
+  } catch (error) {
+    console.log('[addSOWFile] error => ', error);
+  }
+};
+
+const removeSOWFile = (params) => async (dispatch, getState) => {
+  try {
+    await sowAPI.deleteSOWFileUrl(params);
+    dispatch(getSOWs());
+  } catch (error) {
+    console.log('[removeSOWFile] error => ', error);
+  }
+};
+
+export { getSOWs, addSOW, setSelectedSOW, addSOWFile, removeSOWFile, editSOW };

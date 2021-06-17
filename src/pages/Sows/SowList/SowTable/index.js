@@ -1,5 +1,5 @@
 import React, { memo, useCallback, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Card, CardContent, Checkbox, TableCell, TableRow } from '@material-ui/core';
 
 import LinkButton from 'components/UI/Buttons/LinkButton';
@@ -7,9 +7,11 @@ import VektorTableContainer from 'parts/Tables/VektorTableContainer';
 import LINKS from 'utils/constants/links';
 import SowActions from './SowActions';
 import setColumn from './setColumn';
+import { setSelectedSOW } from 'redux/actions/sowAction';
 
 const SowTable = ({ selectedItems, setSelectedItems, page, setPage, rowsPerPage, setRowsPerPage, isOrganizationVisible }) => {
-  const { results } = useSelector((state) => state.sows);
+  const dispatch = useDispatch();
+  const { results, pagination } = useSelector((state) => state.sows);
   const organizations = useSelector((state) => state.organizations.results);
   const projects = useSelector((state) => state.projects.results);
   const [action, setAction] = useState('');
@@ -42,13 +44,18 @@ const SowTable = ({ selectedItems, setSelectedItems, page, setPage, rowsPerPage,
   const isSelected = (row) => {
     return selectedItems.findIndex((value) => row.id === value.id) !== -1;
   };
+
+  const setSow = async (sow) => {
+    await dispatch(setSelectedSOW(sow));
+  };
+
   return (
     <Card>
       <CardContent>
         <SowActions action={action} setAction={setAction} onAction={actionHandler} />
         <VektorTableContainer
           columns={columns}
-          rowCounts={results.length}
+          rowCounts={pagination.count || results.length}
           page={page}
           setPage={setPage}
           rowsPerPage={rowsPerPage}
@@ -63,16 +70,24 @@ const SowTable = ({ selectedItems, setSelectedItems, page, setPage, rowsPerPage,
               </TableCell>
               {isOrganizationVisible && (
                 <TableCell component="th" scope="row">
-                  <LinkButton to={LINKS.EDIT_SOW.HREF.replace(':id', row._id)}>{getOrganizationName(row.organization)}</LinkButton>
+                  <LinkButton to={LINKS.EDIT_SOW.HREF.replace(':id', row._id)} onClick={() => setSow(row)}>
+                    {getOrganizationName(row.organization)}
+                  </LinkButton>
                 </TableCell>
               )}
               <TableCell>
-                {isOrganizationVisible ? row.name : <LinkButton to={LINKS.EDIT_SOW.HREF.replace(':id', row._id)}>{row.name}</LinkButton>}
+                {isOrganizationVisible ? (
+                  row.name
+                ) : (
+                  <LinkButton to={LINKS.EDIT_SOW.HREF.replace(':id', row._id)} onClick={() => setSow(row)}>
+                    {row.name}
+                  </LinkButton>
+                )}
               </TableCell>
               <TableCell>{row.metaSystem}</TableCell>
-              <TableCell>{row?.fullContactName || '-'}</TableCell>
+              <TableCell>{row?.initiationPhase?.contractName || '-'}</TableCell>
               <TableCell>{getProjectName(row.project)}</TableCell>
-              <TableCell>{row?.vendorName || '-'}</TableCell>
+              <TableCell>{row?.initiationPhase?.vendorName || '-'}</TableCell>
             </TableRow>
           ))}
         </VektorTableContainer>
