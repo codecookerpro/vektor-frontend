@@ -5,12 +5,19 @@ import { Controller } from 'react-hook-form';
 import VektorTextField from 'components/UI/TextFields/VektorTextField';
 import FilterSelect from 'components/UI/Selects/FilterSelect';
 import { useSelector } from 'react-redux';
+import { FORM_MODE } from 'utils/constants';
 
 const NewSow = ({ mode, sow = {}, control, errors, isOrganizationVisible }) => {
   const classes = useStyles();
   const { results: projects, organization } = useSelector(({ projects }) => projects);
   const { results: organizations } = useSelector(({ organizations }) => organizations);
   const [filterSystems, setFilterSystems] = useState([]);
+
+  useEffect(() => {
+    if (mode === FORM_MODE.update) {
+      setCurrentOrganization(sow.organization);
+    }
+  }, [sow]);
 
   useEffect(() => {
     if (!isOrganizationVisible) {
@@ -53,7 +60,7 @@ const NewSow = ({ mode, sow = {}, control, errors, isOrganizationVisible }) => {
             />
           </Grid>
 
-          {isOrganizationVisible && (
+          {isOrganizationVisible && mode === FORM_MODE.create && (
             <Grid item xs={12} sm={6} md={4}>
               <Controller
                 as={<FilterSelect />}
@@ -82,7 +89,7 @@ const NewSow = ({ mode, sow = {}, control, errors, isOrganizationVisible }) => {
               items={filterSystems}
               error={errors.metaSystem?.message}
               control={control}
-              defaultValue={sow?.metaSystem || ''}
+              defaultValue={`${sow?.metaSystem}/${sow?.project}` || ''}
               disabled={!filterSystems.length}
             />
           </Grid>

@@ -1,10 +1,15 @@
-import React, { memo, useEffect } from 'react';
+import React, { memo, useEffect, useState, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { Grid } from '@material-ui/core';
 
 import PageHeader from 'parts/PageHeader';
 import MetaSystemForm from '../Shared/MetaSystemForm';
+import DeliverableGraph from '../Shared/DeliverableGraph';
+import DeliverableTable from '../Shared/DeliverableTable';
+import InitDialog from '../Shared/InitDialog';
+import SelectDialog from '../Shared/SelectDialog';
+
 import LINKS from 'utils/constants/links';
 import { FORM_MODE } from 'utils/constants';
 import { readMetaSystem } from 'redux/actions/metaSystem';
@@ -12,29 +17,67 @@ import { readMetaSystem } from 'redux/actions/metaSystem';
 const NAV_LINKS = [LINKS.PROJECT_MANAGEMENT, LINKS.PROJECTS];
 
 const EditMetaSystem = () => {
-  const { project, system } = useParams();
+  const { project: projectId, system: systemId } = useParams();
   const dispatch = useDispatch();
-  const metaSystem = useSelector(({ projects: { metaSystems } }) => {
-    if (metaSystems[project]) {
-      return metaSystems[project].find((ms) => ms._id === system);
-    }
-    return null;
+  const [formMode, setFormMode] = useState(FORM_MODE.view);
+  const [initDlg, showInitDlg] = useState(false);
+  const [selectDlg, showSelectDlg] = useState(false);
+
+  const { metaSystem } = useSelector(({ projects: { metaSystems, results } }) => {
+    const project = results.find((p) => p._id === projectId);
+    const systems = metaSystems[projectId];
+    const metaSystem = systems ? systems.find((ms) => ms._id === systemId) : null;
+
+    return { project, metaSystem };
   });
 
-  useEffect(() => dispatch(readMetaSystem(project)), [dispatch, project]);
+  const title = useMemo(() => {
+    if (formMode === FORM_MODE.view) {
+      return 'View System';
+    } else {
+      return LINKS.EDIT_META_SYSTEM.TITLE;
+    }
+  }, [formMode]);
 
-  if (!metaSystem) {
-    return null;
-  }
+  useEffect(() => dispatch(readMetaSystem(projectId)), [dispatch, projectId]);
+
+  useEffect(() => {
+    if (formMode === FORM_MODE.update && metaSystem) {
+      showInitDlg(true);
+    }
+  }, [formMode, metaSystem]);
+
+  const handleInitDlgClose = () => showInitDlg(false);
+  const handleWithTemplate = () => {
+    showInitDlg(false);
+    showSelectDlg(true);
+  };
+  const handleFromScratch = () => {
+    showInitDlg(false);
+  };
+  const handleSelectDlgClose = () => showSelectDlg(false);
+  const handleSelectTemplate = (template) => {
+    console.log(template);
+  };
 
   return (
     <>
-      <PageHeader title={LINKS.EDIT_META_SYSTEM.TITLE} links={NAV_LINKS} />
-      <Grid container spacing={6}>
-        <Grid item xs={12}>
-          <MetaSystemForm system={metaSystem} mode={FORM_MODE.update} />
+      <PageHeader title={title} links={NAV_LINKS} />
+      {metaSystem && (
+        <Grid container spacing={6}>
+          <Grid item xs={12}>
+            <MetaSystemForm system={metaSystem} mode={formMode} setFormMode={setFormMode} />
+          </Grid>
+          <Grid item xs={12}>
+            <DeliverableGraph deliverables={metaSystem.mainSystem.deliverables} />
+          </Grid>
+          <Grid item xs={12}>
+            <DeliverableTable deliverables={metaSystem.mainSystem.deliverables} />
+          </Grid>
         </Grid>
-      </Grid>
+      )}
+      <InitDialog open={initDlg} onClose={handleInitDlgClose} onTemplate={handleWithTemplate} onScratch={handleFromScratch} />
+      <SelectDialog open={selectDlg} onClose={handleSelectDlgClose} onSelect={handleSelectTemplate} />
     </>
   );
 };

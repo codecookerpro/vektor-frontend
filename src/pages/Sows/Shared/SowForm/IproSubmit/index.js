@@ -3,7 +3,7 @@ import { useStyles } from './styles';
 import { Card, CardContent, Grid, TextField, Typography } from '@material-ui/core';
 import inputHandler from '../inputHandler';
 
-const IproSubmit = ({ mode, sow = {}, title, setNotRequiredField }) => {
+const IproSubmit = ({ sow = {}, title, setNotRequiredField }) => {
   const classes = useStyles();
 
   const onChange = (e) => {

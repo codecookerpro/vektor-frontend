@@ -17,8 +17,3 @@ export const FORM_MODE = {
   update: 'update',
   view: 'view',
 };
-
-export const LAYOUT_DIR = {
-  vertical: 'TB',
-  horizontal: 'LR',
-};
