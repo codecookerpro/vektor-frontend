@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { useForm, Controller } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
-import joi from 'joi';
 import { Card, CardContent, Grid, Button, Typography } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 import { makeStyles } from '@material-ui/core/styles';
@@ -12,11 +11,12 @@ import * as userAPI from 'services/api-user';
 import { addUser, editUser, removeUser } from 'redux/actions/users';
 import VektorTextField from 'components/UI/TextFields/VektorTextField';
 import FilterSelect from 'components/UI/Selects/FilterSelect';
-import { STRING_INPUT_VALID, SELECT_VALID, EMAIL_VALID, PASSWORD_VALID } from 'utils/constants/validations';
 import LINKS from 'utils/constants/links';
-import { PERMISSIONS } from 'utils/constants/permissions';
+import { PERMISSION_TYPE, PERMISSIONS } from 'utils/constants/permissions';
 import useLoading from 'utils/hooks/useLoading';
 import { isEmpty } from 'utils/helpers/utility';
+import { FORM_MODE } from 'utils/constants';
+import setSchema from './setSchema';
 
 const useStyles = makeStyles((theme) => ({
   alert: {
@@ -39,15 +39,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const schema = joi.object().keys({
-  email: EMAIL_VALID,
-  name: STRING_INPUT_VALID,
-  organization: SELECT_VALID,
-  permissions: SELECT_VALID,
-  password: PASSWORD_VALID,
-});
-
-const UserForm = ({ user = {} }) => {
+const UserForm = ({ user = {}, mode }) => {
   const classes = useStyles();
   const history = useHistory();
   const dispatch = useDispatch();
@@ -55,6 +47,11 @@ const UserForm = ({ user = {} }) => {
 
   const { results: organizations = [] } = useSelector((state) => state.organizations);
   const [errorMessage, setErrorMessage] = useState('');
+  const [changePassword, setChangePassword] = useState(mode === FORM_MODE.create);
+  const [selectPermission, setSelectPermission] = useState(user?.permissions || '');
+  const [selectOrganization, setSelectOrganization] = useState(user?.organization || '');
+
+  const schema = setSchema(changePassword, selectPermission);
 
   const { control, handleSubmit, errors } = useForm({
     resolver: joiResolver(schema),
@@ -69,14 +66,13 @@ const UserForm = ({ user = {} }) => {
         organization: data.organization,
         permissions: data.permissions,
       };
-
+      if (data.permissions === PERMISSION_TYPE.ADMIN && selectOrganization) params.organization = selectOrganization;
       if (data.password) {
         params = {
           ...params,
           password: data.password,
         };
       }
-
       if (isEmpty(user)) {
         const response = await userAPI.createUser(params);
         dispatch(addUser(response.data));
@@ -145,23 +141,6 @@ const UserForm = ({ user = {} }) => {
             </Grid>
             <Grid item xs={12} sm={6} md={3}>
               <Controller
-                as={<FilterSelect />}
-                fullWidth
-                name="organization"
-                label="Organization"
-                placeholder="Select organization"
-                items={organizations}
-                keys={{
-                  label: 'name',
-                  value: '_id',
-                }}
-                error={errors.organization?.message}
-                control={control}
-                defaultValue={user?.organization || ''}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6} md={3}>
-              <Controller
                 as={<VektorTextField />}
                 id="name"
                 fullWidth
@@ -183,22 +162,68 @@ const UserForm = ({ user = {} }) => {
                 items={PERMISSIONS}
                 error={errors.permissions?.message}
                 control={control}
-                defaultValue={user?.permissions || ''}
+                onClick={({ target }) => setSelectPermission(target?.value)}
+                defaultValue={selectPermission}
               />
             </Grid>
             <Grid item xs={12} sm={6} md={3}>
-              <Controller
-                as={<VektorTextField />}
-                id="password"
-                fullWidth
-                name="password"
-                label="Password"
-                placeholder="Password"
-                error={errors.password?.message}
-                control={control}
-                defaultValue={''}
-              />
+              {selectPermission === PERMISSION_TYPE.ADMIN ? (
+                <FilterSelect
+                  fullWidth
+                  name="organization"
+                  label="Organization"
+                  placeholder="Select organization"
+                  items={organizations}
+                  keys={{
+                    label: 'name',
+                    value: '_id',
+                  }}
+                  value={selectOrganization}
+                  onClick={({ target }) => setSelectOrganization(target?.value)}
+                />
+              ) : (
+                <Controller
+                  as={<FilterSelect />}
+                  fullWidth
+                  name="organization"
+                  label="Organization"
+                  placeholder="Select organization"
+                  items={organizations}
+                  keys={{
+                    label: 'name',
+                    value: '_id',
+                  }}
+                  error={errors.organization?.message}
+                  control={control}
+                  defaultValue={selectOrganization}
+                />
+              )}
             </Grid>
+
+            {mode === FORM_MODE.update && (
+              <Grid item xs={12}>
+                <Button variant="outlined" color="primary" onClick={() => setChangePassword(!changePassword)}>
+                  {changePassword ? 'Hide password' : 'Change password'}
+                </Button>
+              </Grid>
+            )}
+
+            {changePassword && (
+              <Grid item xs={12} sm={6} md={3}>
+                <Controller
+                  as={<VektorTextField />}
+                  id="password"
+                  fullWidth
+                  name="password"
+                  label="Password"
+                  placeholder="Password"
+                  error={errors.password?.message}
+                  control={control}
+                  defaultValue={''}
+                />
+              </Grid>
+            )}
+
             <Grid item xs={12}>
               <div className={classes.buttonContainer}>
                 <Button variant="contained" color="primary" onClick={handleSubmit(onSubmit)}>
