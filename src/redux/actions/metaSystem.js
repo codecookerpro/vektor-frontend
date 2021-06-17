@@ -17,24 +17,26 @@ export const createMetaSystem = (params) => (dispatch) => {
     .catch((err) => console.error('[createMetaSystem] error => ', err));
 };
 
-export const readMetaSystem = (project) => (dispatch, getState) => {
-  const {
-    projects: { metaSystems },
-  } = getState();
+export const readMetaSystem =
+  (project, refresh = false) =>
+  (dispatch, getState) => {
+    const {
+      projects: { metaSystems },
+    } = getState();
 
-  if (metaSystems[project]) {
-    return;
-  }
+    if (metaSystems[project] && !refresh) {
+      return;
+    }
 
-  readAPI({ filter: { project }, sort: 'name' })
-    .then(({ data }) => {
-      dispatch({
-        type: FETCH_META_SYSTEMS,
-        payload: { data, project },
-      });
-    })
-    .catch((err) => console.error('[readMetaSystem] error => ', err));
-};
+    readAPI({ filter: { project }, sort: 'name' })
+      .then(({ data }) => {
+        dispatch({
+          type: FETCH_META_SYSTEMS,
+          payload: { data, project },
+        });
+      })
+      .catch((err) => console.error('[readMetaSystem] error => ', err));
+  };
 
 export const updateMetaSystem = (params) => (dispatch) => {
   updateAPI(params)

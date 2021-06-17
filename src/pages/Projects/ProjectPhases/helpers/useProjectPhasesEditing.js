@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
 import { createProjectPhase, updateProjectPhase, deleteProjectPhase } from 'redux/actions/projects';
-import { ACTIONS } from 'pages/Projects/helpers';
+import { ACTIONS } from 'pages/Projects/constants';
 
 const useProjectPhasesEditing = () => {
   const dispatch = useDispatch();

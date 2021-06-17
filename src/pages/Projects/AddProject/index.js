@@ -3,7 +3,7 @@ import React, { memo } from 'react';
 import PageHeader from 'parts/PageHeader';
 import ProjectForm from '../Shared/ProjectForm';
 import LINKS from 'utils/constants/links';
-import { PROJECT_MODES } from 'utils/constants/projectModes';
+import { PROJECT_MODES } from '../constants';
 
 const NAV_LINKS = [LINKS.PROJECT_MANAGEMENT, LINKS.PROJECTS];
 

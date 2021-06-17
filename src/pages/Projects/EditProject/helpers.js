@@ -2,9 +2,10 @@ import { useEffect, useMemo } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { PROJECT_MODES } from 'utils/constants/projectModes';
+import { PROJECT_MODES } from '../constants';
 import { PERMISSION_TYPE } from 'utils/constants/permissions';
 import { readMetaSystem } from 'redux/actions/metaSystem';
+import { getSystemHistory } from 'redux/actions/systems';
 
 export const useEditProjectLogic = () => {
   const { id } = useParams();
@@ -24,7 +25,10 @@ export const useEditProjectLogic = () => {
     return { projects: results, permissions, metaSystems: metaSystems[id] };
   });
 
-  useEffect(() => dispatch(readMetaSystem(id)), [dispatch, id]);
+  useEffect(() => {
+    dispatch(readMetaSystem(id, true));
+    dispatch(getSystemHistory(id, true));
+  }, [dispatch, id]);
 
   const project = useMemo(() => projects.find((item) => item._id === id), [id, projects]);
   const getMode = useMemo(() => {

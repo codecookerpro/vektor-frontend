@@ -5,14 +5,14 @@ import { joiResolver } from '@hookform/resolvers/joi';
 import { useHistory } from 'react-router-dom';
 
 import { PERMISSION_TYPE } from 'utils/constants/permissions';
-import { PROJECT_MODES } from 'utils/constants/projectModes';
+import { PROJECT_MODES } from 'pages/Projects/constants';
 import LINKS from 'utils/constants/links';
 import { isEmpty } from 'utils/helpers/utility';
 import { addProject, editProject } from 'redux/actions/projects';
 
 import { schema } from './schema';
 
-export const useProjectFrom = (project, mode) => {
+const useProjectFrom = (project, mode) => {
   const [currentOrganization, setCurrentOrganization] = useState('');
   const [filteresUsers, setFilteredUsers] = useState([]);
   const [assignedUserList, setAssignedUserList] = useState([]);
@@ -134,6 +134,7 @@ export const useProjectFrom = (project, mode) => {
       }
       setValue('projectManager', projectManager);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [_id, currentOrganization, mode, permissions, project, setValue]);
 
   return {
@@ -149,3 +150,5 @@ export const useProjectFrom = (project, mode) => {
     setCurrentOrganization,
   };
 };
+
+export default useProjectFrom;

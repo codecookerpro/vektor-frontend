@@ -1,9 +1,9 @@
 import { useSelector } from 'react-redux';
 
 import { PERMISSION_TYPE } from 'utils/constants/permissions';
-import { PROJECT_MODES } from 'utils/constants/projectModes';
+import { PROJECT_MODES } from 'pages/Projects/constants';
 
-export const useVisibilityBooleans = (organization, mode) => {
+const useVisibilityBooleans = (organization, mode) => {
   const { permissions } = useSelector(({ auth }) => auth.currentUser);
 
   const isViewingMode = mode === PROJECT_MODES.VIEWING;
@@ -14,3 +14,5 @@ export const useVisibilityBooleans = (organization, mode) => {
 
   return { isOrganizationVisible, isSupervisorVisible, isViewingMode, isCreationMode };
 };
+
+export default useVisibilityBooleans;

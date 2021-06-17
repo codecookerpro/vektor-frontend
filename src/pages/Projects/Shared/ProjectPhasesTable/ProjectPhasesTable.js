@@ -5,7 +5,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 
 import VektorSubTableContainer from 'parts/Tables/VektorSubTableContainer';
-import { ACTIONS } from 'pages/Projects/helpers';
+import { ACTIONS } from 'pages/Projects/constants';
 
 const columns = [
   { id: 'name', label: 'Name', minWidth: 170 },

@@ -1,4 +1,4 @@
-import { ACTIONS } from 'pages/Projects/helpers';
+import { ACTIONS } from 'pages/Projects/constants';
 import { PERMISSION_TYPE } from 'utils/constants/permissions';
 
 export const ACTIONS_DATA = [

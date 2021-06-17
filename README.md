@@ -48,10 +48,10 @@ ComponentName.jsx       - component/page name
 index.js                - file for export. Export component parts for quick access.
 constants.js            - place constans here
 helpers / helpers.js    - Create a folder, if there are lots of helpers. Create a file if they are few or they iclude some rows.
-  index.js                - ile for export
-  useHelper.js            - hook
-  helperFunc.js           - helper function
-  withHelper.js           - HOC
+  index.js              - file for export
+  useHelper.js          - hook
+  helperFunc.js         - helper function
+  withHelper.js         - HOC
 components              - folder for auxiliary components, then the structure is the same.
   index.js
   AnyComponent
