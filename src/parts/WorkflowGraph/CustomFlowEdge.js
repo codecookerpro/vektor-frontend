@@ -3,13 +3,13 @@ import { getMarkerEnd } from 'react-flow-renderer';
 import { getSmoothStepPathPatched } from './helper';
 import EdgeDialog from './EdgeDialog';
 import { makeStyles } from '@material-ui/core/styles';
-import { arrowHeadColor } from 'utils/constants/reactflow/chart-configs';
+import { GRAPH_PROPS } from './constants';
 
 const useStyles = makeStyles(() => ({
   hoverPath: {
     strokeWidth: 15,
     opacity: 0,
-    stroke: arrowHeadColor,
+    stroke: GRAPH_PROPS.arrowHeadColor,
     fill: 'none',
     pointerEvents: 'all',
     '&:hover': {

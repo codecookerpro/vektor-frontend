@@ -4,11 +4,9 @@ import Popper from '@material-ui/core/Popper';
 import Fade from '@material-ui/core/Fade';
 import { makeStyles } from '@material-ui/core/styles';
 import { Button } from '@material-ui/core';
-import { IDENTIFIERS, TYPE } from 'utils/constants/reactflow/custom-node-types';
 import NodeDialog from './NodeDialog';
 import CloseIcon from '@material-ui/icons/Close';
-import * as nodeDialogConfigs from 'utils/constants/reactflow/node-dialog-configs';
-import { handleColors } from 'utils/constants/reactflow/chart-configs';
+import { IDENTIFIERS, HANDLE_COLORS, HANDLE_TYPES, NODE_DIALOGS } from './constants';
 
 const useStyles = makeStyles(() => ({
   nodeContent: {
@@ -51,7 +49,7 @@ const useStyles = makeStyles(() => ({
     cursor: 'pointer',
   },
   handle: {
-    background: handleColors.source,
+    background: HANDLE_COLORS.source,
   },
 }));
 
@@ -72,71 +70,71 @@ export default memo(({ id, data }) => {
   const handleDeleteNodes = (e) => {
     e.preventDefault();
     setIsDialogOpen(true);
-    setDialogProps(nodeDialogConfigs.DELETE);
+    setDialogProps(NODE_DIALOGS.delete);
   };
 
   const handleEditNodes = (e) => {
     e.preventDefault();
     setIsDialogOpen(true);
-    setDialogProps(nodeDialogConfigs.EDIT);
+    setDialogProps(NODE_DIALOGS.edit);
   };
 
   const handleMargin = 15;
-  const targetStyles = { background: handleColors.target, height: '9px', width: '9px', borderRadius: '50%' };
-  const sourceStyles = { background: handleColors.source, height: '9px', width: '9px', borderRadius: '50%' };
+  const targetStyles = { background: HANDLE_COLORS.target, height: '9px', width: '9px', borderRadius: '50%' };
+  const sourceStyles = { background: HANDLE_COLORS.source, height: '9px', width: '9px', borderRadius: '50%' };
   return (
     <>
       <div onDoubleClick={handlePopUpToggle}>
         <Handle
-          type={TYPE.TARGET}
+          type={HANDLE_TYPES.TARGET}
           style={{ ...targetStyles, marginLeft: '-2px', marginTop: `-${handleMargin}px` }}
           position={Position.Left}
           id={IDENTIFIERS.TARGET_LEFT}
         />
 
         <Handle
-          type={TYPE.TARGET}
+          type={HANDLE_TYPES.TARGET}
           style={{ ...targetStyles, marginTop: '-2px', marginLeft: `${handleMargin}px` }}
           position={Position.Top}
           id={IDENTIFIERS.TARGET_TOP}
         />
 
         <Handle
-          type={TYPE.TARGET}
+          type={HANDLE_TYPES.TARGET}
           style={{ ...targetStyles, marginRight: '-1px', marginTop: `${handleMargin}px` }}
           position={Position.Right}
           id={IDENTIFIERS.TARGET_RIGHT}
         />
 
         <Handle
-          type={TYPE.TARGET}
+          type={HANDLE_TYPES.TARGET}
           style={{ ...targetStyles, marginBottom: '-1px', marginLeft: `-${handleMargin}px` }}
           position={Position.Bottom}
           id={IDENTIFIERS.TARGET_BOTTOM}
         />
         <Handle
-          type={TYPE.SOURCE}
+          type={HANDLE_TYPES.SOURCE}
           style={{ ...sourceStyles, marginLeft: '-2px', marginTop: `${handleMargin}px` }}
           position={Position.Left}
           id={IDENTIFIERS.SOURCE_LEFT}
         />
 
         <Handle
-          type={TYPE.SOURCE}
+          type={HANDLE_TYPES.SOURCE}
           style={{ ...sourceStyles, marginTop: '-2px', marginLeft: `-${handleMargin}px` }}
           position={Position.Top}
           id={IDENTIFIERS.SOURCE_TOP}
         />
 
         <Handle
-          type={TYPE.SOURCE}
+          type={HANDLE_TYPES.SOURCE}
           style={{ ...sourceStyles, marginRight: '-1px', marginTop: `-${handleMargin}px` }}
           position={Position.Right}
           id={IDENTIFIERS.SOURCE_RIGHT}
         />
 
         <Handle
-          type={TYPE.SOURCE}
+          type={HANDLE_TYPES.SOURCE}
           style={{ ...sourceStyles, marginBottom: '-1px', marginLeft: `${handleMargin}px` }}
           position={Position.Bottom}
           id={IDENTIFIERS.SOURCE_BOTTOM}

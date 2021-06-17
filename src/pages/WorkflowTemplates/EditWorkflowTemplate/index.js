@@ -9,7 +9,7 @@ import WorkflowTemplateChart from '../WorkflowTemplateChart';
 import WorkflowTemplateForm from '../Shared/WorkflowTemplateForm';
 import LINKS from 'utils/constants/links';
 import { isEmpty } from 'utils/helpers/utility';
-import { deliverablesToElements } from '../WorkflowTemplateChart/helper';
+import { deliverablesToElements } from 'parts/WorkflowGraph/helper';
 
 const NAV_LINKS = [LINKS.WORKFLOW_TEMPLATES];
 
