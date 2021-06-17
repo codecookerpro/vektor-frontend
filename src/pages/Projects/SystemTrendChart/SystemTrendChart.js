@@ -30,7 +30,7 @@ const SystemTrendChart = () => {
           title="System Trend Chart"
         />
         <CardContent>
-          {chartData.length > 1 ? (
+          {chartData.length > 0 ? (
             <Chart width="100%" height="600px" chartType="LineChart" loader={<div>Loading Chart</div>} data={chartData} options={CHART_OPTIONS} />
           ) : (
             'No data'

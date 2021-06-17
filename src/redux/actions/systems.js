@@ -1,25 +1,30 @@
 import * as TYPES from 'redux/types';
 import * as systemAPI from 'services/api-system';
-import { isEmpty } from 'utils/helpers/utility';
 
 const getSystemHistory =
-  (filterParams = {}) =>
-  async (dispatch) => {
+  (projectId, refresh = false) =>
+  async (dispatch, getState) => {
     try {
+      const {
+        projects: { systemTrends },
+      } = getState();
+
+      if (systemTrends[projectId] && !refresh) {
+        return;
+      }
+
       const params = {
-        ...(!isEmpty(filterParams) && {
-          filter: filterParams,
-        }),
+        filter: { project: projectId },
       };
 
       const response = await systemAPI.getSystemHistory(params);
 
       if (response) {
-        const { data: payload } = response;
+        const { data } = response;
 
         dispatch({
           type: TYPES.FETCH_SYSTEM_TRENDS,
-          payload,
+          payload: { data, projectId },
         });
       }
     } catch (error) {

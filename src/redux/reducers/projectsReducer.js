@@ -4,7 +4,7 @@ const INITIAL_STATE = Object.freeze({
   results: [],
   organization: '',
   metaSystems: {},
-  systemTrends: [],
+  systemTrends: {},
 });
 
 const projectsReducer = (state = INITIAL_STATE, { payload, type }) => {
@@ -96,9 +96,15 @@ const projectsReducer = (state = INITIAL_STATE, { payload, type }) => {
       };
     }
     case TYPES.FETCH_SYSTEM_TRENDS: {
+      const { data, projectId } = payload;
+      const { systemTrends } = state;
+
       return {
         ...state,
-        systemTrends: payload,
+        systemTrends: {
+          ...systemTrends,
+          [projectId]: data,
+        },
       };
     }
     default:

@@ -12,7 +12,7 @@ const useSystemTrendChartData = (id) => {
   useEffect(() => {
     const systemTrendsCharts = {};
     let data = [];
-    const currentSystemTrends = systemTrends.filter(({ project }) => projectId === project);
+    const currentSystemTrends = systemTrends[projectId] || [];
 
     if (currentSystemTrends.length > 0) {
       const names = [

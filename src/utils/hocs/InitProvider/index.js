@@ -40,7 +40,6 @@ const InitProvider = () => {
   useEffect(() => {
     if (accessToken) {
       dispatch(getUsers());
-      dispatch(getSystemHistory());
       if (permissions === PERMISSION_TYPE.ADMIN) {
         dispatch(getOrganizations());
         dispatch(getProjects());
