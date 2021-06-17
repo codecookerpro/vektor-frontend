@@ -3,8 +3,9 @@ import {
   getMetaSystems as readAPI,
   updateMetaSystem as updateAPI,
   deleteMetaSystem as deleteAPI,
+  initDeliverables as initDeliverablesAPI,
 } from 'services/api-meta-system';
-import { CREATE_META_SYSTEM, FETCH_META_SYSTEMS, DELETE_META_SYSTEM, UPDATE_META_SYSTEM } from 'redux/types';
+import { CREATE_META_SYSTEM, FETCH_META_SYSTEMS, DELETE_META_SYSTEM, UPDATE_META_SYSTEM, INIT_DELIVERABLES } from 'redux/types';
 
 export const createMetaSystem = (params) => (dispatch) => {
   createAPI(params)
@@ -58,4 +59,15 @@ export const deleteMetaSystem = (project, system) => (dispatch) => {
       });
     })
     .catch((err) => console.error('[deleteMetaSystem] error => ', err));
+};
+
+export const initDeliverables = (params) => (dispatch) => {
+  initDeliverablesAPI(params)
+    .then(({ data }) => {
+      dispatch({
+        type: INIT_DELIVERABLES,
+        payload: data,
+      });
+    })
+    .catch((err) => console.error('[initDeliverables] error => ', err));
 };

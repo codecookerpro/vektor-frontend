@@ -2,6 +2,7 @@ import React, { memo, useEffect, useState, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { Grid } from '@material-ui/core';
+import moment from 'moment';
 
 import PageHeader from 'parts/PageHeader';
 import MetaSystemForm from '../Shared/MetaSystemForm';
@@ -12,7 +13,7 @@ import SelectDialog from '../Shared/SelectDialog';
 
 import LINKS from 'utils/constants/links';
 import { FORM_MODE } from 'utils/constants';
-import { readMetaSystem } from 'redux/actions/metaSystem';
+import { initDeliverables, readMetaSystem } from 'redux/actions/metaSystem';
 
 const NAV_LINKS = [LINKS.PROJECT_MANAGEMENT, LINKS.PROJECTS];
 
@@ -42,7 +43,7 @@ const EditMetaSystem = () => {
   useEffect(() => dispatch(readMetaSystem(projectId)), [dispatch, projectId]);
 
   useEffect(() => {
-    if (formMode === FORM_MODE.update && metaSystem) {
+    if (formMode === FORM_MODE.update && metaSystem.mainSystem.deliverables.length === 0) {
       showInitDlg(true);
     }
   }, [formMode, metaSystem]);
@@ -57,7 +58,18 @@ const EditMetaSystem = () => {
   };
   const handleSelectDlgClose = () => showSelectDlg(false);
   const handleSelectTemplate = (template) => {
-    console.log(template);
+    const deliverables = template.deliverables.map((d) => ({
+      ...d,
+      start: moment(),
+      end: moment(),
+      completion: moment(),
+      status: 0,
+      plannedHours: 0,
+      workedHours: 0,
+      orderIndex: 0,
+    }));
+
+    dispatch(initDeliverables({ _id: metaSystem.mainSystem._id, deliverables }));
   };
 
   return (

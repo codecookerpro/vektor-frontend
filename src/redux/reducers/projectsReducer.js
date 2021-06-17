@@ -18,6 +18,7 @@ const projectsReducer = (state = INITIAL_STATE, { payload, type }) => {
         organization,
       };
     }
+
     case TYPES.EDIT_PROJECT: {
       const { _id: projectId } = payload;
       const { results } = state;
@@ -28,6 +29,7 @@ const projectsReducer = (state = INITIAL_STATE, { payload, type }) => {
         results: newResults,
       };
     }
+
     case TYPES.FETCH_META_SYSTEMS: {
       const { data, project } = payload;
 
@@ -39,6 +41,7 @@ const projectsReducer = (state = INITIAL_STATE, { payload, type }) => {
         },
       };
     }
+
     case TYPES.CREATE_META_SYSTEM: {
       const { project, _id } = payload;
 
@@ -51,6 +54,7 @@ const projectsReducer = (state = INITIAL_STATE, { payload, type }) => {
         },
       };
     }
+
     case TYPES.UPDATE_META_SYSTEM: {
       const { _id, name, equipmentCategory, equipmentType, equipmentName, equipmentNumber, project, productCode, site } = payload;
 
@@ -76,6 +80,7 @@ const projectsReducer = (state = INITIAL_STATE, { payload, type }) => {
         },
       };
     }
+
     case TYPES.DELETE_META_SYSTEM: {
       const { project, system } = payload;
 
@@ -107,6 +112,19 @@ const projectsReducer = (state = INITIAL_STATE, { payload, type }) => {
         },
       };
     }
+
+    case TYPES.INIT_DELIVERABLES: {
+      const { project, metaSystem } = payload;
+
+      return {
+        ...state,
+        metaSystems: {
+          ...state.metaSystems,
+          [project]: state.metaSystems[project].map((ms) => (ms._id === metaSystem ? { ...ms, mainSystem: payload } : ms)),
+        },
+      };
+    }
+
     default:
       return state;
   }

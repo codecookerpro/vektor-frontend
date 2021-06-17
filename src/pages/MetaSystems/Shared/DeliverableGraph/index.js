@@ -2,9 +2,11 @@ import React, { memo, useState } from 'react';
 import { Card, CardHeader, CardContent } from '@material-ui/core';
 import WorkflowGraph from 'parts/WorkflowGraph';
 import ContainedButton from 'components/UI/Buttons/ContainedButton';
+import { deliverablesToElements } from 'parts/WorkflowGraph/helper';
 
 const DeliverableGraph = ({ deliverables }) => {
   const [toggled, toggleGraph] = useState(false);
+  const [elements, setElements] = useState(deliverablesToElements(deliverables));
 
   return (
     <Card>
@@ -14,7 +16,7 @@ const DeliverableGraph = ({ deliverables }) => {
       />
       {toggled ? (
         <CardContent>
-          <WorkflowGraph editable={false} />
+          <WorkflowGraph editable={false} elements={elements} setElements={setElements} />
         </CardContent>
       ) : null}
     </Card>
