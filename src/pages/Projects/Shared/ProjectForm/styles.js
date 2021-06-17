@@ -16,3 +16,5 @@ export const useStyles = makeStyles((theme) => ({
     display: 'flex',
   },
 }));
+
+export default useStyles;

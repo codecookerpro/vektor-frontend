@@ -12,7 +12,7 @@ import { addProject, editProject } from 'redux/actions/projects';
 
 import { schema } from './schema';
 
-export const useProjectFrom = (project, mode) => {
+const useProjectFrom = (project, mode) => {
   const [currentOrganization, setCurrentOrganization] = useState('');
   const [filteresUsers, setFilteredUsers] = useState([]);
   const [assignedUserList, setAssignedUserList] = useState([]);
@@ -134,6 +134,7 @@ export const useProjectFrom = (project, mode) => {
       }
       setValue('projectManager', projectManager);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [_id, currentOrganization, mode, permissions, project, setValue]);
 
   return {
@@ -149,3 +150,5 @@ export const useProjectFrom = (project, mode) => {
     setCurrentOrganization,
   };
 };
+
+export default useProjectFrom;

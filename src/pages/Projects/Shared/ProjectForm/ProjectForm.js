@@ -7,8 +7,9 @@ import VektorTextField from 'components/UI/TextFields/VektorTextField';
 import FilterSelect from 'components/UI/Selects/FilterSelect';
 import UserTransfer from 'parts/UserTransfer';
 
-import { useProjectFrom, useVisibilityBooleans, PROJECT_DEFAULT_VALUES } from './helpers';
-import { useStyles } from './styles';
+import { useProjectFrom, useVisibilityBooleans } from './helpers';
+import { PROJECT_DEFAULT_VALUES } from './constants';
+import useStyles from './styles';
 
 const ProjectForm = ({ project = PROJECT_DEFAULT_VALUES, mode }) => {
   const classes = useStyles();
