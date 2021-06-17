@@ -1,3 +1,5 @@
+import { keyMirror } from 'utils/helpers/utility';
+
 export const ELEMENT_TYPES = Object.freeze({
   node: 'input_node',
   edge: 'CUSTOM_EDGE',
@@ -35,8 +37,8 @@ export const EDGE_PROPS = Object.freeze({
 });
 
 export const LAYOUT_DIRS = Object.freeze({
-  vertical: 'LR',
-  horizontal: 'TB',
+  vertical: 'TB',
+  horizontal: 'LR',
 });
 
 export const HANDLE_COLORS = Object.freeze({
@@ -75,4 +77,15 @@ export const NODE_DIALOGS = Object.freeze({
     ignoreButton: 'No, Go back.',
     proceedButton: 'Yes, proceed.',
   },
+});
+
+export const GRAPH_EVENTS = keyMirror({
+  graphInit: null,
+  graphLayout: null,
+  nodeCreate: null,
+  nodeLabelChange: null,
+  nodeDelete: null,
+  edgeCreate: null,
+  edgeDelete: null,
+  nodePosChange: null,
 });

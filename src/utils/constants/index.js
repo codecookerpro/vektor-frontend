@@ -16,3 +16,5 @@ export const FORM_MODE = {
   update: 'update',
   view: 'view',
 };
+
+export const noop = () => {};

@@ -1,6 +1,12 @@
 import * as TYPES from 'redux/types';
-import * as workflowTemplateAPI from 'services/api-workflow-template';
+import * as API from 'services/api-workflow-template';
 import { isEmpty } from 'utils/helpers/utility';
+// import {
+//   createWorkflowTemplateDeliverable as createAPI,
+//   updateWorkflowTemplateDeliverable as updateAPI,
+//   deleteWorkflowTemplateDeliverable as deleteAPI,
+//   updateWTDPosition as updatePositionAPI,
+// } from 'services/api-workflow-template';
 
 const getWorkflowTemplates =
   (refresh = false) =>
@@ -17,7 +23,7 @@ const getWorkflowTemplates =
         skip: 0,
         limit: 10000,
       };
-      const { data = [] } = await workflowTemplateAPI.getWorkflowTemplates(params);
+      const { data = [] } = await API.getWorkflowTemplates(params);
       await dispatch({
         type: TYPES.FETCH_WORKFLOW_TEMPLATES,
         payload: data,
@@ -83,14 +89,49 @@ const removeWorkflowTemplate = (workflowTemplate) => async (dispatch, getState) 
   }
 };
 
-const createWTD = (payload) => ({
-  type: TYPES.CREATE_WTD,
-  payload,
-});
+const createWTD = (params) => (dispatch) => {
+  API.createWorkflowTemplateDeliverable(params).then(({ data }) =>
+    dispatch({
+      type: TYPES.CREATE_WTD,
+      payload: data,
+    })
+  );
+};
 
-const updateWTD = (payload) => ({
-  type: TYPES.UPDATE_WTD,
-  payload,
-});
+const updateWTD = (params) => (dispatch) => {
+  API.updateWorkflowTemplateDeliverable(params).then(({ data }) =>
+    dispatch({
+      type: TYPES.UPDATE_WTD,
+      payload: data,
+    })
+  );
+};
 
-export { getWorkflowTemplates, addWorkflowTemplate, editWorkflowTemplate, removeWorkflowTemplate, createWTD, updateWTD };
+const deleteWTD = (params) => (dispatch) => {
+  API.deleteWorkflowTemplateDeliverable(params).then(({ data }) =>
+    dispatch({
+      type: TYPES.UPDATE_WTD,
+      payload: data,
+    })
+  );
+};
+
+const updateWTDPositions = (params) => (dispatch) => {
+  API.updateWTDPositions(params).then(({ data }) =>
+    dispatch({
+      type: TYPES.UPDATE_WTD,
+      payload: data,
+    })
+  );
+};
+
+export {
+  getWorkflowTemplates,
+  addWorkflowTemplate,
+  editWorkflowTemplate,
+  removeWorkflowTemplate,
+  createWTD,
+  updateWTD,
+  deleteWTD,
+  updateWTDPositions,
+};

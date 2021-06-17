@@ -8,13 +8,16 @@ import WorkflowTemplateChart from '../WorkflowTemplateChart';
 const NAV_LINKS = [LINKS.WORKFLOW_TEMPLATES];
 
 const AddWorkflowTemplate = () => {
-  const [nodes, setNodes] = useState([]);
+  const [elements, setElements] = useState([]);
+  const handleGraphEvent = (event, elements) => {
+    setElements(elements);
+  };
 
   return (
     <>
       <PageHeader title={LINKS.ADD_WORKFLOW_TEMPLATE.TITLE} links={NAV_LINKS} />
-      <WorkflowTemplateForm nodes={nodes} />
-      <WorkflowTemplateChart nodes={nodes} setNodes={setNodes} editable={true} />
+      <WorkflowTemplateForm nodes={elements} />
+      <WorkflowTemplateChart onGraphEvent={handleGraphEvent} editable={true} />
     </>
   );
 };

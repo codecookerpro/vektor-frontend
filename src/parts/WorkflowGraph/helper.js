@@ -147,7 +147,7 @@ export const nodeToDeliverable = (nodeId, nodes, mainId) => {
 export const elementsToDeliverables = (elements, templateId) =>
   elements.filter((el) => el.type === ELEMENT_TYPES.node).map((node) => nodeToDeliverable(node.id, elements, templateId));
 
-export const deliverablesToElements = (deliverables) =>
+export const deliverablesToElements = (deliverables, editable = true) =>
   deliverables.reduce((acc, deliverable) => {
     let { chartData: { type, position, edges } = {}, _id, name, start, end, completion, status, plannedHours, workedHours } = deliverable;
     edges = edges
@@ -156,7 +156,7 @@ export const deliverablesToElements = (deliverables) =>
           ...EDGE_PROPS,
           data: {
             ...e.data,
-            editable: true,
+            editable,
           },
         }))
       : [];
@@ -164,7 +164,7 @@ export const deliverablesToElements = (deliverables) =>
       id: _id,
       type,
       position,
-      data: { label: name, start, end, completion, status, plannedHours, workedHours, editable: true },
+      data: { label: name, start, end, completion, status, plannedHours, workedHours, editable },
       style: NODE_PROPS.style,
     };
 
@@ -220,15 +220,15 @@ export const getLayoutedElements = (elements, direction = LAYOUT_DIRS.vertical) 
   });
 };
 
-export const makeNode = (nodeNum, label, eventHandlers) => {
+export const makeNode = (nodeNum, eventHandlers, editable) => {
   const currentTimestamp = new Date().getTime();
   const objectId = ObjectID(currentTimestamp).toHexString();
   const node = {
     id: objectId,
     type: ELEMENT_TYPES.node,
     data: {
-      label,
-      editable: true,
+      label: NODE_PROPS.label,
+      editable,
       ...eventHandlers,
     },
     style: NODE_PROPS.style,
@@ -236,6 +236,40 @@ export const makeNode = (nodeNum, label, eventHandlers) => {
   };
 
   return node;
+};
+
+export const makeEdge = (conn, elements, eventHandlers, editable) => {
+  const { source, target } = conn;
+  const connections = elements.filter((el) => el.type === ELEMENT_TYPES.edge);
+
+  const checkCycle = (src, tar) => {
+    const children = connections.filter((cn) => cn.source === tar).map((cn) => cn.target);
+
+    if (children.includes(src)) {
+      return true;
+    } else if (children.reduce((acc, ch) => acc || checkCycle(src, ch), false)) {
+      return true;
+    }
+
+    return false;
+  };
+
+  const doubled = connections.filter((cn) => cn.source === source && cn.target === target).length;
+
+  if (checkCycle(source, target) || doubled) {
+    return null;
+  }
+
+  const newEdge = {
+    ...conn,
+    ...EDGE_PROPS,
+    data: {
+      handleRemoveEdge: eventHandlers.handleRemoveEdge(conn),
+      editable,
+    },
+  };
+
+  return newEdge;
 };
 
 export const validateElements = (nodes, eventHandlers) => {
