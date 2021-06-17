@@ -1,12 +1,6 @@
 import * as TYPES from 'redux/types';
 import * as API from 'services/api-workflow-template';
 import { isEmpty } from 'utils/helpers/utility';
-// import {
-//   createWorkflowTemplateDeliverable as createAPI,
-//   updateWorkflowTemplateDeliverable as updateAPI,
-//   deleteWorkflowTemplateDeliverable as deleteAPI,
-//   updateWTDPosition as updatePositionAPI,
-// } from 'services/api-workflow-template';
 
 const getWorkflowTemplates =
   (refresh = false) =>
