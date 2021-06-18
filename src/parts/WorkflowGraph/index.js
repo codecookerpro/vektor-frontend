@@ -44,13 +44,13 @@ const WorkflowGraph = ({ editable, deliverables, onGraphEvent }) => {
         </ReactFlow>
       </Box>
       <Grid container justify={editable ? 'space-between' : 'flex-end'} className={classes.buttonContainer}>
-        {editable ? (
+        {editable && (
           <Grid item xs={12} md={4}>
             <Button variant="contained" color="default" onClick={handleCreate}>
               <Plus /> Add Deliverable
             </Button>
           </Grid>
-        ) : null}
+        )}
         <Grid item xs={12} md={4}>
           <Grid container justify="flex-end">
             <Grid item>

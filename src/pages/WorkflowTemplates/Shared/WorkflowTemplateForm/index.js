@@ -74,13 +74,6 @@ const WorkflowTemplateForm = ({ workflowTemplate = {}, nodes = [], onEdit = () =
 
   const onSubmit = async (data) => {
     changeLoadingStatus(true);
-    const deliverables = elementsToDeliverables(nodes).filter((d) => d.name);
-
-    if (deliverables.length === 0) {
-      setErrorMessage('Deliverables are not valid.');
-      changeLoadingStatus(false);
-      return;
-    }
 
     try {
       const params = {
@@ -90,12 +83,21 @@ const WorkflowTemplateForm = ({ workflowTemplate = {}, nodes = [], onEdit = () =
       };
 
       if (isEmpty(workflowTemplate)) {
+        const deliverables = elementsToDeliverables(nodes).filter((d) => d.name);
+
+        if (deliverables.length === 0) {
+          setErrorMessage('Deliverables are not valid.');
+          changeLoadingStatus(false);
+          return;
+        }
+
         const response = await workflowTemplateAPI.createWorkflowTemplate({ ...params, deliverables });
         dispatch(addWorkflowTemplate(response.data));
       } else {
         const response = await workflowTemplateAPI.updateWorkflowTemplate({ ...params, _id: workflowTemplate._id });
         dispatch(editWorkflowTemplate(response.data));
       }
+
       history.push(LINKS.WORKFLOW_TEMPLATES.HREF);
     } catch (error) {
       if (error.response) {

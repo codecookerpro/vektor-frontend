@@ -7,9 +7,9 @@ import { makeNode, makeEdge, getLayoutedElements, deliverablesToElements, valida
 const useGraphLogic = ({ editable = false, deliverables = [], onGraphEvent = noop, boardRef }) => {
   const [elements, setElements] = useState([]);
   const [dialogToggled, setDialogToggled] = useState(false);
-  const [fullscreen, setFullscreen] = useState(false);
   const bodyStyleRef = useRef(null);
   const boardStyleRef = useRef(null);
+  const fullscreenRef = useRef(false);
 
   useEffect(() => {
     const elements = deliverablesToElements(deliverables, editable);
@@ -86,7 +86,7 @@ const useGraphLogic = ({ editable = false, deliverables = [], onGraphEvent = noo
     e.stopPropagation();
     e.preventDefault();
 
-    if (fullscreen) {
+    if (fullscreenRef.current) {
       document.body.style = bodyStyleRef.current;
       boardRef.current.style = boardStyleRef.current;
     } else {
@@ -99,17 +99,14 @@ const useGraphLogic = ({ editable = false, deliverables = [], onGraphEvent = noo
       style.background = 'white';
     }
 
-    setFullscreen(!fullscreen);
+    fullscreenRef.current = !fullscreenRef.current;
   };
 
   const handleEscapeFromFS = (e) => {
-    e.stopPropagation();
-    e.preventDefault();
-
-    if (fullscreen && e.key === 'Escape') {
+    if (fullscreenRef.current && e.key === 'Escape') {
       document.body.style = bodyStyleRef.current;
       boardRef.current.style = boardStyleRef.current;
-      setFullscreen(false);
+      fullscreenRef.current = false;
     }
   };
 
@@ -126,8 +123,8 @@ const useGraphLogic = ({ editable = false, deliverables = [], onGraphEvent = noo
         bodyStyleRef.current = document.body.style;
         boardStyleRef.current = boardRef.current.style;
 
-        fullscreenButton.onclick = handleFullscreen;
-        window.onkeydown = handleEscapeFromFS;
+        fullscreenButton.addEventListener('click', handleFullscreen);
+        window.addEventListener('keydown', handleEscapeFromFS);
       });
     }
     // eslint-disable-next-line
