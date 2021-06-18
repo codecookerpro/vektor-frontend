@@ -1,17 +1,20 @@
-import React, { memo, useRef } from 'react';
+import React, { memo, useRef, useState } from 'react';
 import { Button, Grid, Box } from '@material-ui/core';
 import { Plus } from 'react-feather';
 import ReactFlow, { MiniMap, Background, Controls } from 'react-flow-renderer';
 
-import CustomFlowNode from './CustomFlowNode';
+import { getCustomFlowNode } from './CustomFlowNode';
 import CustomFlowEdge from './CustomFlowEdge';
 import { GRAPH_PROPS, LAYOUT_DIRS, ELEMENT_TYPES } from './constants';
 import useGraphLogic from './useGraphLogic';
 import useStyles from './styles';
 
 const WorkflowGraph = ({ editable, deliverables, onGraphEvent }) => {
-  const classes = useStyles();
+  const [connectInProgress, setConnectInProgress] = useState(false);
   const boardRef = useRef(null);
+
+  const classes = useStyles({ connectInProgress });
+
   const { elements, dialogToggled, handleConnect, handleNodeDragStop, handleCreate, handleLayout } = useGraphLogic({
     editable,
     deliverables,
@@ -26,9 +29,11 @@ const WorkflowGraph = ({ editable, deliverables, onGraphEvent }) => {
           elements={elements}
           elementsSelectable={false}
           onConnect={handleConnect}
+          onConnectStart={() => setConnectInProgress(true)}
+          onConnectStop={() => setConnectInProgress(false)}
           onNodeDragStop={handleNodeDragStop}
           deleteKeyCode={46}
-          nodeTypes={{ [ELEMENT_TYPES.node]: CustomFlowNode }}
+          nodeTypes={{ [ELEMENT_TYPES.node]: getCustomFlowNode(classes.tClass, classes.sClass) }}
           edgeTypes={{ [ELEMENT_TYPES.edge]: CustomFlowEdge }}
           arrowHeadColor={GRAPH_PROPS.arrowHeadColor}
           zoomOnScroll={!dialogToggled}

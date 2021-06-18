@@ -41,11 +41,6 @@ export const LAYOUT_DIRS = Object.freeze({
   horizontal: 'LR',
 });
 
-export const HANDLE_COLORS = Object.freeze({
-  target: '#6283B6',
-  source: '#99BD6B',
-});
-
 export const IDENTIFIERS = Object.freeze({
   TARGET_LEFT: 'target-left',
   TARGET_TOP: 'target-top',

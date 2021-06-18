@@ -9,6 +9,12 @@ const useStyles = makeStyles((theme) => ({
   buttonContainer: {
     marginTop: theme.spacing(1),
   },
+  tClass: {
+    visibility: ({ connectInProgress }) => (connectInProgress ? 'visible' : 'hidden'),
+  },
+  sClass: {
+    visibility: ({ connectInProgress }) => (connectInProgress ? 'hidden' : 'visible'),
+  },
 }));
 
 export default useStyles;
