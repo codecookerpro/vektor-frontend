@@ -28,7 +28,7 @@ const deleteWorkflowTemplateDeliverable = async (params) => {
   return await axios.delete('/api/workflows/nested', { params });
 };
 
-const updateWTDPosition = async (params) => {
+const updateWTDPositions = async (params) => {
   return await axios.put('/api/workflows/positioning', params);
 };
 
@@ -40,5 +40,5 @@ export {
   createWorkflowTemplateDeliverable,
   updateWorkflowTemplateDeliverable,
   deleteWorkflowTemplateDeliverable,
-  updateWTDPosition,
+  updateWTDPositions,
 };

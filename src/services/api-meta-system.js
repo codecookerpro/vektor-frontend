@@ -28,4 +28,8 @@ const deleteMetaSystem = async (params) => {
   return await axios.delete(METASYSTEMS_URL, { params });
 };
 
-export { getMetaSystems, getSystemHistory, createMetaSystem, updateMetaSystem, deleteMetaSystem };
+const initDeliverables = async (params) => {
+  return await axios.put(`/api/metasystems/systems/initialize`, params);
+};
+
+export { getMetaSystems, getSystemHistory, createMetaSystem, updateMetaSystem, deleteMetaSystem, initDeliverables };

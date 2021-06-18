@@ -12,7 +12,6 @@ const ProjectHistory = lazy(() => import(/* webpackChunkName: 'ProjectHistory' *
 const ProjectPhases = lazy(() => import(/* webpackChunkName: 'ProjectPhases' */ 'pages/Projects/ProjectPhases'));
 const AddMetaSystem = lazy(() => import(/* webpackChunkName: 'AddMetaSystem' */ 'pages/MetaSystems/AddMetaSystem'));
 const EditMetaSystem = lazy(() => import(/* webpackChunkName: 'EditMetaSystem' */ 'pages/MetaSystems/EditMetaSystem'));
-const DeliverableTrendChart = lazy(() => import(/* webpackChunkName: 'DeliverableTrendChart' */ 'pages/Systems/DeliverableTrendChart'));
 const ReportList = lazy(() => import(/* webpackChunkName: 'ReportList' */ 'pages/Reports'));
 const Gantt = lazy(() => import(/* webpackChunkName: 'Gantt' */ 'pages/Projects/Gantt'));
 
@@ -79,12 +78,6 @@ const projectManagementRoutes = Object.freeze({
       path: LINKS.EDIT_META_SYSTEM.HREF,
       name: LINKS.EDIT_META_SYSTEM.TITLE,
       component: EditMetaSystem,
-      isNotSlide: true,
-    },
-    {
-      path: LINKS.DELIVERABLE_TREND_CHART.HREF,
-      name: LINKS.DELIVERABLE_TREND_CHART.TITLE,
-      component: DeliverableTrendChart,
       isNotSlide: true,
     },
     {

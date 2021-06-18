@@ -17,6 +17,7 @@ const NewSow = ({ mode, sow = {}, control, errors, isOrganizationVisible }) => {
     if (mode === FORM_MODE.update) {
       setCurrentOrganization(sow.organization);
     }
+    // eslint-disable-next-line
   }, [sow]);
 
   useEffect(() => {

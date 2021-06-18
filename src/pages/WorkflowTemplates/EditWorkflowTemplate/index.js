@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useState } from 'react';
+import React, { memo, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useHistory } from 'react-router-dom';
 
@@ -9,7 +9,9 @@ import WorkflowTemplateChart from '../WorkflowTemplateChart';
 import WorkflowTemplateForm from '../Shared/WorkflowTemplateForm';
 import LINKS from 'utils/constants/links';
 import { isEmpty } from 'utils/helpers/utility';
-import { deliverablesToElements } from 'parts/WorkflowGraph/helper';
+import { GRAPH_EVENTS } from 'parts/WorkflowGraph/constants';
+import { nodeToDeliverable, elementsToDeliverables } from 'parts/WorkflowGraph/helper';
+import { createWTD, updateWTD, deleteWTD, updateWTDPositions } from 'redux/actions/workflowTemplates';
 
 const NAV_LINKS = [LINKS.WORKFLOW_TEMPLATES];
 
@@ -17,30 +19,53 @@ const EditWorkflowTemplate = () => {
   const { id } = useParams();
   const history = useHistory();
   const dispatch = useDispatch();
-  const [nodes, setNodes] = useState([]);
+  const templates = useSelector((state) => state.workflowTemplates.results);
+  const template = useMemo(() => templates.find((item) => item._id === id), [id, templates]);
 
-  const { results = [] } = useSelector((state) => state.workflowTemplates);
-
-  useEffect(() => {
-    dispatch(getWorkflowTemplates());
-  }, [dispatch]);
-
-  const workflowTemplate = results.find((item) => item._id === id);
+  useEffect(() => dispatch(getWorkflowTemplates()));
 
   const historyHandler = () => {
     history.push(LINKS.WORKFLOW_TEMPLATE_HISTORY.HREF.replace(':id', id));
   };
 
-  useEffect(() => {
-    if (isEmpty(workflowTemplate) || isEmpty(workflowTemplate.deliverables)) {
-      return;
+  const handleGraphEvent = (event, elements, nodeId, data) => {
+    switch (event) {
+      case GRAPH_EVENTS.nodeCreate: {
+        dispatch(createWTD(nodeToDeliverable(nodeId, elements, id)));
+        break;
+      }
+      case GRAPH_EVENTS.nodeDelete: {
+        dispatch(deleteWTD({ mainId: id, _id: nodeId }));
+        break;
+      }
+      case GRAPH_EVENTS.nodeLabelChange:
+      case GRAPH_EVENTS.edgeCreate:
+      case GRAPH_EVENTS.edgeDelete: {
+        dispatch(updateWTD(nodeToDeliverable(nodeId, elements, id)));
+        break;
+      }
+      case GRAPH_EVENTS.nodePosChange: {
+        dispatch(
+          updateWTD(
+            nodeToDeliverable(
+              nodeId,
+              elements.map((n) => (n.id === nodeId ? { ...n, position: data } : n)),
+              id
+            )
+          )
+        );
+        break;
+      }
+      case GRAPH_EVENTS.graphLayout: {
+        const deliverables = elementsToDeliverables(elements).map(({ _id, chartData }) => ({ _id, chartData }));
+        dispatch(updateWTDPositions({ _id: id, deliverables }));
+        break;
+      }
+
+      default:
+        break;
     }
-
-    const { deliverables } = workflowTemplate;
-    const nodes = deliverablesToElements(deliverables);
-
-    setTimeout(() => setNodes(nodes));
-  }, [workflowTemplate]);
+  };
 
   return (
     <>
@@ -49,10 +74,10 @@ const EditWorkflowTemplate = () => {
         links={NAV_LINKS}
         leftElement={<ContainedButton onClick={historyHandler}>History</ContainedButton>}
       />
-      {isEmpty(workflowTemplate) || (
+      {isEmpty(template) || (
         <>
-          <WorkflowTemplateForm nodes={nodes} workflowTemplate={workflowTemplate} />
-          <WorkflowTemplateChart nodes={nodes} setNodes={setNodes} editable={true} workflowTemplateId={workflowTemplate._id} />
+          <WorkflowTemplateForm workflowTemplate={template} />
+          <WorkflowTemplateChart deliverables={template.deliverables} editable={true} onGraphEvent={handleGraphEvent} />
         </>
       )}
     </>
