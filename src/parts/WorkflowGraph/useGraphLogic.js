@@ -104,6 +104,8 @@ const useGraphLogic = ({ editable = false, deliverables = [], onGraphEvent = noo
 
   const handleEscapeFromFS = (e) => {
     if (fullscreenRef.current && e.key === 'Escape') {
+      e.preventDefault();
+      e.stopPropagation();
       document.body.style = bodyStyleRef.current;
       boardRef.current.style = boardStyleRef.current;
       fullscreenRef.current = false;

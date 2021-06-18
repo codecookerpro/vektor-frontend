@@ -11,7 +11,6 @@ import { Alert } from '@material-ui/lab';
 import { makeStyles } from '@material-ui/core/styles';
 
 import { PERMISSION_TYPE } from 'utils/constants/permissions';
-import * as workflowTemplateAPI from 'services/api-workflow-template';
 import { addWorkflowTemplate, editWorkflowTemplate, removeWorkflowTemplate } from 'redux/actions/workflowTemplates';
 import VektorTextField from 'components/UI/TextFields/VektorTextField';
 import FilterSelect from 'components/UI/Selects/FilterSelect';
@@ -21,7 +20,7 @@ import useLoading from 'utils/hooks/useLoading';
 import { isEmpty } from 'utils/helpers/utility';
 import { setPopup } from 'redux/actions/popupActions';
 import { POPUP_TYPE } from 'utils/constants/popupType';
-import { FORM_MODE } from 'utils/constants';
+import { FORM_MODE, noop } from 'utils/constants';
 import { elementsToDeliverables } from 'parts/WorkflowGraph/helper';
 
 const useStyles = makeStyles((theme) => ({
@@ -44,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const WorkflowTemplateForm = ({ workflowTemplate = {}, nodes = [], onEdit = () => {} }) => {
+const WorkflowTemplateForm = ({ workflowTemplate = {}, onEdit = noop, getElements = noop }) => {
   const classes = useStyles();
   const history = useHistory();
   const dispatch = useDispatch();
@@ -83,7 +82,7 @@ const WorkflowTemplateForm = ({ workflowTemplate = {}, nodes = [], onEdit = () =
       };
 
       if (isEmpty(workflowTemplate)) {
-        const deliverables = elementsToDeliverables(nodes).filter((d) => d.name);
+        const deliverables = elementsToDeliverables(getElements()).filter((d) => d.name);
 
         if (deliverables.length === 0) {
           setErrorMessage('Deliverables are not valid.');
@@ -91,11 +90,9 @@ const WorkflowTemplateForm = ({ workflowTemplate = {}, nodes = [], onEdit = () =
           return;
         }
 
-        const response = await workflowTemplateAPI.createWorkflowTemplate({ ...params, deliverables });
-        dispatch(addWorkflowTemplate(response.data));
+        dispatch(addWorkflowTemplate({ ...params, deliverables }));
       } else {
-        const response = await workflowTemplateAPI.updateWorkflowTemplate({ ...params, _id: workflowTemplate._id });
-        dispatch(editWorkflowTemplate(response.data));
+        dispatch(editWorkflowTemplate({ ...params, _id: workflowTemplate._id }));
       }
 
       history.push(LINKS.WORKFLOW_TEMPLATES.HREF);
@@ -118,8 +115,7 @@ const WorkflowTemplateForm = ({ workflowTemplate = {}, nodes = [], onEdit = () =
         popupText: 'Are you sure you want to delete this template?',
         onConfirm: async () => {
           try {
-            await workflowTemplateAPI.deleteWorkflowTemplate({ _id: workflowTemplate._id });
-            dispatch(removeWorkflowTemplate(workflowTemplate));
+            dispatch(removeWorkflowTemplate({ _id: workflowTemplate._id }));
             history.push(LINKS.WORKFLOW_TEMPLATES.HREF);
           } catch (error) {
             if (error.response) {
