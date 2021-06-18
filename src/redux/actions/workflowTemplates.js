@@ -68,7 +68,7 @@ const removeWorkflowTemplate = (params) => async (dispatch, getState) => {
 
       dispatch({
         type: TYPES.FETCH_WORKFLOW_TEMPLATES,
-        payload: results.filter((item) => item._id !== data._id),
+        payload: results.filter((item) => item._id !== params._id),
       });
     })
     .catch((error) => console.log('[removeWorkflowTemplate] error => ', error));
