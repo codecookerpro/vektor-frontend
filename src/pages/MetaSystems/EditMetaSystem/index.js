@@ -2,7 +2,6 @@ import React, { memo, useEffect, useState, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { Grid } from '@material-ui/core';
-import moment from 'moment';
 
 import PageHeader from 'parts/PageHeader';
 import MetaSystemForm from '../Shared/MetaSystemForm';
@@ -48,12 +47,10 @@ const EditMetaSystem = () => {
     }
 
     const dNum = metaSystem.mainSystem.deliverables.length;
-    const dlgExist = initDlg || selectDlg;
-
-    if (formMode === FORM_MODE.update && dNum === 0 && !dlgExist) {
+    if (formMode === FORM_MODE.update && dNum === 0) {
       showInitDlg(true);
     }
-  }, [formMode, metaSystem, initDlg, selectDlg]);
+  }, [formMode, metaSystem]);
 
   const handleInitDlgClose = () => showInitDlg(false);
   const handleWithTemplate = () => {
@@ -65,18 +62,8 @@ const EditMetaSystem = () => {
   };
   const handleSelectDlgClose = () => showSelectDlg(false);
   const handleSelectTemplate = (template) => {
-    const deliverables = template.deliverables.map((d) => ({
-      ...d,
-      start: moment(),
-      end: moment(),
-      completion: moment(),
-      status: 0,
-      plannedHours: 0,
-      workedHours: 0,
-      orderIndex: 0,
-    }));
-
-    dispatch(initDeliverables({ _id: metaSystem.mainSystem._id, deliverables }));
+    showSelectDlg(false);
+    dispatch(initDeliverables({ _id: metaSystem.mainSystem._id, deliverables: template.deliverables }));
   };
 
   return (

@@ -12,9 +12,11 @@ const useGraphLogic = ({ editable = false, deliverables = [], onGraphEvent = noo
   const fullscreenRef = useRef(false);
 
   useEffect(() => {
-    const elements = deliverablesToElements(deliverables, editable);
-    setElements(elements);
-    onGraphEvent(GRAPH_EVENTS.graphInit, elements);
+    if (deliverables.length) {
+      const elements = deliverablesToElements(deliverables, editable);
+      setElements(elements);
+      onGraphEvent(GRAPH_EVENTS.graphInit, elements);
+    }
     // eslint-disable-next-line
   }, [deliverables, editable]);
 
