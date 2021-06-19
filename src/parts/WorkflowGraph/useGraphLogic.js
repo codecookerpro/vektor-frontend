@@ -79,7 +79,8 @@ const useGraphLogic = ({ editable = false, deliverables = [], onGraphEvent = noo
 
   const handleNodeDragStop = (e, node) => {
     e.preventDefault();
-    onGraphEvent(GRAPH_EVENTS.nodePosChange, elements, node.id, node.position);
+    const updatedElements = elements.map((n) => (n.id === node.id ? { ...n, position: node.position } : n));
+    onGraphEvent(GRAPH_EVENTS.nodePosChange, updatedElements, node.id);
   };
 
   const handleFullscreen = (e) => {

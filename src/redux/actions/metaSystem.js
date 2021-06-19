@@ -110,3 +110,36 @@ export const createDeliverable = (params) => (dispatch) => {
     })
     .catch((err) => console.error('[createDeliverable] error => ', err));
 };
+
+export const updateDeliverable = (params) => (dispatch) => {
+  API.updateDeliverable(params)
+    .then(({ data }) => {
+      dispatch({
+        type: INIT_DELIVERABLES,
+        payload: data,
+      });
+    })
+    .catch((err) => console.error('[createDeliverable] error => ', err));
+};
+
+export const deleteDeliverable = (params) => (dispatch) => {
+  API.deleteDeliverable(params)
+    .then(({ data }) => {
+      dispatch({
+        type: INIT_DELIVERABLES,
+        payload: data,
+      });
+    })
+    .catch((err) => console.error('[deleteDeliverable] error => ', err));
+};
+
+export const updateDeliverablePositions = (params) => (dispatch) => {
+  API.updateDeliverablePositions(params)
+    .then(({ data }) => {
+      dispatch({
+        type: INIT_DELIVERABLES,
+        payload: data,
+      });
+    })
+    .catch((err) => console.error('[updateDeliverablePositions] error => ', err));
+};

@@ -40,8 +40,8 @@ export const updateDeliverable = async (params) => {
   return await axios.put(`${METASYSTEMS_URL}/systems/nested`, params);
 };
 
-export const deteteDeliverable = async (params) => {
-  return await axios.delete(`${METASYSTEMS_URL}/systems/nested`, params);
+export const deleteDeliverable = async (params) => {
+  return await axios.delete(`${METASYSTEMS_URL}/systems/nested`, { params });
 };
 
 export const updateDeliverablePositions = async (params) => {

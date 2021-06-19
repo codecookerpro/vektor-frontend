@@ -6,46 +6,32 @@ import ContainedButton from 'components/UI/Buttons/ContainedButton';
 
 import { GRAPH_EVENTS } from 'parts/WorkflowGraph/constants';
 import { nodeToDeliverable, elementsToDeliverables } from 'parts/WorkflowGraph/helper';
-import { createWTD, updateWTD, deleteWTD, updateWTDPositions } from 'redux/actions/workflowTemplates';
+import { createDeliverable, updateDeliverable, deleteDeliverable, updateDeliverablePositions } from 'redux/actions/metaSystem';
+import { restrict } from 'utils/helpers/utility';
 
 const DeliverableGraph = ({ editable, mainSystem }) => {
   const dispatch = useDispatch();
   const [toggled, toggleGraph] = useState(false);
-  const id = 0;
 
-  const handleGraphEvent = (event, elements, nodeId, data) => {
+  const handleGraphEvent = (event, elements, nodeId) => {
+    const mainId = mainSystem._id;
     switch (event) {
-      case GRAPH_EVENTS.nodeCreate: {
-        dispatch(createWTD(nodeToDeliverable(nodeId, elements)));
+      case GRAPH_EVENTS.nodeCreate:
+        dispatch(createDeliverable(nodeToDeliverable(nodeId, elements, mainId)));
         break;
-      }
-      case GRAPH_EVENTS.nodeDelete: {
-        dispatch(deleteWTD({ mainId: id, _id: nodeId }));
+      case GRAPH_EVENTS.nodeDelete:
+        dispatch(deleteDeliverable({ mainId, _id: nodeId }));
         break;
-      }
       case GRAPH_EVENTS.nodeLabelChange:
       case GRAPH_EVENTS.edgeCreate:
-      case GRAPH_EVENTS.edgeDelete: {
-        dispatch(updateWTD(nodeToDeliverable(nodeId, elements)));
+      case GRAPH_EVENTS.edgeDelete:
+      case GRAPH_EVENTS.nodePosChange:
+        dispatch(updateDeliverable(nodeToDeliverable(nodeId, elements, mainId)));
         break;
-      }
-      case GRAPH_EVENTS.nodePosChange: {
-        dispatch(
-          updateWTD(
-            nodeToDeliverable(
-              nodeId,
-              elements.map((n) => (n.id === nodeId ? { ...n, position: data } : n)),
-              id
-            )
-          )
-        );
+      case GRAPH_EVENTS.graphLayout:
+        const deliverables = elementsToDeliverables(elements).map((d) => restrict(d, ['_id', 'chartData']));
+        dispatch(updateDeliverablePositions({ _id: mainId, deliverables }));
         break;
-      }
-      case GRAPH_EVENTS.graphLayout: {
-        const deliverables = elementsToDeliverables(elements).map(({ _id, chartData }) => ({ _id, chartData }));
-        dispatch(updateWTDPositions({ _id: id, deliverables }));
-        break;
-      }
 
       default:
         break;
