@@ -119,7 +119,7 @@ export const updateDeliverable = (params) => (dispatch) => {
         payload: data,
       });
     })
-    .catch((err) => console.error('[createDeliverable] error => ', err));
+    .catch((err) => console.error('[updateDeliverable] error => ', err));
 };
 
 export const deleteDeliverable = (params) => (dispatch) => {
