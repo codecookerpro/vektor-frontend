@@ -93,7 +93,7 @@ const useGraphLogic = ({ editable = false, deliverables = [], onGraphEvent = noo
       document.body.style.overflow = 'hidden';
       const style = boardRef.current.style;
       style.position = 'fixed';
-      style.zIndex = 9999999;
+      style.zIndex = 1250;
       style.top = '0px';
       style.left = '0px';
       style.background = 'white';

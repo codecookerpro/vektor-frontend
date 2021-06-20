@@ -29,7 +29,7 @@ const useStyles = makeStyles(() => ({
     maxHeight: '100%',
   },
   nodePopupContainer: {
-    zIndex: 100,
+    zIndex: 1260,
   },
   nodePopup: {
     marginTop: '50px',
