@@ -6,7 +6,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Button } from '@material-ui/core';
 import NodeDialog from './NodeDialog';
 import CloseIcon from '@material-ui/icons/Close';
-import { IDENTIFIERS, HANDLE_TYPES, NODE_DIALOGS } from './constants';
+import { IDENTIFIERS, HANDLE_TYPES, NODE_DIALOGS, GRAPH_PROPS } from './constants';
 
 const useStyles = makeStyles(() => ({
   nodeContent: {
@@ -29,7 +29,7 @@ const useStyles = makeStyles(() => ({
     maxHeight: '100%',
   },
   nodePopupContainer: {
-    zIndex: 1260,
+    zIndex: GRAPH_PROPS.zIndex + 1,
   },
   nodePopup: {
     marginTop: '50px',
