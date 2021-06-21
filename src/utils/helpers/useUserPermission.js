@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
 
-import { PERMISSION_TYPE } from 'utils/constants';
+import { PERMISSION_TYPE } from '../constants';
 
 const useUserPermissions = () => {
   const { permissions } = useSelector(({ auth }) => {

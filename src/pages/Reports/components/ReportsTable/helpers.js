@@ -41,7 +41,7 @@ const useReportsTableLogic = (isAdmin, filter) => {
     } else {
       dispatch(getReports({ organization: userOrganization }, true));
     }
-  }, []);
+  }, [dispatch, isAdmin, userOrganization]);
 
   useEffect(() => {
     const filterKeys = Object.keys(filter);

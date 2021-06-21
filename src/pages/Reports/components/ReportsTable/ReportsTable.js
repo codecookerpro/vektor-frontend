@@ -4,7 +4,7 @@ import { CSVLink } from 'react-csv';
 
 import ContainedButton from 'components/UI/Buttons/ContainedButton';
 import VektorTableContainer from 'parts/Tables/VektorTableContainer';
-import useUserPermissions from 'pages/Reports/helpers';
+import useUserPermissions from 'utils/helpers/useUserPermission';
 
 import { COLUMNS, HEADERS } from './constants';
 import useReportsTableLogic from './helpers';

@@ -38,7 +38,7 @@ const useReportFiltersLogic = (isAdmin, filter, setFilter) => {
     } else {
       dispatch(getMetaSystemsFilter([]));
     }
-  }, [filter]);
+  }, [dispatch, filter]);
 
   const inputHandler = ({ target }) => {
     const { name, value } = target;

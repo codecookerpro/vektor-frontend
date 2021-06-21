@@ -12,7 +12,7 @@ const useSystemTrendChartData = (id) => {
 
   const { name } = useMemo(() => projects.find((item) => item._id === id) || {}, [id, projects]);
 
-  useEffect(() => dispatch(getSystemHistory(id, true)), [id, systemTrends]);
+  useEffect(() => dispatch(getSystemHistory(id, true)), [dispatch, id]);
 
   useEffect(() => {
     const systemTrendsCharts = {};
