@@ -15,6 +15,9 @@ export const useStyles = makeStyles((theme) => ({
   buttonContainer: {
     display: 'flex',
   },
+  deleteButton: {
+    marginLeft: theme.spacing(1),
+  },
 }));
 
 export default useStyles;

@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import { Controller } from 'react-hook-form';
 import { Card, CardContent, Grid, Button, Typography } from '@material-ui/core';
 
+import { ColorButton } from 'components/UI/Buttons';
 import VektorTextField from 'components/UI/TextFields/VektorTextField';
 import FilterSelect from 'components/UI/Selects/FilterSelect';
 import UserTransfer from 'parts/UserTransfer';
@@ -13,9 +14,20 @@ import useStyles from './styles';
 
 const ProjectForm = ({ project = PROJECT_DEFAULT_VALUES, mode }) => {
   const classes = useStyles();
-  const { errors, control, PMs, supervisors, filteresUsers, assignedUserList, organization, handleAssignedUsers, onSubmit, setCurrentOrganization } =
-    useProjectFrom(project, mode);
-  const { isOrganizationVisible, isSupervisorVisible, isViewingMode, isCreationMode } = useVisibilityBooleans(organization, mode);
+  const {
+    errors,
+    control,
+    PMs,
+    supervisors,
+    filteresUsers,
+    assignedUserList,
+    organization,
+    handleAssignedUsers,
+    onSubmit,
+    onDeleteProject,
+    setCurrentOrganization,
+  } = useProjectFrom(project, mode);
+  const { isOrganizationVisible, isSupervisorVisible, isViewingMode, isCreationMode, isButtonEnabled } = useVisibilityBooleans(organization, mode);
   const { results: organizations } = useSelector(({ organizations }) => organizations);
 
   return (
@@ -116,18 +128,25 @@ const ProjectForm = ({ project = PROJECT_DEFAULT_VALUES, mode }) => {
               />
             </Grid>
             <Grid item xs={12}>
-              <div className={classes.buttonContainer}>
-                {!isViewingMode && (
-                  <Button variant="contained" color="primary" onClick={onSubmit(false)}>
-                    Save
-                  </Button>
-                )}
-                {isCreationMode && (
-                  <Button color="primary" className={classes.addAnother} onClick={onSubmit(true)}>
-                    Save and add another
-                  </Button>
-                )}
-              </div>
+              {isButtonEnabled && (
+                <div className={classes.buttonContainer}>
+                  {!isViewingMode && (
+                    <>
+                      <Button variant="contained" color="primary" onClick={onSubmit(false)}>
+                        Save
+                      </Button>
+                      <ColorButton className={classes.deleteButton} variant="contained" colour="red" onClick={onDeleteProject}>
+                        Delete Project
+                      </ColorButton>
+                    </>
+                  )}
+                  {isCreationMode && (
+                    <Button color="primary" className={classes.addAnother} onClick={onSubmit(true)}>
+                      Save and add another
+                    </Button>
+                  )}
+                </div>
+              )}
             </Grid>
           </Grid>
         </form>
