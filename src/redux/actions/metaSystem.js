@@ -4,7 +4,13 @@ import {
   updateMetaSystem as updateAPI,
   deleteMetaSystem as deleteAPI,
 } from 'services/api-meta-system';
-import { CREATE_META_SYSTEM, FETCH_META_SYSTEMS, DELETE_META_SYSTEM, UPDATE_META_SYSTEM } from 'redux/types';
+import { CREATE_META_SYSTEM, FETCH_META_SYSTEMS, DELETE_META_SYSTEM, UPDATE_META_SYSTEM, FETCH_META_SYSTEMS_FILTER } from 'redux/types';
+import { isEmpty } from 'utils/helpers/utility';
+
+export const getMetaSystemsFilter = (data, isLoading = false) => ({
+  type: FETCH_META_SYSTEMS_FILTER,
+  payload: { data, isLoading },
+});
 
 export const createMetaSystem = (params) => (dispatch) => {
   createAPI(params)
@@ -28,7 +34,12 @@ export const readMetaSystem =
       return;
     }
 
-    readAPI({ filter: { project }, sort: 'name' })
+    const params = {
+      sort: 'name',
+      ...(!isEmpty(project) && { filter: { project } }),
+    };
+
+    readAPI(params)
       .then(({ data }) => {
         dispatch({
           type: FETCH_META_SYSTEMS,
@@ -58,4 +69,20 @@ export const deleteMetaSystem = (project, system) => (dispatch) => {
       });
     })
     .catch((err) => console.error('[deleteMetaSystem] error => ', err));
+};
+
+export const fetchMetaSystemsFilter = (project) => async (dispatch) => {
+  dispatch(getMetaSystemsFilter(null, true));
+  const params = {
+    sort: 'name',
+    filter: { project },
+  };
+
+  const response = await readAPI(params).catch((err) => console.error('[fetchMetaSystemsFilter] error => ', err));
+
+  if (response) {
+    const { data } = response;
+
+    dispatch(getMetaSystemsFilter(data));
+  }
 };

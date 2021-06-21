@@ -117,7 +117,7 @@ const createProjectPhase = (phase) => async (dispatch) => {
 
     return isCompleted;
   } catch (error) {
-    console.log('[editProject] error => ', error);
+    console.log('[createProjectPhase] error => ', error);
   }
 };
 
@@ -135,7 +135,7 @@ const updateProjectPhase = (phase) => async (dispatch) => {
 
     return isCompleted;
   } catch (error) {
-    console.log('[editProject] error => ', error);
+    console.log('[updateProjectPhase] error => ', error);
   }
 };
 
@@ -153,7 +153,7 @@ const deleteProjectPhase = (phase) => async (dispatch) => {
 
     return isCompleted;
   } catch (error) {
-    console.log('[editProject] error => ', error);
+    console.log('[deleteProjectPhase] error => ', error);
   }
 };
 

@@ -44,7 +44,7 @@ const EditProject = () => {
             <Grid item xs={8}>
               <DetailLinkCard title="System Trend Chart" onDetail={onClickButton(LINKS.SYSTEM_TREND_CHART.HREF)} />
             </Grid>
-            <ContainedButton onClick={onClickButton(LINKS.ADD_META_SYSTEM.HREF.replace(':id', project?._id))}>
+            <ContainedButton onClick={onClickButton(LINKS.ADD_META_SYSTEM.HREF)}>
               <Plus /> Add System
             </ContainedButton>
           </Grid>
