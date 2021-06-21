@@ -3,8 +3,16 @@ import {
   getMetaSystems as readAPI,
   updateMetaSystem as updateAPI,
   deleteMetaSystem as deleteAPI,
+  initDeliverables as initDeliverablesAPI,
 } from 'services/api-meta-system';
-import { CREATE_META_SYSTEM, FETCH_META_SYSTEMS, DELETE_META_SYSTEM, UPDATE_META_SYSTEM, FETCH_META_SYSTEMS_FILTER } from 'redux/types';
+import {
+  CREATE_META_SYSTEM,
+  FETCH_META_SYSTEMS,
+  DELETE_META_SYSTEM,
+  UPDATE_META_SYSTEM,
+  INIT_DELIVERABLES,
+  FETCH_META_SYSTEMS_FILTER,
+} from 'redux/types';
 import { isEmpty } from 'utils/helpers/utility';
 
 export const getMetaSystemsFilter = (data, isLoading = false) => ({
@@ -85,4 +93,15 @@ export const fetchMetaSystemsFilter = (project) => async (dispatch) => {
 
     dispatch(getMetaSystemsFilter(data));
   }
+};
+
+export const initDeliverables = (params) => (dispatch) => {
+  initDeliverablesAPI(params)
+    .then(({ data }) => {
+      dispatch({
+        type: INIT_DELIVERABLES,
+        payload: data,
+      });
+    })
+    .catch((err) => console.error('[initDeliverables] error => ', err));
 };

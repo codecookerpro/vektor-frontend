@@ -14,7 +14,7 @@ const DeliverableGraph = ({ deliverables }) => {
       />
       {toggled ? (
         <CardContent>
-          <WorkflowGraph editable={false} />
+          <WorkflowGraph editable={true} deliverables={deliverables} />
         </CardContent>
       ) : null}
     </Card>
