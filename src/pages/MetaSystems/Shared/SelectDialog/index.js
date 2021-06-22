@@ -9,7 +9,6 @@ import FilterSelect from 'components/UI/Selects/FilterSelect';
 import { getWorkflowTemplates } from 'redux/actions/workflowTemplates';
 import WorkflowGraph from 'parts/WorkflowGraph';
 import { isEmpty } from 'lodash';
-import { deliverablesToElements } from 'parts/WorkflowGraph/helper';
 
 const useStyles = makeStyles((theme) => ({
   selector: {
@@ -22,22 +21,15 @@ const SelectDialog = ({ open, onClose, onSelect }) => {
   const classes = useStyles();
   const templates = useSelector((state) => state.workflowTemplates.results);
   const [templateId, setTemplateId] = useState(null);
-  const { workflow, template } = useMemo(() => {
+  const template = useMemo(() => {
     if (isEmpty(templateId) || isEmpty(templates)) {
-      return [];
+      return {};
     }
 
-    const template = templates.find((t) => t._id === templateId);
-    const workflow = deliverablesToElements(template.deliverables);
-
-    return { template, workflow };
+    return templates.find((t) => t._id === templateId);
   }, [templateId, templates]);
 
-  useEffect(() => {
-    if (templates.length === 0) {
-      dispatch(getWorkflowTemplates());
-    }
-  }, [dispatch, templates]);
+  useEffect(() => dispatch(getWorkflowTemplates()));
 
   const handleSelect = () => {
     onSelect(template);
@@ -65,7 +57,7 @@ const SelectDialog = ({ open, onClose, onSelect }) => {
             />
           </Grid>
           <Grid item xs={12}>
-            <WorkflowGraph editable={false} elements={workflow} />
+            <WorkflowGraph editable={false} deliverables={template.deliverables} />
           </Grid>
         </Grid>
       </DialogContent>

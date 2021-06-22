@@ -2,7 +2,6 @@ import React, { memo, useEffect, useState, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { Grid } from '@material-ui/core';
-import moment from 'moment';
 
 import PageHeader from 'parts/PageHeader';
 import MetaSystemForm from '../Shared/MetaSystemForm';
@@ -13,7 +12,8 @@ import SelectDialog from '../Shared/SelectDialog';
 
 import LINKS from 'utils/constants/links';
 import { FORM_MODE } from 'utils/constants';
-import { initDeliverables, readMetaSystem } from 'redux/actions/metaSystem';
+import { initDeliverables, readMetaSystem, updateDeliverable } from 'redux/actions/metaSystem';
+import { restrict } from 'utils/helpers/utility';
 
 const NAV_LINKS = [LINKS.PROJECT_MANAGEMENT, LINKS.PROJECTS];
 
@@ -32,18 +32,21 @@ const EditMetaSystem = () => {
     return { project, metaSystem };
   });
 
-  const title = useMemo(() => {
-    if (formMode === FORM_MODE.view) {
-      return 'View System';
-    } else {
-      return LINKS.EDIT_META_SYSTEM.TITLE;
-    }
+  const { title, editable } = useMemo(() => {
+    const title = formMode === FORM_MODE.view ? 'View System' : LINKS.EDIT_META_SYSTEM.TITLE;
+    const editable = formMode === FORM_MODE.update;
+    return { title, editable };
   }, [formMode]);
 
   useEffect(() => dispatch(readMetaSystem(projectId)), [dispatch, projectId]);
 
   useEffect(() => {
-    if (formMode === FORM_MODE.update && metaSystem.mainSystem.deliverables.length === 0) {
+    if (!metaSystem) {
+      return;
+    }
+
+    const dNum = metaSystem.mainSystem.deliverables.length;
+    if (formMode === FORM_MODE.update && dNum === 0) {
       showInitDlg(true);
     }
   }, [formMode, metaSystem]);
@@ -58,18 +61,12 @@ const EditMetaSystem = () => {
   };
   const handleSelectDlgClose = () => showSelectDlg(false);
   const handleSelectTemplate = (template) => {
-    const deliverables = template.deliverables.map((d) => ({
-      ...d,
-      start: moment(),
-      end: moment(),
-      completion: moment(),
-      status: 0,
-      plannedHours: 0,
-      workedHours: 0,
-      orderIndex: 0,
-    }));
-
-    dispatch(initDeliverables({ _id: metaSystem.mainSystem._id, deliverables }));
+    showSelectDlg(false);
+    dispatch(initDeliverables({ _id: metaSystem.mainSystem._id, deliverables: template.deliverables }));
+  };
+  const handleRowChange = (data) => {
+    const mainId = metaSystem.mainSystem._id;
+    dispatch(updateDeliverable({ ...restrict(data, ['_id', 'plannedHours', 'workedHours', 'start', 'end']), mainId }));
   };
 
   return (
@@ -81,10 +78,10 @@ const EditMetaSystem = () => {
             <MetaSystemForm system={metaSystem} mode={formMode} setFormMode={setFormMode} />
           </Grid>
           <Grid item xs={12}>
-            <DeliverableGraph deliverables={metaSystem.mainSystem.deliverables} />
+            <DeliverableGraph editable={editable} mainSystem={metaSystem.mainSystem} />
           </Grid>
           <Grid item xs={12}>
-            <DeliverableTable deliverables={metaSystem.mainSystem.deliverables} />
+            <DeliverableTable editable={editable} deliverables={metaSystem.mainSystem.deliverables} onRowChange={handleRowChange} />
           </Grid>
         </Grid>
       )}

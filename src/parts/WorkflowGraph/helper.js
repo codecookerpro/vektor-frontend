@@ -3,6 +3,7 @@ import dagre from 'dagre';
 import { isNode } from 'react-flow-renderer';
 import { GRAPH_PROPS, NODE_PROPS, EDGE_PROPS, LAYOUT_DIRS, ELEMENT_TYPES, IDENTIFIERS } from './constants';
 import ObjectID from 'bson-objectid';
+import { isEmpty } from 'utils/helpers/utility';
 
 const bottomLeftCorner = (x, y, size) => `L ${x},${y - size}Q ${x},${y} ${x + size},${y}`;
 const leftBottomCorner = (x, y, size) => `L ${x + size},${y}Q ${x},${y} ${x},${y - size}`;
@@ -147,8 +148,12 @@ export const nodeToDeliverable = (nodeId, nodes, mainId) => {
 export const elementsToDeliverables = (elements, templateId) =>
   elements.filter((el) => el.type === ELEMENT_TYPES.node).map((node) => nodeToDeliverable(node.id, elements, templateId));
 
-export const deliverablesToElements = (deliverables, editable = true) =>
-  deliverables.reduce((acc, deliverable) => {
+export const deliverablesToElements = (deliverables, editable = true) => {
+  if (isEmpty(deliverables)) {
+    return [];
+  }
+
+  return deliverables.reduce((acc, deliverable) => {
     let { chartData: { type, position, edges } = {}, _id, name, start, end, completion, status, plannedHours, workedHours } = deliverable;
     edges = edges
       ? edges.map((e) => ({
@@ -170,6 +175,7 @@ export const deliverablesToElements = (deliverables, editable = true) =>
 
     return [...acc, node, ...edges];
   }, []);
+};
 
 export const position = (num) => {
   const nNumY = GRAPH_PROPS.height / (NODE_PROPS.height + NODE_PROPS.marginY);

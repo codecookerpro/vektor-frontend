@@ -40,6 +40,7 @@ const WorkflowGraph = ({ editable, deliverables, onGraphEvent }) => {
           nodesDraggable={!dialogToggled && editable}
           paneMoveable={!dialogToggled}
           zoomOnDoubleClick={false}
+          nodesConnectable={true}
           ref={boardRef}
         >
           <MiniMap />

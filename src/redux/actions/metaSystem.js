@@ -1,16 +1,10 @@
-import {
-  createMetaSystem as createAPI,
-  getMetaSystems as readAPI,
-  updateMetaSystem as updateAPI,
-  deleteMetaSystem as deleteAPI,
-  initDeliverables as initDeliverablesAPI,
-} from 'services/api-meta-system';
+import * as API from 'services/api-meta-system';
 import {
   CREATE_META_SYSTEM,
   FETCH_META_SYSTEMS,
   DELETE_META_SYSTEM,
   UPDATE_META_SYSTEM,
-  INIT_DELIVERABLES,
+  UPDATE_DELIVERABLES,
   FETCH_META_SYSTEMS_FILTER,
 } from 'redux/types';
 import { isEmpty } from 'utils/helpers/utility';
@@ -21,7 +15,7 @@ export const getMetaSystemsFilter = (data, isLoading = false) => ({
 });
 
 export const createMetaSystem = (params) => (dispatch) => {
-  createAPI(params)
+  API.createMetaSystem(params)
     .then(({ data }) => {
       dispatch({
         type: CREATE_META_SYSTEM,
@@ -47,7 +41,7 @@ export const readMetaSystem =
       ...(!isEmpty(project) && { filter: { project } }),
     };
 
-    readAPI(params)
+    API.getMetaSystems(params)
       .then(({ data }) => {
         dispatch({
           type: FETCH_META_SYSTEMS,
@@ -58,7 +52,7 @@ export const readMetaSystem =
   };
 
 export const updateMetaSystem = (params) => (dispatch) => {
-  updateAPI(params)
+  API.updateMetaSystem(params)
     .then(({ data }) => {
       dispatch({
         type: UPDATE_META_SYSTEM,
@@ -69,7 +63,7 @@ export const updateMetaSystem = (params) => (dispatch) => {
 };
 
 export const deleteMetaSystem = (project, system) => (dispatch) => {
-  deleteAPI({ _id: system })
+  API.deleteMetaSystem({ _id: system })
     .then(() => {
       dispatch({
         type: DELETE_META_SYSTEM,
@@ -86,7 +80,7 @@ export const fetchMetaSystemsFilter = (project) => async (dispatch) => {
     filter: { project },
   };
 
-  const response = await readAPI(params).catch((err) => console.error('[fetchMetaSystemsFilter] error => ', err));
+  const response = await API.getMetaSystems(params).catch((err) => console.error('[fetchMetaSystemsFilter] error => ', err));
 
   if (response) {
     const { data } = response;
@@ -96,12 +90,56 @@ export const fetchMetaSystemsFilter = (project) => async (dispatch) => {
 };
 
 export const initDeliverables = (params) => (dispatch) => {
-  initDeliverablesAPI(params)
+  API.initDeliverables(params)
     .then(({ data }) => {
       dispatch({
-        type: INIT_DELIVERABLES,
+        type: UPDATE_DELIVERABLES,
         payload: data,
       });
     })
     .catch((err) => console.error('[initDeliverables] error => ', err));
+};
+
+export const createDeliverable = (params) => (dispatch) => {
+  API.createDeliverable(params)
+    .then(({ data }) => {
+      dispatch({
+        type: UPDATE_DELIVERABLES,
+        payload: data,
+      });
+    })
+    .catch((err) => console.error('[createDeliverable] error => ', err));
+};
+
+export const updateDeliverable = (params) => (dispatch) => {
+  API.updateDeliverable(params)
+    .then(({ data }) => {
+      dispatch({
+        type: UPDATE_DELIVERABLES,
+        payload: data,
+      });
+    })
+    .catch((err) => console.error('[updateDeliverable] error => ', err));
+};
+
+export const deleteDeliverable = (params) => (dispatch) => {
+  API.deleteDeliverable(params)
+    .then(({ data }) => {
+      dispatch({
+        type: UPDATE_DELIVERABLES,
+        payload: data,
+      });
+    })
+    .catch((err) => console.error('[deleteDeliverable] error => ', err));
+};
+
+export const updateDeliverablePositions = (params) => (dispatch) => {
+  API.updateDeliverablePositions(params)
+    .then(({ data }) => {
+      dispatch({
+        type: UPDATE_DELIVERABLES,
+        payload: data,
+      });
+    })
+    .catch((err) => console.error('[updateDeliverablePositions] error => ', err));
 };
