@@ -1,6 +1,6 @@
 import LINKS from 'utils/constants/links';
 
-const FOOTER_MENU_LINKS = [
+export const FOOTER_MENU_LINKS = [
   {
     HREF: LINKS.ADD_PROJECT.HREF,
     TITLE: LINKS.ADD_PROJECT.TITLE,
@@ -22,5 +22,3 @@ const FOOTER_MENU_LINKS = [
     TITLE: LINKS.ADD_WORKFLOW_TEMPLATE.TITLE,
   },
 ];
-
-export default FOOTER_MENU_LINKS;

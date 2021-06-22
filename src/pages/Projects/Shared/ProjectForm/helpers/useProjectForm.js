@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
 import { useHistory } from 'react-router-dom';
 
-import { PERMISSION_TYPE } from 'utils/constants/permissions';
+import { PERMISSION_TYPES } from 'utils/constants';
 import { PROJECT_MODES } from 'pages/Projects/constants';
 import LINKS from 'utils/constants/links';
 import { isEmpty } from 'utils/helpers/utility';
@@ -37,8 +37,8 @@ const useProjectFrom = (project, mode) => {
       const { projectManager, supervisor } = project;
 
       const organizationUsers = users.filter((u) => u.organization === organization);
-      const filteredPMs = organizationUsers.filter((u) => u.permissions === PERMISSION_TYPE.PROJECT_MANAGER);
-      const filteredSupervisors = organizationUsers.filter((u) => u.permissions === PERMISSION_TYPE.SUPERVISOR);
+      const filteredPMs = organizationUsers.filter((u) => u.permissions === PERMISSION_TYPES.projectManager);
+      const filteredSupervisors = organizationUsers.filter((u) => u.permissions === PERMISSION_TYPES.supervisor);
 
       const pms = filteredPMs.length > 0 ? [...filteredPMs, { _id: '', name: '---' }] : [{ _id: projectManager, name: '---' }];
       const supervisors = filteredSupervisors.length > 0 ? [...filteredSupervisors, { _id: '', name: '---' }] : [{ _id: supervisor, name: '---' }];
@@ -105,10 +105,10 @@ const useProjectFrom = (project, mode) => {
   useEffect(() => {
     const { organization: projectOrganization, assignedUsers, name, number, projectManager, supervisor } = project;
 
-    const initialOrganization = permissions !== PERMISSION_TYPE.ADMIN ? organization : projectOrganization;
+    const initialOrganization = permissions !== PERMISSION_TYPES.admin ? organization : projectOrganization;
 
     const { organizationUsers, pms, supervisors } = getBasicUserFiltering(initialOrganization);
-    const filteredUsers = organizationUsers.filter((u) => u.permissions === PERMISSION_TYPE.USER && !assignedUsers.includes(u._id));
+    const filteredUsers = organizationUsers.filter((u) => u.permissions === PERMISSION_TYPES.user && !assignedUsers.includes(u._id));
     const assignedUserList = organizationUsers.filter((u) => assignedUsers.includes(u._id));
 
     setAssignedUserList(assignedUserList);
@@ -119,8 +119,8 @@ const useProjectFrom = (project, mode) => {
     setValue('projectManager', projectManager);
 
     if (mode === PROJECT_MODES.CREATION) {
-      setValue('organization', permissions !== PERMISSION_TYPE.ADMIN ? organization : '');
-      setValue('supervisor', permissions === PERMISSION_TYPE.SUPERVISOR ? _id : '');
+      setValue('organization', permissions !== PERMISSION_TYPES.admin ? organization : '');
+      setValue('supervisor', permissions === PERMISSION_TYPES.supervisor ? _id : '');
     } else {
       setValue('supervisor', supervisor);
       setValue('organization', projectOrganization);
@@ -131,14 +131,14 @@ const useProjectFrom = (project, mode) => {
     if (currentOrganization) {
       const { projectManager } = project;
       const { organizationUsers, pms, supervisors } = getBasicUserFiltering(currentOrganization);
-      const filteredUsers = organizationUsers.filter((u) => u.permissions === PERMISSION_TYPE.USER);
+      const filteredUsers = organizationUsers.filter((u) => u.permissions === PERMISSION_TYPES.user);
 
       setPMs(pms);
       setSupervisors(supervisors);
       setFilteredUsers(filteredUsers);
 
       if (mode === PROJECT_MODES.CREATION) {
-        setValue('supervisor', permissions === PERMISSION_TYPE.SUPERVISOR ? _id : '');
+        setValue('supervisor', permissions === PERMISSION_TYPES.supervisor ? _id : '');
       } else {
         setValue('supervisor', '');
       }

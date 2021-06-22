@@ -12,7 +12,7 @@ import { addUser, editUser, removeUser } from 'redux/actions/users';
 import VektorTextField from 'components/UI/TextFields/VektorTextField';
 import FilterSelect from 'components/UI/Selects/FilterSelect';
 import LINKS from 'utils/constants/links';
-import { PERMISSION_TYPE, PERMISSIONS } from 'utils/constants/permissions';
+import { PERMISSION_TYPES, PERMISSIONS } from 'utils/constants';
 import useLoading from 'utils/hooks/useLoading';
 import { isEmpty } from 'utils/helpers/utility';
 import { FORM_MODE } from 'utils/constants';
@@ -66,7 +66,7 @@ const UserForm = ({ user = {}, mode }) => {
         organization: data.organization,
         permissions: data.permissions,
       };
-      if (data.permissions === PERMISSION_TYPE.ADMIN && selectOrganization) params.organization = selectOrganization;
+      if (data.permissions === PERMISSION_TYPES.admin && selectOrganization) params.organization = selectOrganization;
       if (data.password) {
         params = {
           ...params,
@@ -167,7 +167,7 @@ const UserForm = ({ user = {}, mode }) => {
               />
             </Grid>
             <Grid item xs={12} sm={6} md={3}>
-              {selectPermission === PERMISSION_TYPE.ADMIN ? (
+              {selectPermission === PERMISSION_TYPES.admin ? (
                 <FilterSelect
                   fullWidth
                   name="organization"

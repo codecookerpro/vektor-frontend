@@ -8,9 +8,9 @@ import { getSOWs, setSelectedSOW } from 'redux/actions/sowAction';
 import SowFilters from './SowFilter';
 import PageHeader from 'parts/PageHeader';
 import LINKS from 'utils/constants/links';
-import { PERMISSION_TYPE } from 'utils/constants/permissions';
+import { PERMISSION_TYPES } from 'utils/constants';
 import ContainedButton from 'components/UI/Buttons/ContainedButton';
-import * as TABLE_ENVIRONMENTS from 'utils/constants/table-environments';
+import { DEFAULT_ROWS_PER_PAGE } from 'utils/constants';
 
 const SowList = () => {
   const history = useHistory();
@@ -18,10 +18,12 @@ const SowList = () => {
   const [filter, setFilter] = useState({});
   const [selectedItems, setSelectedItems] = useState([]);
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(TABLE_ENVIRONMENTS.ROWS_PER_PAGE);
+  const [rowsPerPage, setRowsPerPage] = useState(DEFAULT_ROWS_PER_PAGE);
   const { permissions } = useSelector(({ auth }) => auth.currentUser);
-  const isVisible = [PERMISSION_TYPE.ADMIN, PERMISSION_TYPE.SUPERVISOR, PERMISSION_TYPE.PROJECT_MANAGER, PERMISSION_TYPE.USER].includes(permissions);
-  const isOrganizationVisible = permissions === PERMISSION_TYPE.ADMIN;
+  const isVisible = [PERMISSION_TYPES.admin, PERMISSION_TYPES.supervisor, PERMISSION_TYPES.projectManager, PERMISSION_TYPES.user].includes(
+    permissions
+  );
+  const isOrganizationVisible = permissions === PERMISSION_TYPES.admin;
 
   useEffect(() => {
     const skip = page * rowsPerPage;

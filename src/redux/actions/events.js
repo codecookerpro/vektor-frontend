@@ -1,4 +1,4 @@
-import * as TYPES from 'redux/types';
+import TYPES from 'utils/constants/action-types';
 import * as eventAPI from 'services/api-event';
 import { isEmpty } from 'utils/helpers/utility';
 

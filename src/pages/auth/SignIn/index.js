@@ -17,7 +17,7 @@ import { EMAIL_VALID, PASSWORD_VALID } from 'utils/constants/validations';
 import LINKS from 'utils/constants/links';
 import { LOCAL_SIGN_IN_ERRORS } from 'utils/constants/error-codes';
 import { setPopup } from 'redux/actions/popupActions';
-import { POPUP_TYPE } from 'utils/constants/popupType';
+import { POPUP_TYPE } from 'utils/constants';
 
 const schema = joi.object().keys({
   email: EMAIL_VALID,
@@ -41,7 +41,7 @@ function SignIn() {
         history.push(LINKS.OVERVIEW.HREF);
       })
       .catch((err) => {
-        dispatch(setPopup({ popupType: POPUP_TYPE.ERROR, popupText: errorCode2Message(err?.response?.data?.code, LOCAL_SIGN_IN_ERRORS) }));
+        dispatch(setPopup({ popupType: POPUP_TYPE.error, popupText: errorCode2Message(err?.response?.data?.code, LOCAL_SIGN_IN_ERRORS) }));
         reset({ email: '', password: '' });
       });
   };

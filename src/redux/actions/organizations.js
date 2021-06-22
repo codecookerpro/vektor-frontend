@@ -1,9 +1,8 @@
-import * as TYPES from 'redux/types';
+import TYPES from 'utils/constants/action-types';
 import * as organizationAPI from 'services/api-organization';
 import { isEmpty } from 'utils/helpers/utility';
 import { setPopup } from './popupActions';
-import { POPUP_TYPE } from 'utils/constants/popupType';
-import { POPUP_TEXT } from 'utils/constants/popupText';
+import { POPUP_TYPE } from 'utils/constants';
 import { errorCode2Message } from 'utils/helpers/errorCode2Message';
 import { LOCAL_ORGANIZATION_ERRORS } from 'utils/constants/error-codes';
 
@@ -98,7 +97,7 @@ const createOrganization = (options) => async (dispatch) => {
       dispatch(addOrganization(response.data));
     })
     .catch((err) => {
-      dispatch(setPopup({ popupType: POPUP_TYPE.ERROR, popupText: errorCode2Message(err?.response?.data?.code, LOCAL_ORGANIZATION_ERRORS) }));
+      dispatch(setPopup({ popupType: POPUP_TYPE.error, popupText: errorCode2Message(err?.response?.data?.code, LOCAL_ORGANIZATION_ERRORS) }));
     });
 };
 
@@ -110,7 +109,7 @@ const updateOrganization = (options) => async (dispatch) => {
       dispatch(editOrganization(response.data));
     })
     .catch((err) => {
-      dispatch(setPopup({ popupType: POPUP_TYPE.ERROR, popupText: errorCode2Message(100, []) }));
+      dispatch(setPopup({ popupType: POPUP_TYPE.error, popupText: errorCode2Message(100, []) }));
     });
 };
 
@@ -132,13 +131,13 @@ const addDepartment = (options) => async (dispatch) => {
   await organizationAPI
     .createOrganizationDepartment(options)
     .then((response) => {
-      dispatch(setPopup({ popupType: POPUP_TYPE.INFO, popupText: POPUP_TEXT.INFO.SAVE_DEPARTMENT }));
+      dispatch(setPopup({ popupType: POPUP_TYPE.info, popupText: 'Department was created' }));
       dispatch(editOrganization(response.data));
       dispatch(setSelectedOrganization(response.data));
       dispatch(setSelectedDepartments(response.data.departments));
     })
     .catch((err) => {
-      dispatch(setPopup({ popupType: POPUP_TYPE.ERROR, popupText: errorCode2Message(100, []) }));
+      dispatch(setPopup({ popupType: POPUP_TYPE.error, popupText: errorCode2Message(100, []) }));
     });
 };
 
@@ -146,13 +145,13 @@ const editDepartment = (options) => async (dispatch) => {
   await organizationAPI
     .updateOrganizationDepartment(options)
     .then((response) => {
-      dispatch(setPopup({ popupType: POPUP_TYPE.INFO, popupText: POPUP_TEXT.INFO.SAVE_DEPARTMENT }));
+      dispatch(setPopup({ popupType: POPUP_TYPE.info, popupText: 'Department was saved' }));
       dispatch(editOrganization(response.data));
       dispatch(setSelectedOrganization(response.data));
       dispatch(setSelectedDepartments(response.data.departments));
     })
     .catch((err) => {
-      dispatch(setPopup({ popupType: POPUP_TYPE.ERROR, popupText: errorCode2Message(100, []) }));
+      dispatch(setPopup({ popupType: POPUP_TYPE.error, popupText: errorCode2Message(100, []) }));
     });
 };
 
@@ -165,7 +164,7 @@ const deleteDepartment = (options) => async (dispatch) => {
       dispatch(setSelectedDepartments(response.data.departments));
     })
     .catch((err) => {
-      dispatch(setPopup({ popupType: POPUP_TYPE.ERROR, popupText: errorCode2Message(100, []) }));
+      dispatch(setPopup({ popupType: POPUP_TYPE.error, popupText: errorCode2Message(100, []) }));
     });
 };
 

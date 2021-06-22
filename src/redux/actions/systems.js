@@ -1,4 +1,4 @@
-import * as TYPES from 'redux/types';
+import TYPES from 'utils/constants/action-types';
 import * as metaSystemAPI from 'services/api-meta-system';
 
 const getSystemHistory =

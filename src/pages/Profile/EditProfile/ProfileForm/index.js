@@ -15,8 +15,7 @@ import ContainedButton from 'components/UI/Buttons/ContainedButton';
 import { setPopup } from 'redux/actions/popupActions';
 import { Visibility, VisibilityOff } from '@material-ui/icons';
 import { LOCAL_CHANGE_PASSWORD_ERRORS } from 'utils/constants/error-codes';
-import { POPUP_TYPE } from 'utils/constants/popupType';
-import { POPUP_TEXT } from 'utils/constants/popupText';
+import { POPUP_TYPE } from 'utils/constants';
 
 const useStyles = makeStyles((theme) => ({
   alert: {
@@ -84,10 +83,10 @@ const ProfileForm = () => {
     await userAPI
       .changeUserPassword(params)
       .then(() => {
-        dispatch(setPopup({ popupType: POPUP_TYPE.INFO, popupText: POPUP_TEXT.INFO.CHANGE_PASSWORD }));
+        dispatch(setPopup({ popupType: POPUP_TYPE.info, popupText: 'Password was changed' }));
       })
       .catch((err) => {
-        dispatch(setPopup({ popupType: POPUP_TYPE.ERROR, popupText: errorCode2Message(err?.response?.data?.code, LOCAL_CHANGE_PASSWORD_ERRORS) }));
+        dispatch(setPopup({ popupType: POPUP_TYPE.error, popupText: errorCode2Message(err?.response?.data?.code, LOCAL_CHANGE_PASSWORD_ERRORS) }));
       });
 
     reset({ oldPassword: '', newPassword: '', repeatNewPassword: '' });
