@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { removeElements, addEdge } from 'react-flow-renderer';
 import { noop } from 'utils/constants';
-import { GRAPH_EVENTS } from './constants';
+import { GRAPH_EVENTS, GRAPH_PROPS } from './constants';
 import { makeNode, makeEdge, getLayoutedElements, deliverablesToElements, validateElements } from './helper';
 
 const useGraphLogic = ({ editable = false, deliverables = [], onGraphEvent = noop, boardRef }) => {
@@ -93,7 +93,7 @@ const useGraphLogic = ({ editable = false, deliverables = [], onGraphEvent = noo
       document.body.style.overflow = 'hidden';
       const style = boardRef.current.style;
       style.position = 'fixed';
-      style.zIndex = 9999999;
+      style.zIndex = GRAPH_PROPS.zIndex;
       style.top = '0px';
       style.left = '0px';
       style.background = 'white';

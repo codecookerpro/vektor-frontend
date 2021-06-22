@@ -84,20 +84,17 @@ const editProject = (project) => async (dispatch) => {
   }
 };
 
-const removeProject = (project) => async (dispatch, getState) => {
+const removeProject = (project) => async (dispatch) => {
   try {
-    const {
-      projects: { results },
-    } = getState();
+    let isCompleted = false;
+    const response = await projectAPI.deleteProject(project);
 
-    const newProjects = results.filter((item) => item._id !== project._id);
+    if (response) {
+      dispatch({ type: TYPES.REMOVE_PROJECT, payload: project });
+      isCompleted = true;
+    }
 
-    dispatch({
-      type: TYPES.FETCH_PROJECTS,
-      payload: {
-        results: newProjects,
-      },
-    });
+    return isCompleted;
   } catch (error) {
     console.log('[removeProject] error => ', error);
   }

@@ -32,6 +32,17 @@ const projectsReducer = (state = INITIAL_STATE, { payload, type }) => {
       };
     }
 
+    case TYPES.REMOVE_PROJECT: {
+      const { results } = state;
+      const { _id: projectId } = payload;
+      const newProjects = results.filter(({ _id }) => _id !== projectId);
+
+      return {
+        ...state,
+        results: newProjects,
+      };
+    }
+
     case TYPES.FETCH_META_SYSTEMS: {
       const { data, project } = payload;
 

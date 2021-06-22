@@ -12,12 +12,6 @@ const workflowTemplatesReducer = (state = INITIAL_STATE, { type, payload }) => {
         results: payload,
       };
 
-    case TYPES.CREATE_WTD:
-      return {
-        ...state,
-        results: [...state.results, payload],
-      };
-
     case TYPES.UPDATE_WTD:
       return {
         ...state,

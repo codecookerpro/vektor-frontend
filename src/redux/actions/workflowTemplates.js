@@ -78,7 +78,7 @@ const createWTD = (params) => (dispatch) => {
   API.createWorkflowTemplateDeliverable(params)
     .then(({ data }) =>
       dispatch({
-        type: TYPES.CREATE_WTD,
+        type: TYPES.UPDATE_WTD,
         payload: data,
       })
     )
