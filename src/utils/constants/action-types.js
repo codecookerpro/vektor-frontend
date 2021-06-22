@@ -40,6 +40,7 @@ const ActionTypes = keyMirror({
   DELETE_META_SYSTEM: null,
   UPDATE_META_SYSTEM: null,
   INIT_DELIVERABLES: null,
+  UPDATE_DELIVERABLES: null,
   FETCH_META_SYSTEMS_FILTER: null,
 
   // popup
