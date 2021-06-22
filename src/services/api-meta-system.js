@@ -2,34 +2,48 @@ import axios from 'services/axios';
 
 const METASYSTEMS_URL = '/api/metasystems';
 
-const getMetaSystems = async (data) => {
+export const getMetaSystems = async (data) => {
   const params = {
     get_json: JSON.stringify(data),
   };
   return await axios.get(METASYSTEMS_URL, { params });
 };
 
-const getSystemHistory = async (data) => {
+export const getSystemHistory = async (data) => {
   const params = {
     get_json: JSON.stringify(data),
   };
   return await axios.get(`${METASYSTEMS_URL}/systems/history`, { params });
 };
 
-const createMetaSystem = async (params) => {
+export const createMetaSystem = async (params) => {
   return await axios.post(METASYSTEMS_URL, params);
 };
 
-const updateMetaSystem = async (params) => {
+export const updateMetaSystem = async (params) => {
   return await axios.put(METASYSTEMS_URL, params);
 };
 
-const deleteMetaSystem = async (params) => {
+export const deleteMetaSystem = async (params) => {
   return await axios.delete(METASYSTEMS_URL, { params });
 };
 
-const initDeliverables = async (params) => {
-  return await axios.put(`/api/metasystems/systems/initialize`, params);
+export const initDeliverables = async (params) => {
+  return await axios.put(`${METASYSTEMS_URL}/systems/initialize`, params);
 };
 
-export { getMetaSystems, getSystemHistory, createMetaSystem, updateMetaSystem, deleteMetaSystem, initDeliverables };
+export const createDeliverable = async (params) => {
+  return await axios.post(`${METASYSTEMS_URL}/systems/nested`, params);
+};
+
+export const updateDeliverable = async (params) => {
+  return await axios.put(`${METASYSTEMS_URL}/systems/nested`, params);
+};
+
+export const deteteDeliverable = async (params) => {
+  return await axios.delete(`${METASYSTEMS_URL}/systems/nested`, params);
+};
+
+export const updateDeliverablePositions = async (params) => {
+  return await axios.put(`${METASYSTEMS_URL}/systems/positioning`, params);
+};

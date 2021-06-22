@@ -43,10 +43,17 @@ const EditMetaSystem = () => {
   useEffect(() => dispatch(readMetaSystem(projectId)), [dispatch, projectId]);
 
   useEffect(() => {
-    if (formMode === FORM_MODE.update && metaSystem.mainSystem.deliverables.length === 0) {
+    if (!metaSystem) {
+      return;
+    }
+
+    const dNum = metaSystem.mainSystem.deliverables.length;
+    const dlgExist = initDlg || selectDlg;
+
+    if (formMode === FORM_MODE.update && dNum === 0 && !dlgExist) {
       showInitDlg(true);
     }
-  }, [formMode, metaSystem]);
+  }, [formMode, metaSystem, initDlg, selectDlg]);
 
   const handleInitDlgClose = () => showInitDlg(false);
   const handleWithTemplate = () => {
@@ -81,7 +88,7 @@ const EditMetaSystem = () => {
             <MetaSystemForm system={metaSystem} mode={formMode} setFormMode={setFormMode} />
           </Grid>
           <Grid item xs={12}>
-            <DeliverableGraph deliverables={metaSystem.mainSystem.deliverables} />
+            <DeliverableGraph editable={formMode === FORM_MODE.udpate} mainSystem={metaSystem.mainSystem} />
           </Grid>
           <Grid item xs={12}>
             <DeliverableTable deliverables={metaSystem.mainSystem.deliverables} />
