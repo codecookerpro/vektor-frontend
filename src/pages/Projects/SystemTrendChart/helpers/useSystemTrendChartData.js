@@ -4,26 +4,26 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { getSystemHistory } from 'redux/actions/systems';
 
-const useSystemTrendChartData = (id) => {
+const useSystemTrendChartData = (_id) => {
   const dispatch = useDispatch();
   const [chartData, setChartData] = useState([]);
 
   const { results: projects, metaSystems, systemTrends } = useSelector(({ projects }) => projects);
 
-  const { name } = useMemo(() => projects.find((item) => item._id === id) || {}, [id, projects]);
+  const { name } = useMemo(() => projects.find((item) => item._id === _id) || {}, [_id, projects]);
 
-  useEffect(() => dispatch(getSystemHistory(id, true)), [dispatch, id]);
+  useEffect(() => dispatch(getSystemHistory(_id, true)), [dispatch, _id]);
 
   useEffect(() => {
     const systemTrendsCharts = {};
     let data = [];
-    const currentSystemTrends = systemTrends[id] || [];
+    const currentSystemTrends = systemTrends[_id] || [];
 
     if (currentSystemTrends.length > 0) {
       const names = [
         'Date',
         ...(
-          metaSystems[id]?.map(({ name }) => [`${name} EV`, `${name} PV`]) ||
+          metaSystems[_id]?.map(({ name }) => [`${name} EV`, `${name} PV`]) ||
           currentSystemTrends?.map(({ metaSystem }) => [`${metaSystem} EV`, `${metaSystem} PV`])
         ).flat(),
       ];
@@ -49,7 +49,7 @@ const useSystemTrendChartData = (id) => {
 
       setChartData([names, ...data]);
     }
-  }, [metaSystems, id, systemTrends]);
+  }, [metaSystems, _id, systemTrends]);
 
   return { name, chartData };
 };
