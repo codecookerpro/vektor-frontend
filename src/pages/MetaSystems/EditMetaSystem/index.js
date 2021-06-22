@@ -1,10 +1,11 @@
 import React, { memo, useEffect, useState, useMemo } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { Grid } from '@material-ui/core';
 import moment from 'moment';
 
 import PageHeader from 'parts/PageHeader';
+import DetailLinkCard from 'parts/DetailLinkCard';
 import MetaSystemForm from '../Shared/MetaSystemForm';
 import DeliverableGraph from '../Shared/DeliverableGraph';
 import DeliverableTable from '../Shared/DeliverableTable';
@@ -20,6 +21,7 @@ const NAV_LINKS = [LINKS.PROJECT_MANAGEMENT, LINKS.PROJECTS];
 const EditMetaSystem = () => {
   const { project: projectId, system: systemId } = useParams();
   const dispatch = useDispatch();
+  const history = useHistory();
   const [formMode, setFormMode] = useState(FORM_MODE.view);
   const [initDlg, showInitDlg] = useState(false);
   const [selectDlg, showSelectDlg] = useState(false);
@@ -72,6 +74,11 @@ const EditMetaSystem = () => {
     dispatch(initDeliverables({ _id: metaSystem.mainSystem._id, deliverables }));
   };
 
+  const handleOnDetail = () => {
+    const deliverableChartLink = LINKS.DELIVERABLE_TREND_CHART.HREF;
+    history.push(deliverableChartLink.replace(':projectId', projectId).replace(':systemId', systemId));
+  };
+
   return (
     <>
       <PageHeader title={title} links={NAV_LINKS} />
@@ -85,6 +92,9 @@ const EditMetaSystem = () => {
           </Grid>
           <Grid item xs={12}>
             <DeliverableTable deliverables={metaSystem.mainSystem.deliverables} />
+          </Grid>
+          <Grid item xs={12}>
+            <DetailLinkCard title="Deliverable Trend Chart" onDetail={handleOnDetail} />
           </Grid>
         </Grid>
       )}

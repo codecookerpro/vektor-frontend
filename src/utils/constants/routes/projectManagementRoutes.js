@@ -57,6 +57,12 @@ const projectManagementRoutes = Object.freeze({
       isNotSlide: true,
     },
     {
+      path: LINKS.DELIVERABLE_TREND_CHART.HREF,
+      name: LINKS.DELIVERABLE_TREND_CHART.TITLE,
+      component: SystemTrendChart,
+      isNotSlide: true,
+    },
+    {
       path: LINKS.PROJECT_HISTORY.HREF,
       name: LINKS.PROJECT_HISTORY.TITLE,
       component: ProjectHistory,

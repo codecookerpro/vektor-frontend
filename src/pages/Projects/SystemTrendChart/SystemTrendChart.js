@@ -6,20 +6,19 @@ import { MoreVertical } from 'react-feather';
 import Chart from 'react-google-charts';
 
 import PageHeader from 'parts/PageHeader';
-import LINKS from 'utils/constants/links';
 
 import useStyles from './styles';
-import { useSystemTrendChartData, getNavLinks } from './helpers';
+import { useTrendChartData, getNavLinks } from './helpers';
 import { CHART_OPTIONS } from './constants';
 
 const SystemTrendChart = () => {
   const classes = useStyles();
-  const { id } = useParams();
-  const { name, chartData } = useSystemTrendChartData(id);
+  const { projectId, systemId } = useParams();
+  const { projectName, systemName, title, chartData } = useTrendChartData(projectId, systemId);
 
   return (
     <>
-      <PageHeader title={`${LINKS.SYSTEM_TREND_CHART.TITLE}: ${name || 'Not Found'}`} links={getNavLinks(name, id)} />
+      <PageHeader title={`${title}: ${projectName || 'Not Found'}`} links={getNavLinks(projectName, projectId, systemName, systemId)} />
       <Card className={classes.root}>
         <CardHeader
           action={
@@ -27,7 +26,7 @@ const SystemTrendChart = () => {
               <MoreVertical />
             </IconButton>
           }
-          title="System Trend Chart"
+          title={title}
         />
         <CardContent>
           {chartData.length > 0 ? (

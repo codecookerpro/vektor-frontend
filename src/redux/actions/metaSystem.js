@@ -4,6 +4,7 @@ import {
   updateMetaSystem as updateAPI,
   deleteMetaSystem as deleteAPI,
   initDeliverables as initDeliverablesAPI,
+  getSystemHistory as getSystemHistoryAPI,
 } from 'services/api-meta-system';
 import {
   CREATE_META_SYSTEM,
@@ -12,6 +13,7 @@ import {
   UPDATE_META_SYSTEM,
   INIT_DELIVERABLES,
   FETCH_META_SYSTEMS_FILTER,
+  FETCH_SYSTEM_TRENDS,
 } from 'redux/types';
 import { isEmpty } from 'utils/helpers/utility';
 
@@ -105,3 +107,34 @@ export const initDeliverables = (params) => (dispatch) => {
     })
     .catch((err) => console.error('[initDeliverables] error => ', err));
 };
+
+export const getSystemHistory =
+  (projectId, refresh = false) =>
+  async (dispatch, getState) => {
+    try {
+      const {
+        projects: { systemTrends },
+      } = getState();
+
+      if (systemTrends[projectId] && !refresh) {
+        return;
+      }
+
+      const params = {
+        filter: { project: projectId },
+      };
+
+      const response = await getSystemHistoryAPI(params);
+
+      if (response) {
+        const { data } = response;
+
+        dispatch({
+          type: FETCH_SYSTEM_TRENDS,
+          payload: { data, projectId },
+        });
+      }
+    } catch (error) {
+      console.log('[getSystemHistory] error => ', error);
+    }
+  };

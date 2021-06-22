@@ -1,2 +1,2 @@
-export { default as useSystemTrendChartData } from './useSystemTrendChartData';
+export { default as useTrendChartData } from './useTrendChartData';
 export { getNavLinks } from './helperFunctions';
