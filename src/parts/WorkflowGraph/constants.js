@@ -8,6 +8,7 @@ export const ELEMENT_TYPES = Object.freeze({
 export const GRAPH_PROPS = Object.freeze({
   arrowHeadColor: '#4d84c0',
   height: window.innerHeight > 1067 ? window.innerHeight - 617 : 350,
+  zIndex: 1250,
 });
 
 export const NODE_PROPS = Object.freeze({
