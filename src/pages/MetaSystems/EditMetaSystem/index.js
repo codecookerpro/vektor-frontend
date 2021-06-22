@@ -12,7 +12,8 @@ import SelectDialog from '../Shared/SelectDialog';
 
 import LINKS from 'utils/constants/links';
 import { FORM_MODE } from 'utils/constants';
-import { initDeliverables, readMetaSystem } from 'redux/actions/metaSystem';
+import { initDeliverables, readMetaSystem, updateDeliverable } from 'redux/actions/metaSystem';
+import { restrict } from 'utils/helpers/utility';
 
 const NAV_LINKS = [LINKS.PROJECT_MANAGEMENT, LINKS.PROJECTS];
 
@@ -31,12 +32,10 @@ const EditMetaSystem = () => {
     return { project, metaSystem };
   });
 
-  const title = useMemo(() => {
-    if (formMode === FORM_MODE.view) {
-      return 'View System';
-    } else {
-      return LINKS.EDIT_META_SYSTEM.TITLE;
-    }
+  const { title, editable } = useMemo(() => {
+    const title = formMode === FORM_MODE.view ? 'View System' : LINKS.EDIT_META_SYSTEM.TITLE;
+    const editable = formMode === FORM_MODE.update;
+    return { title, editable };
   }, [formMode]);
 
   useEffect(() => dispatch(readMetaSystem(projectId)), [dispatch, projectId]);
@@ -65,6 +64,10 @@ const EditMetaSystem = () => {
     showSelectDlg(false);
     dispatch(initDeliverables({ _id: metaSystem.mainSystem._id, deliverables: template.deliverables }));
   };
+  const handleRowChange = (data) => {
+    const mainId = metaSystem.mainSystem._id;
+    dispatch(updateDeliverable({ ...restrict(data, ['_id', 'plannedHours', 'workedHours', 'start', 'end']), mainId }));
+  };
 
   return (
     <>
@@ -75,10 +78,10 @@ const EditMetaSystem = () => {
             <MetaSystemForm system={metaSystem} mode={formMode} setFormMode={setFormMode} />
           </Grid>
           <Grid item xs={12}>
-            <DeliverableGraph editable={formMode === FORM_MODE.update} mainSystem={metaSystem.mainSystem} />
+            <DeliverableGraph editable={editable} mainSystem={metaSystem.mainSystem} />
           </Grid>
           <Grid item xs={12}>
-            <DeliverableTable deliverables={metaSystem.mainSystem.deliverables} />
+            <DeliverableTable editable={editable} deliverables={metaSystem.mainSystem.deliverables} onRowChange={handleRowChange} />
           </Grid>
         </Grid>
       )}

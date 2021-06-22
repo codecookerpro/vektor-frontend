@@ -134,7 +134,7 @@ const projectsReducer = (state = INITIAL_STATE, { payload, type }) => {
       };
     }
 
-    case TYPES.INIT_DELIVERABLES: {
+    case TYPES.UPDATE_DELIVERABLES: {
       const { project, metaSystem } = payload;
 
       return {

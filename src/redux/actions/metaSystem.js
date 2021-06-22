@@ -4,7 +4,7 @@ import {
   FETCH_META_SYSTEMS,
   DELETE_META_SYSTEM,
   UPDATE_META_SYSTEM,
-  INIT_DELIVERABLES,
+  UPDATE_DELIVERABLES,
   FETCH_META_SYSTEMS_FILTER,
 } from 'redux/types';
 import { isEmpty } from 'utils/helpers/utility';
@@ -93,7 +93,7 @@ export const initDeliverables = (params) => (dispatch) => {
   API.initDeliverables(params)
     .then(({ data }) => {
       dispatch({
-        type: INIT_DELIVERABLES,
+        type: UPDATE_DELIVERABLES,
         payload: data,
       });
     })
@@ -104,7 +104,7 @@ export const createDeliverable = (params) => (dispatch) => {
   API.createDeliverable(params)
     .then(({ data }) => {
       dispatch({
-        type: INIT_DELIVERABLES,
+        type: UPDATE_DELIVERABLES,
         payload: data,
       });
     })
@@ -115,7 +115,7 @@ export const updateDeliverable = (params) => (dispatch) => {
   API.updateDeliverable(params)
     .then(({ data }) => {
       dispatch({
-        type: INIT_DELIVERABLES,
+        type: UPDATE_DELIVERABLES,
         payload: data,
       });
     })
@@ -126,7 +126,7 @@ export const deleteDeliverable = (params) => (dispatch) => {
   API.deleteDeliverable(params)
     .then(({ data }) => {
       dispatch({
-        type: INIT_DELIVERABLES,
+        type: UPDATE_DELIVERABLES,
         payload: data,
       });
     })
@@ -137,7 +137,7 @@ export const updateDeliverablePositions = (params) => (dispatch) => {
   API.updateDeliverablePositions(params)
     .then(({ data }) => {
       dispatch({
-        type: INIT_DELIVERABLES,
+        type: UPDATE_DELIVERABLES,
         payload: data,
       });
     })

@@ -60,7 +60,10 @@ const useGraphLogic = ({ editable = false, deliverables = [], onGraphEvent = noo
     const newNode = makeNode(elements.length, eventHandlers, editable);
     const updatedElements = [...elements, newNode];
     setElements(updatedElements);
-    onGraphEvent(GRAPH_EVENTS.nodeCreate, updatedElements, newNode.id);
+
+    if (editable) {
+      onGraphEvent(GRAPH_EVENTS.nodeCreate, updatedElements, newNode.id);
+    }
   };
 
   const handleConnect = (conn) => {
@@ -69,20 +72,29 @@ const useGraphLogic = ({ editable = false, deliverables = [], onGraphEvent = noo
     if (newEdge) {
       const updatedElements = addEdge(newEdge, elements);
       setElements(updatedElements);
-      onGraphEvent(GRAPH_EVENTS.edgeCreate, updatedElements, newEdge.target);
+
+      if (editable) {
+        onGraphEvent(GRAPH_EVENTS.edgeCreate, updatedElements, newEdge.target);
+      }
     }
   };
 
   const handleLayout = (direction) => {
     const layoutedElements = getLayoutedElements(elements, direction);
     setElements(layoutedElements);
-    onGraphEvent(GRAPH_EVENTS.graphLayout, layoutedElements);
+
+    if (editable) {
+      onGraphEvent(GRAPH_EVENTS.graphLayout, layoutedElements);
+    }
   };
 
   const handleNodeDragStop = (e, node) => {
     e.preventDefault();
     const updatedElements = elements.map((n) => (n.id === node.id ? { ...n, position: node.position } : n));
-    onGraphEvent(GRAPH_EVENTS.nodePosChange, updatedElements, node.id);
+
+    if (editable) {
+      onGraphEvent(GRAPH_EVENTS.nodePosChange, updatedElements, node.id);
+    }
   };
 
   const handleFullscreen = (e) => {
