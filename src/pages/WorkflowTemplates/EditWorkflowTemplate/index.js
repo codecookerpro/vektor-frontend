@@ -8,7 +8,7 @@ import PageHeader from 'parts/PageHeader';
 import WorkflowTemplateChart from '../WorkflowTemplateChart';
 import WorkflowTemplateForm from '../Shared/WorkflowTemplateForm';
 import LINKS from 'utils/constants/links';
-import { isEmpty } from 'utils/helpers/utility';
+import { isEmpty, restrict } from 'utils/helpers/utility';
 import { GRAPH_EVENTS } from 'parts/WorkflowGraph/constants';
 import { nodeToDeliverable, elementsToDeliverables } from 'parts/WorkflowGraph/helper';
 import { createWTD, updateWTD, deleteWTD, updateWTDPositions } from 'redux/actions/workflowTemplates';
@@ -28,39 +28,24 @@ const EditWorkflowTemplate = () => {
     history.push(LINKS.WORKFLOW_TEMPLATE_HISTORY.HREF.replace(':id', id));
   };
 
-  const handleGraphEvent = (event, elements, nodeId, data) => {
+  const handleGraphEvent = (event, elements, nodeId) => {
     switch (event) {
-      case GRAPH_EVENTS.nodeCreate: {
+      case GRAPH_EVENTS.nodeCreate:
         dispatch(createWTD(nodeToDeliverable(nodeId, elements, id)));
         break;
-      }
-      case GRAPH_EVENTS.nodeDelete: {
+      case GRAPH_EVENTS.nodeDelete:
         dispatch(deleteWTD({ mainId: id, _id: nodeId }));
         break;
-      }
       case GRAPH_EVENTS.nodeLabelChange:
       case GRAPH_EVENTS.edgeCreate:
-      case GRAPH_EVENTS.edgeDelete: {
+      case GRAPH_EVENTS.edgeDelete:
+      case GRAPH_EVENTS.nodePosChange:
         dispatch(updateWTD(nodeToDeliverable(nodeId, elements, id)));
         break;
-      }
-      case GRAPH_EVENTS.nodePosChange: {
-        dispatch(
-          updateWTD(
-            nodeToDeliverable(
-              nodeId,
-              elements.map((n) => (n.id === nodeId ? { ...n, position: data } : n)),
-              id
-            )
-          )
-        );
-        break;
-      }
-      case GRAPH_EVENTS.graphLayout: {
-        const deliverables = elementsToDeliverables(elements).map(({ _id, chartData }) => ({ _id, chartData }));
+      case GRAPH_EVENTS.graphLayout:
+        const deliverables = elementsToDeliverables(elements).map((d) => restrict(d, ['_id', 'chartData']));
         dispatch(updateWTDPositions({ _id: id, deliverables }));
         break;
-      }
 
       default:
         break;

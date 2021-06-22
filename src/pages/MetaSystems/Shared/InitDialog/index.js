@@ -3,7 +3,7 @@ import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } 
 import { ColorButton } from 'components/UI/Buttons';
 
 const InitDialog = ({ open, onClose, onTemplate, onScratch }) => (
-  <Dialog open={open} onClose={onClose} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
+  <Dialog open={open} onClose={onClose}>
     <DialogTitle id="alert-dialog-title">Deliverables Initialization</DialogTitle>
     <DialogContent>
       <DialogContentText>Do you want to intialize deliverables with template?</DialogContentText>

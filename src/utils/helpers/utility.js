@@ -18,4 +18,12 @@ const keyMirror = (obj) =>
     )
   );
 
-export { isEmpty, keyMirror };
+const restrict = (obj, keys = []) =>
+  keys.reduce((acc, key) => {
+    return {
+      ...acc,
+      [key]: obj[key],
+    };
+  }, {});
+
+export { isEmpty, keyMirror, restrict };
