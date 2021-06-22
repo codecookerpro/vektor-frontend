@@ -8,7 +8,7 @@ import { PERMISSION_TYPE } from 'utils/constants/permissions';
 import { PROJECT_MODES } from 'pages/Projects/constants';
 import LINKS from 'utils/constants/links';
 import { isEmpty } from 'utils/helpers/utility';
-import { addProject, editProject } from 'redux/actions/projects';
+import { addProject, editProject, removeProject } from 'redux/actions/projects';
 
 import { schema } from './schema';
 
@@ -92,6 +92,16 @@ const useProjectFrom = (project, mode) => {
       }
     });
 
+  const onDeleteProject = async () => {
+    const { _id } = project;
+
+    const isCompleted = await dispatch(removeProject({ _id }));
+
+    if (isCompleted) {
+      history.push(LINKS.PROJECTS.HREF);
+    }
+  };
+
   useEffect(() => {
     const { organization: projectOrganization, assignedUsers, name, number, projectManager, supervisor } = project;
 
@@ -146,6 +156,7 @@ const useProjectFrom = (project, mode) => {
     assignedUserList,
     organization: watchOrganization,
     onSubmit,
+    onDeleteProject,
     handleAssignedUsers,
     setCurrentOrganization,
   };
