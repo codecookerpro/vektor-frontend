@@ -4,6 +4,8 @@ const INITIAL_STATE = Object.freeze({
   results: [],
   organization: '',
   metaSystems: {},
+  metaSystemsFilter: [],
+  isMetaSystemsLoading: false,
   systemTrends: {},
 });
 
@@ -52,7 +54,15 @@ const projectsReducer = (state = INITIAL_STATE, { payload, type }) => {
         },
       };
     }
+    case TYPES.FETCH_META_SYSTEMS_FILTER: {
+      const { data, isLoading } = payload;
 
+      return {
+        ...state,
+        isMetaSystemsLoading: isLoading,
+        ...(data !== null && { metaSystemsFilter: data }),
+      };
+    }
     case TYPES.CREATE_META_SYSTEM: {
       const { project, _id } = payload;
 

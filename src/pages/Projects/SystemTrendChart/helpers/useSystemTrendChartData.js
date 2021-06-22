@@ -1,24 +1,29 @@
 import { useState, useMemo, useEffect } from 'react';
 import moment from 'moment';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
-const useSystemTrendChartData = (id) => {
+import { getSystemHistory } from 'redux/actions/systems';
+
+const useSystemTrendChartData = (_id) => {
+  const dispatch = useDispatch();
   const [chartData, setChartData] = useState([]);
 
   const { results: projects, metaSystems, systemTrends } = useSelector(({ projects }) => projects);
 
-  const { name, _id: projectId } = useMemo(() => projects.find((item) => item._id === id) || {}, [id, projects]);
+  const { name } = useMemo(() => projects.find((item) => item._id === _id) || {}, [_id, projects]);
+
+  useEffect(() => dispatch(getSystemHistory(_id, true)), [dispatch, _id]);
 
   useEffect(() => {
     const systemTrendsCharts = {};
     let data = [];
-    const currentSystemTrends = systemTrends[projectId] || [];
+    const currentSystemTrends = systemTrends[_id] || [];
 
     if (currentSystemTrends.length > 0) {
       const names = [
         'Date',
         ...(
-          metaSystems[projectId]?.map(({ name }) => [`${name} EV`, `${name} PV`]) ||
+          metaSystems[_id]?.map(({ name }) => [`${name} EV`, `${name} PV`]) ||
           currentSystemTrends?.map(({ metaSystem }) => [`${metaSystem} EV`, `${metaSystem} PV`])
         ).flat(),
       ];
@@ -44,7 +49,7 @@ const useSystemTrendChartData = (id) => {
 
       setChartData([names, ...data]);
     }
-  }, [metaSystems, projectId, systemTrends]);
+  }, [metaSystems, _id, systemTrends]);
 
   return { name, chartData };
 };
