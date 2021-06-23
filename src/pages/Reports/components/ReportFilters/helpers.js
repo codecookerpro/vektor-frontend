@@ -55,8 +55,8 @@ const useReportFiltersLogic = (isAdmin, filter, setFilter) => {
         break;
       case 'metaSystem':
         setFilter(({ organization, project }) => ({
-          organization,
           project,
+          ...(organization && { organization }),
           ...(value && { [name]: value }),
         }));
         break;

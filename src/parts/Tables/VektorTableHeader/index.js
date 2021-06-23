@@ -16,7 +16,7 @@ const VektorTableHeader = ({ columns }) => {
     <TableHead>
       <TableRow>
         {columns.map((column) => (
-          <TableCell key={column.id} align={column.align} style={{ minWidth: column.minWidth }} className={classes.label}>
+          <TableCell key={column.id} align={column.align} style={{ minWidth: column.minWidth, maxWidth: column.maxWidth }} className={classes.label}>
             {column.label}
           </TableCell>
         ))}
