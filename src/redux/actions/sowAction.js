@@ -1,5 +1,5 @@
 import * as sowAPI from 'services/api-sow';
-import * as TYPES from 'redux/types';
+import TYPES from 'utils/constants/action-types';
 
 const getSOWs =
   (filter = {}, pagination = {}) =>

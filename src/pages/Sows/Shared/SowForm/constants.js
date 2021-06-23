@@ -1,31 +1,31 @@
 export const SOW_FORM_PHASE = {
-  NEW_SOW: {
+  newSow: {
     label: 'New SOW',
     value: '',
   },
-  INITIATION_PHASE: {
+  initiationPhase: {
     label: 'Initiation Phase',
     value: 'initiationPhase',
   },
-  INITIATION_PHASE_ATTACHMENTS: {
+  initiationPhaseAttachments: {
     label: 'Attachments - Initiation Phase',
     parentPhase: 'initiationPhase',
     value: 'initiationPhase',
   },
-  INTAKE_PHASE: {
+  intakePhase: {
     label: 'Intake Phase',
     value: 'intakePhase',
   },
-  INTAKE_PHASE_ATTACHMENTS: {
+  intakePhaseAttachments: {
     label: 'Attachments - Intake Phase',
     parentPhase: 'intakePhase',
     value: 'intakePhase',
   },
-  IPRO_SUBMIT: {
+  iproSubmit: {
     label: 'IPRO Submit',
     value: 'iProSubmit',
   },
-  IPRO_SUBMIT_ATTACHMENTS: {
+  iproSubmitAttachments: {
     label: 'Attachments - IPRO Submit',
     parentPhase: 'iProSubmit',
     value: 'iProSubmit',

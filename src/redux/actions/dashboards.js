@@ -1,4 +1,4 @@
-import * as TYPES from 'redux/types';
+import TYPES from 'utils/constants/action-types';
 import * as dashboardAPI from 'services/api-dashboard';
 import { isEmpty } from 'utils/helpers/utility';
 

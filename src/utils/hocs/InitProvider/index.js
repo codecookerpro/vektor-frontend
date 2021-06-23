@@ -5,7 +5,7 @@ import { setAccessToken, setRefreshToken, setCurrentUser } from 'redux/actions/a
 import { getUsers } from 'redux/actions/users';
 import { getOrganizations } from 'redux/actions/organizations';
 import { getProjects } from 'redux/actions/projects';
-import { PERMISSION_TYPE } from 'utils/constants/permissions';
+import { PERMISSION_TYPES } from 'utils/constants';
 
 const InitProvider = () => {
   const dispatch = useDispatch();
@@ -39,7 +39,7 @@ const InitProvider = () => {
   useEffect(() => {
     if (accessToken) {
       dispatch(getUsers());
-      if (permissions === PERMISSION_TYPE.ADMIN) {
+      if (permissions === PERMISSION_TYPES.admin) {
         dispatch(getOrganizations());
         dispatch(getProjects());
       } else {

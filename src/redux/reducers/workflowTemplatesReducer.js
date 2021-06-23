@@ -1,26 +1,13 @@
-import * as TYPES from 'redux/types';
+import { handleActions } from 'redux-actions';
+import ActionTypes from 'utils/constants/action-types';
+import * as updaters from 'redux/updaters/workflow-templates';
 
-const INITIAL_STATE = Object.freeze({
-  results: [],
-});
-
-const workflowTemplatesReducer = (state = INITIAL_STATE, { type, payload }) => {
-  switch (type) {
-    case TYPES.FETCH_WORKFLOW_TEMPLATES:
-      return {
-        ...state,
-        results: payload,
-      };
-
-    case TYPES.UPDATE_WTD:
-      return {
-        ...state,
-        results: state.results.map((wf) => (wf._id === payload._id ? payload : wf)),
-      };
-
-    default:
-      return state;
-  }
+const actionHandler = {
+  [ActionTypes.FETCH_WORKFLOW_TEMPLATES]: updaters.fetchWorkflowTemplatesUpdater,
+  [ActionTypes.CREATE_WTD]: updaters.createWTDUpdater,
+  [ActionTypes.UPDATE_WTD]: updaters.updateWTDUpdater,
 };
+
+const workflowTemplatesReducer = handleActions(actionHandler, updaters.INITIAL_STATE);
 
 export default workflowTemplatesReducer;

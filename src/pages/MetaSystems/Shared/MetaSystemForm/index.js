@@ -10,12 +10,11 @@ import { makeStyles } from '@material-ui/core/styles';
 import VektorTextField from 'components/UI/TextFields/VektorTextField';
 import FilterSelect from 'components/UI/Selects/FilterSelect';
 import { STRING_INPUT_VALID, SELECT_VALID } from 'utils/constants/validations';
-import { EQUIPMENT_TYPE, EQUIPMENT_TYPES } from 'utils/constants/equipment-types';
-import { EQUIPMENT_CATEGORIES, EQUIPMENT_CATEGORY_TYPE } from 'utils/constants/equipment-categories';
+import { EQUIPMENT_TYPES, EQUIPMENTS, EQUIPMENT_CATEGORIES, EQUIPMENT_CATEGORY_TYPES } from 'utils/constants';
 import { createMetaSystem, updateMetaSystem, deleteMetaSystem } from 'redux/actions/metaSystem';
 import { FORM_MODE } from 'utils/constants';
 import { setPopup } from 'redux/actions/popupActions';
-import { POPUP_TYPE } from 'utils/constants/popupType';
+import { POPUP_TYPE } from 'utils/constants';
 
 const useStyles = makeStyles((theme) => ({
   alert: {
@@ -87,7 +86,7 @@ const MetaSystemForm = ({ mode = FORM_MODE.view, system = {}, setFormMode = () =
   const handleDelete = () => {
     dispatch(
       setPopup({
-        popupType: POPUP_TYPE.CONFIRM,
+        popupType: POPUP_TYPE.confirm,
         popupText: 'Are you sure you want to delete this system?',
         onConfirm: () => {
           dispatch(deleteMetaSystem(system.project, system._id));
@@ -130,7 +129,7 @@ const MetaSystemForm = ({ mode = FORM_MODE.view, system = {}, setFormMode = () =
                 items={EQUIPMENT_CATEGORIES}
                 error={errors.equipmentCategory?.message}
                 control={control}
-                defaultValue={system.equipmentCategory || EQUIPMENT_CATEGORY_TYPE.CUSTOM}
+                defaultValue={system.equipmentCategory || EQUIPMENT_CATEGORY_TYPES.custom}
               />
             </Grid>
             <Grid item xs={12} sm={6} md={4}>
@@ -141,10 +140,10 @@ const MetaSystemForm = ({ mode = FORM_MODE.view, system = {}, setFormMode = () =
                 name="equipmentType"
                 label="Equipment Type"
                 placeholder="Select Type"
-                items={EQUIPMENT_TYPES}
+                items={EQUIPMENTS}
                 error={errors.equipmentType?.message}
                 control={control}
-                defaultValue={system.equipmentType || EQUIPMENT_TYPE.PROCESS}
+                defaultValue={system.equipmentType || EQUIPMENT_TYPES.process}
               />
             </Grid>
             <Grid item xs={12} sm={6} md={3}>

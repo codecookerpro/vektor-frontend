@@ -1,4 +1,4 @@
-import { PERMISSION_TYPE } from './permissions';
+import { PERMISSION_TYPES } from './enums';
 
 const LINKS = Object.freeze({
   AUTH: {
@@ -140,17 +140,17 @@ const LINKS = Object.freeze({
   USER_MANAGEMENT: {
     TITLE: 'User Management',
     HREF: '/user-management',
-    ROLES: [PERMISSION_TYPE.ADMIN],
+    ROLES: [PERMISSION_TYPES.admin],
   },
   USERS: {
     TITLE: 'Users',
     HREF: '/user-management/users',
-    ROLES: [PERMISSION_TYPE.ADMIN],
+    ROLES: [PERMISSION_TYPES.admin],
   },
   ADD_USER: {
     TITLE: 'New User',
     HREF: '/user-management/users/add',
-    ROLES: [PERMISSION_TYPE.ADMIN],
+    ROLES: [PERMISSION_TYPES.admin],
   },
   EDIT_USER: {
     TITLE: 'New User',

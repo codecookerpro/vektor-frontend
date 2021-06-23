@@ -1,17 +1,17 @@
 import { keyMirror } from 'utils/helpers/utility';
 
-export const ELEMENT_TYPES = Object.freeze({
+export const ELEMENT_TYPES = keyMirror({
   node: 'input_node',
   edge: 'CUSTOM_EDGE',
 });
 
-export const GRAPH_PROPS = Object.freeze({
+export const GRAPH_PROPS = keyMirror({
   arrowHeadColor: '#4d84c0',
   height: window.innerHeight > 1067 ? window.innerHeight - 617 : 350,
   zIndex: 1250,
 });
 
-export const NODE_PROPS = Object.freeze({
+export const NODE_PROPS = keyMirror({
   width: 149,
   height: 70,
   label: 'Deliverable',
@@ -27,7 +27,7 @@ export const NODE_PROPS = Object.freeze({
   marginY: 15,
 });
 
-export const EDGE_PROPS = Object.freeze({
+export const EDGE_PROPS = keyMirror({
   type: ELEMENT_TYPES.edge,
   arrowHeadType: 'arrowclosed',
   style: {
@@ -37,29 +37,29 @@ export const EDGE_PROPS = Object.freeze({
   },
 });
 
-export const LAYOUT_DIRS = Object.freeze({
+export const LAYOUT_DIRS = keyMirror({
   vertical: 'TB',
   horizontal: 'LR',
 });
 
-export const IDENTIFIERS = Object.freeze({
-  TARGET_LEFT: 'target-left',
-  TARGET_TOP: 'target-top',
-  TARGET_RIGHT: 'target-right',
-  TARGET_BOTTOM: 'target-bottom',
+export const IDENTIFIERS = keyMirror({
+  targetLeft: 'target-left',
+  targetTop: 'target-top',
+  targetRight: 'target-right',
+  targetBottom: 'target-bottom',
 
-  SOURCE_LEFT: 'source-left',
-  SOURCE_TOP: 'source-top',
-  SOURCE_RIGHT: 'source-right',
-  SOURCE_BOTTOM: 'source-bottom',
+  sourceLeft: 'source-left',
+  sourceTop: 'source-top',
+  sourceRight: 'source-right',
+  sourceBottom: 'source-bottom',
 });
 
-export const HANDLE_TYPES = Object.freeze({
-  TARGET: 'target',
-  SOURCE: 'source',
+export const HANDLE_TYPES = keyMirror({
+  target: null,
+  source: null,
 });
 
-export const NODE_DIALOGS = Object.freeze({
+export const NODE_DIALOGS = keyMirror({
   edit: {
     type: 'edit',
     title: 'Edit',

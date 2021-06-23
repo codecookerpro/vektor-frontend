@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
 
-import { PERMISSION_TYPE } from 'utils/constants/permissions';
+import { PERMISSION_TYPES } from 'utils/constants';
 import { PROJECT_MODES } from 'pages/Projects/constants';
 
 import { ALLOWED_ROLES } from '../constants';
@@ -11,8 +11,8 @@ const useVisibilityBooleans = (organization, mode) => {
   const isViewingMode = mode === PROJECT_MODES.VIEWING;
   const isCreationMode = mode === PROJECT_MODES.CREATION;
   const isEditingMode = mode === PROJECT_MODES.EDITING;
-  const isOrganizationVisible = (isCreationMode || isEditingMode) && permissions === PERMISSION_TYPE.ADMIN;
-  const isSupervisorVisible = (isCreationMode && permissions !== PERMISSION_TYPE.SUPERVISOR && Boolean(organization)) || !isCreationMode;
+  const isOrganizationVisible = (isCreationMode || isEditingMode) && permissions === PERMISSION_TYPES.admin;
+  const isSupervisorVisible = (isCreationMode && permissions !== PERMISSION_TYPES.supervisor && Boolean(organization)) || !isCreationMode;
   const isButtonEnabled = ALLOWED_ROLES.includes(permissions);
 
   return { isOrganizationVisible, isSupervisorVisible, isViewingMode, isCreationMode, isButtonEnabled };

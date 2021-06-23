@@ -5,7 +5,7 @@ import { Card, CardContent, TableCell, TableRow, Checkbox, Typography } from '@m
 import { getEvents } from 'redux/actions/events';
 import LinkButton from 'components/UI/Buttons/LinkButton';
 import VektorTableContainer from 'parts/Tables/VektorTableContainer';
-import * as TABLE_ENVIRONMENTS from 'utils/constants/table-environments';
+import { DEFAULT_ROWS_PER_PAGE } from 'utils/constants';
 import LINKS from 'utils/constants/links';
 import { getEnglishDateWithTime } from 'utils/helpers/time';
 import { isEmpty } from 'utils/helpers/utility';
@@ -25,7 +25,7 @@ const AuditTrailLogsTable = ({ selectedItems, setSelectedItems }) => {
   const { results = [] } = useSelector((state) => state.events);
   const users = useSelector((state) => state.users.results);
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(TABLE_ENVIRONMENTS.ROWS_PER_PAGE);
+  const [rowsPerPage, setRowsPerPage] = useState(DEFAULT_ROWS_PER_PAGE);
 
   useEffect(() => {
     dispatch(getEvents());
