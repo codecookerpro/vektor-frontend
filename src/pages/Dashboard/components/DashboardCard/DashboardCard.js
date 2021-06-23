@@ -2,10 +2,8 @@ import React, { memo, useState } from 'react';
 import { Card, CardContent, CardHeader, Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
-import DashboardChart from './DashboardChart';
-import DashboardTable from './DashboardTable';
+import { DashboardChart, DashboardTable, LineProgress, StepProgress } from './components';
 import { ColorButton } from 'components/UI/Buttons';
-import LineProgress from 'parts/LineProgress';
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -54,7 +52,7 @@ const DashboardCard = ({ item }) => {
                 <LineProgress label="Worked vs Planned Hours" completed={12} total={16} />
               </Grid>
               <Grid item xs={12}>
-                <LineProgress label="Milestones" completed={3} total={4} />
+                <StepProgress label="Milestones" completed={3} total={4} />
               </Grid>
             </Grid>
           </Grid>
