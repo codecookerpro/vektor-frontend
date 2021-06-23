@@ -3,7 +3,7 @@ import { useParams, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { PROJECT_MODES } from '../constants';
-import { PERMISSION_TYPE } from 'utils/constants/permissions';
+import { PERMISSION_TYPES } from 'utils/constants';
 import { readMetaSystem } from 'redux/actions/metaSystem';
 import { getSystemHistory } from 'redux/actions/systems';
 
@@ -33,8 +33,8 @@ export const useEditProjectLogic = () => {
   const project = useMemo(() => projects.find((item) => item._id === id), [id, projects]);
   const getMode = useMemo(() => {
     switch (permissions) {
-      case PERMISSION_TYPE.SUPERVISOR:
-      case PERMISSION_TYPE.ADMIN:
+      case PERMISSION_TYPES.supervisor:
+      case PERMISSION_TYPES.admin:
         return PROJECT_MODES.EDITING;
       default:
         return PROJECT_MODES.VIEWING;

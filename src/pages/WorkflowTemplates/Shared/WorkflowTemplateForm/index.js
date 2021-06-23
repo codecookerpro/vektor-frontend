@@ -10,7 +10,7 @@ import { Card, CardContent, Grid, Button, Typography } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 import { makeStyles } from '@material-ui/core/styles';
 
-import { PERMISSION_TYPE } from 'utils/constants/permissions';
+import { PERMISSION_TYPES } from 'utils/constants';
 import { addWorkflowTemplate, editWorkflowTemplate, removeWorkflowTemplate } from 'redux/actions/workflowTemplates';
 import VektorTextField from 'components/UI/TextFields/VektorTextField';
 import FilterSelect from 'components/UI/Selects/FilterSelect';
@@ -19,7 +19,7 @@ import LINKS from 'utils/constants/links';
 import useLoading from 'utils/hooks/useLoading';
 import { isEmpty } from 'utils/helpers/utility';
 import { setPopup } from 'redux/actions/popupActions';
-import { POPUP_TYPE } from 'utils/constants/popupType';
+import { POPUP_TYPE } from 'utils/constants';
 import { FORM_MODE, noop } from 'utils/constants';
 import { elementsToDeliverables } from 'parts/WorkflowGraph/helper';
 
@@ -61,7 +61,7 @@ const WorkflowTemplateForm = ({ workflowTemplate = {}, onEdit = noop, getElement
     differentialWeight: INTEGER_VALID,
   };
 
-  if (currentUser.permissions === PERMISSION_TYPE.ADMIN) {
+  if (currentUser.permissions === PERMISSION_TYPES.admin) {
     schemaForOrg.organization = SELECT_VALID;
   }
 
@@ -77,7 +77,7 @@ const WorkflowTemplateForm = ({ workflowTemplate = {}, onEdit = noop, getElement
     try {
       const params = {
         name: data.name,
-        organization: currentUser.permissions === PERMISSION_TYPE.ADMIN ? data.organization : currentUser.organization,
+        organization: currentUser.permissions === PERMISSION_TYPES.admin ? data.organization : currentUser.organization,
         differentialWeight: data.differentialWeight,
       };
 
@@ -111,7 +111,7 @@ const WorkflowTemplateForm = ({ workflowTemplate = {}, onEdit = noop, getElement
     changeLoadingStatus(true);
     dispatch(
       setPopup({
-        popupType: POPUP_TYPE.CONFIRM,
+        popupType: POPUP_TYPE.confirm,
         popupText: 'Are you sure you want to delete this template?',
         onConfirm: async () => {
           try {
@@ -162,7 +162,7 @@ const WorkflowTemplateForm = ({ workflowTemplate = {}, onEdit = noop, getElement
                 defaultValue={workflowTemplate?.name || ''}
               />
             </Grid>
-            {currentUser.permissions === PERMISSION_TYPE.ADMIN && (
+            {currentUser.permissions === PERMISSION_TYPES.admin && (
               <Grid item xs={12} sm={6} md={4}>
                 <Controller
                   as={<FilterSelect />}

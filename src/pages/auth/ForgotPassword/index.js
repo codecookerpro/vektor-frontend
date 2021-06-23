@@ -13,8 +13,7 @@ import LinkButton from 'components/UI/Buttons/LinkButton';
 import AuthWrapper, { authPageStyles } from '../Shared/AuthWrapper';
 import { EMAIL_VALID } from 'utils/constants/validations';
 import { setPopup } from 'redux/actions/popupActions';
-import { POPUP_TYPE } from 'utils/constants/popupType';
-import { POPUP_TEXT } from 'utils/constants/popupText';
+import { POPUP_TYPE } from 'utils/constants';
 
 const schema = joi.object().keys({
   email: EMAIL_VALID,
@@ -36,7 +35,7 @@ function ForgotPassword() {
         email: data.email,
       };
       await authAPI.restorePassword(params);
-      dispatch(setPopup({ popupType: POPUP_TYPE.INFO, popupText: POPUP_TEXT.INFO.FORGOT_PASSWORD }));
+      dispatch(setPopup({ popupType: POPUP_TYPE.info, popupText: 'Email was sent' }));
     } catch (error) {
       if (error.response) {
         const {

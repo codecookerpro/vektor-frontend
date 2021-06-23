@@ -4,7 +4,7 @@ import { Card, CardContent, TableCell, TableRow, Checkbox, Typography } from '@m
 
 import LinkButton from 'components/UI/Buttons/LinkButton';
 import VektorTableContainer from 'parts/Tables/VektorTableContainer';
-import * as TABLE_ENVIRONMENTS from 'utils/constants/table-environments';
+import { DEFAULT_ROWS_PER_PAGE } from 'utils/constants';
 import LINKS from 'utils/constants/links';
 import { setSelectedDepartments, setSelectedOrganization } from 'redux/actions/organizations';
 
@@ -14,7 +14,7 @@ const OrganizationsTable = ({ selectedItems, setSelectedItems }) => {
   const dispatch = useDispatch();
   const { results = [] } = useSelector((state) => state.organizations);
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(TABLE_ENVIRONMENTS.ROWS_PER_PAGE);
+  const [rowsPerPage, setRowsPerPage] = useState(DEFAULT_ROWS_PER_PAGE);
 
   const toggleHandler = (value) => () => {
     const currentIndex = selectedItems.findIndex((item) => item._id === value._id);

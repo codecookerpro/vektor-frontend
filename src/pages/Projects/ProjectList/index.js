@@ -6,7 +6,7 @@ import { Plus } from 'react-feather';
 import { getProjects } from 'redux/actions/projects';
 import ContainedButton from 'components/UI/Buttons/ContainedButton';
 import PageHeader from 'parts/PageHeader';
-import { PERMISSION_TYPE } from 'utils/constants/permissions';
+import { PERMISSION_TYPES } from 'utils/constants';
 
 import OrganizationFilter from './OrganizationFilter';
 import ProjectsTable from './ProjectsTable';
@@ -19,13 +19,13 @@ const ProjectList = () => {
   const history = useHistory();
 
   const { permissions } = useSelector(({ auth }) => auth.currentUser);
-  const isAddProjectButtonVisible = permissions === PERMISSION_TYPE.ADMIN || permissions === PERMISSION_TYPE.SUPERVISOR;
-  const isOrganizationFilterVisible = permissions === PERMISSION_TYPE.ADMIN;
+  const isAddProjectButtonVisible = permissions === PERMISSION_TYPES.admin || permissions === PERMISSION_TYPES.supervisor;
+  const isOrganizationFilterVisible = permissions === PERMISSION_TYPES.admin;
 
   const [organization, setOrganization] = useState('');
 
   useEffect(() => {
-    if (permissions === PERMISSION_TYPE.ADMIN) {
+    if (permissions === PERMISSION_TYPES.admin) {
       dispatch(getProjects({ organization }));
     }
   }, [dispatch, organization, permissions]);

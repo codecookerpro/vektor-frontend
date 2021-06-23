@@ -1,9 +1,9 @@
 import { ACTIONS } from 'pages/Projects/constants';
-import { PERMISSION_TYPE } from 'utils/constants/permissions';
+import { PERMISSION_TYPES } from 'utils/constants';
 
 export const ACTIONS_DATA = [
   { title: 'Rename phase', action: ACTIONS.RENAME },
   { title: 'Delete Phase', action: ACTIONS.DELETE },
 ];
 
-export const ALLOWED_ROLES = [PERMISSION_TYPE.ADMIN, PERMISSION_TYPE.SUPERVISOR, PERMISSION_TYPE.PROJECT_MANAGER];
+export const ALLOWED_ROLES = [PERMISSION_TYPES.admin, PERMISSION_TYPES.supervisor, PERMISSION_TYPES.projectManager];

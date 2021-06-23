@@ -210,16 +210,16 @@ export const getLayoutedElements = (elements, direction = LAYOUT_DIRS.vertical) 
   return elements.map((el) => {
     if (isNode(el)) {
       const nodeWithPosition = dagreGraph.node(el.id);
-      el.targetPosition = isHorizontal ? IDENTIFIERS.TARGET_LEFT : IDENTIFIERS.TARGET_TOP;
-      el.sourcePosition = isHorizontal ? IDENTIFIERS.SOURCE_RIGHT : IDENTIFIERS.SOURCE_BOTTOM;
+      el.targetPosition = isHorizontal ? IDENTIFIERS.targetLeft : IDENTIFIERS.targetTop;
+      el.sourcePosition = isHorizontal ? IDENTIFIERS.sourceRight : IDENTIFIERS.sourceBottom;
 
       el.position = {
         x: nodeWithPosition.x - NODE_PROPS.width / 2 + Math.random() / 1000,
         y: nodeWithPosition.y - NODE_PROPS.height / 2,
       };
     } else {
-      el.targetHandle = isHorizontal ? IDENTIFIERS.TARGET_LEFT : IDENTIFIERS.TARGET_TOP;
-      el.sourceHandle = isHorizontal ? IDENTIFIERS.SOURCE_RIGHT : IDENTIFIERS.SOURCE_BOTTOM;
+      el.targetHandle = isHorizontal ? IDENTIFIERS.targetLeft : IDENTIFIERS.targetTop;
+      el.sourceHandle = isHorizontal ? IDENTIFIERS.sourceRight : IDENTIFIERS.sourceBottom;
     }
 
     return el;

@@ -1,16 +1,9 @@
 import * as API from 'services/api-meta-system';
-import {
-  CREATE_META_SYSTEM,
-  FETCH_META_SYSTEMS,
-  DELETE_META_SYSTEM,
-  UPDATE_META_SYSTEM,
-  UPDATE_DELIVERABLES,
-  FETCH_META_SYSTEMS_FILTER,
-} from 'redux/types';
 import { isEmpty } from 'utils/helpers/utility';
+import ActionTypes from 'utils/constants/action-types';
 
 export const getMetaSystemsFilter = (data, isLoading = false) => ({
-  type: FETCH_META_SYSTEMS_FILTER,
+  type: ActionTypes.FETCH_META_SYSTEMS_FILTER,
   payload: { data, isLoading },
 });
 
@@ -18,7 +11,7 @@ export const createMetaSystem = (params) => (dispatch) => {
   API.createMetaSystem(params)
     .then(({ data }) => {
       dispatch({
-        type: CREATE_META_SYSTEM,
+        type: ActionTypes.CREATE_META_SYSTEM,
         payload: data,
       });
     })
@@ -44,7 +37,7 @@ export const readMetaSystem =
     API.getMetaSystems(params)
       .then(({ data }) => {
         dispatch({
-          type: FETCH_META_SYSTEMS,
+          type: ActionTypes.FETCH_META_SYSTEMS,
           payload: { data, project },
         });
       })
@@ -55,7 +48,7 @@ export const updateMetaSystem = (params) => (dispatch) => {
   API.updateMetaSystem(params)
     .then(({ data }) => {
       dispatch({
-        type: UPDATE_META_SYSTEM,
+        type: ActionTypes.UPDATE_META_SYSTEM,
         payload: data,
       });
     })
@@ -66,7 +59,7 @@ export const deleteMetaSystem = (project, system) => (dispatch) => {
   API.deleteMetaSystem({ _id: system })
     .then(() => {
       dispatch({
-        type: DELETE_META_SYSTEM,
+        type: ActionTypes.DELETE_META_SYSTEM,
         payload: { project, system },
       });
     })
@@ -93,53 +86,38 @@ export const initDeliverables = (params) => (dispatch) => {
   API.initDeliverables(params)
     .then(({ data }) => {
       dispatch({
-        type: UPDATE_DELIVERABLES,
+        type: ActionTypes.INIT_DELIVERABLES,
         payload: data,
       });
     })
     .catch((err) => console.error('[initDeliverables] error => ', err));
 };
 
+export const updateDeliverables = (payload) => ({
+  type: ActionTypes.UPDATE_DELIVERABLES,
+  payload,
+});
+
 export const createDeliverable = (params) => (dispatch) => {
   API.createDeliverable(params)
-    .then(({ data }) => {
-      dispatch({
-        type: UPDATE_DELIVERABLES,
-        payload: data,
-      });
-    })
+    .then(({ data }) => dispatch(updateDeliverables(data)))
     .catch((err) => console.error('[createDeliverable] error => ', err));
 };
 
 export const updateDeliverable = (params) => (dispatch) => {
   API.updateDeliverable(params)
-    .then(({ data }) => {
-      dispatch({
-        type: UPDATE_DELIVERABLES,
-        payload: data,
-      });
-    })
+    .then(({ data }) => dispatch(updateDeliverables(data)))
     .catch((err) => console.error('[updateDeliverable] error => ', err));
 };
 
 export const deleteDeliverable = (params) => (dispatch) => {
   API.deleteDeliverable(params)
-    .then(({ data }) => {
-      dispatch({
-        type: UPDATE_DELIVERABLES,
-        payload: data,
-      });
-    })
+    .then(({ data }) => dispatch(updateDeliverables(data)))
     .catch((err) => console.error('[deleteDeliverable] error => ', err));
 };
 
 export const updateDeliverablePositions = (params) => (dispatch) => {
   API.updateDeliverablePositions(params)
-    .then(({ data }) => {
-      dispatch({
-        type: UPDATE_DELIVERABLES,
-        payload: data,
-      });
-    })
+    .then(({ data }) => dispatch(updateDeliverables(data)))
     .catch((err) => console.error('[updateDeliverablePositions] error => ', err));
 };

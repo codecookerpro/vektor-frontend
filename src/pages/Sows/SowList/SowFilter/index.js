@@ -3,14 +3,14 @@ import { Card, CardContent } from '@material-ui/core';
 import FilterSelect from 'components/UI/Selects/FilterSelect';
 import { useSelector } from 'react-redux';
 import { useStyles } from './styles';
-import { PERMISSION_TYPE } from 'utils/constants/permissions';
+import { PERMISSION_TYPES } from 'utils/constants';
 
 const SowFilters = ({ filter, setFilter }) => {
   const classes = useStyles();
   const { results: organizations = [] } = useSelector((state) => state.organizations);
   const { results: projects = [] } = useSelector((state) => state.projects);
   const { permissions } = useSelector(({ auth }) => auth.currentUser);
-  const isOrganizationVisible = permissions === PERMISSION_TYPE.ADMIN;
+  const isOrganizationVisible = permissions === PERMISSION_TYPES.admin;
 
   const inputHandler = (event) => {
     setFilter((prev) => ({

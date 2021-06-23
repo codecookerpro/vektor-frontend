@@ -8,10 +8,10 @@ import NewSow from './NewSow';
 import InitiationPhase from './InitiationPhase';
 import IntakePhase from './IntakePhase';
 import IproSubmit from './IproSubmit';
-import { SOW_FORM_PHASE } from 'utils/constants/sowFormPhase';
+import { SOW_FORM_PHASE } from './constants';
 import { useStyles } from './styles';
 import { addSOW, editSOW } from 'redux/actions/sowAction';
-import { PERMISSION_TYPE } from 'utils/constants/permissions';
+import { PERMISSION_TYPES } from 'utils/constants';
 import setSchema from './setSchema';
 import AttachmentsPhase from './AttachmentsPhase';
 import { isEmpty } from 'utils/helpers/utility';
@@ -25,7 +25,7 @@ const SowForm = ({ mode }) => {
 
   const { organization: defaultOrganization } = useSelector(({ projects }) => projects);
   const { permissions } = useSelector(({ auth }) => auth.currentUser);
-  const isOrganizationVisible = permissions === PERMISSION_TYPE.ADMIN;
+  const isOrganizationVisible = permissions === PERMISSION_TYPES.admin;
 
   const schema = setSchema(isOrganizationVisible && mode === FORM_MODE.create);
 
@@ -80,12 +80,12 @@ const SowForm = ({ mode }) => {
           setProject={setProject}
           isOrganizationVisible={isOrganizationVisible}
         />
-        <InitiationPhase sow={sow} title={SOW_FORM_PHASE.INITIATION_PHASE} setNotRequiredField={setNotRequiredField} />
-        {mode === FORM_MODE.update && <AttachmentsPhase sow={sow} title={SOW_FORM_PHASE.INITIATION_PHASE_ATTACHMENTS} />}
-        <IntakePhase sow={sow} title={SOW_FORM_PHASE.INTAKE_PHASE} setNotRequiredField={setNotRequiredField} />
-        {mode === FORM_MODE.update && <AttachmentsPhase sow={sow} title={SOW_FORM_PHASE.INTAKE_PHASE_ATTACHMENTS} />}
-        <IproSubmit sow={sow} title={SOW_FORM_PHASE.IPRO_SUBMIT} setNotRequiredField={setNotRequiredField} />
-        {mode === FORM_MODE.update && <AttachmentsPhase sow={sow} title={SOW_FORM_PHASE.IPRO_SUBMIT_ATTACHMENTS} />}
+        <InitiationPhase sow={sow} title={SOW_FORM_PHASE.initiationPhase} setNotRequiredField={setNotRequiredField} />
+        {mode === FORM_MODE.update && <AttachmentsPhase sow={sow} title={SOW_FORM_PHASE.initiationPhaseAttachments} />}
+        <IntakePhase sow={sow} title={SOW_FORM_PHASE.intakePhase} setNotRequiredField={setNotRequiredField} />
+        {mode === FORM_MODE.update && <AttachmentsPhase sow={sow} title={SOW_FORM_PHASE.intakePhaseAttachments} />}
+        <IproSubmit sow={sow} title={SOW_FORM_PHASE.iproSubmit} setNotRequiredField={setNotRequiredField} />
+        {mode === FORM_MODE.update && <AttachmentsPhase sow={sow} title={SOW_FORM_PHASE.iproSubmitAttachments} />}
         <div className={classes.buttonContainer}>
           <Button variant="contained" color="primary" type="submit">
             Save
