@@ -27,11 +27,11 @@ export const EQUIPMENTS = [
 // Equipment Category
 export const EQUIPMENT_CATEGORIES = [
   {
-    LABLE: EQUIPMENT_CATEGORY_TYPES.custom,
+    LABEL: EQUIPMENT_CATEGORY_TYPES.custom,
     VALUE: EQUIPMENT_CATEGORY_TYPES.custom,
   },
   {
-    LABLE: EQUIPMENT_CATEGORY_TYPES.commercial,
+    LABEL: EQUIPMENT_CATEGORY_TYPES.commercial,
     VALUE: EQUIPMENT_CATEGORY_TYPES.commercial,
   },
 ];
