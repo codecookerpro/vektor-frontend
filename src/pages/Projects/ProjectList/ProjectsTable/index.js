@@ -5,7 +5,7 @@ import { Card, CardContent, TableCell, TableRow, Typography } from '@material-ui
 import VektorChip from 'components/VektorChip';
 import LinkButton from 'components/UI/Buttons/LinkButton';
 import VektorTableContainer from 'parts/Tables/VektorTableContainer';
-import * as TABLE_ENVIRONMENTS from 'utils/constants/table-environments';
+import { DEFAULT_ROWS_PER_PAGE } from 'utils/constants';
 import LINKS from 'utils/constants/links';
 
 const columns = [
@@ -20,7 +20,7 @@ const ProjectsTable = () => {
   const { results } = useSelector((state) => state.projects);
   const organizations = useSelector((state) => state.organizations.results);
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(TABLE_ENVIRONMENTS.ROWS_PER_PAGE);
+  const [rowsPerPage, setRowsPerPage] = useState(DEFAULT_ROWS_PER_PAGE);
 
   const getOrganizationName = (_id) => {
     const organization = organizations.find((item) => item._id === _id);

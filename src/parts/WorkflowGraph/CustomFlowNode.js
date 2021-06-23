@@ -7,6 +7,7 @@ import { Button } from '@material-ui/core';
 import NodeDialog from './NodeDialog';
 import CloseIcon from '@material-ui/icons/Close';
 import { IDENTIFIERS, HANDLE_TYPES, NODE_DIALOGS, GRAPH_PROPS } from './constants';
+import { ColorButton } from 'components/UI/Buttons';
 
 const useStyles = makeStyles(() => ({
   nodeContent: {
@@ -38,6 +39,7 @@ const useStyles = makeStyles(() => ({
     display: 'flex',
     flexDirection: 'column',
     padding: '24px 30px',
+    boxShadow: '0.3em 0.3em 1em rgb(0 0 0 / 30%)',
   },
   nodePopupButton: {
     width: '100%',
@@ -83,74 +85,74 @@ export const getCustomFlowNode = (tClass, sClass) => {
       <>
         <div onDoubleClick={handlePopUpToggle}>
           <Handle
-            type={HANDLE_TYPES.TARGET}
+            type={HANDLE_TYPES.target}
             className={tClass}
             style={{ ...handleStyles, marginLeft: '-2px' }}
             position={Position.Left}
-            id={IDENTIFIERS.TARGET_LEFT}
+            id={IDENTIFIERS.targetLeft}
           />
 
           <Handle
-            type={HANDLE_TYPES.TARGET}
+            type={HANDLE_TYPES.target}
             className={tClass}
             style={{ ...handleStyles, marginTop: '-2px' }}
             position={Position.Top}
-            id={IDENTIFIERS.TARGET_TOP}
+            id={IDENTIFIERS.targetTop}
           />
 
           <Handle
-            type={HANDLE_TYPES.TARGET}
+            type={HANDLE_TYPES.target}
             className={tClass}
             style={{ ...handleStyles, marginRight: '-1px' }}
             position={Position.Right}
-            id={IDENTIFIERS.TARGET_RIGHT}
+            id={IDENTIFIERS.targetRight}
           />
 
           <Handle
-            type={HANDLE_TYPES.TARGET}
+            type={HANDLE_TYPES.target}
             className={tClass}
             style={{ ...handleStyles, marginBottom: '-1px' }}
             position={Position.Bottom}
-            id={IDENTIFIERS.TARGET_BOTTOM}
+            id={IDENTIFIERS.targetBottom}
           />
 
           <Handle
-            type={HANDLE_TYPES.SOURCE}
+            type={HANDLE_TYPES.source}
             className={sClass}
             style={{ ...handleStyles, marginLeft: '-2px' }}
             position={Position.Left}
-            id={IDENTIFIERS.SOURCE_LEFT}
+            id={IDENTIFIERS.sourceLeft}
           />
 
           <Handle
-            type={HANDLE_TYPES.SOURCE}
+            type={HANDLE_TYPES.source}
             className={sClass}
             style={{ ...handleStyles, marginTop: '-2px' }}
             position={Position.Top}
-            id={IDENTIFIERS.SOURCE_TOP}
+            id={IDENTIFIERS.sourceTop}
           />
 
           <Handle
-            type={HANDLE_TYPES.SOURCE}
+            type={HANDLE_TYPES.source}
             className={sClass}
             style={{ ...handleStyles, marginRight: '-1px' }}
             position={Position.Right}
-            id={IDENTIFIERS.SOURCE_RIGHT}
+            id={IDENTIFIERS.sourceRight}
           />
 
           <Handle
-            type={HANDLE_TYPES.SOURCE}
+            type={HANDLE_TYPES.source}
             className={sClass}
             style={{ ...handleStyles, marginBottom: '-1px' }}
             position={Position.Bottom}
-            id={IDENTIFIERS.SOURCE_BOTTOM}
+            id={IDENTIFIERS.sourceBottom}
           />
 
           <div className={classes.nodeContent}>
             <p className={classes.name}>{data.label || <small>Double-click to edit</small>}</p>
           </div>
 
-          <Popper open={isPopperOpen} anchorEl={popperElement} className={classes.nodePopupContainer} transition>
+          <Popper open={isPopperOpen} anchorEl={popperElement} className={classes.nodePopupContainer} transition boxShadow={5}>
             {({ TransitionProps }) => (
               <Fade {...TransitionProps}>
                 <div className={classes.nodePopup}>
@@ -158,9 +160,9 @@ export const getCustomFlowNode = (tClass, sClass) => {
                   <Button variant="contained" color="primary" className={classes.nodePopupButton} onClick={handleEditNodes}>
                     Edit
                   </Button>
-                  <Button variant="contained" color="default" onClick={handleDeleteNodes}>
+                  <ColorButton colour="red" onClick={handleDeleteNodes}>
                     Delete
-                  </Button>
+                  </ColorButton>
                 </div>
               </Fade>
             )}

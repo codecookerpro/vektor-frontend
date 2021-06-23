@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 
 import { getReports } from 'redux/actions/reports';
-import * as TABLE_ENVIRONMENTS from 'utils/constants/table-environments';
+import { DEFAULT_ROWS_PER_PAGE } from 'utils/constants';
 
 import { COLUMNS } from './constants';
 
@@ -14,7 +14,7 @@ const useReportsTableLogic = (isAdmin, filter) => {
   const [reports, setReports] = useState([]);
   const [page, setPage] = useState(0);
   const [rowCounts, setRowCounts] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(TABLE_ENVIRONMENTS.ROWS_PER_PAGE);
+  const [rowsPerPage, setRowsPerPage] = useState(DEFAULT_ROWS_PER_PAGE);
   const [selectedItems, setSelectedItems] = useState([]);
 
   const fromPage = page * rowsPerPage;

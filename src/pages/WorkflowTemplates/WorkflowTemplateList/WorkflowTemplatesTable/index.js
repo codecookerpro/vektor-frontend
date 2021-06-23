@@ -5,7 +5,7 @@ import { Card, CardContent, TableCell, TableRow, Checkbox, Typography } from '@m
 import { getWorkflowTemplates } from 'redux/actions/workflowTemplates';
 import LinkButton from 'components/UI/Buttons/LinkButton';
 import VektorTableContainer from 'parts/Tables/VektorTableContainer';
-import * as TABLE_ENVIRONMENTS from 'utils/constants/table-environments';
+import { DEFAULT_ROWS_PER_PAGE } from 'utils/constants';
 import LINKS from 'utils/constants/links';
 
 const columns = [
@@ -19,7 +19,7 @@ const WorkflowTemplatesTable = ({ selectedItems, setSelectedItems }) => {
   const { results = [] } = useSelector((state) => state.workflowTemplates);
   const organizations = useSelector((state) => state.organizations.results || []);
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(TABLE_ENVIRONMENTS.ROWS_PER_PAGE);
+  const [rowsPerPage, setRowsPerPage] = useState(DEFAULT_ROWS_PER_PAGE);
 
   useEffect(() => {
     dispatch(getWorkflowTemplates());

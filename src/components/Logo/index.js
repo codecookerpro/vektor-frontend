@@ -5,7 +5,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 
 import LINKS from 'utils/constants/links';
-import { LOGO_IMAGE_PATH } from 'utils/constants/image-paths';
+import { LOGO_IMAGE_PATH } from 'utils/constants/resources';
 
 const useStyles = makeStyles(() => ({
   picture: {

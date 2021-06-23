@@ -2,7 +2,7 @@ import React, { memo } from 'react';
 import styled from 'styled-components/macro';
 import { Grid, Hidden, List, ListItemText as MuiListItemText, ListItem as MuiListItem } from '@material-ui/core';
 
-import FOOTER_MENU_LINKS from 'utils/constants/footer-menu';
+import { FOOTER_MENU_LINKS } from './constants';
 
 const Wrapper = styled.div`
   padding: ${(props) => props.theme.spacing(1) / 4}px ${(props) => props.theme.spacing(4)}px;

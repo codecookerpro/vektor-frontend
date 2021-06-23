@@ -5,8 +5,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import { makeStyles } from '@material-ui/core/styles';
 import { setPopup } from 'redux/actions/popupActions';
 import { useDispatch, useSelector } from 'react-redux';
-import { POPUP_TYPE } from 'utils/constants/popupType';
-import { EMPTY_STRING } from 'utils/constants/emptyString';
+import { POPUP_TYPE } from 'utils/constants';
 
 const useStyles = makeStyles((theme) => ({
   backDrop: {
@@ -36,8 +35,8 @@ const Popup = () => {
   const dispatch = useDispatch();
   const classes = useStyles();
   const {
-    popupType = POPUP_TYPE.INACTIVE,
-    popupText = EMPTY_STRING,
+    popupType = POPUP_TYPE.inactive,
+    popupText = '',
     onConfirm = async () => {},
     onCancel = async () => {},
     confirmText = 'Confirm',
@@ -45,23 +44,23 @@ const Popup = () => {
   } = useSelector((state) => state.popup);
 
   const handleClose = async () => {
-    await dispatch(setPopup({ popupType: POPUP_TYPE.INACTIVE, popupText: EMPTY_STRING }));
+    await dispatch(setPopup({ popupType: POPUP_TYPE.inactive }));
     await onCancel();
   };
 
   const handleConfirm = async () => {
-    await dispatch(setPopup({ popupType: POPUP_TYPE.INACTIVE, popupText: EMPTY_STRING }));
+    await dispatch(setPopup({ popupType: POPUP_TYPE.inactive }));
     await onConfirm();
   };
 
-  if (popupType === POPUP_TYPE.INACTIVE) {
+  if (popupType === POPUP_TYPE.inactive) {
     return null;
   }
 
   return (
     <div>
       <Dialog
-        open={popupType !== POPUP_TYPE.INACTIVE}
+        open={popupType !== POPUP_TYPE.inactive}
         onClose={handleClose}
         maxWidth="xs"
         fullWidth={false}
@@ -81,7 +80,7 @@ const Popup = () => {
           <DialogContentText className={classes.dialogContentText}>{popupText}</DialogContentText>
         </DialogContent>
         <DialogActions className={classes.actionButtons}>
-          {popupType === POPUP_TYPE.CONFIRM ? (
+          {popupType === POPUP_TYPE.confirm ? (
             <>
               <Button color="default" variant="contained" onClick={handleClose}>
                 {cancelText}

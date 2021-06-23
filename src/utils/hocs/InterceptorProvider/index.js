@@ -6,7 +6,7 @@ import * as authAPI from 'services/api-auth';
 import { logoutUser, setUserToken } from 'redux/actions/authActions';
 import { GENERIC_ERRORS } from 'utils/constants/error-codes';
 import { setPopup } from 'redux/actions/popupActions';
-import { POPUP_TYPE } from 'utils/constants/popupType';
+import { POPUP_TYPE } from 'utils/constants';
 
 const InterceptorProvider = () => {
   const { accessToken, passwordResetToken } = useSelector((state) => state.auth);
@@ -20,7 +20,7 @@ const InterceptorProvider = () => {
           const { data } = error.response;
           const { code } = data;
           switch (code) {
-            case GENERIC_ERRORS.VALIDATION:
+            case GENERIC_ERRORS.validation:
               if (process.env.NODE_ENV !== 'production') {
                 const { errors: errorsResponse = [] } = data;
                 let messages = '[DEBUG] \n';
@@ -28,11 +28,11 @@ const InterceptorProvider = () => {
                   const { message } = error;
                   messages += message + ' \n';
                 });
-                dispatch(setPopup({ popupType: POPUP_TYPE.ERROR, popupText: messages }));
+                dispatch(setPopup({ popupType: POPUP_TYPE.error, popupText: messages }));
               }
               break;
-            case GENERIC_ERRORS.AUTH:
-            case GENERIC_ERRORS.ACCESS_TOKEN_EXP:
+            case GENERIC_ERRORS.auth:
+            case GENERIC_ERRORS.accessTokenExp:
               const params = { refreshToken: localStorage.refreshToken || sessionStorage.refreshToken };
               const { accessToken, refreshToken, data: user } = await authAPI.refreshToken(params);
               dispatch(
@@ -44,7 +44,7 @@ const InterceptorProvider = () => {
               );
               window.location.reload();
               break;
-            case GENERIC_ERRORS.REFRESH_TOKEN:
+            case GENERIC_ERRORS.refreshToken:
               dispatch(logoutUser());
               window.location.reload();
               break;
