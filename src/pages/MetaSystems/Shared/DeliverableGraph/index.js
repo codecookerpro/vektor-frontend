@@ -2,7 +2,7 @@ import React, { memo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Card, CardHeader, CardContent } from '@material-ui/core';
 import WorkflowGraph from 'parts/WorkflowGraph';
-import ContainedButton from 'components/UI/Buttons/ContainedButton';
+import { ColorButton } from 'components/UI/Buttons';
 
 import { GRAPH_EVENTS } from 'parts/WorkflowGraph/constants';
 import { nodeToDeliverable, elementsToDeliverables } from 'parts/WorkflowGraph/helper';
@@ -42,7 +42,11 @@ const DeliverableGraph = ({ editable, mainSystem }) => {
     <Card>
       <CardHeader
         title="Deliverables Graph"
-        action={<ContainedButton onClick={() => toggleGraph(!toggled)}>{toggled ? 'Hide Graph' : 'See Graph'}</ContainedButton>}
+        action={
+          <ColorButton colour="lightGreen" onClick={() => toggleGraph(!toggled)}>
+            {toggled ? 'Hide Graph' : 'See Graph'}
+          </ColorButton>
+        }
       />
       {toggled ? (
         <CardContent>

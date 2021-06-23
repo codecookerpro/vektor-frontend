@@ -5,6 +5,7 @@ import { Grid } from '@material-ui/core';
 
 import PageHeader from 'parts/PageHeader';
 import MetaSystemForm from '../Shared/MetaSystemForm';
+import GanttChart from '../Shared/GanttChart';
 import DeliverableGraph from '../Shared/DeliverableGraph';
 import DeliverableTable from '../Shared/DeliverableTable';
 import InitDialog from '../Shared/InitDialog';
@@ -76,6 +77,9 @@ const EditMetaSystem = () => {
         <Grid container spacing={6}>
           <Grid item xs={12}>
             <MetaSystemForm system={metaSystem} mode={formMode} setFormMode={setFormMode} />
+          </Grid>
+          <Grid item xs={12}>
+            <GanttChart deliverables={metaSystem.mainSystem.deliverables} />
           </Grid>
           <Grid item xs={12}>
             <DeliverableGraph editable={editable} mainSystem={metaSystem.mainSystem} />

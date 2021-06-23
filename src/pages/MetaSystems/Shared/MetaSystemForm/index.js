@@ -15,6 +15,7 @@ import { createMetaSystem, updateMetaSystem, deleteMetaSystem } from 'redux/acti
 import { FORM_MODE } from 'utils/constants';
 import { setPopup } from 'redux/actions/popupActions';
 import { POPUP_TYPE } from 'utils/constants';
+import { ColorButton } from 'components/UI/Buttons';
 
 const useStyles = makeStyles((theme) => ({
   alert: {
@@ -33,7 +34,6 @@ const useStyles = makeStyles((theme) => ({
   },
   deleteButton: {
     marginLeft: 'auto',
-    backgroundColor: theme.custom.palette.red,
   },
   cancelButton: {
     marginLeft: theme.spacing(4),
@@ -238,9 +238,9 @@ const MetaSystemForm = ({ mode = FORM_MODE.view, system = {}, setFormMode = () =
                   </>
                 )}
                 {mode === FORM_MODE.update ? (
-                  <Button variant="contained" color="primary" className={classes.deleteButton} onClick={handleDelete}>
+                  <ColorButton variant="contained" colour="red" className={classes.deleteButton} onClick={handleDelete}>
                     DELETE
-                  </Button>
+                  </ColorButton>
                 ) : null}
               </div>
             </Grid>

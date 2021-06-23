@@ -64,6 +64,20 @@ const variant = {
       black: '#000000',
       border: '#f1f0f2',
     },
+    buttonPalette: {
+      lightGreen: {
+        main: '#a6b884',
+        dark: '#a2b176',
+        light: '#a6b884',
+        contrastText: '#FFF',
+      },
+      red: {
+        main: '#d32f2f',
+        dark: '#d32f2f',
+        light: '#d32f2f',
+        contrastText: '#FFF',
+      },
+    },
   },
 };
 
