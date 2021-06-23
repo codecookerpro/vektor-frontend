@@ -2,22 +2,16 @@ import { useState, useMemo, useEffect } from 'react';
 import moment from 'moment';
 import { useSelector, useDispatch } from 'react-redux';
 
-import LINKS from 'utils/constants/links';
 import { getSystemHistory, readMetaSystem } from 'redux/actions/metaSystem';
 import { isEmpty } from 'utils/helpers/utility';
 
 const useTrendChartData = (projectId, systemId) => {
   const dispatch = useDispatch();
   const [chartData, setChartData] = useState([]);
-  const isDeliverableTrendChart = Boolean(systemId);
-  const title = isDeliverableTrendChart ? LINKS.DELIVERABLE_TREND_CHART.TITLE : LINKS.SYSTEM_TREND_CHART.TITLE;
 
-  const { results: projects, metaSystems, systemTrends } = useSelector(({ projects }) => projects);
+  const { metaSystems, systemTrends } = useSelector(({ projects }) => projects);
 
-  const { name: systemName } = useMemo(() => metaSystems[projectId]?.find((item) => item._id === systemId) || {}, [metaSystems, projectId, systemId]);
-  const { name: projectName } = useMemo(() => projects?.find((item) => item._id === projectId) || {}, [projectId, projects]);
-
-  const getSystemTrendChartData = useMemo(() => {
+  const systemTrendChartData = useMemo(() => {
     const systemTrendsCharts = {};
     const currentSystemTrends = systemTrends[projectId] || [];
     let data = [];
@@ -54,7 +48,7 @@ const useTrendChartData = (projectId, systemId) => {
     return [names, ...data];
   }, [metaSystems, projectId, systemTrends]);
 
-  const getDeliverableTrendChartData = useMemo(() => {
+  const deliverableTrendChartData = useMemo(() => {
     let data = [];
     const { samples } = systemTrends[projectId]?.find(({ metaSystem }) => metaSystem === systemId) || {};
 
@@ -95,16 +89,12 @@ const useTrendChartData = (projectId, systemId) => {
     let data = [];
 
     if (Boolean(systemTrends[projectId]) && !isEmpty(systemTrends[projectId])) {
-      if (isDeliverableTrendChart) {
-        data = getDeliverableTrendChartData;
-      } else {
-        data = getSystemTrendChartData;
-      }
+      data = isDeliverableTrendChart ? deliverableTrendChartData : systemTrendChartData;
       setChartData(data);
     }
-  }, [getDeliverableTrendChartData, getSystemTrendChartData, projectId, systemId, systemTrends]);
+  }, [deliverableTrendChartData, systemTrendChartData, projectId, systemId, systemTrends]);
 
-  return { projectName, systemName, title, chartData };
+  return { chartData };
 };
 
 export default useTrendChartData;

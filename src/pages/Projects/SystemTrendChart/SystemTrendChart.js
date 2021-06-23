@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React, { memo, useMemo } from 'react';
 
 import { useParams } from 'react-router-dom';
 import { Card, CardHeader, CardContent, IconButton } from '@material-ui/core';
@@ -8,17 +8,19 @@ import Chart from 'react-google-charts';
 import PageHeader from 'parts/PageHeader';
 
 import useStyles from './styles';
-import { useTrendChartData, getNavLinks } from './helpers';
+import { useTrendChartData, useTrendChartNames, getNavLinks } from './helpers';
 import { CHART_OPTIONS } from './constants';
 
 const SystemTrendChart = () => {
   const classes = useStyles();
   const { projectId, systemId } = useParams();
-  const { projectName, systemName, title, chartData } = useTrendChartData(projectId, systemId);
+  const { chartData } = useTrendChartData(projectId, systemId);
+  const { systemName, projectName, title } = useTrendChartNames(projectId, systemId);
+  const navLinks = useMemo(() => getNavLinks(projectName, projectId, systemName, systemId), [projectId, projectName, systemId, systemName]);
 
   return (
     <>
-      <PageHeader title={`${title}: ${projectName || 'Not Found'}`} links={getNavLinks(projectName, projectId, systemName, systemId)} />
+      <PageHeader title={`${title}: ${projectName || 'Not Found'}`} links={navLinks} />
       <Card className={classes.root}>
         <CardHeader
           action={
