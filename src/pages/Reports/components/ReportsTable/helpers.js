@@ -1,8 +1,12 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import Checkbox from '@material-ui/core/Checkbox';
 import { useDispatch, useSelector } from 'react-redux';
+import moment from 'moment';
 
 import { getReports } from 'redux/actions/reports';
 import { DEFAULT_ROWS_PER_PAGE } from 'utils/constants';
+
+import { COLUMNS } from './constants';
 
 const useReportsTableLogic = (isAdmin, filter) => {
   const dispatch = useDispatch();
@@ -26,11 +30,13 @@ const useReportsTableLogic = (isAdmin, filter) => {
     return { reportsData, organizationsData, userOrganization };
   });
 
-  const reportsWithOrganizationName = useMemo(
+  const filteredReports = useMemo(
     () =>
       reportsData.map((r) => ({
         ...r,
         organizationName: organizationsData.find((o) => o._id === r.organization)?.name || 'No organization name',
+        start: moment(r.start).format('YYYY/MM/DD'),
+        end: moment(r.end).format('YYYY/MM/DD'),
       })),
     [organizationsData, reportsData]
   );
@@ -45,38 +51,57 @@ const useReportsTableLogic = (isAdmin, filter) => {
 
   useEffect(() => {
     const filterKeys = Object.keys(filter);
-    let filteredData = [];
+    let data = [];
 
     if (filterKeys.length > 0) {
-      filteredData = filterKeys.reduce((acc, key) => [...acc.filter((r) => r[key] === filter[key])], reportsWithOrganizationName);
+      data = filterKeys.reduce((acc, key) => [...acc.filter((r) => r[key] === filter[key])], filteredReports);
     } else {
-      filteredData = reportsWithOrganizationName;
+      data = filteredReports;
     }
 
-    setRowCounts(filteredData.length);
-    setReports(rowsPerPage > 0 ? filteredData.slice(fromPage, toPage) : filteredData);
-  }, [filter, fromPage, organizationsData, reportsData, reportsWithOrganizationName, rowsPerPage, toPage]);
+    setRowCounts(data.length);
+    setReports(rowsPerPage > 0 ? data.slice(fromPage, toPage) : data);
+  }, [filter, fromPage, organizationsData, reportsData, filteredReports, rowsPerPage, toPage]);
 
   const toggleHandler = useCallback(
     (value) => () => {
-      const currentIndex = selectedItems.findIndex((item) => item._id === value._id);
-      const newSelectedItems = [...selectedItems];
+      if (value) {
+        const currentIndex = selectedItems.findIndex((item) => item._id === value._id);
+        const newSelectedItems = [...selectedItems];
 
-      if (currentIndex === -1) {
-        newSelectedItems.push(value);
+        if (currentIndex === -1) {
+          newSelectedItems.push(value);
+        } else {
+          newSelectedItems.splice(currentIndex, 1);
+        }
+
+        setSelectedItems(newSelectedItems);
       } else {
-        newSelectedItems.splice(currentIndex, 1);
+        setSelectedItems(selectedItems.length === reports.length ? [] : reports);
       }
-
-      setSelectedItems(newSelectedItems);
     },
-    [selectedItems]
+    [reports, selectedItems]
   );
-  const checkSelected = useCallback((rowId) => selectedItems.findIndex((value) => rowId === value._id) !== -1, [selectedItems]);
-  const getRelevantHeaders = (value) => (isAdmin ? value : value.slice(1));
+
+  const checkSelected = useCallback(
+    (rowId) => (rowId ? selectedItems.findIndex((value) => rowId === value._id) !== -1 : selectedItems.length === reports.length),
+    [reports.length, selectedItems]
+  );
+
+  const resetSelectedItems = () => setSelectedItems([]);
+
+  const columns = [
+    {
+      id: 'select',
+      label: <Checkbox inputProps={{ 'aria-labelledby': `check-all` }} checked={checkSelected()} onChange={toggleHandler()} />,
+      minWidth: 10,
+    },
+    ...getRelevantHeaders(isAdmin, COLUMNS),
+  ];
 
   return {
     reports,
+    columns,
     selectedItems,
     rowCounts,
     page,
@@ -84,10 +109,11 @@ const useReportsTableLogic = (isAdmin, filter) => {
     setPage,
     toggleHandler,
     checkSelected,
-    getRelevantHeaders,
     setRowsPerPage,
-    resetSelectedItems: () => setSelectedItems([]),
+    resetSelectedItems,
   };
 };
 
-export default useReportsTableLogic;
+const getRelevantHeaders = (isAdmin, value) => (isAdmin ? value : value.filter((v) => v?.id !== 'organization' && v?.key !== 'organizationName'));
+
+export { useReportsTableLogic, getRelevantHeaders };
