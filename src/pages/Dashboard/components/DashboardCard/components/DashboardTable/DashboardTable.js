@@ -1,71 +1,23 @@
-import React, { memo } from 'react';
-import styled from 'styled-components/macro';
-import { green, red } from '@material-ui/core/colors';
-import { Table, TableBody, TableCell as MuiTableCell, TableHead, TableRow as MuiTableRow } from '@material-ui/core';
+import React, { memo, useMemo } from 'react';
+import { Grid, Box } from '@material-ui/core';
+import { isEmpty } from 'utils/helpers/utility';
 
-const TableRow = styled(MuiTableRow)`
-  height: 42px;
-`;
+const DashboardTable = ({ phases }) => {
+  const noPhase = useMemo(() => isEmpty(phases) || phases.length === 0, [phases]);
 
-const TableCell = styled(MuiTableCell)`
-  padding-top: 0;
-  padding-bottom: 0;
-`;
-
-const GreenText = styled.span`
-  color: ${() => green[400]};
-  font-weight: ${(props) => props.theme.typography.fontWeightMedium};
-`;
-
-const RedText = styled.span`
-  color: ${() => red[400]};
-  font-weight: ${(props) => props.theme.typography.fontWeightMedium};
-`;
-
-const DashboardTable = () => {
   return (
-    <Table>
-      <TableHead>
-        <TableRow>
-          <TableCell>Source</TableCell>
-          <TableCell align="right">Value</TableCell>
-        </TableRow>
-      </TableHead>
-      <TableBody>
-        <TableRow>
-          <TableCell component="th" scope="row">
-            Social
-          </TableCell>
-          <TableCell align="right">
-            <GreenText>+35%</GreenText>
-          </TableCell>
-        </TableRow>
-        <TableRow>
-          <TableCell component="th" scope="row">
-            Search Engines
-          </TableCell>
-          <TableCell align="right">
-            <RedText>-12%</RedText>
-          </TableCell>
-        </TableRow>
-        <TableRow>
-          <TableCell component="th" scope="row">
-            Direct
-          </TableCell>
-          <TableCell align="right">
-            <GreenText>+46%</GreenText>
-          </TableCell>
-        </TableRow>
-        <TableRow>
-          <TableCell component="th" scope="row">
-            Other
-          </TableCell>
-          <TableCell align="right">
-            <GreenText>+24%</GreenText>
-          </TableCell>
-        </TableRow>
-      </TableBody>
-    </Table>
+    <Box my={3}>
+      <Grid container spacing={1} direction="column" justify="center" alignItems="center">
+        <Grid item>
+          <Box component="h3">{noPhase ? 'NO PHASES' : phases[0].name}</Box>
+        </Grid>
+        {phases.map((p) => (
+          <Grid item key={p.name}>
+            {p.name}: {p.nMetaSystems}
+          </Grid>
+        ))}
+      </Grid>
+    </Box>
   );
 };
 

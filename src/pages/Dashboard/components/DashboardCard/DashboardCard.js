@@ -1,60 +1,60 @@
-import React, { memo, useState } from 'react';
+import React, { memo, useState, useMemo } from 'react';
 import { Card, CardContent, CardHeader, Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
-import { DashboardChart, DashboardTable, LineProgress, StepProgress } from './components';
+import { DashboardChart, DashboardTable, DetailCard } from './components';
 import { ColorButton } from 'components/UI/Buttons';
 
 const useStyles = makeStyles((theme) => ({
   card: {
     padding: theme.spacing(2, 0),
   },
+  cardNoPhases: {
+    padding: theme.spacing(2, 0),
+    '& *': {
+      color: 'lightgray',
+    },
+  },
   cardContent: {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
+    minHeight: '400px',
   },
   button: {
-    marginTop: theme.spacing(2),
+    marginTop: 'auto',
   },
 }));
 
-const DashboardCard = ({ item }) => {
+const DashboardCard = ({ data }) => {
   const classes = useStyles();
   const [toggledDetail, toggleDetail] = useState(false);
+  const noPhases = useMemo(() => data.phases.length === 0, [data]);
 
   const detailHandler = () => {
     toggleDetail(!toggledDetail);
   };
 
   return (
-    <Grid item xs={12} md={6} lg={toggledDetail ? 6 : 3}>
+    <Grid item xs={toggledDetail ? 12 : 6} md={toggledDetail ? 9 : 3} lg={toggledDetail ? 6 : 2}>
       <Grid container spacing={6}>
-        <Grid item xs={toggledDetail ? 6 : 12}>
-          <Card mb={3} className={classes.card}>
-            <CardHeader title={item.name} />
+        <Grid item xs={toggledDetail ? 4 : 12}>
+          <Card mb={3} className={noPhases ? classes.cardNoPhases : classes.card}>
+            <CardHeader title={data.name} />
             <CardContent className={classes.cardContent}>
-              <DashboardChart />
-              <DashboardTable />
-              <ColorButton className={classes.button} colour="lightGreen" onClick={detailHandler}>
-                {toggledDetail ? 'Hide Details' : 'More Details'}
-              </ColorButton>
+              <DashboardChart data={data} />
+              <DashboardTable phases={data.phases} />
+              {noPhases === false && (
+                <ColorButton className={classes.button} colour="lightGreen" onClick={detailHandler}>
+                  {toggledDetail ? 'Hide Details' : 'More Details'}
+                </ColorButton>
+              )}
             </CardContent>
           </Card>
         </Grid>
         {toggledDetail && (
-          <Grid item xs={6}>
-            <Grid container spacing={1}>
-              <Grid item xs={12}>
-                <LineProgress label="Completed vs Total Systems" completed={1} total={item.nMetaSystems} />
-              </Grid>
-              <Grid item xs={12}>
-                <LineProgress label="Worked vs Planned Hours" completed={item.workedHours} total={item.plannedHours} />
-              </Grid>
-              <Grid item xs={12}>
-                <StepProgress label="Milestones" completed={3} total={4} />
-              </Grid>
-            </Grid>
+          <Grid item xs={8}>
+            <DetailCard data={data} />
           </Grid>
         )}
       </Grid>
