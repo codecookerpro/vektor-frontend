@@ -15,7 +15,7 @@ const useVisibilityBooleans = (organization, mode) => {
   const isSupervisorVisible = (isCreationMode && permissions !== PERMISSION_TYPES.supervisor && Boolean(organization)) || !isCreationMode;
   const isButtonEnabled = ALLOWED_ROLES.includes(permissions);
 
-  return { isOrganizationVisible, isSupervisorVisible, isViewingMode, isCreationMode, isButtonEnabled };
+  return { isOrganizationVisible, isSupervisorVisible, isViewingMode, isButtonEnabled };
 };
 
 export default useVisibilityBooleans;

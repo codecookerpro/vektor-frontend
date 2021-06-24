@@ -26,6 +26,8 @@ const ProjectList = () => {
 
   useEffect(() => {
     if (permissions === PERMISSION_TYPES.admin) {
+      dispatch(getProjects());
+    } else {
       dispatch(getProjects({ organization }));
     }
   }, [dispatch, organization, permissions]);

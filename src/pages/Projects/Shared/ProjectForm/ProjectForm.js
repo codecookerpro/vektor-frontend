@@ -7,6 +7,7 @@ import { ColorButton } from 'components/UI/Buttons';
 import VektorTextField from 'components/UI/TextFields/VektorTextField';
 import FilterSelect from 'components/UI/Selects/FilterSelect';
 import UserTransfer from 'parts/UserTransfer';
+import { PROJECT_MODES } from 'pages/Projects/constants';
 
 import { useProjectFrom, useVisibilityBooleans } from './helpers';
 import { PROJECT_DEFAULT_VALUES } from './constants';
@@ -27,8 +28,42 @@ const ProjectForm = ({ project = PROJECT_DEFAULT_VALUES, mode }) => {
     onDeleteProject,
     setCurrentOrganization,
   } = useProjectFrom(project, mode);
-  const { isOrganizationVisible, isSupervisorVisible, isViewingMode, isCreationMode, isButtonEnabled } = useVisibilityBooleans(organization, mode);
+  const { isOrganizationVisible, isSupervisorVisible, isViewingMode, isButtonEnabled } = useVisibilityBooleans(organization, mode);
   const { results: organizations } = useSelector(({ organizations }) => organizations);
+
+  const renderBottomButtons = () => {
+    if (isButtonEnabled) {
+      let rightButtonComponent;
+
+      switch (mode) {
+        case PROJECT_MODES.CREATION:
+          rightButtonComponent = (
+            <Button color="primary" className={classes.addAnother} onClick={onSubmit(true)}>
+              Save and add another
+            </Button>
+          );
+          break;
+        case PROJECT_MODES.EDITING:
+          rightButtonComponent = (
+            <ColorButton className={classes.deleteButton} variant="contained" colour="red" onClick={onDeleteProject}>
+              Delete Project
+            </ColorButton>
+          );
+          break;
+        default:
+          break;
+      }
+
+      return (
+        <div className={classes.buttonContainer}>
+          <Button variant="contained" color="primary" onClick={onSubmit(false)}>
+            Save
+          </Button>
+          {rightButtonComponent}
+        </div>
+      );
+    }
+  };
 
   return (
     <Card>
@@ -128,25 +163,7 @@ const ProjectForm = ({ project = PROJECT_DEFAULT_VALUES, mode }) => {
               />
             </Grid>
             <Grid item xs={12}>
-              {isButtonEnabled && (
-                <div className={classes.buttonContainer}>
-                  {!isViewingMode && (
-                    <>
-                      <Button variant="contained" color="primary" onClick={onSubmit(false)}>
-                        Save
-                      </Button>
-                      <ColorButton className={classes.deleteButton} variant="contained" colour="red" onClick={onDeleteProject}>
-                        Delete Project
-                      </ColorButton>
-                    </>
-                  )}
-                  {isCreationMode && (
-                    <Button color="primary" className={classes.addAnother} onClick={onSubmit(true)}>
-                      Save and add another
-                    </Button>
-                  )}
-                </div>
-              )}
+              {renderBottomButtons()}
             </Grid>
           </Grid>
         </form>

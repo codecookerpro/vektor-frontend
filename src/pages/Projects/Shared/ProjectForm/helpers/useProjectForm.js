@@ -4,11 +4,12 @@ import { useForm } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
 import { useHistory } from 'react-router-dom';
 
-import { PERMISSION_TYPES } from 'utils/constants';
+import { PERMISSION_TYPES, POPUP_TYPE } from 'utils/constants';
 import { PROJECT_MODES } from 'pages/Projects/constants';
 import LINKS from 'utils/constants/links';
 import { isEmpty } from 'utils/helpers/utility';
 import { addProject, editProject, removeProject } from 'redux/actions/projects';
+import { setPopup } from 'redux/actions/popupActions';
 
 import { schema } from './schema';
 
@@ -95,11 +96,19 @@ const useProjectFrom = (project, mode) => {
   const onDeleteProject = async () => {
     const { _id } = project;
 
-    const isCompleted = await dispatch(removeProject({ _id }));
+    dispatch(
+      setPopup({
+        popupType: POPUP_TYPE.confirm,
+        popupText: 'Are you sure you want to delete this project?',
+        onConfirm: async () => {
+          const isCompleted = await dispatch(removeProject({ _id }));
 
-    if (isCompleted) {
-      history.push(LINKS.PROJECTS.HREF);
-    }
+          if (isCompleted) {
+            history.push(LINKS.PROJECTS.HREF);
+          }
+        },
+      })
+    );
   };
 
   useEffect(() => {
