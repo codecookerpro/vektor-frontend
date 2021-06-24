@@ -59,7 +59,7 @@ const LINKS = Object.freeze({
   },
   SYSTEM_TREND_CHART: {
     TITLE: 'System Trend Chart',
-    HREF: '/project-management/projects/edit/:id/system-trend-chart',
+    HREF: '/project-management/projects/edit/:projectId/system-trend-chart',
   },
   PROJECT_HISTORY: {
     TITLE: 'Project History',
@@ -99,7 +99,7 @@ const LINKS = Object.freeze({
   },
   DELIVERABLE_TREND_CHART: {
     TITLE: 'Deliverable Trend Chart',
-    HREF: '/project-management/systems/edit/:id/deliverable-trend-chart',
+    HREF: '/project-management/projects/edit/:projectId/systems/edit/:systemId/deliverable-trend-chart',
   },
   REPORTS: {
     TITLE: 'Reports',

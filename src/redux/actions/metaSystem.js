@@ -121,3 +121,34 @@ export const updateDeliverablePositions = (params) => (dispatch) => {
     .then(({ data }) => dispatch(updateDeliverables(data)))
     .catch((err) => console.error('[updateDeliverablePositions] error => ', err));
 };
+
+export const getSystemHistory =
+  (projectId, refresh = false) =>
+  async (dispatch, getState) => {
+    try {
+      const {
+        projects: { systemTrends },
+      } = getState();
+
+      if (systemTrends[projectId] && !refresh) {
+        return;
+      }
+
+      const params = {
+        filter: { project: projectId },
+      };
+
+      const response = await API.getSystemHistory(params);
+
+      if (response) {
+        const { data } = response;
+
+        dispatch({
+          type: ActionTypes.FETCH_SYSTEM_TRENDS,
+          payload: { data, projectId },
+        });
+      }
+    } catch (error) {
+      console.log('[getSystemHistory] error => ', error);
+    }
+  };

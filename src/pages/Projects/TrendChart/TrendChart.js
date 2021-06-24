@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React, { memo, useMemo } from 'react';
 
 import { useParams } from 'react-router-dom';
 import { Card, CardHeader, CardContent, IconButton } from '@material-ui/core';
@@ -6,20 +6,21 @@ import { MoreVertical } from 'react-feather';
 import Chart from 'react-google-charts';
 
 import PageHeader from 'parts/PageHeader';
-import LINKS from 'utils/constants/links';
 
 import useStyles from './styles';
-import { useSystemTrendChartData, getNavLinks } from './helpers';
+import { useTrendChartData, useTrendChartNames, getNavLinks } from './helpers';
 import { CHART_OPTIONS } from './constants';
 
-const SystemTrendChart = () => {
+const TrendChart = () => {
   const classes = useStyles();
-  const { id } = useParams();
-  const { name, chartData } = useSystemTrendChartData(id);
+  const { projectId, systemId } = useParams();
+  const { chartData } = useTrendChartData(projectId, systemId);
+  const { systemName, projectName, title } = useTrendChartNames(projectId, systemId);
+  const navLinks = useMemo(() => getNavLinks(projectName, projectId, systemName, systemId), [projectId, projectName, systemId, systemName]);
 
   return (
     <>
-      <PageHeader title={`${LINKS.SYSTEM_TREND_CHART.TITLE}: ${name || 'Not Found'}`} links={getNavLinks(name, id)} />
+      <PageHeader title={`${title}: ${projectName || 'Not Found'}`} links={navLinks} />
       <Card className={classes.root}>
         <CardHeader
           action={
@@ -27,7 +28,7 @@ const SystemTrendChart = () => {
               <MoreVertical />
             </IconButton>
           }
-          title="System Trend Chart"
+          title={title}
         />
         <CardContent>
           {chartData.length > 0 ? (
@@ -41,4 +42,4 @@ const SystemTrendChart = () => {
   );
 };
 
-export default memo(SystemTrendChart);
+export default memo(TrendChart);

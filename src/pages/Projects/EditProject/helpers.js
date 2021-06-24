@@ -4,8 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { PROJECT_MODES } from '../constants';
 import { PERMISSION_TYPES } from 'utils/constants';
-import { readMetaSystem } from 'redux/actions/metaSystem';
-import { getSystemHistory } from 'redux/actions/systems';
+import { readMetaSystem, getSystemHistory } from 'redux/actions/metaSystem';
 
 export const useEditProjectLogic = () => {
   const { id } = useParams();
@@ -43,7 +42,7 @@ export const useEditProjectLogic = () => {
   const isPhasesVisible = project && project?.phases.length > 0;
 
   const onClickButton = (href) => () => {
-    history.push(href.replace(':id', id));
+    history.push(href.replace(':projectId', id));
   };
 
   return { project, isPhasesVisible, getMode, onClickButton, metaSystems };
