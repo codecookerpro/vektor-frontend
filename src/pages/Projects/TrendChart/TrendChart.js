@@ -11,7 +11,7 @@ import useStyles from './styles';
 import { useTrendChartData, useTrendChartNames, getNavLinks } from './helpers';
 import { CHART_OPTIONS } from './constants';
 
-const SystemTrendChart = () => {
+const TrendChart = () => {
   const classes = useStyles();
   const { projectId, systemId } = useParams();
   const { chartData } = useTrendChartData(projectId, systemId);
@@ -42,4 +42,4 @@ const SystemTrendChart = () => {
   );
 };
 
-export default memo(SystemTrendChart);
+export default memo(TrendChart);
