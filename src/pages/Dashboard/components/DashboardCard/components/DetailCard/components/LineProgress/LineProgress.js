@@ -9,19 +9,24 @@ const Card = styled(MuiCard)(spacing);
 const LinearProgress = styled(MuiLinearProgress)(spacing);
 
 const useStyles = makeStyles((theme) => ({
-  normal: {
+  green: {
     backgroundColor: theme.custom.palette.lightGreen,
   },
-  overflow: {
+  red: {
     backgroundColor: theme.custom.palette.red,
   },
 }));
 
 const LineProgress = ({ label, completed, total }) => {
   const classes = useStyles();
+  const overflowed = useMemo(() => completed > total, [completed, total]);
   const percent = useMemo(() => {
-    const value = (completed * 100) / total;
-    return value > 100 ? 100 : value;
+    const offset = completed - total;
+    if (offset > 0) {
+      return (offset * 100) / completed;
+    } else {
+      return (completed * 100) / total;
+    }
   }, [completed, total]);
 
   return (
@@ -41,7 +46,8 @@ const LineProgress = ({ label, completed, total }) => {
             color="primary"
             mt={4}
             classes={{
-              barColorPrimary: total < completed ? classes.overflow : classes.normal,
+              barColorPrimary: overflowed ? classes.red : classes.green,
+              colorPrimary: overflowed ? classes.green : null,
             }}
           />
         </CardContent>

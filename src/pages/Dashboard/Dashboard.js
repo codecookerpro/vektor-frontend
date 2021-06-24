@@ -21,15 +21,15 @@ const DashboardList = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  const { results } = useSelector((state) => state.dashboards);
+  const dashboards = useSelector((state) => state.dashboards.results);
   useEffect(() => dispatch(getDashboards()));
 
   return (
     <main className={classes.root}>
       <PageHeader title={LINKS.DASHBOARD.TITLE} links={NAV_LINKS} />
       <Grid container spacing={6}>
-        {results.map((item, index) => (
-          <DashboardCard item={item} key={index} />
+        {dashboards.map((data, index) => (
+          <DashboardCard data={data} key={index} />
         ))}
       </Grid>
     </main>
