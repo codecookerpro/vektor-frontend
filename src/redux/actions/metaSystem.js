@@ -82,21 +82,16 @@ export const fetchMetaSystemsFilter = (project) => async (dispatch) => {
   }
 };
 
-export const initDeliverables = (params) => (dispatch) => {
-  API.initDeliverables(params)
-    .then(({ data }) => {
-      dispatch({
-        type: ActionTypes.INIT_DELIVERABLES,
-        payload: data,
-      });
-    })
-    .catch((err) => console.error('[initDeliverables] error => ', err));
-};
-
 export const updateDeliverables = (payload) => ({
   type: ActionTypes.UPDATE_DELIVERABLES,
   payload,
 });
+
+export const initDeliverables = (params) => (dispatch) => {
+  API.initDeliverables(params)
+    .then(({ data }) => dispatch(updateDeliverables(data)))
+    .catch((err) => console.error('[initDeliverables] error => ', err));
+};
 
 export const createDeliverable = (params) => (dispatch) => {
   API.createDeliverable(params)

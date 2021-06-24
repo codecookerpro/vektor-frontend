@@ -46,10 +46,10 @@ const DashboardCard = ({ item }) => {
           <Grid item xs={6}>
             <Grid container spacing={1}>
               <Grid item xs={12}>
-                <LineProgress label="Completed vs Total Systems" completed={1} total={2} />
+                <LineProgress label="Completed vs Total Systems" completed={1} total={item.nMetaSystems} />
               </Grid>
               <Grid item xs={12}>
-                <LineProgress label="Worked vs Planned Hours" completed={12} total={16} />
+                <LineProgress label="Worked vs Planned Hours" completed={item.workedHours} total={item.plannedHours} />
               </Grid>
               <Grid item xs={12}>
                 <StepProgress label="Milestones" completed={3} total={4} />
