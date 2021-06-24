@@ -42,7 +42,6 @@ const ProjectForm = ({ project = PROJECT_DEFAULT_VALUES, mode }) => {
               Save and add another
             </Button>
           );
-
           break;
         case PROJECT_MODES.EDITING:
           rightButtonComponent = (
