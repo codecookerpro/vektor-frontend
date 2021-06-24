@@ -13,7 +13,6 @@ const ProjectPhases = lazy(() => import(/* webpackChunkName: 'ProjectPhases' */ 
 const AddMetaSystem = lazy(() => import(/* webpackChunkName: 'AddMetaSystem' */ 'pages/MetaSystems/AddMetaSystem'));
 const EditMetaSystem = lazy(() => import(/* webpackChunkName: 'EditMetaSystem' */ 'pages/MetaSystems/EditMetaSystem'));
 const ReportList = lazy(() => import(/* webpackChunkName: 'ReportList' */ 'pages/Reports'));
-const Gantt = lazy(() => import(/* webpackChunkName: 'Gantt' */ 'pages/Projects/Gantt'));
 
 const projectManagementRoutes = Object.freeze({
   id: LINKS.PROJECT_MANAGEMENT.TITLE,
@@ -84,11 +83,6 @@ const projectManagementRoutes = Object.freeze({
       path: LINKS.REPORTS.HREF,
       name: LINKS.REPORTS.TITLE,
       component: ReportList,
-    },
-    {
-      path: LINKS.PROJECT_GANTT.HREF,
-      name: LINKS.PROJECT_GANTT.TITLE,
-      component: Gantt,
     },
   ],
 });
