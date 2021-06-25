@@ -1,12 +1,11 @@
-import React, { memo } from 'react';
-import { useHistory } from 'react-router-dom';
-import { Card, CardContent, CardHeader } from '@material-ui/core';
+import React, { memo, useState } from 'react';
+import { Card, CardContent, CardHeader, Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
-import ContainedButton from 'components/UI/Buttons/ContainedButton';
 import DashboardChart from './DashboardChart';
 import DashboardTable from './DashboardTable';
-import LINKS from 'utils/constants/links';
+import { ColorButton } from 'components/UI/Buttons';
+import LineProgress from 'parts/LineProgress';
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -22,27 +21,46 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const DashboardCard = ({ showButton = false, item }) => {
+const DashboardCard = ({ item }) => {
   const classes = useStyles();
-  const history = useHistory();
+  const [toggledDetail, toggleDetail] = useState(false);
 
   const detailHandler = () => {
-    history.push(LINKS.DASHBOARD_DETAIL.HREF.replace(':id', 'Voxsync'));
+    toggleDetail(!toggledDetail);
   };
 
   return (
-    <Card mb={3} className={classes.card}>
-      <CardHeader title={item.name} />
-      <CardContent className={classes.cardContent}>
-        <DashboardChart />
-        <DashboardTable />
-        {showButton && (
-          <ContainedButton className={classes.button} onClick={detailHandler}>
-            More Detail
-          </ContainedButton>
+    <Grid item xs={12} md={6} lg={toggledDetail ? 6 : 3}>
+      <Grid container spacing={6}>
+        <Grid item xs={toggledDetail ? 6 : 12}>
+          <Card mb={3} className={classes.card}>
+            <CardHeader title={item.name} />
+            <CardContent className={classes.cardContent}>
+              <DashboardChart />
+              <DashboardTable />
+              <ColorButton className={classes.button} colour="lightGreen" onClick={detailHandler}>
+                {toggledDetail ? 'Hide Details' : 'More Details'}
+              </ColorButton>
+            </CardContent>
+          </Card>
+        </Grid>
+        {toggledDetail && (
+          <Grid item xs={6}>
+            <Grid container spacing={1}>
+              <Grid item xs={12}>
+                <LineProgress label="Completed vs Total Systems" completed={1} total={2} />
+              </Grid>
+              <Grid item xs={12}>
+                <LineProgress label="Worked vs Planned Hours" completed={12} total={16} />
+              </Grid>
+              <Grid item xs={12}>
+                <LineProgress label="Milestones" completed={3} total={4} />
+              </Grid>
+            </Grid>
+          </Grid>
         )}
-      </CardContent>
-    </Card>
+      </Grid>
+    </Grid>
   );
 };
 
