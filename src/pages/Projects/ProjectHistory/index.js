@@ -8,14 +8,15 @@ import projects from 'utils/temp/projects';
 import results from 'utils/temp/project-history';
 
 const ProjectHistory = () => {
-  const { id } = useParams();
+  const { projectId } = useParams();
 
-  const project = useMemo(() => projects.find((item) => item.id === id), [id]);
+  const project = useMemo(() => projects.find((item) => item._id === projectId), [projectId]);
+
   const NAV_LINKS = [
     LINKS.PROJECT_MANAGEMENT,
     LINKS.PROJECTS,
     {
-      HREF: LINKS.EDIT_PROJECT.HREF.replace(':id', id),
+      HREF: LINKS.EDIT_PROJECT.HREF.replace(':projectId', projectId),
       TITLE: project?.name || 'Not Found',
     },
   ];

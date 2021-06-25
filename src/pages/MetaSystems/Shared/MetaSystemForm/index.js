@@ -52,7 +52,7 @@ const schema = joi.object().keys({
 });
 
 const MetaSystemForm = ({ mode = FORM_MODE.view, system = {}, setFormMode = () => {} }) => {
-  const { id } = useParams();
+  const { projectId } = useParams();
   const classes = useStyles();
   const history = useHistory();
   const dispatch = useDispatch();
@@ -69,7 +69,7 @@ const MetaSystemForm = ({ mode = FORM_MODE.view, system = {}, setFormMode = () =
       equipmentType: data.equipmentType,
       equipmentName: data.equipmentName,
       equipmentNumber: data.equipmentNumber,
-      project: id,
+      project: projectId,
       productCode: data.productCode,
       site: data.site,
     };
