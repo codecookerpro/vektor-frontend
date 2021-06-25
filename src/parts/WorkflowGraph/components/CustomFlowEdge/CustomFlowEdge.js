@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import { getMarkerEnd } from 'react-flow-renderer';
 import { getSmoothStepPathPatched } from './helper';
-import EdgeDialog from './EdgeDialog';
+import { EdgeDialog } from './components';
 import { makeStyles } from '@material-ui/core/styles';
-import { GRAPH_PROPS } from './constants';
+import { GRAPH_PROPS } from 'parts/WorkflowGraph/constants';
 
 const useStyles = makeStyles(() => ({
   hoverPath: {
@@ -18,19 +18,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-export default function CustomFlowEdge({
-  id,
-  sourceX,
-  sourceY,
-  targetX,
-  targetY,
-  sourcePosition,
-  targetPosition,
-  style = {},
-  data,
-  arrowHeadType,
-  markerEndId,
-}) {
+const CustomFlowEdge = ({ id, sourceX, sourceY, targetX, targetY, sourcePosition, targetPosition, style = {}, data, arrowHeadType, markerEndId }) => {
   const [toggled, setToggled] = useState(false);
   const classes = useStyles();
 
@@ -61,4 +49,6 @@ export default function CustomFlowEdge({
       <EdgeDialog setToggled={setToggled} toggled={toggled} onDelete={deleteEdge} />
     </>
   );
-}
+};
+
+export default memo(CustomFlowEdge);
