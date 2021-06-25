@@ -7,7 +7,7 @@ import { ACTIONS } from 'pages/Projects/constants';
 
 const useProjectPhasesEditing = () => {
   const dispatch = useDispatch();
-  const { id } = useParams();
+  const { projectId } = useParams();
 
   const [phases, setPhases] = useState([]);
   const [editingPhase, setEditingPhase] = useState(null);
@@ -15,7 +15,7 @@ const useProjectPhasesEditing = () => {
 
   const { results: projects } = useSelector(({ projects }) => projects);
 
-  const project = useMemo(() => projects.find((item) => item._id === id), [id, projects]);
+  const project = useMemo(() => projects.find((item) => item._id === projectId), [projectId, projects]);
   const isEditingHeader = (orderIndex) => editingPhase?.orderIndex === orderIndex && activeAction === ACTIONS.RENAME;
 
   useEffect(() => {
@@ -98,7 +98,7 @@ const useProjectPhasesEditing = () => {
   };
 
   return {
-    id,
+    projectId,
     project,
     phases,
     editingPhase,

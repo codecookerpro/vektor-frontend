@@ -14,13 +14,13 @@ const getNavLinks = (name, id) => [
 ];
 
 const useNavLinks = () => {
-  const { id } = useParams();
+  const { projectId } = useParams();
 
   const { results: projects } = useSelector(({ projects }) => projects);
 
-  const { name } = useMemo(() => projects.find(({ _id }) => _id === id) || {}, [id, projects]);
+  const { name } = useMemo(() => projects.find(({ _id }) => _id === projectId) || {}, [projectId, projects]);
 
-  return getNavLinks(name, id);
+  return getNavLinks(name, projectId);
 };
 
 export default useNavLinks;

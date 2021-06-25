@@ -18,7 +18,7 @@ import { useProjectPhasesEditing, getNavLinks } from './helpers';
 const ProjectPhases = () => {
   const { phaseHeader } = useStyles();
   const {
-    id,
+    projectId,
     project,
     phases,
     editingPhase,
@@ -51,7 +51,7 @@ const ProjectPhases = () => {
 
   return (
     <>
-      <PageHeader title={`${LINKS.PROJECT_PHASES.TITLE}: ${project?.name || 'Not Found'}`} links={getNavLinks(project?.name, id)} />
+      <PageHeader title={`${LINKS.PROJECT_PHASES.TITLE}: ${project?.name || 'Not Found'}`} links={getNavLinks(project?.name, projectId)} />
       <Grid container spacing={6}>
         <Grid item xs={12}>
           <DndProvider backend={HTML5Backend}>

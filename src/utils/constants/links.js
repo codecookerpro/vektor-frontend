@@ -63,11 +63,11 @@ const LINKS = Object.freeze({
   },
   PROJECT_HISTORY: {
     TITLE: 'Project History',
-    HREF: '/project-management/projects/edit/:id/history',
+    HREF: '/project-management/projects/edit/:projectId/history',
   },
   PROJECT_PHASES: {
     TITLE: 'Project Phases',
-    HREF: '/project-management/projects/edit/:id/phases',
+    HREF: '/project-management/projects/edit/:projectId/phases',
   },
   PROJECT_GANTT: {
     TITLE: 'Project Gantt Sample',
@@ -91,7 +91,7 @@ const LINKS = Object.freeze({
   },
   ADD_META_SYSTEM: {
     TITLE: 'Add System',
-    HREF: '/project-management/projects/edit/:id/meta-system/add',
+    HREF: '/project-management/projects/edit/:projectId/meta-system/add',
   },
   EDIT_META_SYSTEM: {
     TITLE: 'Edit System',
