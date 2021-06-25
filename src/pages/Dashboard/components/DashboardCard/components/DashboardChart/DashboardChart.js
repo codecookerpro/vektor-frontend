@@ -1,6 +1,6 @@
 import React, { memo, useMemo } from 'react';
 import styled, { withTheme } from 'styled-components/macro';
-import { grey, orange, red, yellow } from '@material-ui/core/colors';
+import { grey, green, red, yellow } from '@material-ui/core/colors';
 import { Typography } from '@material-ui/core';
 import { Doughnut } from 'react-chartjs-2';
 import moment from 'moment';
@@ -43,7 +43,7 @@ const DashboardChart = ({ theme, data }) => {
     } else if (currentPhase.plannedValue > status && endDate < today) {
       return red[500];
     } else {
-      return orange[500];
+      return green[500];
     }
   }, [phases, status]);
 
