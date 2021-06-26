@@ -1,35 +1,35 @@
-import axios from 'services/axios';
+import { get, put, del, post } from 'services/axios';
 
 const getWorkflowTemplates = async (data) => {
-  return await axios.get('/api/workflows', { data });
+  return await get('workflows', { data });
 };
 
 const createWorkflowTemplate = async (params) => {
-  return await axios.post('/api/workflows', params);
+  return await post('workflows', params);
 };
 
 const updateWorkflowTemplate = async (params) => {
-  return await axios.put('/api/workflows', params);
+  return await put('workflows', params);
 };
 
 const deleteWorkflowTemplate = async (params) => {
-  return await axios.delete('/api/workflows', { params });
+  return await del('workflows', { params });
 };
 
 const createWorkflowTemplateDeliverable = async (params) => {
-  return await axios.post('/api/workflows/nested', params);
+  return await post('workflows', 'nested', params);
 };
 
 const updateWorkflowTemplateDeliverable = async (params) => {
-  return await axios.put('/api/workflows/nested', params);
+  return await put('workflows', 'nested', params);
 };
 
 const deleteWorkflowTemplateDeliverable = async (params) => {
-  return await axios.delete('/api/workflows/nested', { params });
+  return await del('workflows', 'nested', { params });
 };
 
 const updateWTDPositions = async (params) => {
-  return await axios.put('/api/workflows/positioning', params);
+  return await put('workflows', 'positioning', params);
 };
 
 export {

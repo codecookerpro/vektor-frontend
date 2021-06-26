@@ -1,26 +1,26 @@
-import axios from 'services/axios';
+import { get, put, del, post } from 'services/axios';
 
 const getUsers = async (data) => {
   const params = {
     get_json: JSON.stringify(data),
   };
-  return await axios.get('/api/users', { params });
+  return await get('users', { params });
 };
 
 const createUser = async (params) => {
-  return await axios.post('/api/users', params);
+  return await post('users', params);
 };
 
 const updateUser = async (params) => {
-  return await axios.put(`/api/users`, params);
+  return await put('users', params);
 };
 
 const deleteUser = async (params) => {
-  return await axios.delete(`/api/users`, { params });
+  return await del('users', { params });
 };
 
 const changeUserPassword = async (params) => {
-  return await axios.post(`/api/users/change-password`, params);
+  return await post('users', 'change-password', params);
 };
 
 export { getUsers, createUser, updateUser, deleteUser, changeUserPassword };
