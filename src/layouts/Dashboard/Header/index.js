@@ -5,7 +5,6 @@ import { Menu as MenuIcon } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
 
 import UserDropdown from './UserDropdown';
-import SearchInput from './SearchInput';
 import UserInfo from './UserInfo';
 
 const AppBar = styled(MuiAppBar)`
@@ -42,9 +41,6 @@ const Header = ({ onDrawerToggle }) => {
                 </IconButton>
               </Grid>
             </Hidden>
-            <Grid item>
-              <SearchInput />
-            </Grid>
             <Grid item xs />
             <Grid item>
               <div className={classes.userInfo}>

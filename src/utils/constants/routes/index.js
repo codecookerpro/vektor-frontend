@@ -7,9 +7,6 @@ import userManagementRoutes from './userManagementRoutes';
 import recentActionRoutes from './recentActionRoutes';
 import profileEditRoute from './profileEditRoute';
 
-import formsRoutes from './formsRoutes';
-import iconsRoutes from './iconsRoutes';
-
 export const dashboardLayoutRoutes = [
   overviewRoutes,
   projectManagementRoutes,
@@ -18,9 +15,6 @@ export const dashboardLayoutRoutes = [
   userManagementRoutes,
   recentActionRoutes,
   profileEditRoute,
-
-  formsRoutes,
-  iconsRoutes,
 ];
 
 export const authLayoutRoutes = [authRoutes];
@@ -32,7 +26,4 @@ export const sidebarRoutes = [
   workflowTemplateRoutes,
   userManagementRoutes,
   recentActionRoutes,
-
-  formsRoutes,
-  iconsRoutes,
 ];
