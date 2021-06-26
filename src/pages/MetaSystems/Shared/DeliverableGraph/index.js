@@ -29,6 +29,7 @@ const DeliverableGraph = ({ editable, mainSystem }) => {
         dispatch(updateDeliverable(nodeToDeliverable(nodeId, elements, mainId)));
         break;
       case GRAPH_EVENTS.graphLayout:
+      case GRAPH_EVENTS.graphMigrate:
         const deliverables = elementsToDeliverables(elements).map((d) => restrict(d, ['_id', 'chartData']));
         dispatch(updateDeliverablePositions({ _id: mainId, deliverables }));
         break;

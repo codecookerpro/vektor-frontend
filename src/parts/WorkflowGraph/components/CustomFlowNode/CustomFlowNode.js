@@ -2,58 +2,15 @@ import React, { memo, useState } from 'react';
 import { Handle, Position } from 'react-flow-renderer';
 import Popper from '@material-ui/core/Popper';
 import Fade from '@material-ui/core/Fade';
-import { makeStyles } from '@material-ui/core/styles';
 import { Button } from '@material-ui/core';
-import NodeDialog from './NodeDialog';
+import { NodeDialog } from './components';
 import CloseIcon from '@material-ui/icons/Close';
-import { IDENTIFIERS, HANDLE_TYPES, NODE_DIALOGS, GRAPH_PROPS } from './constants';
+import { IDENTIFIERS, HANDLE_TYPES, NODE_DIALOGS } from 'parts/WorkflowGraph/constants';
 import { ColorButton } from 'components/UI/Buttons';
+import { useStyles } from './styles';
 
-const useStyles = makeStyles(() => ({
-  nodeContent: {
-    width: 'calc(100% - 24px)',
-    height: 'calc(100% - 14px)',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    position: 'absolute',
-    top: '7px',
-    left: '12px',
-    textAlign: 'center',
-  },
-  name: {
-    width: '100%',
-    margin: '0',
-    overflowX: 'hidden',
-    overflowY: 'auto',
-    textOverflow: 'ellipsis',
-    maxHeight: '100%',
-  },
-  nodePopupContainer: {
-    zIndex: GRAPH_PROPS.zIndex + 1,
-  },
-  nodePopup: {
-    marginTop: '50px',
-    minHeight: '100px',
-    backgroundColor: 'white',
-    display: 'flex',
-    flexDirection: 'column',
-    padding: '24px 30px',
-    boxShadow: '0.3em 0.3em 1em rgb(0 0 0 / 30%)',
-  },
-  nodePopupButton: {
-    width: '100%',
-    marginBottom: '12px',
-  },
-  nodePopupCloseIcon: {
-    position: 'relative',
-    left: '100%',
-    cursor: 'pointer',
-  },
-}));
-
-export const getCustomFlowNode = (tClass, sClass) => {
-  return memo(({ id, data }) => {
+const CustomFlowNodeFactory = (tClass, sClass) =>
+  memo(({ id, data }) => {
     const classes = useStyles();
     const [popperElement, setPopperElement] = useState(null);
     const isPopperOpen = Boolean(popperElement);
@@ -181,4 +138,5 @@ export const getCustomFlowNode = (tClass, sClass) => {
       </>
     );
   });
-};
+
+export default CustomFlowNodeFactory;

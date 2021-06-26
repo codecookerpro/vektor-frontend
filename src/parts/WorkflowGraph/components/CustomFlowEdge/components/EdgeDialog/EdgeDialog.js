@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -55,4 +55,4 @@ const EdgeDialog = ({ toggled, setToggled, onDelete }) => {
   );
 };
 
-export default EdgeDialog;
+export default memo(EdgeDialog);

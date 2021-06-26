@@ -43,6 +43,7 @@ const EditWorkflowTemplate = () => {
         dispatch(updateWTD(nodeToDeliverable(nodeId, elements, id)));
         break;
       case GRAPH_EVENTS.graphLayout:
+      case GRAPH_EVENTS.graphMigrate:
         const deliverables = elementsToDeliverables(elements).map((d) => restrict(d, ['_id', 'chartData']));
         dispatch(updateWTDPositions({ _id: id, deliverables }));
         break;

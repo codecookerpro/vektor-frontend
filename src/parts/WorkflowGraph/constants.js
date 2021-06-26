@@ -78,6 +78,7 @@ export const NODE_DIALOGS = keyMirror({
 export const GRAPH_EVENTS = keyMirror({
   graphInit: null,
   graphLayout: null,
+  graphMigrate: null,
   nodeCreate: null,
   nodeLabelChange: null,
   nodeDelete: null,

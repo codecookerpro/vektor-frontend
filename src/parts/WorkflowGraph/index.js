@@ -3,10 +3,9 @@ import { Button, Grid, Box } from '@material-ui/core';
 import { Plus } from 'react-feather';
 import ReactFlow, { MiniMap, Background, Controls } from 'react-flow-renderer';
 
-import { getCustomFlowNode } from './CustomFlowNode';
-import CustomFlowEdge from './CustomFlowEdge';
+import { CustomFlowEdge, CustomFlowNodeFactory } from './components';
 import { GRAPH_PROPS, LAYOUT_DIRS, ELEMENT_TYPES } from './constants';
-import useGraphLogic from './useGraphLogic';
+import useGraphLogic from './hook';
 import useStyles from './styles';
 
 const WorkflowGraph = ({ editable, deliverables, onGraphEvent }) => {
@@ -33,7 +32,7 @@ const WorkflowGraph = ({ editable, deliverables, onGraphEvent }) => {
           onConnectStop={() => setConnectInProgress(false)}
           onNodeDragStop={handleNodeDragStop}
           deleteKeyCode={46}
-          nodeTypes={{ [ELEMENT_TYPES.node]: getCustomFlowNode(classes.tClass, classes.sClass) }}
+          nodeTypes={{ [ELEMENT_TYPES.node]: CustomFlowNodeFactory(classes.tClass, classes.sClass) }}
           edgeTypes={{ [ELEMENT_TYPES.edge]: CustomFlowEdge }}
           arrowHeadColor={GRAPH_PROPS.arrowHeadColor}
           zoomOnScroll={!dialogToggled}

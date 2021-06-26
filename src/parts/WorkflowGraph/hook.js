@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { removeElements, addEdge } from 'react-flow-renderer';
 import { noop } from 'utils/constants';
+import { isEmpty } from 'utils/helpers/utility';
 import { GRAPH_EVENTS, GRAPH_PROPS } from './constants';
 import { makeNode, makeEdge, getLayoutedElements, deliverablesToElements, validateElements } from './helper';
 
@@ -14,8 +15,16 @@ const useGraphLogic = ({ editable = false, deliverables = [], onGraphEvent = noo
   useEffect(() => {
     if (deliverables.length) {
       const elements = deliverablesToElements(deliverables, editable);
+      const shouldMigrate = deliverables.reduce((acc, d) => acc || isEmpty(d.chartData), false);
       setElements(elements);
-      onGraphEvent(GRAPH_EVENTS.graphInit, elements);
+
+      setTimeout(() => {
+        if (shouldMigrate) {
+          onGraphEvent(GRAPH_EVENTS.graphMigrate, elements);
+        } else {
+          onGraphEvent(GRAPH_EVENTS.graphInit, elements);
+        }
+      });
     }
     // eslint-disable-next-line
   }, [deliverables, editable]);
