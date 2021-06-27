@@ -66,6 +66,11 @@ export const deleteMetaSystem = (project, system) => (dispatch) => {
     .catch((err) => console.error('[deleteMetaSystem] error => ', err));
 };
 
+export const duplicateMetaSystem = (system) => ({
+  type: ActionTypes.DUPLICATE_META_SYSTEM,
+  payload: system,
+});
+
 export const fetchMetaSystemsFilter = (project) => async (dispatch) => {
   dispatch(getMetaSystemsFilter(null, true));
   const params = {

@@ -17,8 +17,6 @@ import { FORM_MODE } from 'utils/constants';
 import { initDeliverables, readMetaSystem, updateDeliverable } from 'redux/actions/metaSystem';
 import { restrict } from 'utils/helpers/utility';
 
-const NAV_LINKS = [LINKS.PROJECT_MANAGEMENT, LINKS.PROJECTS];
-
 const EditMetaSystem = () => {
   const { project: projectId, system: systemId } = useParams();
   const dispatch = useDispatch();
@@ -27,7 +25,7 @@ const EditMetaSystem = () => {
   const [initDlg, showInitDlg] = useState(false);
   const [selectDlg, showSelectDlg] = useState(false);
 
-  const { metaSystem } = useSelector(({ projects: { metaSystems, results } }) => {
+  const { metaSystem, project } = useSelector(({ projects: { metaSystems, results } }) => {
     const project = results.find((p) => p._id === projectId);
     const systems = metaSystems[projectId];
     const metaSystem = systems ? systems.find((ms) => ms._id === systemId) : null;
@@ -40,6 +38,18 @@ const EditMetaSystem = () => {
     const editable = formMode === FORM_MODE.update;
     return { title, editable };
   }, [formMode]);
+
+  const NAV_LINKS = useMemo(
+    () => [
+      LINKS.PROJECT_MANAGEMENT,
+      LINKS.PROJECTS,
+      {
+        TITLE: project?.name || 'Not Found',
+        HREF: LINKS.EDIT_PROJECT.HREF.replace(':id', projectId),
+      },
+    ],
+    [project, projectId]
+  );
 
   useEffect(() => dispatch(readMetaSystem(projectId)), [dispatch, projectId]);
 

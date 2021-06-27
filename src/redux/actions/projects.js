@@ -4,40 +4,41 @@ import { isEmpty } from 'utils/helpers/utility';
 
 const getProjects =
   ({ refresh = false, organization = '' } = {}) =>
-  async (dispatch, getState) => {
-    try {
-      const {
-        projects: { results, organization: preOrganization },
-      } = getState();
-      if (!refresh && !isEmpty(results) && organization === preOrganization) {
-        return;
-      }
+  (dispatch, getState) => {
+    const {
+      projects: { results, organization: preOrganization },
+    } = getState();
 
-      let params = {
-        skip: 0,
-        limit: 10000,
-      };
+    if (!refresh && !isEmpty(results) && organization === preOrganization) {
+      return;
+    }
 
-      if (organization) {
-        params = {
-          ...params,
-          filter: {
-            organization,
-          },
-        };
-      }
+    let params = {
+      skip: 0,
+      limit: 10000,
+    };
 
-      const { data = [] } = await projectAPI.getProjects(params);
-      await dispatch({
-        type: TYPES.FETCH_PROJECTS,
-        payload: {
-          results: data,
+    if (organization) {
+      params = {
+        ...params,
+        filter: {
           organization,
         },
-      });
-    } catch (error) {
-      console.log('[getProjects] error => ', error);
+      };
     }
+
+    projectAPI
+      .getProjects(params)
+      .then(({ data }) =>
+        dispatch({
+          type: TYPES.FETCH_PROJECTS,
+          payload: {
+            results: data,
+            organization,
+          },
+        })
+      )
+      .catch((error) => console.log('[getProjects] error => ', error));
   };
 
 const addProject = (project) => async (dispatch, getState) => {
@@ -90,7 +91,7 @@ const removeProject = (project) => async (dispatch) => {
     const response = await projectAPI.deleteProject(project);
 
     if (response) {
-      dispatch({ type: TYPES.REMOVE_PROJECT, payload: project });
+      dispatch({ type: TYPES.DELETE_PROJECT, payload: project });
       isCompleted = true;
     }
 

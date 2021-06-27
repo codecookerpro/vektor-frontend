@@ -29,7 +29,8 @@ const SelectDialog = ({ open, onClose, onSelect }) => {
     return templates.find((t) => t._id === templateId);
   }, [templateId, templates]);
 
-  useEffect(() => dispatch(getWorkflowTemplates()));
+  // eslint-disable-next-line
+  useEffect(() => dispatch(getWorkflowTemplates()), []);
 
   const handleSelect = () => {
     onSelect(template);
