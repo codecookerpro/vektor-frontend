@@ -2,7 +2,7 @@ import React, { memo } from 'react';
 import { Card, CardContent, Typography } from '@material-ui/core';
 
 import FilterSelect from 'components/UI/Selects/FilterSelect';
-import useUserPermissions from 'utils/helpers/useUserPermission';
+import useUserPermissions from 'utils/hooks/useUserPermission';
 
 import useStyles from './styles';
 import useReportFiltersLogic from './helpers';

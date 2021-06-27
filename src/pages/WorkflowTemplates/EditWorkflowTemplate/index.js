@@ -12,6 +12,7 @@ import { isEmpty, restrict } from 'utils/helpers/utility';
 import { GRAPH_EVENTS } from 'parts/WorkflowGraph/constants';
 import { nodeToDeliverable, elementsToDeliverables } from 'parts/WorkflowGraph/helper';
 import { createWTD, updateWTD, deleteWTD, updateWTDPositions } from 'redux/actions/workflowTemplates';
+import { FORM_MODE } from 'utils/constants';
 
 const NAV_LINKS = [LINKS.WORKFLOW_TEMPLATES];
 
@@ -62,7 +63,7 @@ const EditWorkflowTemplate = () => {
       />
       {isEmpty(template) || (
         <>
-          <WorkflowTemplateForm workflowTemplate={template} />
+          <WorkflowTemplateForm workflowTemplate={template} mode={FORM_MODE.update} />
           <WorkflowTemplateChart deliverables={template.deliverables} editable={true} onGraphEvent={handleGraphEvent} />
         </>
       )}

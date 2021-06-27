@@ -6,22 +6,21 @@ import { useForm, Controller } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
 import joi from 'joi';
 
-import { Card, CardContent, Grid, Button, Typography } from '@material-ui/core';
+import { Card, CardContent, Grid, Button, Typography, Box } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 import { makeStyles } from '@material-ui/core/styles';
-
-import { PERMISSION_TYPES } from 'utils/constants';
-import { addWorkflowTemplate, editWorkflowTemplate, removeWorkflowTemplate } from 'redux/actions/workflowTemplates';
+import { addWorkflowTemplate, editWorkflowTemplate, removeWorkflowTemplate, duplicateWT } from 'redux/actions/workflowTemplates';
 import VektorTextField from 'components/UI/TextFields/VektorTextField';
 import FilterSelect from 'components/UI/Selects/FilterSelect';
 import { STRING_INPUT_VALID, SELECT_VALID, INTEGER_VALID } from 'utils/constants/validations';
 import LINKS from 'utils/constants/links';
 import useLoading from 'utils/hooks/useLoading';
-import { isEmpty } from 'utils/helpers/utility';
 import { setPopup } from 'redux/actions/popupActions';
 import { POPUP_TYPE } from 'utils/constants';
 import { FORM_MODE, noop } from 'utils/constants';
 import { elementsToDeliverables } from 'parts/WorkflowGraph/helper';
+import { ColorButton } from 'components/UI/Buttons';
+import useUserPermissions from 'utils/hooks/useUserPermission';
 
 const useStyles = makeStyles((theme) => ({
   alert: {
@@ -35,33 +34,33 @@ const useStyles = makeStyles((theme) => ({
   form: {
     marginBottom: theme.spacing(6),
   },
-  delete: {
-    backgroundColor: theme.custom.palette.red,
+  button: {
+    margin: theme.spacing(1),
+  },
+  buttonRight: {
+    float: 'right',
   },
   content: {
     marginBottom: theme.spacing(6),
   },
 }));
 
-const WorkflowTemplateForm = ({ workflowTemplate = {}, onEdit = noop, getElements = noop }) => {
+const WorkflowTemplateForm = ({ workflowTemplate = {}, mode = FORM_MODE.create, getElements = noop }) => {
   const classes = useStyles();
   const history = useHistory();
   const dispatch = useDispatch();
   const { changeLoadingStatus } = useLoading();
   const { results: organizations = [] } = useSelector((state) => state.organizations);
   const [errorMessage, setErrorMessage] = useState('');
-  const [editMode, setEditMode] = useState(false);
-
-  const formMode = isEmpty(workflowTemplate) ? FORM_MODE.create : editMode ? FORM_MODE.update : FORM_MODE.view;
-
-  const currentUser = useSelector((state) => state.auth.currentUser);
+  const [editable, setEditable] = useState(mode === FORM_MODE.create);
+  const { isAdmin, organization: userOrganization } = useUserPermissions();
 
   let schemaForOrg = {
     name: STRING_INPUT_VALID,
     differentialWeight: INTEGER_VALID,
   };
 
-  if (currentUser.permissions === PERMISSION_TYPES.admin) {
+  if (isAdmin) {
     schemaForOrg.organization = SELECT_VALID;
   }
 
@@ -77,11 +76,11 @@ const WorkflowTemplateForm = ({ workflowTemplate = {}, onEdit = noop, getElement
     try {
       const params = {
         name: data.name,
-        organization: currentUser.permissions === PERMISSION_TYPES.admin ? data.organization : currentUser.organization,
+        organization: isAdmin ? data.organization : userOrganization,
         differentialWeight: data.differentialWeight,
       };
 
-      if (isEmpty(workflowTemplate)) {
+      if (mode === FORM_MODE.create) {
         const deliverables = elementsToDeliverables(getElements()).filter((d) => d.name);
 
         if (deliverables.length === 0) {
@@ -131,9 +130,9 @@ const WorkflowTemplateForm = ({ workflowTemplate = {}, onEdit = noop, getElement
     );
   };
 
-  const changeMode = (editable) => {
-    setEditMode(editable);
-    onEdit(editable);
+  const handleDuplicate = () => {
+    dispatch(duplicateWT(workflowTemplate));
+    history.push(LINKS.ADD_WORKFLOW_TEMPLATE.HREF);
   };
 
   return (
@@ -158,11 +157,11 @@ const WorkflowTemplateForm = ({ workflowTemplate = {}, onEdit = noop, getElement
                 placeholder="Name"
                 error={errors.name?.message}
                 control={control}
-                disabled={formMode === FORM_MODE.view}
+                disabled={!editable}
                 defaultValue={workflowTemplate?.name || ''}
               />
             </Grid>
-            {currentUser.permissions === PERMISSION_TYPES.admin && (
+            {isAdmin && (
               <Grid item xs={12} sm={6} md={4}>
                 <Controller
                   as={<FilterSelect />}
@@ -177,7 +176,7 @@ const WorkflowTemplateForm = ({ workflowTemplate = {}, onEdit = noop, getElement
                   }}
                   error={errors.organization?.message}
                   control={control}
-                  disabled={formMode === FORM_MODE.view}
+                  disabled={!editable}
                   defaultValue={workflowTemplate?.organization || ''}
                 />
               </Grid>
@@ -192,42 +191,37 @@ const WorkflowTemplateForm = ({ workflowTemplate = {}, onEdit = noop, getElement
                 placeholder="Number"
                 error={errors.differentialWeight?.message}
                 control={control}
-                disabled={formMode === FORM_MODE.view}
+                disabled={!editable}
                 defaultValue={workflowTemplate?.differentialWeight || 1}
               />
             </Grid>
             <Grid item xs={12}>
-              <Grid container justify="space-between">
-                {formMode === FORM_MODE.create ? (
-                  <Grid item>
-                    <Button variant="contained" color="primary" onClick={handleSubmit(onSubmit)}>
-                      Save
-                    </Button>
-                  </Grid>
-                ) : formMode === FORM_MODE.update ? (
-                  <>
-                    <Grid item>
-                      <Button variant="contained" color="primary" onClick={handleSubmit(onSubmit)}>
-                        SAVE CHANGES
-                      </Button>
-                    </Grid>
-                    <Grid item>
-                      <Button variant="contained" color="default" onClick={() => changeMode(false)}>
-                        CANCEL
-                      </Button>
-                    </Grid>
-                    <Grid item>
-                      <Button color="primary" variant="contained" className={classes.delete} onClick={deleteHandler}>
-                        DELETE
-                      </Button>
-                    </Grid>
-                  </>
-                ) : (
-                  <Button variant="contained" color="primary" onClick={() => changeMode(true)}>
+              {mode === FORM_MODE.create ? (
+                <Button variant="contained" color="primary" onClick={handleSubmit(onSubmit)}>
+                  Save
+                </Button>
+              ) : mode === FORM_MODE.update && editable ? (
+                <Box>
+                  <Button className={classes.button} variant="contained" color="primary" onClick={handleSubmit(onSubmit)}>
+                    SAVE CHANGES
+                  </Button>
+                  <Button className={classes.button} variant="contained" color="default" onClick={() => setEditable(false)}>
+                    CANCEL
+                  </Button>
+                  <ColorButton className={classes.buttonRight} colour="red" onClick={deleteHandler}>
+                    DELETE
+                  </ColorButton>
+                </Box>
+              ) : (
+                <Box>
+                  <Button className={classes.button} variant="contained" color="primary" onClick={() => setEditable(true)}>
                     EDIT
                   </Button>
-                )}
-              </Grid>
+                  <Button className={classes.button} variant="contained" color="default" onClick={handleDuplicate}>
+                    DUPLICATE
+                  </Button>
+                </Box>
+              )}
             </Grid>
           </Grid>
         </form>

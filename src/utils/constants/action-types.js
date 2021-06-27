@@ -47,9 +47,14 @@ const ActionTypes = keyMirror({
   SET_POPUP: null,
 
   // workflowTemplates
-  FETCH_WORKFLOW_TEMPLATES: null,
+  CREATE_WT: null,
+  UPDATE_WT: null,
+  DELETE_WT: null,
+  FETCH_WT: null,
+  DUPLICATE_WT: null,
   CREATE_WTD: null,
   UPDATE_WTD: null,
+  DUPLICATE_TEMPLATE: null,
 });
 
 export default ActionTypes;
