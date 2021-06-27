@@ -1,42 +1,38 @@
-import React, { memo, useState, useEffect } from 'react';
+import React, { memo, useEffect, useState, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Card, CardContent, TableCell, TableRow, Checkbox, Typography } from '@material-ui/core';
 
-import { getWorkflowTemplates } from 'redux/actions/workflowTemplates';
+import { Card, CardHeader, CardContent, TableCell, TableRow } from '@material-ui/core';
 import LinkButton from 'components/UI/Buttons/LinkButton';
 import VektorTableContainer from 'parts/Tables/VektorTableContainer';
-import { DEFAULT_ROWS_PER_PAGE } from 'utils/constants';
+
 import LINKS from 'utils/constants/links';
+
+import { useFilter, usePagenation } from 'utils/hooks';
+import { getWorkflowTemplates } from 'redux/actions/workflowTemplates';
 
 const columns = [
   { id: 'name', label: 'Name', minWidth: 130 },
   { id: 'organization', label: 'Organization', minWidth: 130 },
 ];
 
-const WorkflowTemplatesTable = ({ selectedItems, setSelectedItems }) => {
+const WorkflowTemplatesTable = () => {
   const dispatch = useDispatch();
 
-  const { results = [] } = useSelector((state) => state.workflowTemplates);
-  const organizations = useSelector((state) => state.organizations.results || []);
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(DEFAULT_ROWS_PER_PAGE);
-
-  useEffect(() => {
-    dispatch(getWorkflowTemplates());
-  }, [dispatch]);
-
-  const toggleHandler = (value) => () => {
-    const currentIndex = selectedItems.findIndex((item) => item._id === value._id);
-    const newSelectedItems = [...selectedItems];
-
-    if (currentIndex === -1) {
-      newSelectedItems.push(value);
+  const templates = useSelector((state) => state.workflowTemplates.results);
+  const organizations = useSelector((state) => state.organizations.results);
+  const [filter, setFilter] = useState(null);
+  const filteredTemplates = useMemo(() => {
+    if (filter) {
+      return templates.filter((t) => t.organization === filter);
     } else {
-      newSelectedItems.splice(currentIndex, 1);
+      return templates;
     }
+  }, [filter, templates]);
+  const { page, setPage, rowsPerPage, setRowsPerPage, pageRecords } = usePagenation(filteredTemplates);
+  const filterComponent = useFilter(organizations, 'organization', setFilter);
 
-    setSelectedItems(newSelectedItems);
-  };
+  // eslint-disable-next-line
+  useEffect(() => dispatch(getWorkflowTemplates(true)), []);
 
   const getOrganizationName = (_id) => {
     const organization = organizations.find((item) => item._id === _id);
@@ -45,29 +41,20 @@ const WorkflowTemplatesTable = ({ selectedItems, setSelectedItems }) => {
 
   return (
     <Card>
+      <CardHeader title={`${filteredTemplates.length} templates`} action={filterComponent} />
       <CardContent>
-        <Typography variant="h5" color="textPrimary" gutterBottom>
-          {`${results.length} templates`}
-        </Typography>
         <VektorTableContainer
           columns={columns}
-          rowCounts={results.length}
+          rowCounts={templates.length}
           page={page}
           setPage={setPage}
           rowsPerPage={rowsPerPage}
           setRowsPerPage={setRowsPerPage}
         >
-          {(rowsPerPage > 0 ? results.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) : results).map((row) => (
+          {pageRecords.map((row) => (
             <TableRow key={row._id}>
               <TableCell component="th" scope="row">
-                <div style={{ display: 'flex' }}>
-                  <Checkbox
-                    inputProps={{ 'aria-labelledby': `check-${row._id}` }}
-                    checked={selectedItems.findIndex((value) => row._id === value._id) !== -1}
-                    onChange={toggleHandler(row)}
-                  />
-                  <LinkButton to={LINKS.EDIT_WORKFLOW_TEMPLATE.HREF.replace(':id', row._id)}>{row.name}</LinkButton>
-                </div>
+                <LinkButton to={LINKS.EDIT_WORKFLOW_TEMPLATE.HREF.replace(':id', row._id)}>{row.name}</LinkButton>
               </TableCell>
               <TableCell>{getOrganizationName(row.organization)}</TableCell>
             </TableRow>
