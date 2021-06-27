@@ -9,9 +9,7 @@ const useFilter = (items, label, setFilter = noop, keys = { label: 'name', value
     setFilter(value);
   };
   const component = useMemo(
-    () => (
-      <FilterSelect label={`By ${label}`} placeholder={`Select ${label}`} items={items} keys={keys} value={value} onChange={handleSelect} />
-    ),
+    () => <FilterSelect label={`By ${label}`} placeholder={`Select ${label}`} items={items} keys={keys} value={value} onChange={handleSelect} />,
     // eslint-disable-next-line
     [label, items, keys, value]
   );
