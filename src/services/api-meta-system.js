@@ -23,7 +23,7 @@ export const updateMetaSystem = async (params) => {
 };
 
 export const deleteMetaSystem = async (params) => {
-  return await delete ('metasystems', { params });
+  return await del('metasystems', { params });
 };
 
 export const initDeliverables = async (params) => {
