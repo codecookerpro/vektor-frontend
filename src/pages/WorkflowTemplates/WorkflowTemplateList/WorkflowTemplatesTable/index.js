@@ -7,7 +7,7 @@ import VektorTableContainer from 'parts/Tables/VektorTableContainer';
 
 import LINKS from 'utils/constants/links';
 
-import { useFilter, usePagenation } from 'utils/hooks';
+import { useFilter, usePagenation, useUserPermission } from 'utils/hooks';
 import { getWorkflowTemplates } from 'redux/actions/workflowTemplates';
 
 const columns = [
@@ -30,6 +30,7 @@ const WorkflowTemplatesTable = () => {
   }, [filter, templates]);
   const { page, setPage, rowsPerPage, setRowsPerPage, pageRecords } = usePagenation(filteredTemplates);
   const filterComponent = useFilter(organizations, 'organization', setFilter);
+  const { isAdmin } = useUserPermission();
 
   // eslint-disable-next-line
   useEffect(() => dispatch(getWorkflowTemplates(true)), []);
@@ -41,7 +42,7 @@ const WorkflowTemplatesTable = () => {
 
   return (
     <Card>
-      <CardHeader title={`${filteredTemplates.length} templates`} action={filterComponent} />
+      <CardHeader title={`${filteredTemplates.length} templates`} action={isAdmin && filterComponent} />
       <CardContent>
         <VektorTableContainer
           columns={columns}
