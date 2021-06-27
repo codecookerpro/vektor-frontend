@@ -26,4 +26,9 @@ const restrict = (obj, keys = []) =>
     };
   }, {});
 
-export { isEmpty, keyMirror, restrict };
+const exclude = (obj, keys = []) => {
+  const excludedKeys = Object.keys(obj).filter((key) => !keys.includes(key));
+  return restrict(obj, excludedKeys);
+};
+
+export { isEmpty, keyMirror, restrict, exclude };

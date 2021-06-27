@@ -18,7 +18,7 @@ import { initDeliverables, readMetaSystem, updateDeliverable } from 'redux/actio
 import { restrict } from 'utils/helpers/utility';
 
 const EditMetaSystem = () => {
-  const { project: projectId, system: systemId } = useParams();
+  const { projectId, systemId } = useParams();
   const dispatch = useDispatch();
   const history = useHistory();
   const [formMode, setFormMode] = useState(FORM_MODE.view);
@@ -51,7 +51,8 @@ const EditMetaSystem = () => {
     [project, projectId]
   );
 
-  useEffect(() => dispatch(readMetaSystem(projectId)), [dispatch, projectId]);
+  // eslint-disable-next-line
+  useEffect(() => dispatch(readMetaSystem(projectId)), []);
 
   useEffect(() => {
     if (!metaSystem) {

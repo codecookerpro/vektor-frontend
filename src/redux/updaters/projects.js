@@ -53,7 +53,7 @@ export const fetchMetaSystemsFilterUpdater = (state, { payload: { data, isLoadin
 });
 
 export const createMetaSystemUpdater = (state, { payload }) => {
-  const [project, _id] = payload;
+  const { project, _id } = payload;
   return {
     ...state,
     results: state.results.map((p) => (p._id === project ? { ...p, metaSystems: [...p.metaSystems, _id] } : p)),

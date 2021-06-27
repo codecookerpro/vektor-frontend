@@ -15,6 +15,7 @@ import { STRING_INPUT_VALID, SELECT_VALID } from 'utils/constants/validations';
 import { EQUIPMENT_TYPES, EQUIPMENTS, EQUIPMENT_CATEGORIES, EQUIPMENT_CATEGORY_TYPES, FORM_MODE, POPUP_TYPE, noop } from 'utils/constants';
 import { createMetaSystem, updateMetaSystem, deleteMetaSystem, duplicateMetaSystem } from 'redux/actions/metaSystem';
 import { setPopup } from 'redux/actions/popupActions';
+import LINKS from 'utils/constants/links';
 
 const useStyles = makeStyles((theme) => ({
   alert: {
@@ -72,7 +73,7 @@ const MetaSystemForm = ({ mode = FORM_MODE.view, system = {}, setFormMode = noop
 
     if (mode === FORM_MODE.create) {
       dispatch(createMetaSystem({ ...params, organization: data.organization }));
-      history.goBack();
+      history.push(LINKS.EDIT_PROJECT.HREF.replace(':id', projectId));
     } else if (mode === FORM_MODE.update) {
       dispatch(updateMetaSystem({ ...params, _id: system._id }));
       setFormMode(FORM_MODE.view);
@@ -94,6 +95,7 @@ const MetaSystemForm = ({ mode = FORM_MODE.view, system = {}, setFormMode = noop
 
   const handleDuplicate = () => {
     dispatch(duplicateMetaSystem(system));
+    history.push(LINKS.ADD_META_SYSTEM.HREF.replace(':projectId', projectId));
   };
 
   return (
@@ -236,13 +238,15 @@ const MetaSystemForm = ({ mode = FORM_MODE.view, system = {}, setFormMode = noop
                   <Button variant="contained" color="primary" onClick={handleSubmit(onSubmit)}>
                     SAVE CHANGES
                   </Button>
-                  <Button variant="contained" color="default" className={classes.button} onClick={() => setFormMode(FORM_MODE.view)}>
-                    CANCEL
-                  </Button>
                   {mode === FORM_MODE.update && (
-                    <ColorButton variant="contained" colour="red" className={classes.deleteButton} onClick={handleDelete}>
-                      DELETE
-                    </ColorButton>
+                    <>
+                      <Button variant="contained" color="default" className={classes.button} onClick={() => setFormMode(FORM_MODE.view)}>
+                        CANCEL
+                      </Button>
+                      <ColorButton variant="contained" colour="red" className={classes.deleteButton} onClick={handleDelete}>
+                        DELETE
+                      </ColorButton>
+                    </>
                   )}
                 </Box>
               )}

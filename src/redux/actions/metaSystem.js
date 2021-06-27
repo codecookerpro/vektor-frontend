@@ -1,5 +1,5 @@
 import * as API from 'services/api-meta-system';
-import { isEmpty } from 'utils/helpers/utility';
+import { exclude, isEmpty } from 'utils/helpers/utility';
 import ActionTypes from 'utils/constants/action-types';
 
 export const getMetaSystemsFilter = (data, isLoading = false) => ({
@@ -7,13 +7,19 @@ export const getMetaSystemsFilter = (data, isLoading = false) => ({
   payload: { data, isLoading },
 });
 
-export const createMetaSystem = (params) => (dispatch) => {
+export const createMetaSystem = (params) => (dispatch, getState) => {
   API.createMetaSystem(params)
     .then(({ data }) => {
-      dispatch({
-        type: ActionTypes.CREATE_META_SYSTEM,
-        payload: data,
-      });
+      const metaSystem = getState().projects.metaSystemClone;
+
+      if (metaSystem) {
+        const {
+          mainSystem: { deliverables },
+        } = metaSystem;
+        dispatch(initDeliverables({ _id: data.mainSystem._id, deliverables: deliverables.map((d) => exclude(d, ['calculated'])) }));
+      }
+
+      dispatch({ type: ActionTypes.CREATE_META_SYSTEM, payload: data });
     })
     .catch((err) => console.error('[createMetaSystem] error => ', err));
 };
