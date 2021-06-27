@@ -28,10 +28,10 @@ export const readMetaSystem =
   (project, refresh = false) =>
   (dispatch, getState) => {
     const {
-      projects: { metaSystems },
+      projects: { metaSystems, metaSystemClone },
     } = getState();
 
-    if (metaSystems[project] && !refresh) {
+    if ((metaSystems[project] && !refresh) || !isEmpty(metaSystemClone)) {
       return;
     }
 
