@@ -1,6 +1,6 @@
 import React, { memo, useState, useMemo, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Card, CardHeader, CardContent, TableCell, TableRow } from '@material-ui/core';
+import { Card, CardHeader, CardContent, TableCell, TableRow, Grid } from '@material-ui/core';
 
 import LinkButton from 'components/UI/Buttons/LinkButton';
 import VektorTableContainer from 'parts/Tables/VektorTableContainer';
@@ -8,13 +8,14 @@ import LINKS from 'utils/constants/links';
 import setColumn from './setColumn';
 import { useFilter, usePagenation, useUserPermission } from 'utils/hooks';
 import { getSOWs, setSelectedSOW } from 'redux/actions/sowAction';
+import { readMetaSystem } from 'redux/actions/metaSystem';
 
 const SowTable = () => {
   const dispatch = useDispatch();
   const sows = useSelector((state) => state.sows.results);
   const organizations = useSelector((state) => state.organizations.results);
   const projects = useSelector((state) => state.projects.results);
-  const systems = useSelector((state) => state.sows.metaSystems);
+  const systems = useSelector((state) => state.projects.metaSystems.raw || []);
   const { isAdmin } = useUserPermission();
   const columns = setColumn(isAdmin);
   const filteredSows = useMemo(() => {
@@ -40,6 +41,9 @@ const SowTable = () => {
     // eslint-disable-next-line
   }, [page, rowsPerPage, organizationFilter, systemFilter]);
 
+  // eslint-disable-next-line
+  useEffect(() => dispatch(readMetaSystem()), []);
+
   const getOrganizationName = (_id) => {
     const organization = organizations.find((item) => item._id === _id);
     return organization?.name || '';
@@ -55,7 +59,15 @@ const SowTable = () => {
 
   return (
     <Card>
-      <CardHeader title={`${filteredSows.length} SOWs`} action={orgFilterComp} />
+      <CardHeader
+        title={`${filteredSows.length} SOWs`}
+        action={
+          <Grid container spacing={4}>
+            {isAdmin && <Grid item>{orgFilterComp}</Grid>}
+            <Grid item>{sysFilterComp}</Grid>
+          </Grid>
+        }
+      />
       <CardContent>
         <VektorTableContainer
           columns={columns}
