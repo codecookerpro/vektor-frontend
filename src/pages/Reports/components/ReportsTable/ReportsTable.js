@@ -2,7 +2,7 @@ import React, { memo } from 'react';
 import { Card, CardContent } from '@material-ui/core';
 
 import VektorTableContainer from 'parts/Tables/VektorTableContainer';
-import useUserPermissions from 'utils/helpers/useUserPermission';
+import useUserPermissions from 'utils/hooks/useUserPermission';
 
 import { useReportsTableLogic } from './helpers';
 import { ReportsTableButtons, ReportRow } from './components';

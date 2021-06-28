@@ -2,28 +2,22 @@ import React from 'react';
 import { Card, CardContent, CardHeader, Grid, IconButton, Menu, MenuItem } from '@material-ui/core';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 
-import PhaseItem from '../PhaseItem';
-
 import useStyles from './styles';
 import { usePhaseBoxLogic } from './helpers';
 
-const PhaseBox = ({ orderIndex, name, fields, moveItem, onHeaderClick, onActionClick, phaseActions }) => {
+const PhaseBox = ({ phase, fields, onHeaderClick, onActionClick, phaseActions }) => {
+  const { name, orderIndex, _id } = phase || {};
+
   const classes = useStyles();
-  const {
-    anchorEl,
-    isPhaseActions,
-    selectedField,
-    isOpen,
-    handleMenuClick,
-    handleClose,
-    handleActionClick,
-    handleItemSelection,
-    clearItemSelection,
-    drop,
-  } = usePhaseBoxLogic(orderIndex, phaseActions, fields, moveItem, onActionClick);
+  const { anchorEl, isPhaseActions, isOpen, dropRef, handleMenuClick, handleClose, handleActionClick } = usePhaseBoxLogic(
+    _id,
+    orderIndex,
+    phaseActions,
+    onActionClick
+  );
 
   return (
-    <div ref={drop}>
+    <div ref={dropRef}>
       <Card>
         <CardHeader
           className={onHeaderClick ? classes.cardHeader : ''}
@@ -48,20 +42,7 @@ const PhaseBox = ({ orderIndex, name, fields, moveItem, onHeaderClick, onActionC
         />
         <CardContent className={classes.content}>
           <Grid container spacing={3}>
-            {fields.length > 0 &&
-              fields.map((field, index) => (
-                <Grid key={index} item xs={12}>
-                  <PhaseItem
-                    item={field}
-                    selectedSource={name}
-                    moveItem={moveItem}
-                    selectedField={selectedField}
-                    clearItemSelection={clearItemSelection}
-                    handleSelection={handleItemSelection}
-                    index={index}
-                  />
-                </Grid>
-              ))}
+            {fields}
           </Grid>
         </CardContent>
       </Card>

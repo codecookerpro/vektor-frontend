@@ -36,7 +36,7 @@ const EditProject = () => {
         </Grid>
         {isPhasesVisible && (
           <Grid item xs={12}>
-            <PhasesListView phases={project.phases} />
+            <PhasesListView project={project} metaSystems={metaSystems} />
           </Grid>
         )}
         <Grid item xs={12}>

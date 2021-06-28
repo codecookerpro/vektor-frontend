@@ -77,7 +77,7 @@ const projectsReducer = (state = INITIAL_STATE, { payload, type }) => {
     }
 
     case TYPES.UPDATE_META_SYSTEM: {
-      const { _id, name, equipmentCategory, equipmentType, equipmentName, equipmentNumber, project, productCode, site } = payload;
+      const { _id, name, equipmentCategory, equipmentType, equipmentName, equipmentNumber, project, productCode, site, projectPhase } = payload;
 
       return {
         ...state,
@@ -95,6 +95,7 @@ const projectsReducer = (state = INITIAL_STATE, { payload, type }) => {
                   project,
                   productCode,
                   site,
+                  projectPhase,
                 }
               : ms
           ),

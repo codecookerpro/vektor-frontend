@@ -9,7 +9,7 @@ import PageHeader from 'parts/PageHeader';
 import LINKS from 'utils/constants/links';
 import ProjectPhasesTable from '../Shared/ProjectPhasesTable';
 import PhaseBox from '../Shared/PhasesListView/PhaseBox';
-import ItemsDragLayer from '../Shared/PhasesListView/ItemsDragLayer';
+import PhaseItem from '../Shared/PhasesListView/PhaseItem';
 
 import { ACTIONS_DATA, ALLOWED_ROLES } from './constants';
 import useStyles from './styles';
@@ -23,6 +23,7 @@ const ProjectPhases = () => {
     phases,
     editingPhase,
     activeAction,
+    currentMetaSystems,
     isEditingHeader,
     onChangePhase,
     onCompleteEditing,
@@ -49,21 +50,30 @@ const ProjectPhases = () => {
     [editingPhase?.name, isEditingHeader, onChangePhase, onCompleteEditing, phaseHeader]
   );
 
+  const returnItemsForColumn = (newProjectPhase) => {
+    return currentMetaSystems
+      .filter(({ projectPhase }) => projectPhase === newProjectPhase)
+      .map((ms) => (
+        <Grid key={ms._id} item xs={12}>
+          <PhaseItem item={ms} projectId={project._id} canDrag={false} />
+        </Grid>
+      ));
+  };
+
   return (
     <>
       <PageHeader title={`${LINKS.PROJECT_PHASES.TITLE}: ${project?.name || 'Not Found'}`} links={getNavLinks(project?.name, projectId)} />
       <Grid container spacing={6}>
         <Grid item xs={12}>
           <DndProvider backend={HTML5Backend}>
-            <ItemsDragLayer />
             <Grid container spacing={6}>
-              {phases.map(({ orderIndex, name }, idx) => (
+              {phases.map(({ _id, orderIndex, name }, idx) => (
                 <Grid key={orderIndex} item xs={12} sm={6} md={3}>
                   <PhaseBox
                     orderIndex={orderIndex}
-                    name={renderTitleComponent(orderIndex, idx, name)}
+                    phase={{ name: renderTitleComponent(orderIndex, idx, name) }}
                     phaseActions={isEditingVisible && ACTIONS_DATA}
-                    fields={[]}
+                    fields={currentMetaSystems && returnItemsForColumn(_id)}
                     moveItem={() => null}
                     onActionClick={onActionClick}
                   />
@@ -71,7 +81,7 @@ const ProjectPhases = () => {
               ))}
               {isEditingVisible && (
                 <Grid item xs={12} sm={6} md={3}>
-                  <PhaseBox name="+ Add new phase" fields={[]} moveItem={() => null} onHeaderClick={onHeaderClick} />
+                  <PhaseBox phase={{ name: '+ Add new phase' }} fields={[]} moveItem={() => null} onHeaderClick={onHeaderClick} />
                 </Grid>
               )}
             </Grid>
