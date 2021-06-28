@@ -31,7 +31,7 @@ export const readMetaSystem =
       projects: { metaSystems, metaSystemClone },
     } = getState();
 
-    if ((metaSystems[project] && !refresh) || !isEmpty(metaSystemClone)) {
+    if ((project && metaSystems[project] && !refresh) || !isEmpty(metaSystemClone)) {
       return;
     }
 
