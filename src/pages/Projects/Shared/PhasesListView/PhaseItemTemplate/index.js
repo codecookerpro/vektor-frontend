@@ -22,7 +22,7 @@ const PhaseItemTemplate = ({ fields }) => {
 
   return (
     <div>
-      {fields.map((field, index) => (
+      {fields?.map((field, index) => (
         <Card key={index} className={classes.container}>
           <CardContent className={classes.content}>
             <div>

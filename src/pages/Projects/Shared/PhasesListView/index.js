@@ -1,37 +1,40 @@
-import React, { memo } from 'react';
+import React, { memo, useState, useEffect } from 'react';
 import { Grid } from '@material-ui/core';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 
+import PhaseItem from './PhaseItem';
 import PhaseBox from './PhaseBox';
-import ItemsDragLayer from './ItemsDragLayer';
+import { getCondition } from './helpers';
 
-const PhasesListView = ({ phases }) => {
-  const moveItem = (items, source, dropResult) => {
-    console.log('items => ', items);
-    console.log('source => ', source);
-    console.log('dropResult => ', dropResult);
-    // const leftItems =
-    //   source === 'left'
-    //     ? data.leftItems.filter((x) => items.findIndex((y) => x === y) < 0)
-    //     : data.leftItems.concat(items);
+const PhasesListView = ({ project, metaSystems }) => {
+  const [metasystems, setMetasystems] = useState([]);
 
-    // const rightItems =
-    //   source === 'left'
-    //     ? data.rightItems.concat(items)
-    //     : data.rightItems.filter((x) => items.findIndex((y) => x === y) < 0);
-    // setData({ leftItems, rightItems });
-  };
+  useEffect(() => {
+    setMetasystems(metaSystems);
+  }, [metaSystems]);
+
+  const returnItemsForColumn = (newProjectPhase) =>
+    metasystems
+      .filter(({ projectPhase }) => getCondition(projectPhase, newProjectPhase))
+      .map((ms) => (
+        <Grid key={ms._id} item xs={12}>
+          <PhaseItem item={ms} projectId={project._id} setItems={setMetasystems} />
+        </Grid>
+      ));
 
   return (
     <DndProvider backend={HTML5Backend}>
-      <ItemsDragLayer />
       <Grid container spacing={6}>
-        {phases.map((phase) => (
-          <Grid key={phase._id} item xs={12} sm={6} md={3}>
-            <PhaseBox orderIndex={phase.orderIndex} name={phase.name} fields={[]} moveItem={moveItem} />
-          </Grid>
-        ))}
+        <Grid item xs={12} sm={6} md={3}>
+          <PhaseBox phase={{ orderIndex: 0, name: 'Buffer phase' }} fields={returnItemsForColumn()} moveItem={() => {}} />
+        </Grid>
+        {project.phases.length > 0 &&
+          project.phases.map((phase) => (
+            <Grid key={phase._id} item xs={12} sm={6} md={3}>
+              <PhaseBox phase={phase} fields={returnItemsForColumn(phase._id)} moveItem={() => {}} />
+            </Grid>
+          ))}
       </Grid>
     </DndProvider>
   );

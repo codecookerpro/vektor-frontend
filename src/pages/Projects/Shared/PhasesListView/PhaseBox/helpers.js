@@ -1,31 +1,18 @@
 import { useState } from 'react';
 import { useDrop } from 'react-dnd';
 
-export const usePhaseBoxLogic = (orderIndex, phaseActions, fields, moveItem, onActionClick) => {
-  const [, drop] = useDrop(
-    () => ({
-      accept: 'ITEM',
-      drop: moveItem,
-      collect: (monitor) => ({
-        isOver: monitor.isOver(),
-        canDrop: monitor.canDrop(),
-      }),
+export const usePhaseBoxLogic = (_id, orderIndex, phaseActions, onActionClick) => {
+  const [, dropRef] = useDrop({
+    accept: 'ITEM',
+    drop: () => ({ name: _id }),
+    collect: (monitor) => ({
+      isOver: monitor.isOver(),
+      canDrop: monitor.canDrop(),
     }),
-    [moveItem]
-  );
-  const [selectedField, setSelectedField] = useState(null);
+  });
   const [anchorEl, setAnchorEl] = useState(null);
   const isOpen = Boolean(anchorEl);
   const isPhaseActions = Boolean(phaseActions) && phaseActions.length > 0;
-
-  const clearItemSelection = () => {
-    setSelectedField(null);
-  };
-
-  const handleItemSelection = (index) => {
-    const field = index < 0 ? '' : fields[index];
-    setSelectedField(field);
-  };
 
   const handleMenuClick = ({ currentTarget }) => {
     setAnchorEl(currentTarget);
@@ -43,13 +30,10 @@ export const usePhaseBoxLogic = (orderIndex, phaseActions, fields, moveItem, onA
   return {
     anchorEl,
     isPhaseActions,
-    selectedField,
     isOpen,
+    dropRef,
     handleMenuClick,
     handleClose,
     handleActionClick,
-    handleItemSelection,
-    clearItemSelection,
-    drop,
   };
 };

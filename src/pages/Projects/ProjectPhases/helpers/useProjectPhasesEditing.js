@@ -2,6 +2,7 @@ import { useMemo, useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
+import { readMetaSystem } from 'redux/actions/metaSystem';
 import { createProjectPhase, updateProjectPhase, deleteProjectPhase } from 'redux/actions/projects';
 import { ACTIONS } from 'pages/Projects/constants';
 
@@ -13,9 +14,10 @@ const useProjectPhasesEditing = () => {
   const [editingPhase, setEditingPhase] = useState(null);
   const [activeAction, setActiveAction] = useState('');
 
-  const { results: projects } = useSelector(({ projects }) => projects);
+  const { results: projects, metaSystems } = useSelector(({ projects }) => projects);
 
   const project = useMemo(() => projects.find((item) => item._id === projectId), [projectId, projects]);
+  const currentMetaSystems = metaSystems[projectId];
   const isEditingHeader = (orderIndex) => editingPhase?.orderIndex === orderIndex && activeAction === ACTIONS.RENAME;
 
   useEffect(() => {
@@ -23,6 +25,10 @@ const useProjectPhasesEditing = () => {
       setPhases(project.phases);
     }
   }, [project]);
+
+  useEffect(() => {
+    dispatch(readMetaSystem(projectId));
+  }, [dispatch, projectId]);
 
   const onHeaderClick = () => {
     const newPhase = {
@@ -102,6 +108,7 @@ const useProjectPhasesEditing = () => {
     project,
     phases,
     editingPhase,
+    currentMetaSystems,
     activeAction,
     isEditingHeader,
     onChangePhase,

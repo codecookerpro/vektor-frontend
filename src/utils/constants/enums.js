@@ -6,7 +6,6 @@ export const PERMISSION_TYPES = {
   projectManager: 'PROJECT_MANAGER',
   user: 'USER',
   viewer: 'VIEWER',
-
   subset(keys) {
     return keys.map((type) => this[type] || console.error(`Invalid permission type was detected: ${type}`));
   },
