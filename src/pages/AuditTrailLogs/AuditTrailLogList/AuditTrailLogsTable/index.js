@@ -8,7 +8,7 @@ import VektorTableContainer from 'parts/Tables/VektorTableContainer';
 import LINKS from 'utils/constants/links';
 import { getEnglishDateWithTime } from 'utils/helpers/time';
 import { isEmpty } from 'utils/helpers/utility';
-import { useFilter, usePagination } from 'utils/hooks';
+import { useFilter, usePagination, useUserPermission } from 'utils/hooks';
 import { ACTIONS, ENTITY_NAMES } from 'utils/constants';
 
 const columns = [
@@ -28,31 +28,34 @@ const AuditTrailLogsTable = () => {
   const users = useSelector((state) => state.users.results);
   const organizations = useSelector((state) => state.organizations.results);
 
-  const [org, setOrganization] = useState(null);
-  const [user, setUser] = useState(null);
-  const [action, setActionType] = useState(null);
-  const [entity, setEntityName] = useState(null);
-  const filter = useMemo(
+  const { isAdmin } = useUserPermission();
+
+  const [orgFilter, setOrganization] = useState(null);
+  const [userFilter, setUser] = useState(null);
+  const [actionFilter, setActionType] = useState(null);
+  const [entityFilter, setEntityName] = useState(null);
+  const filterObj = useMemo(
     () => ({
-      organization: org || undefined,
-      user: user || undefined,
-      actionType: action || undefined,
-      mName: entity || undefined,
+      organization: orgFilter || undefined,
+      user: userFilter || undefined,
+      actionType: actionFilter || undefined,
+      mName: entityFilter || undefined,
     }),
-    [org, user, action, entity]
+    [orgFilter, userFilter, actionFilter, entityFilter]
   );
 
+  const orgFilterComponent = useFilter(organizations, 'organization', setOrganization);
   const filterComponents = [
-    useFilter(organizations, 'organization', setOrganization),
+    isAdmin && orgFilterComponent,
     useFilter(users, 'user', setUser),
     useFilter(ACTIONS, 'action', setActionType, { value: 'value', label: 'label' }),
     useFilter(ENTITY_NAMES, 'entity name', setEntityName, { value: 'value', label: 'label' }),
-  ];
+  ].filter((f) => f);
 
   const { page, setPage, rowsPerPage, setRowsPerPage, pagination } = usePagination();
 
   // eslint-disable-next-line
-  useEffect(() => dispatch(getEvents(pagination, filter, true)), [pagination, filter]);
+  useEffect(() => dispatch(getEvents(pagination, filterObj, true)), [pagination, filterObj]);
 
   const getUserName = (_id) => {
     const user = users.find((item) => item._id === _id);

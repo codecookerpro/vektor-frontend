@@ -10,7 +10,7 @@ export const fetchEventsUpdater = (state, { payload: { data, pagination } }) => 
   pagination,
 });
 
-export const fetchLatestEventsUpdater = (state, { payload: { data } }) => ({
+export const fetchLatestEventsUpdater = (state, { payload }) => ({
   ...state,
-  latest: data,
+  latest: payload,
 });
