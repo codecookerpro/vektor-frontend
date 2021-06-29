@@ -15,9 +15,9 @@ apiAxios.interceptors.response.use((response) => {
 });
 
 export const composeUrl = (urlData) => {
-  if (urlData instanceof String) {
+  if (typeof urlData === 'string') {
     return urlData;
-  } else if (urlData instanceof Array) {
+  } else if (Array.isArray(urlData)) {
     return urlJoin(urlData);
   } else {
     console.trace('Incorrect usage of wrapped axios request');

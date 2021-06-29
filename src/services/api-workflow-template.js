@@ -15,19 +15,19 @@ const deleteWorkflowTemplate = async (params) => {
 };
 
 const createWorkflowTemplateDeliverable = async (params) => {
-  return await post('workflows', 'nested', params);
+  return await post(['workflows', 'nested'], params);
 };
 
 const updateWorkflowTemplateDeliverable = async (params) => {
-  return await put('workflows', 'nested', params);
+  return await put(['workflows', 'nested'], params);
 };
 
 const deleteWorkflowTemplateDeliverable = async (params) => {
-  return await del('workflows', 'nested', params);
+  return await del(['workflows', 'nested'], params);
 };
 
 const updateWTDPositions = async (params) => {
-  return await put('workflows', 'positioning', params);
+  return await put(['workflows', 'positioning'], params);
 };
 
 export {
