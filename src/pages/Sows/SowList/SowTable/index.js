@@ -1,21 +1,48 @@
-import React, { memo, useCallback, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Card, CardContent, Checkbox, TableCell, TableRow } from '@material-ui/core';
+import React, { memo, useState, useMemo, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { Card, CardHeader, CardContent, TableCell, TableRow, Grid } from '@material-ui/core';
 
 import LinkButton from 'components/UI/Buttons/LinkButton';
 import VektorTableContainer from 'parts/Tables/VektorTableContainer';
 import LINKS from 'utils/constants/links';
-import SowActions from './SowActions';
 import setColumn from './setColumn';
-import { setSelectedSOW } from 'redux/actions/sowAction';
+import { useFilter, usePagenation, useUserPermission } from 'utils/hooks';
+import { getSOWs, setSelectedSOW } from 'redux/actions/sowAction';
+import { readMetaSystem } from 'redux/actions/metaSystem';
 
-const SowTable = ({ selectedItems, setSelectedItems, page, setPage, rowsPerPage, setRowsPerPage, isOrganizationVisible }) => {
+const SowTable = () => {
   const dispatch = useDispatch();
-  const { results, pagination } = useSelector((state) => state.sows);
+  const sows = useSelector((state) => state.sows.results);
   const organizations = useSelector((state) => state.organizations.results);
   const projects = useSelector((state) => state.projects.results);
-  const [action, setAction] = useState('');
-  const columns = setColumn(isOrganizationVisible);
+  const systems = useSelector((state) => state.projects.metaSystems.raw || []);
+  const { isAdmin } = useUserPermission();
+  const columns = setColumn(isAdmin);
+  const filteredSows = useMemo(() => {
+    return sows;
+  }, [sows]);
+  const [organizationFilter, setOrganizationFilter] = useState(null);
+  const [systemFilter, setSystemFilter] = useState(null);
+  const { page, setPage, rowsPerPage, setRowsPerPage } = usePagenation(filteredSows);
+  const orgFilterComp = useFilter(organizations, 'organization', setOrganizationFilter);
+  const sysFilterComp = useFilter(systems, 'system', setSystemFilter);
+
+  useEffect(() => {
+    const pagination = {
+      skip: page * rowsPerPage,
+      limit: rowsPerPage,
+    };
+    const filter = {
+      organization: organizationFilter || undefined,
+      metaSystem: systemFilter || undefined,
+    };
+
+    dispatch(getSOWs(filter, pagination));
+    // eslint-disable-next-line
+  }, [page, rowsPerPage, organizationFilter, systemFilter]);
+
+  // eslint-disable-next-line
+  useEffect(() => dispatch(readMetaSystem()), []);
 
   const getOrganizationName = (_id) => {
     const organization = organizations.find((item) => item._id === _id);
@@ -26,49 +53,33 @@ const SowTable = ({ selectedItems, setSelectedItems, page, setPage, rowsPerPage,
     return project?.name || '';
   };
 
-  const actionHandler = useCallback(() => {
-    console.log('action go');
-  }, []);
-
-  const toggleHandler = (value) => () => {
-    const currentIndex = selectedItems.findIndex((item) => item.id === value.id);
-    const newSelectedItems = [...selectedItems];
-    if (currentIndex === -1) {
-      newSelectedItems.push(value);
-    } else {
-      newSelectedItems.splice(currentIndex, 1);
-    }
-    setSelectedItems(newSelectedItems);
-  };
-
-  const isSelected = (row) => {
-    return selectedItems.findIndex((value) => row.id === value.id) !== -1;
-  };
-
   const setSow = async (sow) => {
     await dispatch(setSelectedSOW(sow));
   };
 
   return (
     <Card>
+      <CardHeader
+        title={`${filteredSows.length} SOWs`}
+        action={
+          <Grid container spacing={4}>
+            {isAdmin && <Grid item>{orgFilterComp}</Grid>}
+            <Grid item>{sysFilterComp}</Grid>
+          </Grid>
+        }
+      />
       <CardContent>
-        <SowActions action={action} setAction={setAction} onAction={actionHandler} />
         <VektorTableContainer
           columns={columns}
-          rowCounts={pagination.count || results.length}
+          rowCounts={filteredSows.length}
           page={page}
           setPage={setPage}
           rowsPerPage={rowsPerPage}
           setRowsPerPage={setRowsPerPage}
         >
-          {results.map((row) => (
+          {filteredSows.map((row) => (
             <TableRow key={row._id}>
-              <TableCell component="th" scope="row">
-                <div style={{ display: 'flex' }}>
-                  <Checkbox inputProps={{ 'aria-labelledby': `check-${row.id}` }} checked={isSelected(row)} onChange={toggleHandler(row)} />
-                </div>
-              </TableCell>
-              {isOrganizationVisible && (
+              {isAdmin && (
                 <TableCell component="th" scope="row">
                   <LinkButton to={LINKS.EDIT_SOW.HREF.replace(':id', row._id)} onClick={() => setSow(row)}>
                     {getOrganizationName(row.organization)}
@@ -76,7 +87,7 @@ const SowTable = ({ selectedItems, setSelectedItems, page, setPage, rowsPerPage,
                 </TableCell>
               )}
               <TableCell>
-                {isOrganizationVisible ? (
+                {isAdmin ? (
                   row.name
                 ) : (
                   <LinkButton to={LINKS.EDIT_SOW.HREF.replace(':id', row._id)} onClick={() => setSow(row)}>

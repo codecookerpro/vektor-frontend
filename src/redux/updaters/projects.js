@@ -42,7 +42,7 @@ export const fetchMetaSystemsUpdater = (state, { payload: { data, project } }) =
   ...state,
   metaSystems: {
     ...state.metaSystems,
-    [project]: data,
+    ...(project ? { [project]: data } : { raw: data }),
   },
 });
 

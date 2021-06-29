@@ -1,12 +1,16 @@
 import { keyMirror } from 'utils/helpers/utility';
 
-export const PERMISSION_TYPES = Object.freeze({
+export const PERMISSION_TYPES = {
   admin: 'ADMIN',
   supervisor: 'SUPERVISOR',
   projectManager: 'PROJECT_MANAGER',
   user: 'USER',
   viewer: 'VIEWER',
-});
+
+  subset(keys) {
+    return keys.map((type) => this[type] || console.error(`Invalid permission type was detected: ${type}`));
+  },
+};
 
 export const EQUIPMENT_TYPES = keyMirror({
   process: 'PROCESS',
