@@ -1,10 +1,5 @@
-import { get } from 'services/axios';
+import { getJQ } from 'services/axios';
 
-const getReports = async (data) => {
-  const params = {
-    get_json: JSON.stringify(data),
-  };
-  return get('reports', { params });
-};
+const getReports = async (data) => getJQ('reports', data);
 
 export { getReports };
