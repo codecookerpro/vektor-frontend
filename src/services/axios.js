@@ -30,7 +30,7 @@ export const composeUrl = (urlData) => {
  * @param {Object} data request data
  * @returns {Promise<AxiosResponse<any>>}
  */
-export const getJQ = async (urlData, data) => await apiAxios.get(composeUrl(urlData), { get_json: JSON.stringify(data) });
+export const getJQ = async (urlData, data) => await apiAxios.get(composeUrl(urlData), { params: { get_json: JSON.stringify(data) } });
 export const get = async (urlData, params) => await apiAxios.get(composeUrl(urlData), params);
 export const post = async (urlData, params) => await apiAxios.post(composeUrl(urlData), params);
 export const put = async (urlData, params) => await apiAxios.put(composeUrl(urlData), params);
