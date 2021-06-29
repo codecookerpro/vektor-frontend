@@ -2,7 +2,7 @@ import TYPES from 'utils/constants/action-types';
 import * as API from 'services/api-workflow-template';
 import { isEmpty } from 'utils/helpers/utility';
 
-const getWorkflowTemplates =
+export const getWorkflowTemplates =
   (refresh = false) =>
   async (dispatch, getState) => {
     try {
@@ -18,63 +18,37 @@ const getWorkflowTemplates =
         limit: 10000,
       };
       const { data = [] } = await API.getWorkflowTemplates(params);
-      await dispatch({
-        type: TYPES.FETCH_WORKFLOW_TEMPLATES,
-        payload: data,
-      });
+
+      dispatch({ type: TYPES.FETCH_WT, payload: data });
     } catch (error) {
       console.log('[getWorkflowTemplates] error => ', error);
     }
   };
 
-const addWorkflowTemplate = (params) => (dispatch, getState) => {
+export const addWorkflowTemplate = (params) => (dispatch) => {
   API.createWorkflowTemplate(params)
-    .then(({ data }) => {
-      const {
-        workflowTemplates: { results },
-      } = getState();
-
-      const newWorkflowTemplates = [data, ...results];
-
-      dispatch({
-        type: TYPES.FETCH_WORKFLOW_TEMPLATES,
-        payload: newWorkflowTemplates,
-      });
-    })
+    .then(({ data }) => dispatch({ type: TYPES.CREATE_WT, payload: data }))
     .catch((error) => console.log('[addWorkflowTemplate] error => ', error));
 };
 
-const editWorkflowTemplate = (params) => (dispatch, getState) => {
+export const editWorkflowTemplate = (params) => (dispatch) => {
   API.updateWorkflowTemplate(params)
-    .then(({ data }) => {
-      const {
-        workflowTemplates: { results },
-      } = getState();
-
-      dispatch({
-        type: TYPES.FETCH_WORKFLOW_TEMPLATES,
-        payload: results.map((tmp) => (tmp._id === data._id ? data : tmp)),
-      });
-    })
+    .then(({ data }) => dispatch({ type: TYPES.UPDATE_WT, payload: data }))
     .catch((error) => console.log('[editWorkflowTemplate] error => ', error));
 };
 
-const removeWorkflowTemplate = (params) => async (dispatch, getState) => {
+export const removeWorkflowTemplate = (params) => (dispatch) => {
   API.deleteWorkflowTemplate(params)
-    .then(({ data }) => {
-      const {
-        workflowTemplates: { results },
-      } = getState();
-
-      dispatch({
-        type: TYPES.FETCH_WORKFLOW_TEMPLATES,
-        payload: results.filter((item) => item._id !== params._id),
-      });
-    })
+    .then(() => dispatch({ type: TYPES.DELETE_WT, payload: params._id }))
     .catch((error) => console.log('[removeWorkflowTemplate] error => ', error));
 };
 
-const createWTD = (params) => (dispatch) => {
+export const duplicateWT = (template) => ({
+  type: TYPES.DUPLICATE_WT,
+  payload: template,
+});
+
+export const createWTD = (params) => (dispatch) => {
   API.createWorkflowTemplateDeliverable(params)
     .then(({ data }) =>
       dispatch({
@@ -85,7 +59,7 @@ const createWTD = (params) => (dispatch) => {
     .catch((error) => console.log('[createWTD] error => ', error));
 };
 
-const updateWTD = (params) => (dispatch) => {
+export const updateWTD = (params) => (dispatch) => {
   API.updateWorkflowTemplateDeliverable(params)
     .then(({ data }) =>
       dispatch({
@@ -96,7 +70,7 @@ const updateWTD = (params) => (dispatch) => {
     .catch((error) => console.log('[updateWTD] error => ', error));
 };
 
-const deleteWTD = (params) => (dispatch) => {
+export const deleteWTD = (params) => (dispatch) => {
   API.deleteWorkflowTemplateDeliverable(params)
     .then(({ data }) =>
       dispatch({
@@ -107,7 +81,7 @@ const deleteWTD = (params) => (dispatch) => {
     .catch((error) => console.log('[deleteWTD] error => ', error));
 };
 
-const updateWTDPositions = (params) => (dispatch) => {
+export const updateWTDPositions = (params) => (dispatch) => {
   API.updateWTDPositions(params)
     .then(({ data }) =>
       dispatch({
@@ -116,15 +90,4 @@ const updateWTDPositions = (params) => (dispatch) => {
       })
     )
     .catch((error) => console.log('[updateWTDPositions] error => ', error));
-};
-
-export {
-  getWorkflowTemplates,
-  addWorkflowTemplate,
-  editWorkflowTemplate,
-  removeWorkflowTemplate,
-  createWTD,
-  updateWTD,
-  deleteWTD,
-  updateWTDPositions,
 };
