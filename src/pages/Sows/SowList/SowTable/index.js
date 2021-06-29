@@ -6,7 +6,7 @@ import LinkButton from 'components/UI/Buttons/LinkButton';
 import VektorTableContainer from 'parts/Tables/VektorTableContainer';
 import LINKS from 'utils/constants/links';
 import setColumn from './setColumn';
-import { useFilter, usePagenation, useUserPermission } from 'utils/hooks';
+import { useFilter, usePagination, useUserPermission } from 'utils/hooks';
 import { getSOWs, setSelectedSOW } from 'redux/actions/sowAction';
 import { readMetaSystem } from 'redux/actions/metaSystem';
 
@@ -23,7 +23,7 @@ const SowTable = () => {
   }, [sows]);
   const [organizationFilter, setOrganizationFilter] = useState(null);
   const [systemFilter, setSystemFilter] = useState(null);
-  const { page, setPage, rowsPerPage, setRowsPerPage } = usePagenation(filteredSows);
+  const { page, setPage, rowsPerPage, setRowsPerPage } = usePagination(filteredSows);
   const orgFilterComp = useFilter(organizations, 'organization', setOrganizationFilter);
   const sysFilterComp = useFilter(systems, 'system', setSystemFilter);
 

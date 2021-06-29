@@ -5,7 +5,7 @@ import { Card, CardHeader, CardContent, TableCell, TableRow, Grid } from '@mater
 import LinkButton from 'components/UI/Buttons/LinkButton';
 import VektorTableContainer from 'parts/Tables/VektorTableContainer';
 import LINKS from 'utils/constants/links';
-import { usePagenation, useFilter } from 'utils/hooks';
+import { usePagination, useFilter } from 'utils/hooks';
 import { PERMISSIONS } from 'utils/constants';
 import useUserPermissions from 'utils/hooks/useUserPermission';
 
@@ -32,7 +32,7 @@ const UsersTable = () => {
     return results;
   }, [users, organizationFilter, permissionFilter]);
   const organizations = useSelector((state) => state.organizations.results);
-  const { page, setPage, rowsPerPage, setRowsPerPage, pageRecords } = usePagenation(filteredUsers);
+  const { page, setPage, rowsPerPage, setRowsPerPage, pageRecords } = usePagination(filteredUsers);
   const orgFilterComponent = useFilter(organizations, 'organization', setOrganizationFilter);
   const perFilterComponent = useFilter(PERMISSIONS, 'permission', setPermissionFilter, { value: 'VALUE', label: 'LABEL' });
   const { isAdmin } = useUserPermissions();

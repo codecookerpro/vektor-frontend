@@ -7,7 +7,7 @@ import VektorTableContainer from 'parts/Tables/VektorTableContainer';
 
 import LINKS from 'utils/constants/links';
 
-import { useFilter, usePagenation, useUserPermission } from 'utils/hooks';
+import { useFilter, usePagination, useUserPermission } from 'utils/hooks';
 import { getWorkflowTemplates } from 'redux/actions/workflowTemplates';
 
 const columns = [
@@ -28,7 +28,7 @@ const WorkflowTemplatesTable = () => {
       return templates;
     }
   }, [filter, templates]);
-  const { page, setPage, rowsPerPage, setRowsPerPage, pageRecords } = usePagenation(filteredTemplates);
+  const { page, setPage, rowsPerPage, setRowsPerPage, pageRecords } = usePagination(filteredTemplates);
   const filterComponent = useFilter(organizations, 'organization', setFilter);
   const { isAdmin } = useUserPermission();
 

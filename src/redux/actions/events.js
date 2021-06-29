@@ -2,32 +2,29 @@ import TYPES from 'utils/constants/action-types';
 import * as eventAPI from 'services/api-event';
 import { isEmpty } from 'utils/helpers/utility';
 
-const getEvents =
-  (refresh = false) =>
-  async (dispatch, getState) => {
-    try {
-      const {
-        events: { results },
-      } = getState();
-      if (!refresh && !isEmpty(results)) {
-        return;
-      }
+export const getEvents =
+  (pagination, filter, refresh = false) =>
+  (dispatch, getState) => {
+    const events = getState().events.results;
 
-      const params = {
-        skip: 0,
-        limit: 10000,
-      };
-      const { data = [] } = await eventAPI.getEvents(params);
-      await dispatch({
-        type: TYPES.FETCH_EVENTS,
-        payload: data,
-      });
-    } catch (error) {
-      console.log('[getEvents] error => ', error);
+    if (!refresh && !isEmpty(events)) {
+      return;
     }
+
+    const params = {
+      skip: 0,
+      limit: 10,
+      ...pagination,
+      filter,
+    };
+
+    eventAPI
+      .getEvents(params)
+      .then((resp) => dispatch({ type: TYPES.FETCH_EVENTS, payload: resp }))
+      .catch((error) => console.log('[getEvents] error => ', error));
   };
 
-const getLatestEvents =
+export const getLatestEvents =
   (refresh = false) =>
   async (dispatch, getState) => {
     try {
@@ -51,5 +48,3 @@ const getLatestEvents =
       console.log('[getLatestEvents] error => ', error);
     }
   };
-
-export { getEvents, getLatestEvents };

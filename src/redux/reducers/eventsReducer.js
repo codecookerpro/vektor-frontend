@@ -1,25 +1,12 @@
-import TYPES from 'utils/constants/action-types';
+import { handleActions } from 'redux-actions';
+import ActionTypes from 'utils/constants/action-types';
+import * as updaters from '../updaters/events';
 
-const INITIAL_STATE = Object.freeze({
-  results: [],
-  latest: [],
-});
-
-const eventsReducer = (state = INITIAL_STATE, action) => {
-  switch (action.type) {
-    case TYPES.FETCH_EVENTS:
-      return {
-        ...state,
-        results: action.payload,
-      };
-    case TYPES.FETCH_LATEST_EVENTS:
-      return {
-        ...state,
-        latest: action.payload,
-      };
-    default:
-      return state;
-  }
+const actionHandler = {
+  [ActionTypes.FETCH_EVENTS]: updaters.fetchEventsUpdater,
+  [ActionTypes.FETCH_LATEST_EVENTS]: updaters.fetchLatestEventsUpdater,
 };
+
+const eventsReducer = handleActions(actionHandler, updaters.INITIAL_STATE);
 
 export default eventsReducer;

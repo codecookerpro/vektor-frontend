@@ -26,7 +26,7 @@ export const restrict = (obj, keys = []) =>
     };
   }, {});
 
-export const pagenate = (records, rowsPerPage, page) => {
+export const paginate = (records, rowsPerPage, page) => {
   if (isEmpty(records)) {
     return [];
   } else if (rowsPerPage > 0) {

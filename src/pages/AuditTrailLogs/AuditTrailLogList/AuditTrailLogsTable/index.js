@@ -1,14 +1,14 @@
-import React, { memo, useEffect, useState } from 'react';
+import React, { memo, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Card, CardContent, TableCell, TableRow, Checkbox, Typography } from '@material-ui/core';
+import { Card, CardHeader, CardContent, TableCell, TableRow } from '@material-ui/core';
 
 import { getEvents } from 'redux/actions/events';
 import LinkButton from 'components/UI/Buttons/LinkButton';
 import VektorTableContainer from 'parts/Tables/VektorTableContainer';
-import { DEFAULT_ROWS_PER_PAGE } from 'utils/constants';
 import LINKS from 'utils/constants/links';
 import { getEnglishDateWithTime } from 'utils/helpers/time';
 import { isEmpty } from 'utils/helpers/utility';
+import { usePagination } from 'utils/hooks';
 
 const columns = [
   { id: 'actionTime', label: 'Action Time', minWidth: 220 },
@@ -19,61 +19,38 @@ const columns = [
   { id: 'changeMessage', label: 'Change Message', minWidth: 90 },
 ];
 
-const AuditTrailLogsTable = ({ selectedItems, setSelectedItems }) => {
+const AuditTrailLogsTable = () => {
   const dispatch = useDispatch();
 
-  const { results = [] } = useSelector((state) => state.events);
+  const events = useSelector((state) => state.events.results);
+  const count = useSelector((state) => state.events.pagination.count);
   const users = useSelector((state) => state.users.results);
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(DEFAULT_ROWS_PER_PAGE);
+  const { page, setPage, rowsPerPage, setRowsPerPage, pagination } = usePagination();
 
-  useEffect(() => {
-    dispatch(getEvents());
-  }, [dispatch]);
+  // eslint-disable-next-line
+  useEffect(() => dispatch(getEvents(pagination, {}, true)), [pagination]);
 
   const getUserName = (_id) => {
     const user = users.find((item) => item._id === _id);
     return user?.email || '';
   };
 
-  const toggleHandler = (value) => () => {
-    const currentIndex = selectedItems.findIndex((item) => item._id === value._id);
-    const newSelectedItems = [...selectedItems];
-
-    if (currentIndex === -1) {
-      newSelectedItems.push(value);
-    } else {
-      newSelectedItems.splice(currentIndex, 1);
-    }
-
-    setSelectedItems(newSelectedItems);
-  };
-
   return (
     <Card>
+      <CardHeader title={`${count} events`} />
       <CardContent>
-        <Typography variant="h5" color="textPrimary" gutterBottom>
-          All
-        </Typography>
         <VektorTableContainer
           columns={columns}
-          rowCounts={results.length}
+          rowCounts={count}
           page={page}
           setPage={setPage}
           rowsPerPage={rowsPerPage}
           setRowsPerPage={setRowsPerPage}
         >
-          {(rowsPerPage > 0 ? results.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) : results).map((row) => (
+          {events.map((row) => (
             <TableRow key={row._id}>
-              <TableCell component="th" scope="row">
-                <div style={{ display: 'flex' }}>
-                  <Checkbox
-                    inputProps={{ 'aria-labelledby': `check-${row._id}` }}
-                    checked={selectedItems.findIndex((value) => row._id === value._id) !== -1}
-                    onChange={toggleHandler(row)}
-                  />
-                  <LinkButton to={LINKS.AUDIT_TRAIL_LOG_DETAIL.HREF.replace(':id', row._id)}>{getEnglishDateWithTime(row.updatedAt)}</LinkButton>
-                </div>
+              <TableCell>
+                <LinkButton to={LINKS.AUDIT_TRAIL_LOG_DETAIL.HREF.replace(':id', row._id)}>{getEnglishDateWithTime(row.updatedAt)}</LinkButton>
               </TableCell>
               <TableCell>{getUserName(row.user)}</TableCell>
               <TableCell>{row.mName}</TableCell>
