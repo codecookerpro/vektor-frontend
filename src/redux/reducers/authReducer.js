@@ -1,9 +1,10 @@
 import TYPES from 'utils/constants/action-types';
 
+const currentUserStored = localStorage.getItem('currentUser');
 const initialState = {
   accessToken: '',
   passwordResetToken: '',
-  currentUser: {},
+  currentUser: currentUserStored ? JSON.parse(currentUserStored) : {},
 };
 
 export default function authReducer(state = initialState, action) {
