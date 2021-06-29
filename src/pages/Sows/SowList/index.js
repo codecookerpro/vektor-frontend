@@ -1,63 +1,34 @@
-import React, { memo, useCallback, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { memo, useCallback } from 'react';
 import { Plus } from 'react-feather';
 import { useHistory } from 'react-router-dom';
 
 import SowTable from './SowTable';
-import { getSOWs, setSelectedSOW } from 'redux/actions/sowAction';
-import SowFilters from './SowFilter';
 import PageHeader from 'parts/PageHeader';
 import LINKS from 'utils/constants/links';
-import { PERMISSION_TYPES } from 'utils/constants';
 import ContainedButton from 'components/UI/Buttons/ContainedButton';
-import { DEFAULT_ROWS_PER_PAGE } from 'utils/constants';
+import { useUserPermission } from 'utils/hooks';
 
 const SowList = () => {
   const history = useHistory();
-  const dispatch = useDispatch();
-  const [filter, setFilter] = useState({});
-  const [selectedItems, setSelectedItems] = useState([]);
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(DEFAULT_ROWS_PER_PAGE);
-  const { permissions } = useSelector(({ auth }) => auth.currentUser);
-  const isVisible = [PERMISSION_TYPES.admin, PERMISSION_TYPES.supervisor, PERMISSION_TYPES.projectManager, PERMISSION_TYPES.user].includes(
-    permissions
-  );
-  const isOrganizationVisible = permissions === PERMISSION_TYPES.admin;
-
-  useEffect(() => {
-    const skip = page * rowsPerPage;
-    const pagination = {
-      skip,
-      limit: rowsPerPage,
-    };
-    dispatch(getSOWs(filter, pagination));
-    dispatch(setSelectedSOW({}));
-  }, [dispatch, filter, page, rowsPerPage]);
+  const { included: isVisible } = useUserPermission('admin', 'supervisor', 'projectManager', 'user');
 
   const addHandler = useCallback(() => {
     history.push(LINKS.ADD_SOW.HREF);
   }, [history]);
 
-  const renderAddSowButton = () => (
-    <ContainedButton onClick={addHandler}>
-      <Plus /> Add SOW
-    </ContainedButton>
-  );
-
   return (
     <>
-      <PageHeader title={LINKS.SOWS.TITLE} leftElement={isVisible && renderAddSowButton()} />
-      <SowFilters filter={filter} setFilter={setFilter} />
-      <SowTable
-        selectedItems={selectedItems}
-        setSelectedItems={setSelectedItems}
-        page={page}
-        setPage={setPage}
-        rowsPerPage={rowsPerPage}
-        setRowsPerPage={setRowsPerPage}
-        isOrganizationVisible={isOrganizationVisible}
+      <PageHeader
+        title={LINKS.SOWS.TITLE}
+        leftElement={
+          isVisible && (
+            <ContainedButton onClick={addHandler}>
+              <Plus /> Add SOW
+            </ContainedButton>
+          )
+        }
       />
+      <SowTable />
     </>
   );
 };

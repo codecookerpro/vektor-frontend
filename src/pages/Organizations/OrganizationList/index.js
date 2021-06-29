@@ -4,7 +4,6 @@ import { Plus } from 'react-feather';
 
 import ContainedButton from 'components/UI/Buttons/ContainedButton';
 import PageHeader from 'parts/PageHeader';
-import OrganizationActions from './OrganizationActions';
 import OrganizationsTable from './OrganizationsTable';
 import LINKS from 'utils/constants/links';
 import { setSelectedDepartments, setSelectedOrganization } from 'redux/actions/organizations';
@@ -15,12 +14,7 @@ const NAV_LINKS = [LINKS.USER_MANAGEMENT];
 const OrganizationList = () => {
   const history = useHistory();
   const dispatch = useDispatch();
-  const [action, setAction] = useState('');
   const [selectedItems, setSelectedItems] = useState([]);
-
-  const actionHandler = useCallback(() => {
-    console.log('action go');
-  }, []);
 
   const addHandler = useCallback(() => {
     dispatch(setSelectedOrganization({}));
@@ -39,7 +33,6 @@ const OrganizationList = () => {
           </ContainedButton>
         }
       />
-      <OrganizationActions action={action} setAction={setAction} onAction={actionHandler} />
       <OrganizationsTable selectedItems={selectedItems} setSelectedItems={setSelectedItems} />
     </>
   );

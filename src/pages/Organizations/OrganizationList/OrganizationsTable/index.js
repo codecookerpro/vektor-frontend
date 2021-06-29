@@ -1,33 +1,19 @@
-import React, { memo, useState } from 'react';
+import React, { memo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Card, CardContent, TableCell, TableRow, Checkbox, Typography } from '@material-ui/core';
+import { Card, CardContent, TableCell, TableRow, Typography } from '@material-ui/core';
 
 import LinkButton from 'components/UI/Buttons/LinkButton';
 import VektorTableContainer from 'parts/Tables/VektorTableContainer';
-import { DEFAULT_ROWS_PER_PAGE } from 'utils/constants';
 import LINKS from 'utils/constants/links';
 import { setSelectedDepartments, setSelectedOrganization } from 'redux/actions/organizations';
+import { usePagenation } from 'utils/hooks';
 
 const columns = [{ id: 'name', label: 'Name', minWidth: 130 }];
 
-const OrganizationsTable = ({ selectedItems, setSelectedItems }) => {
+const OrganizationsTable = () => {
   const dispatch = useDispatch();
-  const { results = [] } = useSelector((state) => state.organizations);
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(DEFAULT_ROWS_PER_PAGE);
-
-  const toggleHandler = (value) => () => {
-    const currentIndex = selectedItems.findIndex((item) => item._id === value._id);
-    const newSelectedItems = [...selectedItems];
-
-    if (currentIndex === -1) {
-      newSelectedItems.push(value);
-    } else {
-      newSelectedItems.splice(currentIndex, 1);
-    }
-
-    setSelectedItems(newSelectedItems);
-  };
+  const organizations = useSelector((state) => state.organizations.results);
+  const { page, setPage, rowsPerPage, setRowsPerPage, pageRecords } = usePagenation(organizations);
 
   const clickHandler = (row) => {
     dispatch(setSelectedOrganization(row));
@@ -38,29 +24,22 @@ const OrganizationsTable = ({ selectedItems, setSelectedItems }) => {
     <Card>
       <CardContent>
         <Typography variant="h5" color="textPrimary" gutterBottom>
-          {`${results.length} organizations`}
+          {`${pageRecords.length} organizations`}
         </Typography>
         <VektorTableContainer
           columns={columns}
-          rowCounts={results.length}
+          rowCounts={pageRecords.length}
           page={page}
           setPage={setPage}
           rowsPerPage={rowsPerPage}
           setRowsPerPage={setRowsPerPage}
         >
-          {(rowsPerPage > 0 ? results.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) : results).map((row) => (
+          {pageRecords.map((row) => (
             <TableRow key={row._id}>
               <TableCell component="th" scope="row">
-                <div style={{ display: 'flex' }}>
-                  <Checkbox
-                    inputProps={{ 'aria-labelledby': `check-${row._id}` }}
-                    checked={selectedItems.findIndex((value) => row._id === value._id) !== -1}
-                    onChange={toggleHandler(row)}
-                  />
-                  <LinkButton to={LINKS.EDIT_ORGANIZATION.HREF.replace(':id', row._id)} onClick={() => clickHandler(row)}>
-                    {row.name}
-                  </LinkButton>
-                </div>
+                <LinkButton to={LINKS.EDIT_ORGANIZATION.HREF.replace(':id', row._id)} onClick={() => clickHandler(row)}>
+                  {row.name}
+                </LinkButton>
               </TableCell>
             </TableRow>
           ))}

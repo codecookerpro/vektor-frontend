@@ -1,19 +1,19 @@
-import axios from 'services/axios';
+import { post } from 'services/axios';
 
 const login = async (params) => {
-  return await axios.post('/api/users/sign-in', params);
+  return await post(['users', 'sign-in'], params);
 };
 
 const restorePassword = async (params) => {
-  return await axios.post('/api/users/restore-password', params);
+  return await post(['users', 'restore-password'], params);
 };
 
 const setPassword = async (params) => {
-  return await axios.post('/api/users/set-password', params);
+  return await post(['users', 'set-password'], params);
 };
 
 const refreshToken = async (params) => {
-  return await axios.post('/api/users/refresh', params);
+  return await post(['users', 'refresh'], params);
 };
 
 export { login, restorePassword, refreshToken, setPassword };

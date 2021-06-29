@@ -1,11 +1,13 @@
-import React, { memo, useState } from 'react';
+import React, { memo, useState, useMemo } from 'react';
 import { useSelector } from 'react-redux';
-import { Card, CardContent, TableCell, TableRow, Typography } from '@material-ui/core';
+import { Card, CardHeader, CardContent, TableCell, TableRow, Grid } from '@material-ui/core';
 
 import LinkButton from 'components/UI/Buttons/LinkButton';
 import VektorTableContainer from 'parts/Tables/VektorTableContainer';
-import { DEFAULT_ROWS_PER_PAGE } from 'utils/constants';
 import LINKS from 'utils/constants/links';
+import { usePagenation, useFilter } from 'utils/hooks';
+import { PERMISSIONS } from 'utils/constants';
+import useUserPermissions from 'utils/hooks/useUserPermission';
 
 const columns = [
   { id: 'name', label: 'Name', minWidth: 130 },
@@ -14,10 +16,26 @@ const columns = [
 ];
 
 const UsersTable = () => {
-  const { results = [] } = useSelector((state) => state.users);
+  const [organizationFilter, setOrganizationFilter] = useState(null);
+  const [permissionFilter, setPermissionFilter] = useState(null);
+  const users = useSelector((state) => state.users.results);
+  const filteredUsers = useMemo(() => {
+    let results = users;
+    if (organizationFilter) {
+      results = results.filter((u) => u.organization === organizationFilter);
+    }
+
+    if (permissionFilter) {
+      results = results.filter((u) => u.permissions === permissionFilter);
+    }
+
+    return results;
+  }, [users, organizationFilter, permissionFilter]);
   const organizations = useSelector((state) => state.organizations.results);
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(DEFAULT_ROWS_PER_PAGE);
+  const { page, setPage, rowsPerPage, setRowsPerPage, pageRecords } = usePagenation(filteredUsers);
+  const orgFilterComponent = useFilter(organizations, 'organization', setOrganizationFilter);
+  const perFilterComponent = useFilter(PERMISSIONS, 'permission', setPermissionFilter, { value: 'VALUE', label: 'LABEL' });
+  const { isAdmin } = useUserPermissions();
 
   const getOrganizationName = (_id) => {
     const organization = organizations.find((item) => item._id === _id);
@@ -26,19 +44,25 @@ const UsersTable = () => {
 
   return (
     <Card>
+      <CardHeader
+        title={`${filteredUsers.length} users`}
+        action={
+          <Grid container spacing={4}>
+            {isAdmin && <Grid item>{orgFilterComponent}</Grid>}
+            <Grid item>{perFilterComponent}</Grid>
+          </Grid>
+        }
+      />
       <CardContent>
-        <Typography variant="h5" color="textPrimary" gutterBottom>
-          {`${results.length} users`}
-        </Typography>
         <VektorTableContainer
           columns={columns}
-          rowCounts={results.length}
+          rowCounts={filteredUsers.length}
           page={page}
           setPage={setPage}
           rowsPerPage={rowsPerPage}
           setRowsPerPage={setRowsPerPage}
         >
-          {(rowsPerPage > 0 ? results.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) : results).map((row) => (
+          {pageRecords.map((row) => (
             <TableRow key={row._id}>
               <TableCell component="th" scope="row">
                 <LinkButton to={LINKS.EDIT_USER.HREF.replace(':id', row._id)}>{row.name || 'No Name'}</LinkButton>

@@ -50,7 +50,7 @@ const addSOW = (sow) => async (dispatch, getState) => {
   }
 };
 
-const editSOW = (sow) => async (dispatch, getState) => {
+const editSOW = (sow) => async (dispatch) => {
   try {
     await sowAPI.updateSOW(sow);
     dispatch(getSOWs());
@@ -66,7 +66,7 @@ const setSelectedSOW = (sow) => {
   };
 };
 
-const addSOWFile = (params) => async (dispatch, getState) => {
+const addSOWFile = (params) => async (dispatch) => {
   try {
     const { _id, file, phase } = params;
     let formData = new FormData();
@@ -80,7 +80,7 @@ const addSOWFile = (params) => async (dispatch, getState) => {
   }
 };
 
-const removeSOWFile = (params) => async (dispatch, getState) => {
+const removeSOWFile = (params) => async (dispatch) => {
   try {
     await sowAPI.deleteSOWFileUrl(params);
     dispatch(getSOWs());
@@ -89,7 +89,7 @@ const removeSOWFile = (params) => async (dispatch, getState) => {
   }
 };
 
-const getSOWFile = (params) => async (dispatch, getState) => {
+const getSOWFile = (params) => async () => {
   try {
     const { url } = await sowAPI.getSOWFile(params);
     return url;
