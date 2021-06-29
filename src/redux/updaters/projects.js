@@ -76,6 +76,7 @@ export const updateMetaSystemUpdater = (state, { payload }) => {
     'project',
     'productCode',
     'site',
+    'projectPhase',
   ]);
   const { project, _id } = restricted;
 
