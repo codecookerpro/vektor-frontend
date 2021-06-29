@@ -4,18 +4,18 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useForm, Controller } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
 import joi from 'joi';
-import { Card, CardContent, Grid, Button, Typography } from '@material-ui/core';
+import { Card, CardContent, Grid, Button, Typography, Box } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
+import { ColorButton } from 'components/UI/Buttons';
 import VektorTextField from 'components/UI/TextFields/VektorTextField';
 import FilterSelect from 'components/UI/Selects/FilterSelect';
+
 import { STRING_INPUT_VALID, SELECT_VALID } from 'utils/constants/validations';
-import { EQUIPMENT_TYPES, EQUIPMENTS, EQUIPMENT_CATEGORIES, EQUIPMENT_CATEGORY_TYPES } from 'utils/constants';
-import { createMetaSystem, updateMetaSystem, deleteMetaSystem } from 'redux/actions/metaSystem';
-import { FORM_MODE } from 'utils/constants';
+import { EQUIPMENT_TYPES, EQUIPMENTS, EQUIPMENT_CATEGORIES, EQUIPMENT_CATEGORY_TYPES, FORM_MODE, POPUP_TYPE, noop } from 'utils/constants';
+import { createMetaSystem, updateMetaSystem, deleteMetaSystem, duplicateMetaSystem } from 'redux/actions/metaSystem';
 import { setPopup } from 'redux/actions/popupActions';
-import { POPUP_TYPE } from 'utils/constants';
-import { ColorButton } from 'components/UI/Buttons';
+import LINKS from 'utils/constants/links';
 
 const useStyles = makeStyles((theme) => ({
   alert: {
@@ -29,14 +29,11 @@ const useStyles = makeStyles((theme) => ({
   form: {
     marginBottom: theme.spacing(6),
   },
-  buttonContainer: {
-    display: 'flex',
-  },
   deleteButton: {
     marginLeft: 'auto',
   },
-  cancelButton: {
-    marginLeft: theme.spacing(4),
+  button: {
+    marginLeft: theme.spacing(1),
   },
 }));
 
@@ -51,7 +48,7 @@ const schema = joi.object().keys({
   productCode: STRING_INPUT_VALID,
 });
 
-const MetaSystemForm = ({ mode = FORM_MODE.view, system = {}, setFormMode = () => {} }) => {
+const MetaSystemForm = ({ mode = FORM_MODE.view, system = {}, setFormMode = noop }) => {
   const { projectId } = useParams();
   const classes = useStyles();
   const history = useHistory();
@@ -76,7 +73,7 @@ const MetaSystemForm = ({ mode = FORM_MODE.view, system = {}, setFormMode = () =
 
     if (mode === FORM_MODE.create) {
       dispatch(createMetaSystem({ ...params, organization: data.organization }));
-      history.goBack();
+      history.push(LINKS.EDIT_PROJECT.HREF.replace(':id', projectId));
     } else if (mode === FORM_MODE.update) {
       dispatch(updateMetaSystem({ ...params, _id: system._id }));
       setFormMode(FORM_MODE.view);
@@ -94,6 +91,11 @@ const MetaSystemForm = ({ mode = FORM_MODE.view, system = {}, setFormMode = () =
         },
       })
     );
+  };
+
+  const handleDuplicate = () => {
+    dispatch(duplicateMetaSystem(system));
+    history.push(LINKS.ADD_META_SYSTEM.HREF.replace(':projectId', projectId));
   };
 
   return (
@@ -222,27 +224,32 @@ const MetaSystemForm = ({ mode = FORM_MODE.view, system = {}, setFormMode = () =
             </Grid>
 
             <Grid item xs={12}>
-              <div className={classes.buttonContainer}>
-                {mode === FORM_MODE.view ? (
+              {mode === FORM_MODE.view ? (
+                <Box display="flex">
                   <Button variant="contained" color="primary" onClick={() => setFormMode(FORM_MODE.update)}>
                     EDIT
                   </Button>
-                ) : (
-                  <>
-                    <Button variant="contained" color="primary" onClick={handleSubmit(onSubmit)}>
-                      SAVE CHANGES
-                    </Button>
-                    <Button variant="contained" color="default" className={classes.cancelButton} onClick={() => history.goBack()}>
-                      CANCEL
-                    </Button>
-                  </>
-                )}
-                {mode === FORM_MODE.update ? (
-                  <ColorButton variant="contained" colour="red" className={classes.deleteButton} onClick={handleDelete}>
-                    DELETE
-                  </ColorButton>
-                ) : null}
-              </div>
+                  <Button variant="contained" color="default" className={classes.button} onClick={handleDuplicate}>
+                    DUPLICATE
+                  </Button>
+                </Box>
+              ) : (
+                <Box display="flex">
+                  <Button variant="contained" color="primary" onClick={handleSubmit(onSubmit)}>
+                    SAVE CHANGES
+                  </Button>
+                  {mode === FORM_MODE.update && (
+                    <>
+                      <Button variant="contained" color="default" className={classes.button} onClick={() => setFormMode(FORM_MODE.view)}>
+                        CANCEL
+                      </Button>
+                      <ColorButton variant="contained" colour="red" className={classes.deleteButton} onClick={handleDelete}>
+                        DELETE
+                      </ColorButton>
+                    </>
+                  )}
+                </Box>
+              )}
             </Grid>
           </Grid>
         </form>

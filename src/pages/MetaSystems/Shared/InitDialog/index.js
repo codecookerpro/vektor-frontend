@@ -12,7 +12,7 @@ const InitDialog = ({ open, onClose, onTemplate, onScratch }) => (
       <ColorButton colour="red" autoFocus onClick={onTemplate}>
         Yes, with template
       </ColorButton>
-      <ColorButton colour="purple" onClick={onScratch}>
+      <ColorButton colour="lightGreen" onClick={onScratch}>
         No, from scratch
       </ColorButton>
     </DialogActions>
