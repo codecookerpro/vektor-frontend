@@ -36,3 +36,23 @@ export const POPUP_TYPE = keyMirror({
   error: null,
   inactive: null,
 });
+
+export const ACTION_TYPES = {
+  create: 'CREATE',
+  update: 'UPDATE',
+  delete: 'DELETE',
+  createNested: 'CREATE_NESTED',
+  updateNested: 'UPDATE_NESTED',
+  deleteNested: 'DELETE_NESTED',
+};
+
+export const ENTITY_NAME_TYPES = {
+  event: 'Event',
+  metaSystem: 'MetaSystem',
+  organization: 'Organization',
+  project: 'Project',
+  sow: 'SOW',
+  system: 'System',
+  user: 'User',
+  workflow: 'Workflow',
+};

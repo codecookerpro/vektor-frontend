@@ -1,6 +1,6 @@
-import React, { memo, useEffect } from 'react';
+import React, { memo, useEffect, useState, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Card, CardHeader, CardContent, TableCell, TableRow } from '@material-ui/core';
+import { Card, CardHeader, CardContent, TableCell, TableRow, Grid } from '@material-ui/core';
 
 import { getEvents } from 'redux/actions/events';
 import LinkButton from 'components/UI/Buttons/LinkButton';
@@ -8,7 +8,8 @@ import VektorTableContainer from 'parts/Tables/VektorTableContainer';
 import LINKS from 'utils/constants/links';
 import { getEnglishDateWithTime } from 'utils/helpers/time';
 import { isEmpty } from 'utils/helpers/utility';
-import { usePagination } from 'utils/hooks';
+import { useFilter, usePagination } from 'utils/hooks';
+import { ACTIONS, ENTITY_NAMES } from 'utils/constants';
 
 const columns = [
   { id: 'actionTime', label: 'Action Time', minWidth: 220 },
@@ -25,10 +26,33 @@ const AuditTrailLogsTable = () => {
   const events = useSelector((state) => state.events.results);
   const count = useSelector((state) => state.events.pagination.count);
   const users = useSelector((state) => state.users.results);
+  const organizations = useSelector((state) => state.organizations.results);
+
+  const [org, setOrganization] = useState(null);
+  const [user, setUser] = useState(null);
+  const [action, setActionType] = useState(null);
+  const [entity, setEntityName] = useState(null);
+  const filter = useMemo(
+    () => ({
+      organization: org || undefined,
+      user: user || undefined,
+      actionType: action || undefined,
+      mName: entity || undefined,
+    }),
+    [org, user, action, entity]
+  );
+
+  const filterComponents = [
+    useFilter(organizations, 'organization', setOrganization),
+    useFilter(users, 'user', setUser),
+    useFilter(ACTIONS, 'action', setActionType, { value: 'value', label: 'label' }),
+    useFilter(ENTITY_NAMES, 'entity name', setEntityName, { value: 'value', label: 'label' }),
+  ];
+
   const { page, setPage, rowsPerPage, setRowsPerPage, pagination } = usePagination();
 
   // eslint-disable-next-line
-  useEffect(() => dispatch(getEvents(pagination, {}, true)), [pagination]);
+  useEffect(() => dispatch(getEvents(pagination, filter, true)), [pagination, filter]);
 
   const getUserName = (_id) => {
     const user = users.find((item) => item._id === _id);
@@ -37,7 +61,18 @@ const AuditTrailLogsTable = () => {
 
   return (
     <Card>
-      <CardHeader title={`${count} events`} />
+      <CardHeader
+        title={`${count} events`}
+        action={
+          <Grid container spacing={4}>
+            {filterComponents.map((filter, idx) => (
+              <Grid item key={idx}>
+                {filter}
+              </Grid>
+            ))}
+          </Grid>
+        }
+      />
       <CardContent>
         <VektorTableContainer
           columns={columns}
