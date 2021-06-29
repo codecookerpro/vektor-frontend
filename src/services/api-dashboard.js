@@ -1,10 +1,5 @@
-import axios from 'services/axios';
+import { getJQ } from 'services/axios';
 
-const getDashboards = async (data) => {
-  const params = {
-    get_json: JSON.stringify(data),
-  };
-  return axios.get('/api/dashboard', { params });
-};
+const getDashboards = async (data) => await getJQ('dashboard', data);
 
 export { getDashboards };

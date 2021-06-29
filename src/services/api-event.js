@@ -1,10 +1,5 @@
-import axios from 'services/axios';
+import { getJQ } from 'services/axios';
 
-const getEvents = async (data) => {
-  const params = {
-    get_json: JSON.stringify(data),
-  };
-  return axios.get('/api/events', { params });
-};
+const getEvents = async (data) => await getJQ('events', data);
 
 export { getEvents };
