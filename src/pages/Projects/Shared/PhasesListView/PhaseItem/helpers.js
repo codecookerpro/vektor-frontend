@@ -11,7 +11,7 @@ const usePhaseItemLogic = (item, projectId, canDrag) => {
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const { included } = useUserPermissions(...ALLOWED_ROLES);
+  const { included } = useUserPermissions(ALLOWED_ROLES);
 
   const changeColumn = (projectPhase) => {
     const params = { _id: item._id, projectPhase: projectPhase || null };
