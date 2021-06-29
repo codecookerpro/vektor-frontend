@@ -1,4 +1,4 @@
-import { get, put, del, post } from 'services/axios';
+import { getJQ, get, put, del, post } from 'services/axios';
 
 export const getMetaSystems = async (data) => {
   const params = {
@@ -7,16 +7,9 @@ export const getMetaSystems = async (data) => {
   return await get('metasystems', { params });
 };
 
-export const getSystemHistory = async (data) => {
-  const params = {
-    get_json: JSON.stringify(data),
-  };
-  return await get('metasystems', 'systems', 'history', { params });
-};
+export const getSystemHistory = async (data) => await getJQ(['metasystems', 'systems', 'history'], data);
 
-export const createMetaSystem = async (params) => {
-  return await post('metasystems', params);
-};
+export const createMetaSystem = async (params) => await post('metasystems', params);
 
 export const updateMetaSystem = async (params) => {
   return await put('metasystems', params);
