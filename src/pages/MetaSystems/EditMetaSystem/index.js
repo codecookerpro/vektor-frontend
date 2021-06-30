@@ -18,21 +18,14 @@ import { initDeliverables, readMetaSystem, updateDeliverable } from 'redux/actio
 import { restrict } from 'utils/helpers/utility';
 
 const EditMetaSystem = () => {
-  const { projectId, systemId } = useParams();
+  const { systemId } = useParams();
   const dispatch = useDispatch();
   const history = useHistory();
   const [formMode, setFormMode] = useState(FORM_MODE.view);
   const [initDlg, showInitDlg] = useState(false);
   const [selectDlg, showSelectDlg] = useState(false);
 
-  const { metaSystem, project } = useSelector(({ projects: { metaSystems, results } }) => {
-    const project = results.find((p) => p._id === projectId);
-    const systems = metaSystems[projectId];
-    const metaSystem = systems ? systems.find((ms) => ms._id === systemId) : null;
-
-    return { project, metaSystem };
-  });
-
+  const metaSystem = useSelector((state) => state.projects.metaSystems.find((s) => s._id === systemId) || {});
   const { title, editable } = useMemo(() => {
     const title = formMode === FORM_MODE.view ? 'View System' : LINKS.EDIT_META_SYSTEM.TITLE;
     const editable = formMode === FORM_MODE.update;
@@ -44,15 +37,15 @@ const EditMetaSystem = () => {
       LINKS.PROJECT_MANAGEMENT,
       LINKS.PROJECTS,
       {
-        TITLE: project?.name || 'Not Found',
-        HREF: LINKS.EDIT_PROJECT.HREF.replace(':id', projectId),
+        TITLE: LINKS.EDIT_PROJECT.TITLE,
+        HREF: LINKS.EDIT_PROJECT.HREF.replace(':id', metaSystem.project),
       },
     ],
-    [project, projectId]
+    [metaSystem]
   );
 
   // eslint-disable-next-line
-  useEffect(() => dispatch(readMetaSystem(projectId)), []);
+  useEffect(() => dispatch(readMetaSystem()), []);
 
   useEffect(() => {
     if (!metaSystem) {
@@ -85,7 +78,7 @@ const EditMetaSystem = () => {
 
   const handleOnDetail = () => {
     const deliverableChartLink = LINKS.DELIVERABLE_TREND_CHART.HREF;
-    history.push(deliverableChartLink.replace(':projectId', projectId).replace(':systemId', systemId));
+    history.push(deliverableChartLink.replace(':projectId', metaSystem.project).replace(':systemId', systemId));
   };
 
   return (

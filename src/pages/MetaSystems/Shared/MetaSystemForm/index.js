@@ -66,13 +66,12 @@ const MetaSystemForm = ({ mode = FORM_MODE.view, system = {}, setFormMode = noop
       equipmentType: data.equipmentType,
       equipmentName: data.equipmentName,
       equipmentNumber: data.equipmentNumber,
-      project: projectId,
       productCode: data.productCode,
       site: data.site,
     };
 
     if (mode === FORM_MODE.create) {
-      dispatch(createMetaSystem({ ...params, organization: data.organization }));
+      dispatch(createMetaSystem({ ...params, project: projectId, organization: data.organization }));
       history.push(LINKS.EDIT_PROJECT.HREF.replace(':id', projectId));
     } else if (mode === FORM_MODE.update) {
       dispatch(updateMetaSystem({ ...params, _id: system._id }));

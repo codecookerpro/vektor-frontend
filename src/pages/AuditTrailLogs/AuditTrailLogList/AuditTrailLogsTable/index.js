@@ -10,6 +10,7 @@ import { getEnglishDateWithTime } from 'utils/helpers/time';
 import { isEmpty } from 'utils/helpers/utility';
 import { useFilter, usePagination, useUserPermission } from 'utils/hooks';
 import { ACTIONS, ENTITY_NAMES } from 'utils/constants';
+import { getLinkFromEvent } from './helper';
 
 const columns = [
   { id: 'actionTime', label: 'Action Time', minWidth: 220 },
@@ -30,10 +31,11 @@ const AuditTrailLogsTable = () => {
 
   const { isAdmin } = useUserPermission();
 
-  const [orgFilter, setOrganization] = useState(null);
-  const [userFilter, setUser] = useState(null);
-  const [actionFilter, setActionType] = useState(null);
-  const [entityFilter, setEntityName] = useState(null);
+  const [orgFilterComponent, orgFilter] = useFilter({ items: organizations, label: 'organization' });
+  const [userFilterComponent, userFilter] = useFilter({ items: users, label: 'user' });
+  const [actionFilterComponent, actionFilter] = useFilter({ items: ACTIONS, label: 'action', keys: { value: 'value', label: 'label' } });
+  const [entityFilterComponent, entityFilter] = useFilter({ items: ENTITY_NAMES, label: 'entity name', keys: { value: 'value', label: 'label' } });
+
   const filterObj = useMemo(
     () => ({
       organization: orgFilter || undefined,
@@ -44,13 +46,7 @@ const AuditTrailLogsTable = () => {
     [orgFilter, userFilter, actionFilter, entityFilter]
   );
 
-  const orgFilterComponent = useFilter(organizations, 'organization', setOrganization);
-  const filterComponents = [
-    isAdmin && orgFilterComponent,
-    useFilter(users, 'user', setUser),
-    useFilter(ACTIONS, 'action', setActionType, { value: 'value', label: 'label' }),
-    useFilter(ENTITY_NAMES, 'entity name', setEntityName, { value: 'value', label: 'label' }),
-  ].filter((f) => f);
+  const filterComponents = [isAdmin && orgFilterComponent, userFilterComponent, entityFilterComponent, actionFilterComponent].filter((f) => f);
 
   const { page, setPage, rowsPerPage, setRowsPerPage, pagination } = usePagination();
 
@@ -91,7 +87,9 @@ const AuditTrailLogsTable = () => {
                 <LinkButton to={LINKS.AUDIT_TRAIL_LOG_DETAIL.HREF.replace(':id', row._id)}>{getEnglishDateWithTime(row.updatedAt)}</LinkButton>
               </TableCell>
               <TableCell>{getUserName(row.user)}</TableCell>
-              <TableCell>{row.mName}</TableCell>
+              <TableCell>
+                <LinkButton to={getLinkFromEvent(row)}>{row.mName}</LinkButton>
+              </TableCell>
               <TableCell>{row.mId}</TableCell>
               <TableCell>{row.actionType}</TableCell>
               <TableCell>

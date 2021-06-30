@@ -20,7 +20,7 @@ const useTrendChartData = (projectId, systemId) => {
       'Date',
       ...currentSystemTrends
         ?.map(({ metaSystem }) => {
-          const name = metaSystems[projectId]?.find(({ _id }) => metaSystem === _id)?.name || metaSystem;
+          const name = metaSystems.find(({ _id }) => metaSystem === _id)?.name || metaSystem;
           return [`${name} EV`, `${name} PV`];
         })
         .flat(),
@@ -58,8 +58,7 @@ const useTrendChartData = (projectId, systemId) => {
         ...samples[0].deliverables
           ?.map(({ deliverable }) => {
             const name =
-              metaSystems[projectId]?.find(({ _id }) => systemId === _id)?.mainSystem?.deliverables?.find(({ _id }) => deliverable === _id)?.name ||
-              deliverable;
+              metaSystems.find(({ _id }) => systemId === _id)?.mainSystem?.deliverables?.find(({ _id }) => deliverable === _id)?.name || deliverable;
 
             return [`${name} EV`, `${name} PV`];
           })
@@ -80,7 +79,7 @@ const useTrendChartData = (projectId, systemId) => {
   }, [metaSystems, projectId, systemId, systemTrends]);
 
   useEffect(() => {
-    dispatch(readMetaSystem(projectId));
+    dispatch(readMetaSystem({ project: projectId }));
     dispatch(getSystemHistory(projectId, true));
   }, [dispatch, metaSystems, projectId]);
 

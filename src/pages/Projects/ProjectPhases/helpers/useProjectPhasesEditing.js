@@ -15,9 +15,8 @@ const useProjectPhasesEditing = () => {
   const [activeAction, setActiveAction] = useState('');
 
   const { results: projects, metaSystems } = useSelector(({ projects }) => projects);
-
   const project = useMemo(() => projects.find((item) => item._id === projectId), [projectId, projects]);
-  const currentMetaSystems = metaSystems[projectId];
+  const currentMetaSystems = useMemo(() => metaSystems.filter((m) => m.project === projectId), [projectId, metaSystems]);
   const isEditingHeader = (orderIndex) => editingPhase?.orderIndex === orderIndex && activeAction === ACTIONS.RENAME;
 
   useEffect(() => {
@@ -27,7 +26,7 @@ const useProjectPhasesEditing = () => {
   }, [project]);
 
   useEffect(() => {
-    dispatch(readMetaSystem(projectId));
+    dispatch(readMetaSystem({ project: projectId }));
   }, [dispatch, projectId]);
 
   const onHeaderClick = () => {

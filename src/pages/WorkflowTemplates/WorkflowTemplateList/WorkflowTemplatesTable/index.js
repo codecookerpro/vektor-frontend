@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useState, useMemo } from 'react';
+import React, { memo, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Card, CardHeader, CardContent, TableCell, TableRow } from '@material-ui/core';
@@ -20,7 +20,8 @@ const WorkflowTemplatesTable = () => {
 
   const templates = useSelector((state) => state.workflowTemplates.results);
   const organizations = useSelector((state) => state.organizations.results);
-  const [filter, setFilter] = useState(null);
+  const [filterComponent, filter] = useFilter({ items: organizations, label: 'organization' });
+
   const filteredTemplates = useMemo(() => {
     if (filter) {
       return templates.filter((t) => t.organization === filter);
@@ -29,7 +30,6 @@ const WorkflowTemplatesTable = () => {
     }
   }, [filter, templates]);
   const { page, setPage, rowsPerPage, setRowsPerPage, pageRecords } = usePagination(filteredTemplates);
-  const filterComponent = useFilter(organizations, 'organization', setFilter);
   const { isAdmin } = useUserPermission();
 
   // eslint-disable-next-line
