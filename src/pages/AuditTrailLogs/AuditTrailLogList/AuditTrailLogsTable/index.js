@@ -53,7 +53,7 @@ const AuditTrailLogsTable = () => {
         <LinkButton to={LINKS.AUDIT_TRAIL_LOG_DETAIL.HREF.replace(':id', data._id)}>{getEnglishDateWithTime(data.updatedAt)}</LinkButton>
       </TableCell>
       {isAdmin && <TableCell rowSpan={rowSpan}>{getOrgName(data.organization)}</TableCell>}
-      <TableCell rowSpan={rowSpan}>{getUserName(data.user)}</TableCell>
+      {isAdmin && <TableCell rowSpan={rowSpan}>{getUserName(data.user)}</TableCell>}
       <TableCell rowSpan={rowSpan}>{getLinkFromEvent(data)}</TableCell>
       <TableCell rowSpan={rowSpan}>{data.mId}</TableCell>
       <TableCell rowSpan={rowSpan}>{data.actionType}</TableCell>
