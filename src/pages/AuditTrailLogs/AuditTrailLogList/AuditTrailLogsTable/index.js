@@ -10,17 +10,7 @@ import { getEnglishDateWithTime } from 'utils/helpers/time';
 import { useFilter, usePagination, useUserPermission } from 'utils/hooks';
 import { ACTIONS, ENTITY_NAMES } from 'utils/constants';
 import { changeToString, getLinkFromEvent } from './helper';
-
-const columns = [
-  { id: 'actionTime', label: 'Action Time', minWidth: 220 },
-  { id: 'user', label: 'User', minWidth: 90 },
-  { id: 'contentType', label: 'Content Type', minWidth: 90 },
-  { id: 'object', label: 'Object', minWidth: 90 },
-  { id: 'action', label: 'Action', minWidth: 90 },
-  { id: 'field', label: 'Field', minWidth: 90 },
-  { id: 'oldValue', label: 'Old Value', minWidth: 90 },
-  { id: 'newValue', label: 'New Value', minWidth: 90 },
-];
+import { ADMIN_COLUMNS, COLUMNS } from './constants';
 
 const AuditTrailLogsTable = () => {
   const dispatch = useDispatch();
@@ -54,16 +44,15 @@ const AuditTrailLogsTable = () => {
   // eslint-disable-next-line
   useEffect(() => dispatch(getEvents(pagination, filterObj, true)), [pagination, filterObj]);
 
-  const getUserName = (_id) => {
-    const user = users.find((item) => item._id === _id);
-    return user?.email || '';
-  };
+  const getUserName = (_id) => users.find((item) => item._id === _id)?.email || '';
+  const getOrgName = (_id) => organizations.find((org) => org._id === _id)?.name || '';
 
   const commonCells = (data, rowSpan = 1) => (
     <>
       <TableCell rowSpan={rowSpan}>
         <LinkButton to={LINKS.AUDIT_TRAIL_LOG_DETAIL.HREF.replace(':id', data._id)}>{getEnglishDateWithTime(data.updatedAt)}</LinkButton>
       </TableCell>
+      {isAdmin && <TableCell rowSpan={rowSpan}>{getOrgName(data.organization)}</TableCell>}
       <TableCell rowSpan={rowSpan}>{getUserName(data.user)}</TableCell>
       <TableCell rowSpan={rowSpan}>{getLinkFromEvent(data)}</TableCell>
       <TableCell rowSpan={rowSpan}>{data.mId}</TableCell>
@@ -94,7 +83,7 @@ const AuditTrailLogsTable = () => {
       />
       <CardContent>
         <VektorTableContainer
-          columns={columns}
+          columns={isAdmin ? ADMIN_COLUMNS : COLUMNS}
           rowCounts={count}
           page={page}
           setPage={setPage}
@@ -109,9 +98,7 @@ const AuditTrailLogsTable = () => {
                 return (
                   <TableRow key={`${row._id}-none`}>
                     {commonCells(row)}
-                    <TableCell />
-                    <TableCell />
-                    <TableCell />
+                    <TableCell colSpan={3} />
                   </TableRow>
                 );
               } else {
