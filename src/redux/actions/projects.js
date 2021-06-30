@@ -16,10 +16,10 @@ const getProjects =
       .catch((error) => console.log('[getProjects] error => ', error));
   };
 
-const addProject = (project) => async (dispatch) => {
+const addProject = (project) => async (dispatch, getState) => {
   projectAPI
     .createProject(project)
-    .then(({ data }) => dispatch({ type: TYPES.FETCH_PROJECTS, payload: [data] }))
+    .then(({ data }) => dispatch({ type: TYPES.FETCH_PROJECTS, payload: [...getState().projects.results, data] }))
     .catch((error) => console.log('[addProject] error => ', error));
 };
 
