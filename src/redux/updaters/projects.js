@@ -1,8 +1,9 @@
 import { restrict } from 'utils/helpers/utility';
+import { updatePool } from './helper';
 
 export const INITIAL_STATE = Object.freeze({
   results: [],
-  organization: '',
+  pagination: { count: 0 },
   metaSystems: [],
   metaSystemsFilter: [],
   isMetaSystemsLoading: false,
@@ -10,10 +11,10 @@ export const INITIAL_STATE = Object.freeze({
   metaSystemClone: null,
 });
 
-export const fetchProjectsUpdater = (state, { payload: { results, organization } }) => ({
+export const fetchProjectsUpdater = (state, { payload }) => ({
   ...state,
-  results,
-  organization,
+  results: payload.data,
+  pagination: payload.pagination,
 });
 
 export const editProjectUpdater = (state, { payload }) => {
@@ -38,16 +39,9 @@ export const deleteProjectUpdater = (state, { payload }) => {
   };
 };
 
-export const fetchMetaSystemsUpdater = (state, { payload: updatedMetaSystems }) => ({
+export const fetchMetaSystemsUpdater = (state, { payload }) => ({
   ...state,
-  metaSystems: updatedMetaSystems.reduce((acc, updated) => {
-    const old = acc.find((old) => old._id === updated._id);
-    if (old) {
-      return acc.map((old) => (old._id === updated._id ? updated : old));
-    } else {
-      return [...acc, updated];
-    }
-  }, state.metaSystems),
+  metaSystems: updatePool(state.metaSystems, payload),
 });
 
 export const fetchMetaSystemsFilterUpdater = (state, { payload: { data, isLoading } }) => ({

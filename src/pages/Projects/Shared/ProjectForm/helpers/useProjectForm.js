@@ -73,20 +73,18 @@ const useProjectFrom = (project, mode) => {
       };
 
       if (mode === PROJECT_MODES.CREATION) {
-        const isCompleted = await dispatch(addProject(params));
+        dispatch(addProject(params));
 
-        if (isCompleted) {
-          if (addNew) {
-            reset({
-              name: '',
-              number: '',
-              organization: '',
-              projectManager: '',
-              supervisor: '',
-            });
-          } else {
-            history.push(LINKS.PROJECTS.HREF);
-          }
+        if (addNew) {
+          reset({
+            name: '',
+            number: '',
+            organization: '',
+            projectManager: '',
+            supervisor: '',
+          });
+        } else {
+          history.push(LINKS.PROJECTS.HREF);
         }
       } else {
         dispatch(editProject(params));

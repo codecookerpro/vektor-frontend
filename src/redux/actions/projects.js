@@ -1,70 +1,26 @@
 import TYPES from 'utils/constants/action-types';
 import * as projectAPI from 'services/api-project';
-import { isEmpty } from 'utils/helpers/utility';
 
 const getProjects =
-  ({ refresh = false, organization = '' } = {}) =>
+  (params = {}, refresh = false) =>
   (dispatch, getState) => {
-    const {
-      projects: { results, organization: preOrganization },
-    } = getState();
+    const projects = getState().projects.results;
 
-    if (!refresh && !isEmpty(results) && organization === preOrganization) {
+    if (!refresh && projects.length) {
       return;
-    }
-
-    let params = {
-      skip: 0,
-      limit: 10000,
-    };
-
-    if (organization) {
-      params = {
-        ...params,
-        filter: {
-          organization,
-        },
-      };
     }
 
     projectAPI
       .getProjects(params)
-      .then(({ data }) =>
-        dispatch({
-          type: TYPES.FETCH_PROJECTS,
-          payload: {
-            results: data,
-            organization,
-          },
-        })
-      )
+      .then((response) => dispatch({ type: TYPES.FETCH_PROJECTS, payload: response }))
       .catch((error) => console.log('[getProjects] error => ', error));
   };
 
-const addProject = (project) => async (dispatch, getState) => {
-  try {
-    let isCompleted = false;
-    const response = await projectAPI.createProject(project);
-
-    if (response) {
-      const {
-        projects: { results },
-      } = getState();
-      const { data } = response;
-
-      dispatch({
-        type: TYPES.FETCH_PROJECTS,
-        payload: {
-          results: [data, ...results],
-        },
-      });
-      isCompleted = true;
-    }
-
-    return isCompleted;
-  } catch (error) {
-    console.log('[addProject] error => ', error);
-  }
+const addProject = (project) => async (dispatch) => {
+  projectAPI
+    .createProject(project)
+    .then(({ data }) => dispatch({ type: TYPES.FETCH_PROJECTS, payload: [data] }))
+    .catch((error) => console.log('[addProject] error => ', error));
 };
 
 const editProject = (project) => async (dispatch) => {

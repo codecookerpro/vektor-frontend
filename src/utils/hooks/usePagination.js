@@ -5,7 +5,6 @@ import { paginate } from 'utils/helpers/utility';
 const usePagination = (records = []) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(DEFAULT_ROWS_PER_PAGE);
-  const pageRecords = useMemo(() => paginate(records, rowsPerPage, page), [records, rowsPerPage, page]);
   const pagination = useMemo(
     () => ({
       skip: page * rowsPerPage,
@@ -13,6 +12,7 @@ const usePagination = (records = []) => {
     }),
     [page, rowsPerPage]
   );
+  const pageRecords = useMemo(() => paginate(records, pagination.skip, pagination.limit), [records, pagination]);
 
   return {
     page,
