@@ -18,7 +18,6 @@ const columns = [
 const UsersTable = () => {
   const users = useSelector((state) => state.users.results);
   const organizations = useSelector((state) => state.organizations.results);
-  const { page, setPage, rowsPerPage, setRowsPerPage, pageRecords } = usePagination(filteredUsers);
   const [orgFilterComponent, organizationFilter] = useFilter({ items: organizations, label: 'organization' });
   const [perFilterComponent, permissionFilter] = useFilter({ items: PERMISSIONS, label: 'permission', keys: { value: 'VALUE', label: 'LABEL' } });
   const { isAdmin } = useUserPermissions();
@@ -35,6 +34,8 @@ const UsersTable = () => {
 
     return results;
   }, [users, organizationFilter, permissionFilter]);
+
+  const { page, setPage, rowsPerPage, setRowsPerPage, pageRecords } = usePagination(filteredUsers);
 
   const getOrganizationName = (_id) => {
     const organization = organizations.find((item) => item._id === _id);

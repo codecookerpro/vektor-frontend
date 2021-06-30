@@ -33,9 +33,9 @@ export const readMetaSystem =
 
     if (project && metaSystems.filter((s) => s.project === project) && !refresh) {
       return;
-    } else if (!isEmpty(metaSystemClone)) {
-      return;
     } else if (system && !isEmpty(metaSystems.find((s) => s._id === system)) && !refresh) {
+      return;
+    } else if (!isEmpty(metaSystemClone)) {
       return;
     }
 

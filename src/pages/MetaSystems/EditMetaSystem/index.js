@@ -15,7 +15,7 @@ import SelectDialog from '../Shared/SelectDialog';
 import LINKS from 'utils/constants/links';
 import { FORM_MODE } from 'utils/constants';
 import { initDeliverables, readMetaSystem, updateDeliverable } from 'redux/actions/metaSystem';
-import { restrict } from 'utils/helpers/utility';
+import { isEmpty, restrict } from 'utils/helpers/utility';
 
 const EditMetaSystem = () => {
   const { systemId } = useParams();
@@ -45,10 +45,10 @@ const EditMetaSystem = () => {
   );
 
   // eslint-disable-next-line
-  useEffect(() => dispatch(readMetaSystem()), []);
+  useEffect(() => dispatch(readMetaSystem({ system: systemId })), []);
 
   useEffect(() => {
-    if (!metaSystem) {
+    if (isEmpty(metaSystem)) {
       return;
     }
 
@@ -84,7 +84,7 @@ const EditMetaSystem = () => {
   return (
     <>
       <PageHeader title={title} links={NAV_LINKS} />
-      {metaSystem && (
+      {isEmpty(metaSystem) || (
         <Grid container spacing={6}>
           <Grid item xs={12}>
             <MetaSystemForm system={metaSystem} mode={formMode} setFormMode={setFormMode} />
