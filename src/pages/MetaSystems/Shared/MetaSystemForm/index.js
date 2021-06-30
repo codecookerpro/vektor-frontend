@@ -94,7 +94,7 @@ const MetaSystemForm = ({ mode = FORM_MODE.view, system = {}, setFormMode = noop
 
   const handleDuplicate = () => {
     dispatch(duplicateMetaSystem(system));
-    history.push(LINKS.ADD_META_SYSTEM.HREF.replace(':projectId', projectId));
+    history.push(LINKS.ADD_META_SYSTEM.HREF.replace(':projectId', system.project));
   };
 
   return (

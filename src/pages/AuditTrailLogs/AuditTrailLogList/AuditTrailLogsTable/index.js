@@ -7,10 +7,9 @@ import LinkButton from 'components/UI/Buttons/LinkButton';
 import VektorTableContainer from 'parts/Tables/VektorTableContainer';
 import LINKS from 'utils/constants/links';
 import { getEnglishDateWithTime } from 'utils/helpers/time';
-import { isEmpty } from 'utils/helpers/utility';
 import { useFilter, usePagination, useUserPermission } from 'utils/hooks';
 import { ACTIONS, ENTITY_NAMES } from 'utils/constants';
-import { getLinkFromEvent } from './helper';
+import { changeToString, getLinkFromEvent } from './helper';
 
 const columns = [
   { id: 'actionTime', label: 'Action Time', minWidth: 220 },
@@ -18,7 +17,9 @@ const columns = [
   { id: 'contentType', label: 'Content Type', minWidth: 90 },
   { id: 'object', label: 'Object', minWidth: 90 },
   { id: 'action', label: 'Action', minWidth: 90 },
-  { id: 'changeMessage', label: 'Change Message', minWidth: 90 },
+  { id: 'field', label: 'Field', minWidth: 90 },
+  { id: 'oldValue', label: 'Old Value', minWidth: 90 },
+  { id: 'newValue', label: 'New Value', minWidth: 90 },
 ];
 
 const AuditTrailLogsTable = () => {
@@ -58,6 +59,25 @@ const AuditTrailLogsTable = () => {
     return user?.email || '';
   };
 
+  const commonCells = (data, rowSpan = 1) => (
+    <>
+      <TableCell rowSpan={rowSpan}>
+        <LinkButton to={LINKS.AUDIT_TRAIL_LOG_DETAIL.HREF.replace(':id', data._id)}>{getEnglishDateWithTime(data.updatedAt)}</LinkButton>
+      </TableCell>
+      <TableCell rowSpan={rowSpan}>{getUserName(data.user)}</TableCell>
+      <TableCell rowSpan={rowSpan}>{getLinkFromEvent(data)}</TableCell>
+      <TableCell rowSpan={rowSpan}>{data.mId}</TableCell>
+      <TableCell rowSpan={rowSpan}>{data.actionType}</TableCell>
+    </>
+  );
+  const changeCells = (chg) => (
+    <>
+      <TableCell>{chg.field}</TableCell>
+      <TableCell>{changeToString(chg.pValue)}</TableCell>
+      <TableCell>{changeToString(chg.nValue)}</TableCell>
+    </>
+  );
+
   return (
     <Card>
       <CardHeader
@@ -81,22 +101,33 @@ const AuditTrailLogsTable = () => {
           rowsPerPage={rowsPerPage}
           setRowsPerPage={setRowsPerPage}
         >
-          {events.map((row) => (
-            <TableRow key={row._id}>
-              <TableCell>
-                <LinkButton to={LINKS.AUDIT_TRAIL_LOG_DETAIL.HREF.replace(':id', row._id)}>{getEnglishDateWithTime(row.updatedAt)}</LinkButton>
-              </TableCell>
-              <TableCell>{getUserName(row.user)}</TableCell>
-              <TableCell>
-                <LinkButton to={getLinkFromEvent(row)}>{row.mName}</LinkButton>
-              </TableCell>
-              <TableCell>{row.mId}</TableCell>
-              <TableCell>{row.actionType}</TableCell>
-              <TableCell>
-                {!isEmpty(row?.change[0]) && `${row?.change[0]?.field}: ${row?.change[0]?.nValue || ''} - ${row?.change[0]?.pValue || ''}`}
-              </TableCell>
-            </TableRow>
-          ))}
+          {events
+            .map((row) => {
+              const change = row.change.filter((chg) => chg.nValue !== chg.pValue);
+
+              if (change.length === 0) {
+                return (
+                  <TableRow key={`${row._id}-none`}>
+                    {commonCells(row)}
+                    <TableCell />
+                    <TableCell />
+                    <TableCell />
+                  </TableRow>
+                );
+              } else {
+                return change.map((chg, idx) =>
+                  idx === 0 ? (
+                    <TableRow key={`${row._id}-${idx}`}>
+                      {commonCells(row, change.length)}
+                      {changeCells(chg)}
+                    </TableRow>
+                  ) : (
+                    <TableRow key={`${row._id}-${idx}`}>{changeCells(chg)}</TableRow>
+                  )
+                );
+              }
+            })
+            .flat()}
         </VektorTableContainer>
       </CardContent>
     </Card>

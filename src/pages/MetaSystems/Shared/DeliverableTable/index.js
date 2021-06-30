@@ -114,7 +114,7 @@ const DeliverableTable = ({ deliverables = [], editable = false, onRowChange = n
     </TableRow>
   );
   const ReadOnlyRow = (row, idx) => (
-    <TableRow key={row._id}>
+    <TableRow key={row._id} id={row._id}>
       <TableCell>{getFieldValue(idx, 'name')}</TableCell>
       <TableCell>{getPredecessors(row)}</TableCell>
       <TableCell>{getFieldValue(idx, 'plannedHours')}</TableCell>
