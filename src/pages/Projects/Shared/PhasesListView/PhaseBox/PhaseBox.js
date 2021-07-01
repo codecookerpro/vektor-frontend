@@ -17,7 +17,7 @@ const PhaseBox = ({ phase, fields, onHeaderClick, onActionClick, phaseActions })
   );
 
   return (
-    <div ref={dropRef}>
+    <div className={classes.container} ref={dropRef}>
       <Card className={classes.card}>
         <CardHeader
           className={onHeaderClick ? classes.cardHeader : ''}
