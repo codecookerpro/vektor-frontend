@@ -12,8 +12,6 @@ export const getEvents =
     }
 
     const params = {
-      skip: 0,
-      limit: 10,
       ...pagination,
       filter,
     };

@@ -31,9 +31,8 @@ const AuditTrailLogDetail = () => {
   const { results = [] } = useSelector((state) => state.events);
   const users = useSelector((state) => state.users.results);
 
-  useEffect(() => {
-    dispatch(getEvents());
-  }, [dispatch]);
+  // eslint-disable-next-line
+  useEffect(() => dispatch(getEvents(null, { _id: id })), []);
 
   const event = useMemo(() => results.find((item) => item._id === id), [id, results]);
 

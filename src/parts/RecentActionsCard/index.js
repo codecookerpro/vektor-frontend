@@ -7,7 +7,6 @@ import { Card, CardContent, Typography, List, ListItem, ListItemIcon, ListItemTe
 import ContainedButton from 'components/UI/Buttons/ContainedButton';
 import getActionIcon from 'utils/helpers/getActionIcon';
 import LINKS from 'utils/constants/links';
-import { ENTITY_NAME_TYPES } from 'utils/constants';
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -34,42 +33,9 @@ function RecentActionsCard({ actions }) {
     return user?.email || '';
   };
 
-  const detailHandler =
-    ({ mId, nestedId, mName }) =>
-    () => {
-      let link = '';
-
-      const appendHash = (url, anchorId) => (anchorId ? `${url}#${anchorId}` : url);
-
-      switch (mName) {
-        case ENTITY_NAME_TYPES.metaSystem:
-          link = appendHash(LINKS.EDIT_META_SYSTEM.HREF.replace(':systemId', mId), nestedId);
-          break;
-        case ENTITY_NAME_TYPES.organization:
-          link = appendHash(LINKS.EDIT_ORGANIZATION.HREF.replace(':id', mId), nestedId);
-          break;
-        case ENTITY_NAME_TYPES.project:
-          link = appendHash(LINKS.EDIT_PROJECT.HREF.replace(':id', mId), nestedId);
-          break;
-        case ENTITY_NAME_TYPES.sow:
-          link = appendHash(LINKS.EDIT_SOW.HREF.replace(':id', mId), nestedId);
-          break;
-        case ENTITY_NAME_TYPES.system:
-          link = appendHash(LINKS.EDIT_META_SYSTEM.HREF.replace(':systemId', mId), nestedId);
-          break;
-        case ENTITY_NAME_TYPES.user:
-          link = appendHash(LINKS.EDIT_USER.HREF.replace(':id', mId), nestedId);
-          break;
-        case ENTITY_NAME_TYPES.workflow:
-          link = appendHash(LINKS.EDIT_WORKFLOW_TEMPLATE.HREF.replace(':id', mId), nestedId);
-          break;
-
-        default:
-          break;
-      }
-
-      history.push(link);
-    };
+  const detailHandler = (action) => {
+    history.push(LINKS.AUDIT_TRAIL_LOG_DETAIL.HREF.replace(':id', action._id));
+  };
 
   return (
     <Card>
@@ -87,7 +53,7 @@ function RecentActionsCard({ actions }) {
                 <ListItemIcon className={classes.itemIcon}>{getActionIcon(action.actionType)}</ListItemIcon>
                 <ListItemText primary={getUserName(action.user)} secondary={`${action.actionType} ${action.mName}`} />
                 <ListItemSecondaryAction>
-                  <ContainedButton onClick={detailHandler(action)}>View Detail</ContainedButton>
+                  <ContainedButton onClick={() => detailHandler(action)}>View Detail</ContainedButton>
                 </ListItemSecondaryAction>
               </ListItem>
             ))}
