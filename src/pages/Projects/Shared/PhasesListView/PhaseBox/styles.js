@@ -1,8 +1,12 @@
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(() => ({
+  card: {
+    minWidth: 265,
+    height: '100%',
+  },
   content: {
-    minHeight: 280,
+    minHeight: 300,
   },
   cardHeader: {
     cursor: 'pointer',

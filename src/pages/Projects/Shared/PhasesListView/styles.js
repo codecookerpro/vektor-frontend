@@ -1,17 +1,15 @@
 import makeStyles from '@material-ui/core/styles/makeStyles';
 
 const useStyles = makeStyles(() => ({
-  phaseHeader: {
-    display: 'flex',
-    alignItems: 'center',
-  },
-  phasesContainer: {
-    maxWidth: 'calc(100vw - 331px)',
+  container: {
+    position: 'relative',
     overflowX: 'auto',
     flexWrap: 'nowrap',
+    maxWidth: 'calc(100vw - 331px)',
   },
   phaseContainer: {
-    padding: '12px 12px 12px 0',
+    paddingTop: 12,
+    paddingRight: 12,
     '&:last-child': {
       paddingRight: 0,
     },
