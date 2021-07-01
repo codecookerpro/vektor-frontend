@@ -117,7 +117,7 @@ const AuditTrailLogDetail = () => {
                         {event.change.map(
                           (chg) =>
                             chg.pValue !== chg.nValue && (
-                              <TableRow>
+                              <TableRow key={chg._id}>
                                 <StyledTableCell>{chg.field}</StyledTableCell>
                                 <StyledTableCell>{changeToString(chg.pValue)}</StyledTableCell>
                                 <StyledTableCell>{changeToString(chg.nValue)}</StyledTableCell>
