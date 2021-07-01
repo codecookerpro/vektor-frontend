@@ -6,9 +6,6 @@ export const PERMISSION_TYPES = {
   projectManager: 'PROJECT_MANAGER',
   user: 'USER',
   viewer: 'VIEWER',
-  subset(keys) {
-    return keys.map((type) => this[type] || console.error(`Invalid permission type was detected: ${type}`));
-  },
 };
 
 export const EQUIPMENT_TYPES = keyMirror({
@@ -36,3 +33,23 @@ export const POPUP_TYPE = keyMirror({
   error: null,
   inactive: null,
 });
+
+export const ACTION_TYPES = {
+  create: 'CREATE',
+  update: 'UPDATE',
+  delete: 'DELETE',
+  createNested: 'CREATE_NESTED',
+  updateNested: 'UPDATE_NESTED',
+  deleteNested: 'DELETE_NESTED',
+};
+
+export const ENTITY_NAME_TYPES = {
+  event: 'Event',
+  metaSystem: 'MetaSystem',
+  organization: 'Organization',
+  project: 'Project',
+  sow: 'SOW',
+  system: 'System',
+  user: 'User',
+  workflow: 'Workflow',
+};

@@ -1,4 +1,4 @@
-import { EQUIPMENT_TYPES, EQUIPMENT_CATEGORY_TYPES, PERMISSION_TYPES } from './enums';
+import { EQUIPMENT_TYPES, EQUIPMENT_CATEGORY_TYPES, PERMISSION_TYPES, ACTION_TYPES, ENTITY_NAME_TYPES } from './enums';
 
 // Equipment
 export const EQUIPMENTS = [
@@ -58,4 +58,24 @@ export const PERMISSIONS = [
     LABEL: PERMISSION_TYPES.viewer,
     VALUE: PERMISSION_TYPES.viewer,
   },
+];
+
+export const ACTIONS = [
+  { value: ACTION_TYPES.create, label: 'Create' },
+  { value: ACTION_TYPES.update, label: 'Update' },
+  { value: ACTION_TYPES.delete, label: 'Delete' },
+  { value: ACTION_TYPES.createNested, label: 'Create Nested' },
+  { value: ACTION_TYPES.updateNested, label: 'Update Nested' },
+  { value: ACTION_TYPES.deleteNested, label: 'Delete Nested' },
+];
+
+export const ENTITY_NAMES = [
+  { value: ENTITY_NAME_TYPES.event, label: 'Event' },
+  { value: ENTITY_NAME_TYPES.metaSystem, label: 'Meta System' },
+  { value: ENTITY_NAME_TYPES.organization, label: 'Organization' },
+  { value: ENTITY_NAME_TYPES.project, label: 'Project' },
+  { value: ENTITY_NAME_TYPES.sow, label: 'SOW' },
+  { value: ENTITY_NAME_TYPES.system, label: 'System' },
+  { value: ENTITY_NAME_TYPES.user, label: 'User' },
+  { value: ENTITY_NAME_TYPES.workflow, label: 'Workflow' },
 ];

@@ -11,7 +11,7 @@ export const getNavLinks = (projectName, projectId, systemName, systemId) => [
   ...(!isEmpty(systemName)
     ? [
         {
-          HREF: LINKS.EDIT_META_SYSTEM.HREF.replace(':projectId', projectId).replace(':systemId', systemId),
+          HREF: LINKS.EDIT_META_SYSTEM.HREF.replace(':systemId', systemId),
           TITLE: systemName || 'Not Found',
         },
       ]

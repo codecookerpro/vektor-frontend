@@ -66,7 +66,7 @@ const SelectDialog = ({ open, onClose, onSelect }) => {
         <ColorButton colour="red" autoFocus onClick={handleSelect}>
           Select
         </ColorButton>
-        <ColorButton colour="purple" onClick={onClose}>
+        <ColorButton colour="lightGreen" onClick={onClose}>
           Cancel
         </ColorButton>
       </DialogActions>

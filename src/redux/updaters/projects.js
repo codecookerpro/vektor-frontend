@@ -1,19 +1,20 @@
 import { restrict } from 'utils/helpers/utility';
+import { updatePool } from './helper';
 
 export const INITIAL_STATE = Object.freeze({
   results: [],
-  organization: '',
-  metaSystems: {},
+  pagination: { count: 0 },
+  metaSystems: [],
   metaSystemsFilter: [],
   isMetaSystemsLoading: false,
   systemTrends: {},
   metaSystemClone: null,
 });
 
-export const fetchProjectsUpdater = (state, { payload: { results, organization } }) => ({
+export const fetchProjectsUpdater = (state, { payload }) => ({
   ...state,
-  results,
-  organization,
+  results: payload.data,
+  pagination: payload.pagination,
 });
 
 export const editProjectUpdater = (state, { payload }) => {
@@ -38,12 +39,9 @@ export const deleteProjectUpdater = (state, { payload }) => {
   };
 };
 
-export const fetchMetaSystemsUpdater = (state, { payload: { data, project } }) => ({
+export const fetchMetaSystemsUpdater = (state, { payload }) => ({
   ...state,
-  metaSystems: {
-    ...state.metaSystems,
-    ...(project ? { [project]: data } : { raw: data }),
-  },
+  metaSystems: updatePool(state.metaSystems, payload),
 });
 
 export const fetchMetaSystemsFilterUpdater = (state, { payload: { data, isLoading } }) => ({
@@ -57,10 +55,7 @@ export const createMetaSystemUpdater = (state, { payload }) => {
   return {
     ...state,
     results: state.results.map((p) => (p._id === project ? { ...p, metaSystems: [...p.metaSystems, _id] } : p)),
-    metaSystems: {
-      ...state.metaSystems,
-      [project]: [...state.metaSystems[project], payload],
-    },
+    metaSystems: [...state.metaSystems, payload],
     metaSystemClone: null,
   };
 };
@@ -78,23 +73,16 @@ export const updateMetaSystemUpdater = (state, { payload }) => {
     'site',
     'projectPhase',
   ]);
-  const { project, _id } = restricted;
 
   return {
     ...state,
-    metaSystems: {
-      ...state.metaSystems,
-      [project]: state.metaSystems[project].map((ms) => (ms._id === _id ? { ...ms, ...restricted } : ms)),
-    },
+    metaSystems: state.metaSystems.map((ms) => (ms._id === payload._id ? { ...ms, ...restricted } : ms)),
   };
 };
 
 export const deleteMetaSystemUpdater = (state, { payload: { project, system } }) => ({
   ...state,
-  metaSystems: {
-    ...state.metaSystems,
-    [project]: state.metaSystems[project].filter((ms) => ms._id !== system),
-  },
+  metaSystems: state.metaSystems.filter((ms) => ms._id !== system),
   results: state.results.map((p) =>
     p._id === project
       ? {
@@ -119,12 +107,9 @@ export const fetchSystemTrendsUpdater = (state, { payload: { data, projectId } }
 });
 
 export const updateDeliverablesUpdater = (state, { payload }) => {
-  const { project, metaSystem } = payload;
+  const { metaSystem } = payload;
   return {
     ...state,
-    metaSystems: {
-      ...state.metaSystems,
-      [project]: state.metaSystems[project].map((ms) => (ms._id === metaSystem ? { ...ms, mainSystem: payload } : ms)),
-    },
+    metaSystems: state.metaSystems.map((ms) => (ms._id === metaSystem ? { ...ms, mainSystem: payload } : ms)),
   };
 };

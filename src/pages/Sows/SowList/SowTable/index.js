@@ -1,4 +1,4 @@
-import React, { memo, useState, useMemo, useEffect } from 'react';
+import React, { memo, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Card, CardHeader, CardContent, TableCell, TableRow, Grid } from '@material-ui/core';
 
@@ -6,7 +6,7 @@ import LinkButton from 'components/UI/Buttons/LinkButton';
 import VektorTableContainer from 'parts/Tables/VektorTableContainer';
 import LINKS from 'utils/constants/links';
 import setColumn from './setColumn';
-import { useFilter, usePagenation, useUserPermission } from 'utils/hooks';
+import { useFilter, usePagination, useUserPermission } from 'utils/hooks';
 import { getSOWs, setSelectedSOW } from 'redux/actions/sowAction';
 import { readMetaSystem } from 'redux/actions/metaSystem';
 
@@ -15,23 +15,16 @@ const SowTable = () => {
   const sows = useSelector((state) => state.sows.results);
   const organizations = useSelector((state) => state.organizations.results);
   const projects = useSelector((state) => state.projects.results);
-  const systems = useSelector((state) => state.projects.metaSystems.raw || []);
+  const systems = useSelector((state) => state.projects.metaSystems);
+
   const { isAdmin } = useUserPermission();
   const columns = setColumn(isAdmin);
-  const filteredSows = useMemo(() => {
-    return sows;
-  }, [sows]);
-  const [organizationFilter, setOrganizationFilter] = useState(null);
-  const [systemFilter, setSystemFilter] = useState(null);
-  const { page, setPage, rowsPerPage, setRowsPerPage } = usePagenation(filteredSows);
-  const orgFilterComp = useFilter(organizations, 'organization', setOrganizationFilter);
-  const sysFilterComp = useFilter(systems, 'system', setSystemFilter);
+
+  const { page, setPage, rowsPerPage, setRowsPerPage, pagination } = usePagination(sows);
+  const [orgFilterComp, organizationFilter] = useFilter({ items: organizations, label: 'organization' });
+  const [sysFilterComp, systemFilter] = useFilter({ items: systems, label: 'system' });
 
   useEffect(() => {
-    const pagination = {
-      skip: page * rowsPerPage,
-      limit: rowsPerPage,
-    };
     const filter = {
       organization: organizationFilter || undefined,
       metaSystem: systemFilter || undefined,
@@ -60,7 +53,7 @@ const SowTable = () => {
   return (
     <Card>
       <CardHeader
-        title={`${filteredSows.length} SOWs`}
+        title={`${sows.length} SOWs`}
         action={
           <Grid container spacing={4}>
             {isAdmin && <Grid item>{orgFilterComp}</Grid>}
@@ -71,13 +64,13 @@ const SowTable = () => {
       <CardContent>
         <VektorTableContainer
           columns={columns}
-          rowCounts={filteredSows.length}
+          rowCounts={sows.length}
           page={page}
           setPage={setPage}
           rowsPerPage={rowsPerPage}
           setRowsPerPage={setRowsPerPage}
         >
-          {filteredSows.map((row) => (
+          {sows.map((row) => (
             <TableRow key={row._id}>
               {isAdmin && (
                 <TableCell component="th" scope="row">

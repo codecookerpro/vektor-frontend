@@ -1,20 +1,23 @@
 import { useState, useMemo } from 'react';
-import { noop } from 'utils/constants';
 import FilterSelect from 'components/UI/Selects/FilterSelect';
 
-const useFilter = (items, label, setFilter = noop, keys = { label: 'name', value: '_id' }) => {
+const useFilter = ({ items, label, keys = { label: 'name', value: '_id' } }) => {
   const [value, setValue] = useState(null);
-  const handleSelect = ({ target: { value } }) => {
-    setValue(value);
-    setFilter(value);
-  };
-  const component = useMemo(
-    () => <FilterSelect label={`By ${label}`} placeholder={`Select ${label}`} items={items} keys={keys} value={value} onChange={handleSelect} />,
-    // eslint-disable-next-line
+  const selectorProps = useMemo(
+    () => ({
+      label: `By ${label}`,
+      placeholder: `Select ${label}`,
+      items,
+      keys,
+      value,
+      onChange: (event) => setValue(event.target.value),
+    }),
     [label, items, keys, value]
   );
 
-  return component;
+  const component = useMemo(() => <FilterSelect {...selectorProps} />, [selectorProps]);
+
+  return [component, value];
 };
 
 export default useFilter;

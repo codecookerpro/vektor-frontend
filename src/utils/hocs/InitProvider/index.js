@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setAccessToken, setRefreshToken, setCurrentUser } from 'redux/actions/authActions';
 import { getUsers } from 'redux/actions/users';
 import { getOrganizations } from 'redux/actions/organizations';
-import { getProjects } from 'redux/actions/projects';
 import { PERMISSION_TYPES } from 'utils/constants';
 
 const InitProvider = () => {
@@ -41,9 +40,6 @@ const InitProvider = () => {
       dispatch(getUsers());
       if (permissions === PERMISSION_TYPES.admin) {
         dispatch(getOrganizations());
-        dispatch(getProjects());
-      } else {
-        dispatch(getProjects({ organization }));
       }
     }
   }, [dispatch, accessToken, organization, permissions]);

@@ -21,11 +21,11 @@ export const useEditProjectLogic = () => {
     } = auth;
     const { results, metaSystems } = projects;
 
-    return { projects: results, permissions, metaSystems: metaSystems[id] };
+    return { projects: results, permissions, metaSystems: metaSystems.filter((m) => m.project === id) };
   });
 
   useEffect(() => {
-    dispatch(readMetaSystem(id, true));
+    dispatch(readMetaSystem({ project: id }, true));
     dispatch(getSystemHistory(id, true));
   }, [dispatch, id]);
 

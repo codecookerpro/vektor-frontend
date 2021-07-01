@@ -1,11 +1,11 @@
-import React, { memo, useState, useMemo } from 'react';
+import React, { memo, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { Card, CardHeader, CardContent, TableCell, TableRow, Grid } from '@material-ui/core';
 
 import LinkButton from 'components/UI/Buttons/LinkButton';
 import VektorTableContainer from 'parts/Tables/VektorTableContainer';
 import LINKS from 'utils/constants/links';
-import { usePagenation, useFilter } from 'utils/hooks';
+import { usePagination, useFilter } from 'utils/hooks';
 import { PERMISSIONS } from 'utils/constants';
 import useUserPermissions from 'utils/hooks/useUserPermission';
 
@@ -16,9 +16,12 @@ const columns = [
 ];
 
 const UsersTable = () => {
-  const [organizationFilter, setOrganizationFilter] = useState(null);
-  const [permissionFilter, setPermissionFilter] = useState(null);
   const users = useSelector((state) => state.users.results);
+  const organizations = useSelector((state) => state.organizations.results);
+  const [orgFilterComponent, organizationFilter] = useFilter({ items: organizations, label: 'organization' });
+  const [perFilterComponent, permissionFilter] = useFilter({ items: PERMISSIONS, label: 'permission', keys: { value: 'VALUE', label: 'LABEL' } });
+  const { isAdmin } = useUserPermissions();
+
   const filteredUsers = useMemo(() => {
     let results = users;
     if (organizationFilter) {
@@ -31,11 +34,8 @@ const UsersTable = () => {
 
     return results;
   }, [users, organizationFilter, permissionFilter]);
-  const organizations = useSelector((state) => state.organizations.results);
-  const { page, setPage, rowsPerPage, setRowsPerPage, pageRecords } = usePagenation(filteredUsers);
-  const orgFilterComponent = useFilter(organizations, 'organization', setOrganizationFilter);
-  const perFilterComponent = useFilter(PERMISSIONS, 'permission', setPermissionFilter, { value: 'VALUE', label: 'LABEL' });
-  const { isAdmin } = useUserPermissions();
+
+  const { page, setPage, rowsPerPage, setRowsPerPage, pageRecords } = usePagination(filteredUsers);
 
   const getOrganizationName = (_id) => {
     const organization = organizations.find((item) => item._id === _id);

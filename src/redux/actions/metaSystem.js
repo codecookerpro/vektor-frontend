@@ -25,28 +25,30 @@ export const createMetaSystem = (params) => (dispatch, getState) => {
 };
 
 export const readMetaSystem =
-  (project, refresh = false) =>
+  ({ project = null, system = null } = {}, refresh = false) =>
   (dispatch, getState) => {
     const {
       projects: { metaSystems, metaSystemClone },
     } = getState();
 
-    if ((project && metaSystems[project] && !refresh) || !isEmpty(metaSystemClone)) {
+    if (project && metaSystems.filter((s) => s.project === project) && !refresh) {
+      return;
+    } else if (system && !isEmpty(metaSystems.find((s) => s._id === system)) && !refresh) {
+      return;
+    } else if (!isEmpty(metaSystemClone)) {
       return;
     }
 
     const params = {
       sort: 'name',
-      ...(!isEmpty(project) && { filter: { project } }),
+      filter: {
+        project: project || undefined,
+        _id: system || undefined,
+      },
     };
 
     API.getMetaSystems(params)
-      .then(({ data }) => {
-        dispatch({
-          type: ActionTypes.FETCH_META_SYSTEMS,
-          payload: { data, project },
-        });
-      })
+      .then(({ data }) => dispatch({ type: ActionTypes.FETCH_META_SYSTEMS, payload: data }))
       .catch((err) => console.error('[readMetaSystem] error => ', err));
   };
 

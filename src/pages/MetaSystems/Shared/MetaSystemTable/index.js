@@ -23,9 +23,9 @@ const MetaSystemTable = ({ records = [] }) => {
         </Typography>
         <VektorSubTableContainer columns={columns}>
           {records.map((row) => (
-            <TableRow key={row._id}>
+            <TableRow key={row._id} id={row._id}>
               <TableCell component="th" scope="row">
-                <LinkButton to={LINKS.EDIT_META_SYSTEM.HREF.replace(':projectId', row.project).replace(':systemId', row._id)}>{row.name}</LinkButton>
+                <LinkButton to={LINKS.EDIT_META_SYSTEM.HREF.replace(':systemId', row._id)}>{row.name}</LinkButton>
               </TableCell>
               <TableCell>{row.mainSystem.calculated.totalPlannedHours}</TableCell>
               <TableCell>{row.mainSystem.calculated.PV}%</TableCell>

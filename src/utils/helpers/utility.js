@@ -26,11 +26,11 @@ export const restrict = (obj, keys = []) =>
     };
   }, {});
 
-export const pagenate = (records, rowsPerPage, page) => {
+export const paginate = (records, skip = 0, limit = 10) => {
   if (isEmpty(records)) {
     return [];
-  } else if (rowsPerPage > 0) {
-    return records.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+  } else if (limit > 0) {
+    return records.slice(skip, skip + limit);
   }
   return records;
 };
