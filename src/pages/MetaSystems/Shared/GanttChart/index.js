@@ -17,7 +17,7 @@ const GanttChart = ({ deliverables }) => {
         title="Gantt Chart"
         action={
           <ColorButton colour="lightGreen" level={300} onClick={() => toggleChart(!toggled)}>
-            {toggled ? 'Hide Chart' : 'See Chart'}
+            {toggled ? 'Hide' : 'Show'}
           </ColorButton>
         }
       />

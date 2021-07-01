@@ -126,7 +126,7 @@ const DeliverableTable = ({ deliverables = [], editable = false, onRowChange = n
 
   return (
     <Card>
-      <CardHeader title="Deliverables Table" />
+      <CardHeader title="Deliverables" />
       <CardContent>
         <VektorSubTableContainer columns={columns}>
           {deliverables.map((row, idx) => (editable ? EditableRow(row, idx) : ReadOnlyRow(row, idx)))}
