@@ -19,11 +19,4 @@ export const dashboardLayoutRoutes = [
 
 export const authLayoutRoutes = [authRoutes];
 
-export const sidebarRoutes = [
-  overviewRoutes,
-  projectManagementRoutes,
-  sowTrackerRoutes,
-  workflowTemplateRoutes,
-  userManagementRoutes,
-  recentActionRoutes,
-];
+export const sidebarRoutes = [overviewRoutes, projectManagementRoutes, sowTrackerRoutes, workflowTemplateRoutes, userManagementRoutes];
