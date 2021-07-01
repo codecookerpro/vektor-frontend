@@ -12,7 +12,7 @@ import VektorTextField from 'components/UI/TextFields/VektorTextField';
 import FilterSelect from 'components/UI/Selects/FilterSelect';
 
 import { STRING_INPUT_VALID, SELECT_VALID } from 'utils/constants/validations';
-import { EQUIPMENT_TYPES, EQUIPMENTS, EQUIPMENT_CATEGORIES, EQUIPMENT_CATEGORY_TYPES, FORM_MODE, POPUP_TYPE, noop } from 'utils/constants';
+import { EQUIPMENTS, EQUIPMENT_CATEGORIES, FORM_MODE, POPUP_TYPE, noop } from 'utils/constants';
 import { createMetaSystem, updateMetaSystem, deleteMetaSystem, duplicateMetaSystem } from 'redux/actions/metaSystem';
 import { setPopup } from 'redux/actions/popupActions';
 import LINKS from 'utils/constants/links';
@@ -130,7 +130,7 @@ const MetaSystemForm = ({ mode = FORM_MODE.view, system = {}, setFormMode = noop
                 items={EQUIPMENT_CATEGORIES}
                 error={errors.equipmentCategory?.message}
                 control={control}
-                defaultValue={system.equipmentCategory || EQUIPMENT_CATEGORY_TYPES.custom}
+                defaultValue={system.equipmentCategory || EQUIPMENT_CATEGORIES[0].VALUE}
               />
             </Grid>
             <Grid item xs={12} sm={6} md={4}>
@@ -144,7 +144,7 @@ const MetaSystemForm = ({ mode = FORM_MODE.view, system = {}, setFormMode = noop
                 items={EQUIPMENTS}
                 error={errors.equipmentType?.message}
                 control={control}
-                defaultValue={system.equipmentType || EQUIPMENT_TYPES.process}
+                defaultValue={system.equipmentType || EQUIPMENTS[0].VALUE}
               />
             </Grid>
             <Grid item xs={12} sm={6} md={3}>
