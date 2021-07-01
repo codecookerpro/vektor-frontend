@@ -16,7 +16,7 @@ import useStyles from './styles';
 import { useProjectPhasesEditing, getNavLinks } from './helpers';
 
 const ProjectPhases = () => {
-  const { phaseHeader } = useStyles();
+  const { phaseHeader, container, phasesContainer, phaseContainer } = useStyles();
   const {
     projectId,
     project,
@@ -35,9 +35,9 @@ const ProjectPhases = () => {
   const { permissions } = useSelector(({ auth }) => auth.currentUser);
   const isEditingVisible = ALLOWED_ROLES.includes(permissions);
 
-  const renderTitleComponent = useCallback(
-    (orderIndex, arrayIndex, name) =>
-      isEditingHeader(orderIndex) ? (
+  const getPhaseComponent = useCallback(
+    (orderIndex, arrayIndex, name, _id) => {
+      const nameComponent = isEditingHeader(orderIndex) ? (
         <div className={phaseHeader}>
           <TextField name="name" value={editingPhase.name} onChange={({ target }) => onChangePhase(target, arrayIndex)} autoFocus />
           <IconButton aria-label="done" onClick={onCompleteEditing}>
@@ -46,7 +46,10 @@ const ProjectPhases = () => {
         </div>
       ) : (
         name
-      ),
+      );
+
+      return { name: nameComponent, orderIndex, _id };
+    },
     [editingPhase?.name, isEditingHeader, onChangePhase, onCompleteEditing, phaseHeader]
   );
 
@@ -63,25 +66,24 @@ const ProjectPhases = () => {
   return (
     <>
       <PageHeader title={`${LINKS.PROJECT_PHASES.TITLE}: ${project?.name || 'Not Found'}`} links={getNavLinks(project?.name, projectId)} />
-      <Grid container spacing={6}>
+      <Grid className={container} container>
         <Grid item xs={12}>
           <DndProvider backend={HTML5Backend}>
-            <Grid container spacing={6}>
+            <Grid className={phasesContainer} container>
               {phases.map(({ _id, orderIndex, name }, idx) => (
-                <Grid key={orderIndex} item xs={12} sm={6} md={3}>
+                <Grid key={orderIndex} className={phaseContainer} item xs={12} sm={6} md={3}>
                   <PhaseBox
                     orderIndex={orderIndex}
-                    phase={{ name: renderTitleComponent(orderIndex, idx, name) }}
+                    phase={getPhaseComponent(orderIndex, idx, name, _id)}
                     phaseActions={isEditingVisible && ACTIONS_DATA}
                     fields={currentMetaSystems && returnItemsForColumn(_id)}
-                    moveItem={() => null}
                     onActionClick={onActionClick}
                   />
                 </Grid>
               ))}
               {isEditingVisible && (
-                <Grid item xs={12} sm={6} md={3}>
-                  <PhaseBox phase={{ name: '+ Add new phase' }} fields={[]} moveItem={() => null} onHeaderClick={onHeaderClick} />
+                <Grid className={phaseContainer} item xs={12} sm={6} md={3}>
+                  <PhaseBox phase={{ name: '+ Add new phase' }} onHeaderClick={onHeaderClick} />
                 </Grid>
               )}
             </Grid>

@@ -36,73 +36,71 @@ const CustomFlowNodeFactory = (tClass, sClass) =>
       setDialogProps(NODE_DIALOGS.edit);
     };
 
-    const handleStyles = { background: '#6283B6', height: '9px', width: '9px', borderRadius: '50%' };
-
     return (
       <>
         <div onDoubleClick={handlePopUpToggle}>
           <Handle
             type={HANDLE_TYPES.target}
             className={tClass}
-            style={{ ...handleStyles, marginLeft: '-2px' }}
             position={Position.Left}
             id={IDENTIFIERS.targetLeft}
+            isValidConnection={data.isValidConnection}
           />
 
           <Handle
             type={HANDLE_TYPES.target}
             className={tClass}
-            style={{ ...handleStyles, marginTop: '-2px' }}
             position={Position.Top}
             id={IDENTIFIERS.targetTop}
+            isValidConnection={data.isValidConnection}
           />
 
           <Handle
             type={HANDLE_TYPES.target}
             className={tClass}
-            style={{ ...handleStyles, marginRight: '-1px' }}
             position={Position.Right}
             id={IDENTIFIERS.targetRight}
+            isValidConnection={data.isValidConnection}
           />
 
           <Handle
             type={HANDLE_TYPES.target}
             className={tClass}
-            style={{ ...handleStyles, marginBottom: '-1px' }}
             position={Position.Bottom}
             id={IDENTIFIERS.targetBottom}
+            isValidConnection={data.isValidConnection}
           />
 
           <Handle
             type={HANDLE_TYPES.source}
             className={sClass}
-            style={{ ...handleStyles, marginLeft: '-2px' }}
             position={Position.Left}
             id={IDENTIFIERS.sourceLeft}
+            isValidConnection={data.isValidConnection}
           />
 
           <Handle
             type={HANDLE_TYPES.source}
             className={sClass}
-            style={{ ...handleStyles, marginTop: '-2px' }}
             position={Position.Top}
             id={IDENTIFIERS.sourceTop}
+            isValidConnection={data.isValidConnection}
           />
 
           <Handle
             type={HANDLE_TYPES.source}
             className={sClass}
-            style={{ ...handleStyles, marginRight: '-1px' }}
             position={Position.Right}
             id={IDENTIFIERS.sourceRight}
+            isValidConnection={data.isValidConnection}
           />
 
           <Handle
             type={HANDLE_TYPES.source}
             className={sClass}
-            style={{ ...handleStyles, marginBottom: '-1px' }}
             position={Position.Bottom}
             id={IDENTIFIERS.sourceBottom}
+            isValidConnection={data.isValidConnection}
           />
 
           <div className={classes.nodeContent}>

@@ -6,6 +6,7 @@ import { Edit, CheckCircle } from '@material-ui/icons';
 import VektorSubTableContainer from 'parts/Tables/VektorSubTableContainer';
 import { noop } from 'utils/constants';
 import moment from 'moment';
+import useFocusElement from 'utils/hooks/useFocusElement';
 
 const mainColumns = [
   { id: 'dependency', label: 'Deliverable Dependancy', minWidth: 100 },
@@ -28,6 +29,8 @@ const mainColumns = [
 ];
 
 const DeliverableTable = ({ deliverables = [], editable = false, onRowChange = noop }) => {
+  useFocusElement(deliverables);
+
   const [editData, setEditData] = useState({});
   const [editIndex, setEditIndex] = useState(-1);
   const columns = useMemo(() => {

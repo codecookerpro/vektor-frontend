@@ -3,7 +3,7 @@ import { removeElements, addEdge } from 'react-flow-renderer';
 import { noop } from 'utils/constants';
 import { isEmpty } from 'utils/helpers/utility';
 import { GRAPH_EVENTS, GRAPH_PROPS } from './constants';
-import { makeNode, makeEdge, getLayoutedElements, deliverablesToElements, validateElements } from './helper';
+import { makeNode, makeEdge, getLayoutedElements, deliverablesToElements, validateElements, checkConnectionValid } from './helper';
 
 const useGraphLogic = ({ editable = false, deliverables = [], onGraphEvent = noop, boardRef }) => {
   const [elements, setElements] = useState([]);
@@ -62,6 +62,16 @@ const useGraphLogic = ({ editable = false, deliverables = [], onGraphEvent = noo
       });
     },
 
+    isValidConnection: (conn) => {
+      let elements = null;
+      setElements((els) => {
+        elements = els;
+        return els;
+      });
+
+      return checkConnectionValid(elements, conn);
+    },
+
     handleSwitchPopup: setDialogToggled,
   };
 
@@ -76,15 +86,12 @@ const useGraphLogic = ({ editable = false, deliverables = [], onGraphEvent = noo
   };
 
   const handleConnect = (conn) => {
-    const newEdge = makeEdge(conn, elements, eventHandlers, editable);
+    const newEdge = makeEdge(conn, eventHandlers, editable);
+    const updatedElements = addEdge(newEdge, elements);
+    setElements(updatedElements);
 
-    if (newEdge) {
-      const updatedElements = addEdge(newEdge, elements);
-      setElements(updatedElements);
-
-      if (editable) {
-        onGraphEvent(GRAPH_EVENTS.edgeCreate, updatedElements, newEdge.target);
-      }
+    if (editable) {
+      onGraphEvent(GRAPH_EVENTS.edgeCreate, updatedElements, newEdge.target);
     }
   };
 
@@ -99,11 +106,16 @@ const useGraphLogic = ({ editable = false, deliverables = [], onGraphEvent = noo
 
   const handleNodeDragStop = (e, node) => {
     e.preventDefault();
-    const updatedElements = elements.map((n) => (n.id === node.id ? { ...n, position: node.position } : n));
 
-    if (editable) {
-      onGraphEvent(GRAPH_EVENTS.nodePosChange, updatedElements, node.id);
-    }
+    setElements((elements) => {
+      const updatedElements = elements.map((n) => (n.id === node.id ? { ...n, position: node.position } : n));
+
+      if (editable) {
+        onGraphEvent(GRAPH_EVENTS.nodePosChange, updatedElements, node.id);
+      }
+
+      return updatedElements;
+    });
   };
 
   const handleFullscreen = (e) => {
