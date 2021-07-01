@@ -6,7 +6,6 @@ const Dashboard = lazy(() => import(/* webpackChunkName: 'Dashboard' */ 'pages/D
 const ProjectList = lazy(() => import(/* webpackChunkName: 'ProjectList' */ 'pages/Projects/ProjectList'));
 const AddProject = lazy(() => import(/* webpackChunkName: 'AddProject' */ 'pages/Projects/AddProject'));
 const EditProject = lazy(() => import(/* webpackChunkName: 'EditProject' */ 'pages/Projects/EditProject'));
-const TrendChart = lazy(() => import(/* webpackChunkName: 'TrendChart' */ 'pages/Projects/TrendChart'));
 const ProjectHistory = lazy(() => import(/* webpackChunkName: 'ProjectHistory' */ 'pages/Projects/ProjectHistory'));
 const ProjectPhases = lazy(() => import(/* webpackChunkName: 'ProjectPhases' */ 'pages/Projects/ProjectPhases'));
 const AddMetaSystem = lazy(() => import(/* webpackChunkName: 'AddMetaSystem' */ 'pages/MetaSystems/AddMetaSystem'));
@@ -40,18 +39,6 @@ const projectManagementRoutes = Object.freeze({
       path: LINKS.EDIT_PROJECT.HREF,
       name: LINKS.EDIT_PROJECT.TITLE,
       component: EditProject,
-      isNotSlide: true,
-    },
-    {
-      path: LINKS.SYSTEM_TREND_CHART.HREF,
-      name: LINKS.SYSTEM_TREND_CHART.TITLE,
-      component: TrendChart,
-      isNotSlide: true,
-    },
-    {
-      path: LINKS.DELIVERABLE_TREND_CHART.HREF,
-      name: LINKS.DELIVERABLE_TREND_CHART.TITLE,
-      component: TrendChart,
       isNotSlide: true,
     },
     {

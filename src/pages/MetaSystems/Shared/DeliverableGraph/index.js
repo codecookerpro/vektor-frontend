@@ -11,7 +11,7 @@ import { restrict } from 'utils/helpers/utility';
 
 const DeliverableGraph = ({ editable, mainSystem }) => {
   const dispatch = useDispatch();
-  const [toggled, toggleGraph] = useState(false);
+  const [toggled, toggleGraph] = useState(true);
 
   const handleGraphEvent = (event, elements, nodeId) => {
     const mainId = mainSystem._id;
