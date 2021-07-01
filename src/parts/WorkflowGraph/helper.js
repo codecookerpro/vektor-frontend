@@ -172,8 +172,13 @@ export const makeNode = (nodeNum, eventHandlers, editable) => {
   return node;
 };
 
-export const makeEdge = (conn, elements, eventHandlers, editable) => {
+export const checkConnectionValid = (elements, conn) => {
   const { source, target } = conn;
+
+  if (source === target) {
+    return false;
+  }
+
   const connections = elements.filter((el) => el.type === ELEMENT_TYPES.edge);
 
   const checkCycle = (src, tar) => {
@@ -191,9 +196,13 @@ export const makeEdge = (conn, elements, eventHandlers, editable) => {
   const doubled = connections.filter((cn) => cn.source === source && cn.target === target).length;
 
   if (checkCycle(source, target) || doubled) {
-    return null;
+    return false;
   }
 
+  return true;
+};
+
+export const makeEdge = (conn, eventHandlers, editable) => {
   const newEdge = {
     ...conn,
     ...EDGE_PROPS,
@@ -214,6 +223,7 @@ export const validateElements = (nodes, eventHandlers) => {
         node.data.handleDeleteNode = eventHandlers.handleDeleteNode;
         node.data.handleInputChange = eventHandlers.handleInputChange;
         node.data.handleSwitchPopup = eventHandlers.handleSwitchPopup;
+        node.data.isValidConnection = eventHandlers.isValidConnection;
       } else {
         node.data.handleRemoveEdge = eventHandlers.handleRemoveEdge(node);
       }
