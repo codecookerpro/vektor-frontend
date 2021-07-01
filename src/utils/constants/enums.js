@@ -8,19 +8,6 @@ export const PERMISSION_TYPES = {
   viewer: 'VIEWER',
 };
 
-export const EQUIPMENT_TYPES = keyMirror({
-  process: 'PROCESS',
-  utilities: 'UTILITIES',
-  analytics: 'ANALYTICS',
-  automation: 'AUTOMATION',
-  computerSystems: 'COMPUTER_SYSTEMS',
-});
-
-export const EQUIPMENT_CATEGORY_TYPES = keyMirror({
-  custom: 'CUSTOM',
-  commercial: 'COMMERCIAL',
-});
-
 export const FORM_MODE = keyMirror({
   create: null,
   update: null,
