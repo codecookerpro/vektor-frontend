@@ -86,14 +86,12 @@ const useGraphLogic = ({ editable = false, deliverables = [], onGraphEvent = noo
   };
 
   const handleConnect = (conn) => {
-    if (checkConnectionValid(elements, conn)) {
-      const newEdge = makeEdge(conn, eventHandlers, editable);
-      const updatedElements = addEdge(newEdge, elements);
-      setElements(updatedElements);
+    const newEdge = makeEdge(conn, eventHandlers, editable);
+    const updatedElements = addEdge(newEdge, elements);
+    setElements(updatedElements);
 
-      if (editable) {
-        onGraphEvent(GRAPH_EVENTS.edgeCreate, updatedElements, newEdge.target);
-      }
+    if (editable) {
+      onGraphEvent(GRAPH_EVENTS.edgeCreate, updatedElements, newEdge.target);
     }
   };
 
