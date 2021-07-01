@@ -9,7 +9,7 @@ import LINKS from 'utils/constants/links';
 import { getEnglishDateWithTime } from 'utils/helpers/time';
 import { useFilter, usePagination, useUserPermission } from 'utils/hooks';
 import { ACTIONS, ENTITY_NAMES } from 'utils/constants';
-import { changeToString, getLinkFromEvent } from './helper';
+import { getLinkFromEvent } from './helper';
 import { ADMIN_COLUMNS, COLUMNS } from './constants';
 
 const AuditTrailLogsTable = () => {
@@ -47,26 +47,6 @@ const AuditTrailLogsTable = () => {
   const getUserName = (_id) => users.find((item) => item._id === _id)?.email || '';
   const getOrgName = (_id) => organizations.find((org) => org._id === _id)?.name || '';
 
-  const commonCells = (data, rowSpan = 1) => (
-    <>
-      <TableCell rowSpan={rowSpan}>
-        <LinkButton to={LINKS.AUDIT_TRAIL_LOG_DETAIL.HREF.replace(':id', data._id)}>{getEnglishDateWithTime(data.updatedAt)}</LinkButton>
-      </TableCell>
-      {isAdmin && <TableCell rowSpan={rowSpan}>{getOrgName(data.organization)}</TableCell>}
-      {isAdmin && <TableCell rowSpan={rowSpan}>{getUserName(data.user)}</TableCell>}
-      <TableCell rowSpan={rowSpan}>{getLinkFromEvent(data)}</TableCell>
-      <TableCell rowSpan={rowSpan}>{data.mId}</TableCell>
-      <TableCell rowSpan={rowSpan}>{data.actionType}</TableCell>
-    </>
-  );
-  const changeCells = (chg) => (
-    <>
-      <TableCell>{chg.field}</TableCell>
-      <TableCell>{changeToString(chg.pValue)}</TableCell>
-      <TableCell>{changeToString(chg.nValue)}</TableCell>
-    </>
-  );
-
   return (
     <Card>
       <CardHeader
@@ -90,31 +70,19 @@ const AuditTrailLogsTable = () => {
           rowsPerPage={rowsPerPage}
           setRowsPerPage={setRowsPerPage}
         >
-          {events
-            .map((row) => {
-              const change = row.change.filter((chg) => chg.nValue !== chg.pValue);
-
-              if (change.length === 0) {
-                return (
-                  <TableRow key={`${row._id}-none`}>
-                    {commonCells(row)}
-                    <TableCell colSpan={3} />
-                  </TableRow>
-                );
-              } else {
-                return change.map((chg, idx) =>
-                  idx === 0 ? (
-                    <TableRow key={`${row._id}-${idx}`}>
-                      {commonCells(row, change.length)}
-                      {changeCells(chg)}
-                    </TableRow>
-                  ) : (
-                    <TableRow key={`${row._id}-${idx}`}>{changeCells(chg)}</TableRow>
-                  )
-                );
-              }
-            })
-            .flat()}
+          {events.map((rowData) => (
+            <TableRow key={rowData._id}>
+              <TableCell>
+                <LinkButton to={LINKS.AUDIT_TRAIL_LOG_DETAIL.HREF.replace(':id', rowData._id)}>
+                  {getEnglishDateWithTime(rowData.updatedAt)}
+                </LinkButton>
+              </TableCell>
+              {isAdmin && <TableCell>{getOrgName(rowData.organization)}</TableCell>}
+              <TableCell>{getUserName(rowData.user)}</TableCell>
+              <TableCell>{getLinkFromEvent(rowData)}</TableCell>
+              <TableCell>{rowData.actionType}</TableCell>
+            </TableRow>
+          ))}
         </VektorTableContainer>
       </CardContent>
     </Card>

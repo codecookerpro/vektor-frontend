@@ -1,8 +1,8 @@
 import React, { memo, useMemo, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useHistory } from 'react-router-dom';
-import { Grid, Card, CardContent, Typography, Button } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { Grid, Card, CardContent, Typography, Button, Table, TableHead, TableBody, TableRow, TableCell } from '@material-ui/core';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
 
 import { getEvents } from 'redux/actions/events';
 import ContainedButton from 'components/UI/Buttons/ContainedButton';
@@ -10,6 +10,7 @@ import PageHeader from 'parts/PageHeader';
 import LINKS from 'utils/constants/links';
 import { isEmpty } from 'utils/helpers/utility';
 import { getEnglishDateWithTime } from 'utils/helpers/time';
+import { changeToString } from './helper';
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -18,7 +19,21 @@ const useStyles = makeStyles((theme) => ({
   description: {
     marginBottom: theme.spacing(3),
   },
+  table: {
+    width: '50%',
+    margin: theme.spacing(5, 0),
+  },
 }));
+
+const StyledTableCell = withStyles((theme) => ({
+  root: {
+    padding: 5,
+  },
+  head: {
+    backgroundColor: 'gray',
+    color: theme.palette.common.white,
+  },
+}))(TableCell);
 
 const NAV_LINKS = [LINKS.USER_MANAGEMENT, LINKS.AUDIT_TRAIL_LOGS];
 
@@ -90,25 +105,41 @@ const AuditTrailLogDetail = () => {
                 <Typography variant="h6" color="textPrimary" className={classes.title}>
                   Details
                 </Typography>
-                {!isEmpty(event?.change[0]) && (
+                {event.change.length && (
                   <Typography variant="body2" color="textPrimary" className={classes.description}>
                     Change Message <br />
-                    {`${event?.change[0]?.field}: ${event?.change[0]?.nValue || ''} - ${event?.change[0]?.pValue || ''}`}
-                  </Typography>
-                )}
-                {!isEmpty(event?.change[0]) && (
-                  <Typography variant="body2" color="textPrimary" className={classes.description}>
-                    Content Type <br />
-                    {event?.change[0]?.field}
+                    <Table className={classes.table}>
+                      <TableHead>
+                        <StyledTableCell>Fields</StyledTableCell>
+                        <StyledTableCell>Old Value</StyledTableCell>
+                        <StyledTableCell>New Value</StyledTableCell>
+                      </TableHead>
+                      <TableBody>
+                        {event.change.map(
+                          (chg) =>
+                            chg.pValue !== chg.nValue && (
+                              <TableRow>
+                                <StyledTableCell>{chg.field}</StyledTableCell>
+                                <StyledTableCell>{changeToString(chg.pValue)}</StyledTableCell>
+                                <StyledTableCell>{changeToString(chg.nValue)}</StyledTableCell>
+                              </TableRow>
+                            )
+                        )}
+                      </TableBody>
+                    </Table>
                   </Typography>
                 )}
                 <Typography variant="body2" color="textPrimary" className={classes.description}>
+                  Content Type <br />
+                  {event.nestedName || event.mName}
+                </Typography>
+                <Typography variant="body2" color="textPrimary" className={classes.description}>
                   Object Id <br />
-                  {event?.mId}
+                  {event.mId}
                 </Typography>
                 <Typography variant="body2" color="textPrimary">
                   Object Repr <br />
-                  {event?.mName}
+                  {event.mName}
                 </Typography>
               </CardContent>
             </Card>
