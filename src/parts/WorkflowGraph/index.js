@@ -41,6 +41,7 @@ const WorkflowGraph = ({ editable, deliverables, onGraphEvent }) => {
           zoomOnDoubleClick={false}
           nodesConnectable={true}
           ref={boardRef}
+          className={classes.reactflow}
         >
           <MiniMap />
           <Controls />
