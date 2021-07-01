@@ -1,6 +1,4 @@
 import React, { memo, useState } from 'react';
-
-import { useParams } from 'react-router-dom';
 import { Card, CardHeader, CardContent } from '@material-ui/core';
 import Chart from 'react-google-charts';
 
@@ -8,18 +6,17 @@ import { useTrendChartData } from './helpers';
 import { CHART_OPTIONS } from './constants';
 import { ColorButton } from 'components/UI/Buttons';
 
-const TrendChart = () => {
+const TrendChart = ({ projectId, systemId }) => {
   const [toggled, toggleChart] = useState(false);
-  const { projectId, systemId } = useParams();
   const { chartData } = useTrendChartData(projectId, systemId);
 
   return (
     <Card>
       <CardHeader
-        title="Gantt Chart"
+        title="System Trend Chart"
         action={
           <ColorButton colour="lightGreen" level={300} onClick={() => toggleChart(!toggled)}>
-            {toggled ? 'Hide Chart' : 'See Chart'}
+            {toggled ? 'Hide' : 'Show'}
           </ColorButton>
         }
       />

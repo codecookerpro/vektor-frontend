@@ -90,7 +90,7 @@ const EditMetaSystem = () => {
             <DeliverableGraph editable={editable} mainSystem={metaSystem.mainSystem} />
           </Grid>
           <Grid item xs={12}>
-            <TrendChart />
+            <TrendChart projectId={metaSystem.project} systemId={metaSystem._id} />
           </Grid>
           <Grid item xs={12}>
             <DeliverableTable editable={editable} deliverables={metaSystem.mainSystem.deliverables} onRowChange={handleRowChange} />
