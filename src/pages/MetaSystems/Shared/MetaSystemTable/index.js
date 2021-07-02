@@ -1,9 +1,12 @@
 import React, { memo } from 'react';
-import { Card, CardContent, TableCell, TableRow, Typography } from '@material-ui/core';
+import { Card, CardHeader, CardContent, TableCell, TableRow, Typography } from '@material-ui/core';
+import { Plus } from 'react-feather';
+import ContainedButton from 'components/UI/Buttons/ContainedButton';
 
 import LinkButton from 'components/UI/Buttons/LinkButton';
 import VektorSubTableContainer from 'parts/Tables/VektorSubTableContainer';
 import LINKS from 'utils/constants/links';
+import { useHistory } from 'react-router-dom';
 
 const columns = [
   { id: 'name', label: 'Name', minWidth: 170 },
@@ -14,9 +17,19 @@ const columns = [
   { id: 'ev', label: 'EV', minWidth: 100 },
 ];
 
-const MetaSystemTable = ({ records = [] }) => {
+const MetaSystemTable = ({ projectId = 0, records = [] }) => {
+  const history = useHistory();
+
   return (
     <Card>
+      <CardHeader
+        title="Systems"
+        action={
+          <ContainedButton onClick={() => history.push(LINKS.ADD_META_SYSTEM.HREF.replace(':projectId', projectId))}>
+            <Plus /> Add Systems
+          </ContainedButton>
+        }
+      />
       <CardContent>
         <Typography variant="h5" color="textPrimary" gutterBottom>
           Systems

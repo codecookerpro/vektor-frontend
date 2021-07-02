@@ -1,6 +1,5 @@
 import React, { memo } from 'react';
 import { Grid } from '@material-ui/core';
-import { Plus } from 'react-feather';
 
 import ContainedButton from 'components/UI/Buttons/ContainedButton';
 import PageHeader from 'parts/PageHeader';
@@ -13,9 +12,10 @@ import LINKS from 'utils/constants/links';
 
 import { NAV_LINKS } from './constants';
 import { useEditProjectLogic } from './helpers';
+import TrendChart from 'pages/MetaSystems/Shared/TrendChart';
 
 const EditProject = () => {
-  const { project, isPhasesVisible, getMode, onClickButton, metaSystems } = useEditProjectLogic();
+  const { projectId, project, isPhasesVisible, getMode, onClickButton, metaSystems } = useEditProjectLogic();
 
   return (
     <>
@@ -40,17 +40,10 @@ const EditProject = () => {
           </Grid>
         )}
         <Grid item xs={12}>
-          <Grid container justify="space-between" alignItems="center">
-            <Grid item xs={8}>
-              <DetailLinkCard title="System Trend Chart" onDetail={onClickButton(LINKS.SYSTEM_TREND_CHART.HREF)} />
-            </Grid>
-            <ContainedButton onClick={onClickButton(LINKS.ADD_META_SYSTEM.HREF)}>
-              <Plus /> Add System
-            </ContainedButton>
-          </Grid>
+          <TrendChart title="System Trend Chart" projectId={projectId} />
         </Grid>
         <Grid item xs={12}>
-          <MetaSystemTable records={metaSystems} />
+          <MetaSystemTable records={metaSystems} projectId={projectId} />
         </Grid>
       </Grid>
     </>

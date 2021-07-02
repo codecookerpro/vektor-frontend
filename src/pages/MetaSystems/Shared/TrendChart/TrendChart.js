@@ -6,14 +6,14 @@ import { useTrendChartData } from './helpers';
 import { CHART_OPTIONS } from './constants';
 import { ColorButton } from 'components/UI/Buttons';
 
-const TrendChart = ({ projectId, systemId }) => {
+const TrendChart = ({ title, projectId, systemId }) => {
   const [toggled, toggleChart] = useState(false);
   const { chartData } = useTrendChartData(projectId, systemId);
 
   return (
     <Card>
       <CardHeader
-        title="Deliverable Trend Chart"
+        title={title}
         action={
           <ColorButton colour="lightGreen" level={300} onClick={() => toggleChart(!toggled)}>
             {toggled ? 'Hide' : 'Show'}

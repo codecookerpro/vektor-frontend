@@ -45,5 +45,5 @@ export const useEditProjectLogic = () => {
     history.push(href.replace(':projectId', id));
   };
 
-  return { project, isPhasesVisible, getMode, onClickButton, metaSystems };
+  return { projectId: id, project, isPhasesVisible, getMode, onClickButton, metaSystems };
 };
