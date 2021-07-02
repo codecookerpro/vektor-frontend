@@ -13,7 +13,7 @@ const TrendChart = ({ projectId, systemId }) => {
   return (
     <Card>
       <CardHeader
-        title="System Trend Chart"
+        title="Deliverable Trend Chart"
         action={
           <ColorButton colour="lightGreen" level={300} onClick={() => toggleChart(!toggled)}>
             {toggled ? 'Hide' : 'Show'}
