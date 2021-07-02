@@ -42,10 +42,10 @@ const DeliverableGraph = ({ editable, mainSystem }) => {
   return (
     <Card>
       <CardHeader
-        title="Deliverables Graph"
+        title="Workflow Chart"
         action={
           <ColorButton colour="lightGreen" onClick={() => toggleGraph(!toggled)}>
-            {toggled ? 'Hide Graph' : 'See Graph'}
+            {toggled ? 'Hide' : 'Show'}
           </ColorButton>
         }
       />
