@@ -7,11 +7,12 @@ export const useStyles = makeStyles((theme) => ({
   },
   name: {
     width: '100%',
-    margin: '0',
+    paddingTop: '23px',
     overflowX: 'hidden',
     overflowY: 'auto',
     textOverflow: 'ellipsis',
-    maxHeight: '100%',
+    height: '65px',
+    textAlign: 'center',
   },
   nodePopupContainer: {
     zIndex: GRAPH_PROPS.zIndex + 1,

@@ -18,6 +18,10 @@ const CustomFlowNodeFactory = (tClass, sClass) =>
     const [dialogProps, setDialogProps] = useState(null);
     const isRealNode = useMemo(() => !isEmpty(data.calculated), [data]);
     const { diffColor, differential } = useMemo(() => {
+      if (!isRealNode) {
+        return {};
+      }
+
       const diffThreshold = data.differentialWeight * (moment(data.end) - moment(data.start));
       const differential = data.calculated.differential;
       let diffColor = null;
@@ -31,7 +35,7 @@ const CustomFlowNodeFactory = (tClass, sClass) =>
       }
 
       return { diffColor, differential };
-    }, [data]);
+    }, [data, isRealNode]);
 
     const classes = useStyles({ diffColor });
 
@@ -163,11 +167,11 @@ const CustomFlowNodeFactory = (tClass, sClass) =>
                 </div>
               </Grid>
             ) : (
-              <p className={classes.name}>{data.label || <small>Double-click to edit</small>}</p>
+              <div className={classes.name}>{data.label || <small>Double-click to edit</small>}</div>
             )}
           </div>
 
-          <Popper open={isPopperOpen} anchorEl={popperElement} className={classes.nodePopupContainer} transition boxShadow={5}>
+          <Popper open={isPopperOpen} anchorEl={popperElement} className={classes.nodePopupContainer} transition>
             {({ TransitionProps }) => (
               <Fade {...TransitionProps}>
                 <div className={classes.nodePopup}>
