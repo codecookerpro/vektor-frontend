@@ -87,7 +87,7 @@ const EditMetaSystem = () => {
             <GanttChart deliverables={metaSystem.mainSystem.deliverables} />
           </Grid>
           <Grid item xs={12}>
-            <DeliverableGraph editable={editable} mainSystem={metaSystem.mainSystem} />
+            <DeliverableGraph editable={editable} mainSystem={metaSystem.mainSystem} differentialWeight={metaSystem.differentialWeight} />
           </Grid>
           <Grid item xs={12}>
             <TrendChart title="Deliverable Trend Chart" projectId={metaSystem.project} systemId={metaSystem._id} />

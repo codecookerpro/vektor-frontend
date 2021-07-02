@@ -32,7 +32,7 @@ const CustomFlowEdge = ({ id, sourceX, sourceY, targetX, targetY, sourcePosition
     if (data.sourceNodeData) {
       const { status } = data.sourceNodeData;
 
-      if (status === 100) {
+      if (status < 100) {
         style.strokeDasharray = 5;
         style.stroke = COLORS.red;
         markerEndId = MARKER_ENDS.red;

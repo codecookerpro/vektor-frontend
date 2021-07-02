@@ -25,7 +25,15 @@ export const nodeToDeliverable = (nodeId, nodes, mainId) => {
     id,
     type,
     position,
-    data: { label, start, end, completion, status, plannedHours, workedHours },
+    data: {
+      label = undefined,
+      start = undefined,
+      end = undefined,
+      completion = undefined,
+      status = undefined,
+      plannedHours = undefined,
+      workedHours = undefined,
+    },
   } = node;
   const deliverable = {
     _id: id,
@@ -53,7 +61,7 @@ export const elementsToDeliverables = (elements, templateId) =>
 
 export const makeEdgeId = (srcId, srcHandle, tarId, tarHandle) => `reactflow__edge-${srcId}${srcHandle}-${tarId}${tarHandle}`;
 
-export const deliverablesToElements = (deliverables, editable = true) => {
+export const deliverablesToElements = (deliverables, editable = true, differentialWeight = 0) => {
   if (isEmpty(deliverables)) {
     return [];
   }
@@ -105,7 +113,7 @@ export const deliverablesToElements = (deliverables, editable = true) => {
       id: _id,
       type: ELEMENT_TYPES.node,
       position: position || makeNodePos(idx),
-      data: { label: name, start, end, completion, status, plannedHours, workedHours, editable, calculated },
+      data: { label: name, start, end, completion, status, plannedHours, workedHours, editable, calculated, differentialWeight },
       style: NODE_PROPS.style,
     };
 

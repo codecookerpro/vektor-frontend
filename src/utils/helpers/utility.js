@@ -39,3 +39,11 @@ export const exclude = (obj, keys = []) => {
   const excludedKeys = Object.keys(obj).filter((key) => !keys.includes(key));
   return restrict(obj, excludedKeys);
 };
+
+export const round = (num, prec) => {
+  if (!num) {
+    return 0;
+  }
+
+  return Math.round(num * Math.pow(10, prec)) / Math.pow(10, prec);
+};

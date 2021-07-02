@@ -8,7 +8,7 @@ import { GRAPH_PROPS, LAYOUT_DIRS, ELEMENT_TYPES, COLORS, MARKER_ENDS } from './
 import useGraphLogic from './hook';
 import useStyles from './styles';
 
-const WorkflowGraph = ({ editable, deliverables, onGraphEvent }) => {
+const WorkflowGraph = ({ editable, deliverables, onGraphEvent, differentialWeight }) => {
   const [connectInProgress, setConnectInProgress] = useState(false);
   const boardRef = useRef(null);
 
@@ -19,6 +19,7 @@ const WorkflowGraph = ({ editable, deliverables, onGraphEvent }) => {
     deliverables,
     onGraphEvent,
     boardRef,
+    differentialWeight,
   });
 
   const handleLoad = (instance) => {
