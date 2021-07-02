@@ -8,7 +8,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import { IDENTIFIERS, HANDLE_TYPES, NODE_DIALOGS } from 'parts/WorkflowGraph/constants';
 import { ColorButton } from 'components/UI/Buttons';
 import { useStyles } from './styles';
-import { COLORS } from './constants';
+import { COLORS } from 'parts/WorkflowGraph/constants';
 import { isEmpty } from 'utils/helpers/utility';
 
 const CustomFlowNodeFactory = (tClass, sClass) =>

@@ -78,3 +78,15 @@ export const GRAPH_EVENTS = keyMirror({
   edgeDelete: null,
   nodePosChange: null,
 });
+
+export const COLORS = {
+  green: 'green',
+  yellow: 'yellow',
+  red: 'red',
+};
+
+export const MARKER_ENDS = {
+  blue: 'react-flow__arrowclosed',
+  green: 'react-flow__markerend-green',
+  red: 'react-flow__markerend-red',
+};

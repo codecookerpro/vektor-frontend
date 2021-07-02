@@ -95,6 +95,7 @@ export const deliverablesToElements = (deliverables, editable = true) => {
         data: {
           ...e.data,
           editable,
+          sourceNodeData: deliverables.find((d) => d._id === e.source),
           calculated,
         },
       }));
