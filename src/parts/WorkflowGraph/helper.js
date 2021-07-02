@@ -60,7 +60,19 @@ export const deliverablesToElements = (deliverables, editable = true) => {
 
   let shouldMigrate = false;
   let elements = deliverables.reduce((acc, deliverable, idx) => {
-    let { chartData: { position, edges } = {}, _id, name, start, end, completion, status, plannedHours, workedHours, predecessors } = deliverable;
+    let {
+      chartData: { position, edges } = {},
+      _id,
+      name,
+      start,
+      end,
+      completion,
+      status,
+      plannedHours,
+      workedHours,
+      predecessors,
+      calculated,
+    } = deliverable;
     shouldMigrate = shouldMigrate || !position || !edges;
 
     if (shouldMigrate) {
@@ -83,6 +95,7 @@ export const deliverablesToElements = (deliverables, editable = true) => {
         data: {
           ...e.data,
           editable,
+          calculated,
         },
       }));
     }
@@ -91,7 +104,7 @@ export const deliverablesToElements = (deliverables, editable = true) => {
       id: _id,
       type: ELEMENT_TYPES.node,
       position: position || makeNodePos(idx),
-      data: { label: name, start, end, completion, status, plannedHours, workedHours, editable },
+      data: { label: name, start, end, completion, status, plannedHours, workedHours, editable, calculated },
       style: NODE_PROPS.style,
     };
 

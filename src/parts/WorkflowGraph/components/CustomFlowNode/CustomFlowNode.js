@@ -1,4 +1,4 @@
-import React, { memo, useState } from 'react';
+import React, { memo, useState, useEffect, useMemo } from 'react';
 import { Handle, Position } from 'react-flow-renderer';
 import Popper from '@material-ui/core/Popper';
 import Fade from '@material-ui/core/Fade';
@@ -8,14 +8,32 @@ import CloseIcon from '@material-ui/icons/Close';
 import { IDENTIFIERS, HANDLE_TYPES, NODE_DIALOGS } from 'parts/WorkflowGraph/constants';
 import { ColorButton } from 'components/UI/Buttons';
 import { useStyles } from './styles';
+import { COLORS } from './constants';
+import { isEmpty } from 'utils/helpers/utility';
 
 const CustomFlowNodeFactory = (tClass, sClass) =>
   memo(({ id, data }) => {
-    const classes = useStyles();
+    const classes = useStyles(data);
     const [popperElement, setPopperElement] = useState(null);
     const isPopperOpen = Boolean(popperElement);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [dialogProps, setDialogProps] = useState(null);
+    const isRealNode = useMemo(() => !isEmpty(data.calculated), [data]);
+
+    useEffect(() => {
+      if (isRealNode === false) {
+        return;
+      }
+
+      const nodeElment = document.querySelectorAll(`[data-id="${id}"]`)[0];
+      if (data.status >= 100) {
+        nodeElment.style.borderColor = COLORS.green;
+      } else if (data.status >= data.calculated.PV) {
+        nodeElment.style.borderColor = COLORS.yellow;
+      } else if (data.status < data.calculated.PV) {
+        nodeElment.style.borderColor = COLORS.red;
+      }
+    }, [id, data, isRealNode]);
 
     const handlePopUpToggle = (e) => {
       if (data.editable) {
@@ -104,7 +122,11 @@ const CustomFlowNodeFactory = (tClass, sClass) =>
           />
 
           <div className={classes.nodeContent}>
-            <p className={classes.name}>{data.label || <small>Double-click to edit</small>}</p>
+            {isRealNode ? (
+              <p className={classes.name}>{data.label || <small>Double-click to edit</small>}</p>
+            ) : (
+              <p className={classes.name}>{data.label || <small>Double-click to edit</small>}</p>
+            )}
           </div>
 
           <Popper open={isPopperOpen} anchorEl={popperElement} className={classes.nodePopupContainer} transition boxShadow={5}>
