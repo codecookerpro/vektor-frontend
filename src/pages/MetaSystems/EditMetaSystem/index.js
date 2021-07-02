@@ -72,7 +72,7 @@ const EditMetaSystem = () => {
   };
   const handleRowChange = (data) => {
     const mainId = metaSystem.mainSystem._id;
-    dispatch(updateDeliverable({ ...restrict(data, ['_id', 'plannedHours', 'workedHours', 'start', 'end']), mainId }));
+    dispatch(updateDeliverable({ ...restrict(data, ['_id', 'plannedHours', 'workedHours', 'start', 'end', 'completion', 'status']), mainId }));
   };
 
   return (

@@ -46,9 +46,8 @@ const AuditTrailLogDetail = () => {
   const { results = [] } = useSelector((state) => state.events);
   const users = useSelector((state) => state.users.results);
 
-  useEffect(() => {
-    dispatch(getEvents());
-  }, [dispatch]);
+  // eslint-disable-next-line
+  useEffect(() => dispatch(getEvents(null, { _id: id })), []);
 
   const event = useMemo(() => results.find((item) => item._id === id), [id, results]);
 
@@ -118,7 +117,7 @@ const AuditTrailLogDetail = () => {
                         {event.change.map(
                           (chg) =>
                             chg.pValue !== chg.nValue && (
-                              <TableRow>
+                              <TableRow key={chg._id}>
                                 <StyledTableCell>{chg.field}</StyledTableCell>
                                 <StyledTableCell>{changeToString(chg.pValue)}</StyledTableCell>
                                 <StyledTableCell>{changeToString(chg.nValue)}</StyledTableCell>

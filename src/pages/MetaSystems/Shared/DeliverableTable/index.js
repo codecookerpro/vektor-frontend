@@ -9,12 +9,23 @@ import moment from 'moment';
 import useFocusElement from 'utils/hooks/useFocusElement';
 
 const mainColumns = [
-  { id: 'dependency', label: 'Deliverable Dependancy', minWidth: 170 },
-  { id: 'predecessors', label: 'Predecessors', minWidth: 170 },
-  { id: 'plannedHours', label: 'Planned Hours', minWidth: 100 },
-  { id: 'workedHours', label: 'Worked Hours', minWidth: 100 },
-  { id: 'start', label: 'Start', minWidth: 100 },
-  { id: 'end', label: 'End', minWidth: 100 },
+  { id: 'dependency', label: 'Deliverable Dependancy', minWidth: 100 },
+  { id: 'predecessors', label: 'Predecessors', minWidth: 70 },
+  { id: 'plannedHours', label: 'Planned Hours', minWidth: 70 },
+  { id: 'workedHours', label: 'Worked Hours', minWidth: 70 },
+  { id: 'start', label: 'Start', minWidth: 120 },
+  { id: 'end', label: 'End', minWidth: 120 },
+  { id: 'completion', label: 'Completion', minWidth: 70 },
+  { id: 'status', label: 'status', minWidth: 70 },
+  { id: 'lapsed', label: 'lapsed', minWidth: 70 },
+  { id: 'differential', label: 'differential', minWidth: 70 },
+  { id: 'effort', label: 'effort', minWidth: 70 },
+  { id: 'EV', label: 'EV', minWidth: 70 },
+  { id: 'PV', label: 'PV', minWidth: 70 },
+  { id: 'weight', label: 'weight', minWidth: 70 },
+  { id: 'systemPV', label: 'System PV', minWidth: 70 },
+  { id: 'systemStatus', label: 'System Status', minWidth: 70 },
+  { id: 'systemEV', label: 'System EV', minWidth: 70 },
 ];
 
 const DeliverableTable = ({ deliverables = [], editable = false, onRowChange = noop }) => {
@@ -42,13 +53,13 @@ const DeliverableTable = ({ deliverables = [], editable = false, onRowChange = n
   const getFieldValue = (idx, name) => {
     const value = idx === editIndex ? editData[name] : deliverables[idx][name];
 
-    if (['start', 'end'].includes(name)) {
-      return moment(value).format('YYYY-MM-DD');
+    if (['start', 'end', 'completion'].includes(name)) {
+      return value ? moment(value).format('YYYY-MM-DD') : '';
     } else {
       return value;
     }
   };
-  const getPredecessors = (row) => row.predecessors.map((pre) => deliverables.find((d) => d._id === pre).name);
+  const getPredecessors = (row) => row.predecessors.map((pre) => deliverables.find((d) => d._id === pre).name).join(', ');
   const isDisabled = (idx) => idx !== editIndex && editIndex >= 0;
   const isReadOnly = (idx) => idx !== editIndex;
   const EditableRow = (row, idx) => (
@@ -110,12 +121,49 @@ const DeliverableTable = ({ deliverables = [], editable = false, onRowChange = n
         />
       </TableCell>
       <TableCell>
+        <TextField
+          id="completion"
+          name="completion"
+          type="date"
+          value={getFieldValue(idx, 'completion')}
+          onChange={handleFieldChange}
+          InputLabelProps={{
+            shrink: true,
+            readOnly: isReadOnly(idx),
+          }}
+          disabled={isDisabled(idx)}
+        />
+      </TableCell>
+      <TableCell>
+        <TextField
+          type="number"
+          name="status"
+          InputProps={{
+            readOnly: isReadOnly(idx),
+            inputProps: { min: '0', max: '100', step: '1' },
+          }}
+          onChange={handleFieldChange}
+          value={getFieldValue(idx, 'status')}
+          disabled={isDisabled(idx)}
+        />
+      </TableCell>
+      <TableCell>{row.calculated.lapsed}</TableCell>
+      <TableCell>{row.calculated.differential}</TableCell>
+      <TableCell>{row.calculated.effort}</TableCell>
+      <TableCell>{row.calculated.EV}%</TableCell>
+      <TableCell>{row.calculated.PV}%</TableCell>
+      <TableCell>{row.calculated.weight}</TableCell>
+      <TableCell>{row.calculated.systemPV}%</TableCell>
+      <TableCell>{row.calculated.systemStatus}%</TableCell>
+      <TableCell>{row.calculated.systemEV}%</TableCell>
+      <TableCell>
         <IconButton aria-label="edit" onClick={() => handleEditButton(idx)}>
           {idx === editIndex ? <CheckCircle /> : <Edit />}
         </IconButton>
       </TableCell>
     </TableRow>
   );
+
   const ReadOnlyRow = (row, idx) => (
     <TableRow key={row._id} id={row._id}>
       <TableCell>{getFieldValue(idx, 'name')}</TableCell>
@@ -124,12 +172,23 @@ const DeliverableTable = ({ deliverables = [], editable = false, onRowChange = n
       <TableCell>{getFieldValue(idx, 'workedHours')}</TableCell>
       <TableCell>{getFieldValue(idx, 'start')}</TableCell>
       <TableCell>{getFieldValue(idx, 'end')}</TableCell>
+      <TableCell>{getFieldValue(idx, 'completion')}</TableCell>
+      <TableCell>{getFieldValue(idx, 'status')}%</TableCell>
+      <TableCell>{row.calculated.lapsed}</TableCell>
+      <TableCell>{row.calculated.differential}</TableCell>
+      <TableCell>{row.calculated.effort}</TableCell>
+      <TableCell>{row.calculated.EV}%</TableCell>
+      <TableCell>{row.calculated.PV}%</TableCell>
+      <TableCell>{row.calculated.weight}</TableCell>
+      <TableCell>{row.calculated.systemPV}%</TableCell>
+      <TableCell>{row.calculated.systemStatus}%</TableCell>
+      <TableCell>{row.calculated.systemEV}%</TableCell>
     </TableRow>
   );
 
   return (
     <Card>
-      <CardHeader title="Deliverables Table" />
+      <CardHeader title="Deliverables" />
       <CardContent>
         <VektorSubTableContainer columns={columns}>
           {deliverables.map((row, idx) => (editable ? EditableRow(row, idx) : ReadOnlyRow(row, idx)))}

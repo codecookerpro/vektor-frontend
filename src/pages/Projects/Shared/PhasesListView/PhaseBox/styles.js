@@ -1,6 +1,9 @@
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(() => ({
+  container: {
+    height: '100%',
+  },
   card: {
     minWidth: 265,
     height: '100%',
