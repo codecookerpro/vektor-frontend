@@ -33,30 +33,8 @@ function RecentActionsCard({ actions }) {
     return user?.email || '';
   };
 
-  const detailHandler = (action) => () => {
-    let link = '';
-    switch (action.mName) {
-      case 'User':
-        link = LINKS.EDIT_USER.HREF;
-        break;
-      case 'Project':
-        link = LINKS.EDIT_PROJECT.HREF;
-        break;
-      case 'Organization':
-        link = LINKS.EDIT_ORGANIZATION.HREF;
-        break;
-      case 'System':
-        link = LINKS.EDIT_SYSTEM.HREF;
-        break;
-      case 'WorkflowTemplate':
-        link = LINKS.EDIT_WORKFLOW_TEMPLATE.HREF;
-        break;
-      default:
-        link = LINKS.EDIT_USER.HREF;
-        break;
-    }
-
-    history.push(link.replace(':id', action.mId));
+  const detailHandler = (action) => {
+    history.push(LINKS.AUDIT_TRAIL_LOG_DETAIL.HREF.replace(':id', action._id));
   };
 
   return (
@@ -75,7 +53,7 @@ function RecentActionsCard({ actions }) {
                 <ListItemIcon className={classes.itemIcon}>{getActionIcon(action.actionType)}</ListItemIcon>
                 <ListItemText primary={getUserName(action.user)} secondary={`${action.actionType} ${action.mName}`} />
                 <ListItemSecondaryAction>
-                  <ContainedButton onClick={detailHandler(action)}>View Detail</ContainedButton>
+                  <ContainedButton onClick={() => detailHandler(action)}>View Detail</ContainedButton>
                 </ListItemSecondaryAction>
               </ListItem>
             ))}
