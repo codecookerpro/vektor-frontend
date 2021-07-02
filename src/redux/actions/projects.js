@@ -1,12 +1,13 @@
 import TYPES from 'utils/constants/action-types';
 import * as projectAPI from 'services/api-project';
+import { isEmpty } from 'utils/helpers/utility';
 
 const getProjects =
   (params = {}, refresh = false) =>
   (dispatch, getState) => {
     const projects = getState().projects.results;
 
-    if (!refresh && projects.length) {
+    if (!refresh && params?.filter?._id && !isEmpty(projects.find((p) => p._id === params.filter._id))) {
       return;
     }
 

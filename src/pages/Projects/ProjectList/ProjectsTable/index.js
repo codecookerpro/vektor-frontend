@@ -23,13 +23,10 @@ const ProjectsTable = () => {
   const getOrganizationName = (_id) => organizations.find((item) => item._id === _id)?.name || '';
   useEffect(() => {
     dispatch(
-      getProjects(
-        {
-          filter: { organization: orgFilter || undefined },
-          ...pagination,
-        },
-        true
-      )
+      getProjects({
+        filter: { organization: orgFilter || undefined },
+        ...pagination,
+      })
     );
     // eslint-disable-next-line
   }, [orgFilter, pagination]);

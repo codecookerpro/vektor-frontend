@@ -1,11 +1,13 @@
 export const INITIAL_STATE = Object.freeze({
   results: [],
+  pagination: { count: 0 },
   templateClone: null,
 });
 
 export const fetchWTUpdater = (state, { payload }) => ({
   ...state,
-  results: payload,
+  results: payload.data,
+  pagination: payload.pagination,
 });
 
 export const createWTUpdater = (state, { payload }) => ({

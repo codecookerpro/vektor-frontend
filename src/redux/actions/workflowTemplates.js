@@ -3,26 +3,19 @@ import * as API from 'services/api-workflow-template';
 import { isEmpty } from 'utils/helpers/utility';
 
 export const getWorkflowTemplates =
-  (refresh = false) =>
-  async (dispatch, getState) => {
-    try {
-      const {
-        workflowTemplates: { results },
-      } = getState();
-      if (!refresh && !isEmpty(results)) {
-        return;
-      }
+  (params = {}, refresh = false) =>
+  (dispatch, getState) => {
+    const {
+      workflowTemplates: { results },
+    } = getState();
 
-      const params = {
-        skip: 0,
-        limit: 10000,
-      };
-      const { data = [] } = await API.getWorkflowTemplates(params);
-
-      dispatch({ type: TYPES.FETCH_WT, payload: data });
-    } catch (error) {
-      console.log('[getWorkflowTemplates] error => ', error);
+    if (!refresh && params?.filter?._id && !isEmpty(results.find((w) => w._id === params.filter._id))) {
+      return;
     }
+
+    API.getWorkflowTemplates(params)
+      .then((response) => dispatch({ type: TYPES.FETCH_WT, payload: response }))
+      .catch((error) => console.log('[getWorkflowTemplates] error => ', error));
   };
 
 export const addWorkflowTemplate = (params) => (dispatch) => {

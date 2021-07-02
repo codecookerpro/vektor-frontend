@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { PROJECT_MODES } from '../constants';
 import { PERMISSION_TYPES } from 'utils/constants';
 import { readMetaSystem, getSystemHistory } from 'redux/actions/metaSystem';
+import { getProjects } from 'redux/actions/projects';
 
 export const useEditProjectLogic = () => {
   const { id } = useParams();
@@ -25,9 +26,11 @@ export const useEditProjectLogic = () => {
   });
 
   useEffect(() => {
+    dispatch(getProjects({ filter: { _id: id } }));
     dispatch(readMetaSystem({ project: id }, true));
     dispatch(getSystemHistory(id, true));
-  }, [dispatch, id]);
+    // eslint-disable-next-line
+  }, []);
 
   const project = useMemo(() => projects.find((item) => item._id === id), [id, projects]);
   const getMode = useMemo(() => {
