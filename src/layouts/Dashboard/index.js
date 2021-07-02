@@ -50,7 +50,7 @@ const Paper = styled(MuiPaper)(spacing);
 const MainContent = styled(Paper)`
   flex: 1;
   background: ${(props) => props.theme.palette.background.default};
-
+  width: calc(100vw - 285px);
   @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
     flex: none;
   }
