@@ -24,7 +24,7 @@ const EditWorkflowTemplate = () => {
   const template = useMemo(() => templates.find((item) => item._id === id), [id, templates]);
 
   // eslint-disable-next-line
-  useEffect(() => dispatch(getWorkflowTemplates()), []);
+  useEffect(() => dispatch(getWorkflowTemplates({ filter: { _id: id } })), []);
 
   const historyHandler = () => {
     history.push(LINKS.WORKFLOW_TEMPLATE_HISTORY.HREF.replace(':id', id));

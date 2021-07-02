@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useMemo } from 'react';
+import React, { memo, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Card, CardHeader, CardContent, TableCell, TableRow } from '@material-ui/core';
@@ -19,21 +19,14 @@ const WorkflowTemplatesTable = () => {
   const dispatch = useDispatch();
 
   const templates = useSelector((state) => state.workflowTemplates.results);
+  const count = useSelector((state) => state.workflowTemplates.pagination.count);
   const organizations = useSelector((state) => state.organizations.results);
-  const [filterComponent, filter] = useFilter({ items: organizations, label: 'organization' });
-
-  const filteredTemplates = useMemo(() => {
-    if (filter) {
-      return templates.filter((t) => t.organization === filter);
-    } else {
-      return templates;
-    }
-  }, [filter, templates]);
-  const { page, setPage, rowsPerPage, setRowsPerPage, pageRecords } = usePagination(filteredTemplates);
+  const [orgFilterComp, orgFilter] = useFilter({ items: organizations, label: 'organization' });
+  const { page, setPage, rowsPerPage, setRowsPerPage, pagination } = usePagination();
   const { isAdmin } = useUserPermission();
 
   // eslint-disable-next-line
-  useEffect(() => dispatch(getWorkflowTemplates(true)), []);
+  useEffect(() => dispatch(getWorkflowTemplates({ ...pagination, filter: { organization: orgFilter || undefined } })), [pagination, orgFilter]);
 
   const getOrganizationName = (_id) => {
     const organization = organizations.find((item) => item._id === _id);
@@ -42,17 +35,17 @@ const WorkflowTemplatesTable = () => {
 
   return (
     <Card>
-      <CardHeader title={`${filteredTemplates.length} templates`} action={isAdmin && filterComponent} />
+      <CardHeader title={`${count} templates`} action={isAdmin && orgFilterComp} />
       <CardContent>
         <VektorTableContainer
           columns={columns}
-          rowCounts={templates.length}
+          rowCounts={count}
           page={page}
           setPage={setPage}
           rowsPerPage={rowsPerPage}
           setRowsPerPage={setRowsPerPage}
         >
-          {pageRecords.map((row) => (
+          {templates.map((row) => (
             <TableRow key={row._id}>
               <TableCell component="th" scope="row">
                 <LinkButton to={LINKS.EDIT_WORKFLOW_TEMPLATE.HREF.replace(':id', row._id)}>{row.name}</LinkButton>
