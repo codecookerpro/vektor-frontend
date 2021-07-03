@@ -50,7 +50,7 @@ function TransferRightList({ items, selectedItems, removeAll, selectItem }) {
               [classes.selected]: selectedItems.findIndex((value) => item._id === value.id) !== -1,
             })}
           >
-            <ListItemText id={`transfer-list-item-${item._id}-label`} primary={item.name} />
+            <ListItemText id={`transfer-list-item-${item._id}-label`} primary={item.label} />
           </ListItem>
         ))}
       </List>

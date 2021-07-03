@@ -9,7 +9,7 @@ const usersReducer = (state = INITIAL_STATE, action) => {
     case TYPES.FETCH_USERS:
       return {
         ...state,
-        results: action.payload,
+        results: action.payload.map((u) => ({ ...u, label: `${u.name} (${u.email})` })),
       };
     default:
       return state;

@@ -46,7 +46,7 @@ function TransferLeftList({ items, selectedItems, chooseAll, selectItem }) {
       <VektorSearchInput placeholder="Filter" className={classes.filter} value={filter} onChange={(e) => setFilter(e.target.value)} />
       <List dense component="div" role="list" className={classes.list}>
         {items
-          .filter((item) => item.name.toLowerCase().includes(filter.toLowerCase()))
+          .filter((item) => item.label.toLowerCase().includes(filter.toLowerCase()))
           .map((item) => (
             <ListItem
               button
@@ -57,7 +57,7 @@ function TransferLeftList({ items, selectedItems, chooseAll, selectItem }) {
                 [classes.selected]: selectedItems.findIndex((value) => item._id === value.id) !== -1,
               })}
             >
-              <ListItemText id={`transfer-list-item-${item._id}-label`} primary={item.name} />
+              <ListItemText id={`transfer-list-item-${item._id}-label`} primary={item.label} />
             </ListItem>
           ))}
       </List>
