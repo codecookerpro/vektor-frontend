@@ -23,7 +23,7 @@ const AuditTrailLogsTable = () => {
   const { isAdmin } = useUserPermission();
 
   const [orgFilterComponent, orgFilter] = useFilter({ items: organizations, label: 'organization' });
-  const [userFilterComponent, userFilter] = useFilter({ items: users, label: 'user' });
+  const [userFilterComponent, userFilter] = useFilter({ items: users, label: 'user', keys: { value: '_id', label: 'label' } });
   const [actionFilterComponent, actionFilter] = useFilter({ items: ACTIONS, label: 'action', keys: { value: 'value', label: 'label' } });
   const [entityFilterComponent, entityFilter] = useFilter({ items: ENTITY_NAMES, label: 'entity name', keys: { value: 'value', label: 'label' } });
 

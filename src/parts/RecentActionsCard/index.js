@@ -30,7 +30,7 @@ function RecentActionsCard({ actions }) {
 
   const getUserName = (_id) => {
     const user = users.find((item) => item._id === _id);
-    return user?.email || '';
+    return user?.label || '';
   };
 
   const detailHandler = (action) => {
