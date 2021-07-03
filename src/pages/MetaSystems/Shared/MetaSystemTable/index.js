@@ -1,5 +1,5 @@
 import React, { memo } from 'react';
-import { Card, CardHeader, CardContent, TableCell, TableRow, Typography } from '@material-ui/core';
+import { Card, CardHeader, CardContent, TableCell, TableRow } from '@material-ui/core';
 import { Plus } from 'react-feather';
 import ContainedButton from 'components/UI/Buttons/ContainedButton';
 
@@ -31,9 +31,6 @@ const MetaSystemTable = ({ projectId = 0, records = [] }) => {
         }
       />
       <CardContent>
-        <Typography variant="h5" color="textPrimary" gutterBottom>
-          Systems
-        </Typography>
         <VektorSubTableContainer columns={columns}>
           {records.map((row) => (
             <TableRow key={row._id} id={row._id}>
