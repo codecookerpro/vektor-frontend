@@ -1,25 +1,18 @@
 import { makeStyles } from '@material-ui/core/styles';
 import { GRAPH_PROPS } from 'parts/WorkflowGraph/constants';
 
-export const useStyles = makeStyles(() => ({
+export const useStyles = makeStyles((theme) => ({
   nodeContent: {
-    width: 'calc(100% - 24px)',
-    height: 'calc(100% - 14px)',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    position: 'absolute',
-    top: '7px',
-    left: '12px',
-    textAlign: 'center',
+    padding: '0px 6px 0px 6px',
   },
   name: {
     width: '100%',
-    margin: '0',
+    paddingTop: '23px',
     overflowX: 'hidden',
     overflowY: 'auto',
     textOverflow: 'ellipsis',
-    maxHeight: '100%',
+    height: '65px',
+    textAlign: 'center',
   },
   nodePopupContainer: {
     zIndex: GRAPH_PROPS.zIndex + 1,
@@ -41,5 +34,19 @@ export const useStyles = makeStyles(() => ({
     position: 'relative',
     left: '100%',
     cursor: 'pointer',
+  },
+  chip: {
+    background: (props) => props.diffColor,
+    height: 'unset',
+    borderRadius: 20,
+    color: theme.custom.palette.white,
+  },
+  chipContainer: {
+    top: 45,
+    left: 0,
+    display: 'flex',
+    position: 'absolute',
+    justifyContent: 'center',
+    width: '100%',
   },
 }));

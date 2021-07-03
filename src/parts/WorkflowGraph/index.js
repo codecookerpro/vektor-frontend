@@ -4,11 +4,11 @@ import { Plus } from 'react-feather';
 import ReactFlow, { MiniMap, Background, Controls } from 'react-flow-renderer';
 
 import { CustomFlowEdge, CustomFlowNodeFactory } from './components';
-import { GRAPH_PROPS, LAYOUT_DIRS, ELEMENT_TYPES } from './constants';
+import { GRAPH_PROPS, LAYOUT_DIRS, ELEMENT_TYPES, COLORS, MARKER_ENDS } from './constants';
 import useGraphLogic from './hook';
 import useStyles from './styles';
 
-const WorkflowGraph = ({ editable, deliverables, onGraphEvent }) => {
+const WorkflowGraph = ({ editable, deliverables, onGraphEvent, differentialWeight }) => {
   const [connectInProgress, setConnectInProgress] = useState(false);
   const boardRef = useRef(null);
 
@@ -19,7 +19,29 @@ const WorkflowGraph = ({ editable, deliverables, onGraphEvent }) => {
     deliverables,
     onGraphEvent,
     boardRef,
+    differentialWeight,
   });
+
+  const handleLoad = (instance) => {
+    const marker = document.getElementById('react-flow__arrowclosed');
+    marker.setAttribute('markerWidth', '30');
+    marker.setAttribute('markerHeight', '30');
+
+    const markerGreen = marker.cloneNode(true);
+    markerGreen.setAttribute('id', MARKER_ENDS.green);
+    markerGreen.firstChild.setAttribute('stroke', COLORS.green);
+    markerGreen.firstChild.setAttribute('fill', COLORS.green);
+
+    const markerRed = marker.cloneNode(true);
+    markerRed.setAttribute('id', MARKER_ENDS.red);
+    markerRed.firstChild.setAttribute('stroke', COLORS.red);
+    markerRed.firstChild.setAttribute('fill', COLORS.red);
+
+    marker.parentNode.appendChild(markerGreen);
+    marker.parentNode.appendChild(markerRed);
+
+    instance.fitView();
+  };
 
   return (
     <Box className={classes.graphContainer}>
@@ -31,6 +53,7 @@ const WorkflowGraph = ({ editable, deliverables, onGraphEvent }) => {
           onConnectStart={() => setConnectInProgress(true)}
           onConnectStop={() => setConnectInProgress(false)}
           onNodeDragStop={handleNodeDragStop}
+          onLoad={handleLoad}
           deleteKeyCode={46}
           nodeTypes={{ [ELEMENT_TYPES.node]: CustomFlowNodeFactory(classes.tClass, classes.sClass) }}
           edgeTypes={{ [ELEMENT_TYPES.edge]: CustomFlowEdge }}

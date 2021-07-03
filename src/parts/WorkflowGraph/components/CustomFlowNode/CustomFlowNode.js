@@ -1,21 +1,58 @@
-import React, { memo, useState } from 'react';
+import React, { memo, useState, useEffect, useMemo } from 'react';
 import { Handle, Position } from 'react-flow-renderer';
-import Popper from '@material-ui/core/Popper';
-import Fade from '@material-ui/core/Fade';
-import { Button } from '@material-ui/core';
+import { Popper, Fade, Typography, Box, Grid, Button, Chip } from '@material-ui/core';
 import { NodeDialog } from './components';
 import CloseIcon from '@material-ui/icons/Close';
 import { IDENTIFIERS, HANDLE_TYPES, NODE_DIALOGS } from 'parts/WorkflowGraph/constants';
 import { ColorButton } from 'components/UI/Buttons';
 import { useStyles } from './styles';
+import { COLORS } from 'parts/WorkflowGraph/constants';
+import { isEmpty, round } from 'utils/helpers/utility';
+import moment from 'moment';
 
 const CustomFlowNodeFactory = (tClass, sClass) =>
   memo(({ id, data }) => {
-    const classes = useStyles();
     const [popperElement, setPopperElement] = useState(null);
     const isPopperOpen = Boolean(popperElement);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [dialogProps, setDialogProps] = useState(null);
+    const isRealNode = useMemo(() => !isEmpty(data.calculated), [data]);
+    const { diffColor, differential } = useMemo(() => {
+      if (!isRealNode) {
+        return {};
+      }
+
+      const diffThreshold = data.differentialWeight * (moment(data.end) - moment(data.start));
+      const differential = data.calculated.differential;
+      let diffColor = null;
+
+      if (differential <= 0) {
+        diffColor = COLORS.green;
+      } else if (differential <= diffThreshold) {
+        diffColor = COLORS.yellow;
+      } else {
+        diffColor = COLORS.red;
+      }
+
+      return { diffColor, differential };
+    }, [data, isRealNode]);
+
+    const classes = useStyles({ diffColor });
+
+    useEffect(() => {
+      if (isRealNode === false) {
+        return;
+      }
+
+      const nodeElment = document.querySelectorAll(`[data-id="${id}"]`)[0];
+      if (data.status >= 100) {
+        nodeElment.style.borderColor = COLORS.green;
+      } else if (data.status >= data.calculated.PV) {
+        nodeElment.style.borderColor = COLORS.yellow;
+      } else if (data.status < data.calculated.PV) {
+        nodeElment.style.borderColor = COLORS.red;
+      }
+    }, [id, data, isRealNode]);
 
     const handlePopUpToggle = (e) => {
       if (data.editable) {
@@ -104,10 +141,37 @@ const CustomFlowNodeFactory = (tClass, sClass) =>
           />
 
           <div className={classes.nodeContent}>
-            <p className={classes.name}>{data.label || <small>Double-click to edit</small>}</p>
+            {isRealNode ? (
+              <Grid container justify="space-between">
+                <Grid item xs={12}>
+                  <Typography align="center" variant="subtitle2" gutterBottom>
+                    {data.label}
+                  </Typography>
+                </Grid>
+                <Grid item>
+                  <Box align="center">
+                    EV
+                    <br />
+                    {round(data.calculated.EV, 1)}%
+                  </Box>
+                </Grid>
+                <Grid item>
+                  <Box align="center">
+                    PV
+                    <br />
+                    {round(data.calculated.PV, 1)}%
+                  </Box>
+                </Grid>
+                <div className={classes.chipContainer}>
+                  <Chip label={`${differential > 0 ? '+' : ''}${differential}`} className={classes.chip} />
+                </div>
+              </Grid>
+            ) : (
+              <div className={classes.name}>{data.label || <small>Double-click to edit</small>}</div>
+            )}
           </div>
 
-          <Popper open={isPopperOpen} anchorEl={popperElement} className={classes.nodePopupContainer} transition boxShadow={5}>
+          <Popper open={isPopperOpen} anchorEl={popperElement} className={classes.nodePopupContainer} transition>
             {({ TransitionProps }) => (
               <Fade {...TransitionProps}>
                 <div className={classes.nodePopup}>

@@ -42,6 +42,13 @@ const useStyles = makeStyles((theme) => ({
       width: '9px',
       borderRadius: '50%',
     },
+    '& .react-flow__node-input_node': {
+      border: '1.5px solid #4d84c0',
+      borderRadius: '10px',
+      background: '#fff',
+      width: '149px',
+      height: '70px',
+    },
   },
 }));
 

@@ -31,9 +31,9 @@ export const nodeToDeliverable = (nodeId, nodes, mainId) => {
     _id: id,
     mainId,
     name: label,
-    start,
-    end,
-    completion,
+    start: start || undefined,
+    end: end || undefined,
+    completion: completion || undefined,
     status,
     plannedHours,
     workedHours,
@@ -53,14 +53,26 @@ export const elementsToDeliverables = (elements, templateId) =>
 
 export const makeEdgeId = (srcId, srcHandle, tarId, tarHandle) => `reactflow__edge-${srcId}${srcHandle}-${tarId}${tarHandle}`;
 
-export const deliverablesToElements = (deliverables, editable = true) => {
+export const deliverablesToElements = (deliverables, editable = true, differentialWeight = 0) => {
   if (isEmpty(deliverables)) {
     return [];
   }
 
   let shouldMigrate = false;
   let elements = deliverables.reduce((acc, deliverable, idx) => {
-    let { chartData: { position, edges } = {}, _id, name, start, end, completion, status, plannedHours, workedHours, predecessors } = deliverable;
+    let {
+      chartData: { position, edges } = {},
+      _id,
+      name,
+      start,
+      end,
+      completion,
+      status,
+      plannedHours,
+      workedHours,
+      predecessors,
+      calculated,
+    } = deliverable;
     shouldMigrate = shouldMigrate || !position || !edges;
 
     if (shouldMigrate) {
@@ -83,6 +95,8 @@ export const deliverablesToElements = (deliverables, editable = true) => {
         data: {
           ...e.data,
           editable,
+          sourceNodeData: deliverables.find((d) => d._id === e.source),
+          calculated,
         },
       }));
     }
@@ -91,7 +105,7 @@ export const deliverablesToElements = (deliverables, editable = true) => {
       id: _id,
       type: ELEMENT_TYPES.node,
       position: position || makeNodePos(idx),
-      data: { label: name, start, end, completion, status, plannedHours, workedHours, editable },
+      data: { label: name, start, end, completion, status, plannedHours, workedHours, editable, calculated, differentialWeight },
       style: NODE_PROPS.style,
     };
 

@@ -1,9 +1,11 @@
-import React, { memo, useEffect, useState } from 'react';
-import { getMarkerEnd } from 'react-flow-renderer';
+import React, { memo, useState, useMemo } from 'react';
+import { getMarkerEnd, getEdgeCenter } from 'react-flow-renderer';
+import CloseIcon from '@material-ui/icons/Close';
 import { getSmoothStepPathPatched } from './helper';
 import { EdgeDialog } from './components';
 import { makeStyles } from '@material-ui/core/styles';
 import { GRAPH_PROPS } from 'parts/WorkflowGraph/constants';
+import { COLORS, MARKER_ENDS } from 'parts/WorkflowGraph/constants';
 
 const useStyles = makeStyles(() => ({
   hoverPath: {
@@ -18,9 +20,32 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const CustomFlowEdge = ({ id, sourceX, sourceY, targetX, targetY, sourcePosition, targetPosition, style = {}, data, arrowHeadType, markerEndId }) => {
+const CustomFlowEdge = ({ id, sourceX, sourceY, targetX, targetY, sourcePosition, targetPosition, style: baseStyle = {}, data, arrowHeadType }) => {
   const [toggled, setToggled] = useState(false);
   const classes = useStyles();
+
+  const { markerEndId, style, color } = useMemo(() => {
+    let markerEndId = MARKER_ENDS.blue;
+    const style = { ...baseStyle };
+    let color = COLORS.blue;
+
+    if (data.sourceNodeData) {
+      const { status } = data.sourceNodeData;
+
+      if (status < 100) {
+        style.strokeDasharray = 5;
+        style.stroke = COLORS.red;
+        markerEndId = MARKER_ENDS.red;
+        color = COLORS.red;
+      } else if (status === 100) {
+        style.stroke = COLORS.green;
+        markerEndId = MARKER_ENDS.green;
+        color = COLORS.green;
+      }
+    }
+
+    return { style, markerEndId, color };
+  }, [data, baseStyle]);
 
   const toggleDialog = () => {
     if (data.editable) {
@@ -35,17 +60,28 @@ const CustomFlowEdge = ({ id, sourceX, sourceY, targetX, targetY, sourcePosition
 
   const edgePath = getSmoothStepPathPatched({ sourceX, sourceY, targetX, targetY, targetPosition, sourcePosition, borderRadius: 8 });
   const markerEnd = getMarkerEnd(arrowHeadType, markerEndId);
-
-  useEffect(() => {
-    const marker = document.getElementById('react-flow__arrowclosed');
-    marker.markerWidth.baseVal.value = 30;
-    marker.markerHeight.baseVal.value = 30;
+  const [edgeCenterX, edgeCenterY] = getEdgeCenter({
+    sourceX,
+    sourceY,
+    targetX,
+    targetY,
   });
+  const foreignObjectSize = 24;
 
   return (
     <>
       <path id={id} style={style} className="react-flow__edge-path" d={edgePath} markerEnd={markerEnd} />
-      <path className={classes.hoverPath} d={edgePath} onDoubleClick={toggleDialog} />
+      {data.editable && <path className={classes.hoverPath} d={edgePath} onDoubleClick={toggleDialog} />}
+      {color === COLORS.red && (
+        <foreignObject
+          width={foreignObjectSize}
+          height={foreignObjectSize}
+          x={edgeCenterX - foreignObjectSize / 2}
+          y={edgeCenterY - foreignObjectSize / 2}
+        >
+          <CloseIcon style={{ color: COLORS.red }} />
+        </foreignObject>
+      )}
       <EdgeDialog setToggled={setToggled} toggled={toggled} onDelete={deleteEdge} />
     </>
   );

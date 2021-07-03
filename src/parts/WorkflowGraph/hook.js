@@ -5,7 +5,7 @@ import { isEmpty } from 'utils/helpers/utility';
 import { GRAPH_EVENTS, GRAPH_PROPS } from './constants';
 import { makeNode, makeEdge, getLayoutedElements, deliverablesToElements, validateElements, checkConnectionValid } from './helper';
 
-const useGraphLogic = ({ editable = false, deliverables = [], onGraphEvent = noop, boardRef }) => {
+const useGraphLogic = ({ editable = false, deliverables = [], onGraphEvent = noop, boardRef, differentialWeight = 0 }) => {
   const [elements, setElements] = useState([]);
   const [dialogToggled, setDialogToggled] = useState(false);
   const bodyStyleRef = useRef(null);
@@ -14,7 +14,7 @@ const useGraphLogic = ({ editable = false, deliverables = [], onGraphEvent = noo
 
   useEffect(() => {
     if (deliverables.length) {
-      const elements = deliverablesToElements(deliverables, editable);
+      const elements = deliverablesToElements(deliverables, editable, differentialWeight);
       const shouldMigrate = deliverables.reduce((acc, d) => acc || isEmpty(d.chartData), false);
       setElements(elements);
 
