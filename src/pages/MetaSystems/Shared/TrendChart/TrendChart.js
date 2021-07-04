@@ -1,22 +1,26 @@
-import React, { memo, useState } from 'react';
+import React, { memo, useEffect, useState, useMemo } from 'react';
 import { Card, CardHeader, CardContent } from '@material-ui/core';
 import Chart from 'react-google-charts';
 
 import { useTrendChartData } from './helpers';
 import { CHART_OPTIONS } from './constants';
 import { ColorButton } from 'components/UI/Buttons';
+import { isEmpty } from 'utils/helpers/utility';
 
 const TrendChart = ({ title, projectId, systemId }) => {
   const [toggled, toggleChart] = useState(false);
   const { chartData } = useTrendChartData(projectId, systemId);
+  const disabled = useMemo(() => isEmpty(chartData), [chartData]);
+
+  useEffect(() => disabled && toggleChart(false), [disabled]);
 
   return (
     <Card>
       <CardHeader
         title={title}
         action={
-          <ColorButton colour="lightGreen" level={300} onClick={() => toggleChart(!toggled)}>
-            {toggled ? 'Hide' : 'Show'}
+          <ColorButton colour="lightGreen" onClick={() => toggleChart(!toggled)} disabled={disabled}>
+            {disabled ? 'No data' : toggled ? 'Hide' : 'Show'}
           </ColorButton>
         }
       />

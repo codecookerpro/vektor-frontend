@@ -1,4 +1,4 @@
-import React, { memo, useState } from 'react';
+import React, { memo, useState, useEffect, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 import { Card, CardHeader, CardContent } from '@material-ui/core';
 import WorkflowGraph from 'parts/WorkflowGraph';
@@ -7,11 +7,12 @@ import { ColorButton } from 'components/UI/Buttons';
 import { GRAPH_EVENTS } from 'parts/WorkflowGraph/constants';
 import { nodeToDeliverable, elementsToDeliverables } from 'parts/WorkflowGraph/helper';
 import { createDeliverable, updateDeliverable, deleteDeliverable, updateDeliverablePositions } from 'redux/actions/metaSystem';
-import { restrict } from 'utils/helpers/utility';
+import { isEmpty, restrict } from 'utils/helpers/utility';
 
 const DeliverableGraph = ({ editable, mainSystem }) => {
   const dispatch = useDispatch();
   const [toggled, toggleGraph] = useState(true);
+  const disabled = useMemo(() => !editable && isEmpty(mainSystem?.deliverables), [editable, mainSystem]);
 
   const handleGraphEvent = (event, elements, nodeId) => {
     const mainId = mainSystem._id;
@@ -39,13 +40,21 @@ const DeliverableGraph = ({ editable, mainSystem }) => {
     }
   };
 
+  useEffect(() => {
+    if (disabled) {
+      toggleGraph(false);
+    } else {
+      toggleGraph(true);
+    }
+  }, [disabled]);
+
   return (
     <Card>
       <CardHeader
         title="Workflow Chart"
         action={
-          <ColorButton colour="lightGreen" onClick={() => toggleGraph(!toggled)}>
-            {toggled ? 'Hide' : 'Show'}
+          <ColorButton colour="lightGreen" onClick={() => toggleGraph(!toggled)} disabled={disabled}>
+            {disabled ? 'No data' : toggled ? 'Hide' : 'Show'}
           </ColorButton>
         }
       />
