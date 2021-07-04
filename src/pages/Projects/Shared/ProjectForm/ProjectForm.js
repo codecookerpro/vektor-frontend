@@ -125,7 +125,7 @@ const ProjectForm = ({ project = PROJECT_DEFAULT_VALUES, mode }) => {
             <Grid item xs={12} sm={6} md={isOrganizationVisible ? 3 : false}>
               <Controller
                 id="projectManager"
-                as={<FilterSelect keys={{ label: 'name', value: '_id' }} />}
+                as={<FilterSelect keys={{ label: 'label', value: '_id' }} />}
                 fullWidth
                 name="projectManager"
                 label="PM"
@@ -141,7 +141,7 @@ const ProjectForm = ({ project = PROJECT_DEFAULT_VALUES, mode }) => {
               {isSupervisorVisible && (
                 <Controller
                   id="supervisor"
-                  as={<FilterSelect keys={{ label: 'name', value: '_id' }} />}
+                  as={<FilterSelect keys={{ label: 'label', value: '_id' }} />}
                   fullWidth
                   name="supervisor"
                   label="Supervisor"

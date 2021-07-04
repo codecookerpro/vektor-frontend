@@ -17,8 +17,8 @@ const useProjectFrom = (project, mode) => {
   const [currentOrganization, setCurrentOrganization] = useState('');
   const [filteresUsers, setFilteredUsers] = useState([]);
   const [assignedUserList, setAssignedUserList] = useState([]);
-  const [PMs, setPMs] = useState([{ _id: project.projectManager, name: '---' }]);
-  const [supervisors, setSupervisors] = useState([{ _id: project.supervisor, name: '---' }]);
+  const [PMs, setPMs] = useState([{ _id: project.projectManager, label: '---' }]);
+  const [supervisors, setSupervisors] = useState([{ _id: project.supervisor, label: '---' }]);
 
   const dispatch = useDispatch();
   const history = useHistory();
@@ -41,8 +41,8 @@ const useProjectFrom = (project, mode) => {
       const filteredPMs = organizationUsers.filter((u) => u.permissions === PERMISSION_TYPES.projectManager);
       const filteredSupervisors = organizationUsers.filter((u) => u.permissions === PERMISSION_TYPES.supervisor);
 
-      const pms = filteredPMs.length > 0 ? [...filteredPMs, { _id: '', name: '---' }] : [{ _id: projectManager, name: '---' }];
-      const supervisors = filteredSupervisors.length > 0 ? [...filteredSupervisors, { _id: '', name: '---' }] : [{ _id: supervisor, name: '---' }];
+      const pms = filteredPMs.length > 0 ? [...filteredPMs, { _id: '', label: '---' }] : [{ _id: projectManager, label: '---' }];
+      const supervisors = filteredSupervisors.length > 0 ? [...filteredSupervisors, { _id: '', label: '---' }] : [{ _id: supervisor, label: '---' }];
 
       return { organizationUsers, pms, supervisors };
     },
