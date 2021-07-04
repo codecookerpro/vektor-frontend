@@ -15,7 +15,7 @@ const useGraphLogic = ({ editable = false, deliverables = [], onGraphEvent = noo
   useEffect(() => {
     if (deliverables.length) {
       const elements = deliverablesToElements(deliverables, editable, differentialWeight);
-      const shouldMigrate = deliverables.reduce((acc, d) => acc || isEmpty(d.chartData), false);
+      const shouldMigrate = deliverables.reduce((acc, d) => acc || isEmpty(d?.chartData?.position), false);
       setElements(elements);
 
       setTimeout(() => {
