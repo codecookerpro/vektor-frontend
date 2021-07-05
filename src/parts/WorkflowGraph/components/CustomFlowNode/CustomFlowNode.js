@@ -1,6 +1,6 @@
 import React, { memo, useState, useEffect, useMemo } from 'react';
 import { Handle, Position } from 'react-flow-renderer';
-import { Popper, Fade, Typography, Box, Grid, Button, Chip } from '@material-ui/core';
+import { Popper, Fade, Box, Button, Chip } from '@material-ui/core';
 import { NodeDialog } from './components';
 import CloseIcon from '@material-ui/icons/Close';
 import { IDENTIFIERS, HANDLE_TYPES, NODE_DIALOGS } from 'parts/WorkflowGraph/constants';
@@ -142,30 +142,22 @@ const CustomFlowNodeFactory = (tClass, sClass) =>
 
           <div className={classes.nodeContent}>
             {isRealNode ? (
-              <Grid container justify="space-between">
-                <Grid item xs={12}>
-                  <Typography align="center" variant="subtitle2" gutterBottom>
-                    {data.label}
-                  </Typography>
-                </Grid>
-                <Grid item>
-                  <Box align="center">
-                    EV
-                    <br />
-                    {round(data.calculated.EV, 1)}%
-                  </Box>
-                </Grid>
-                <Grid item>
-                  <Box align="center">
-                    PV
-                    <br />
-                    {round(data.calculated.PV, 1)}%
-                  </Box>
-                </Grid>
+              <Box>
+                <div className={classes.labelContainer}>
+                  <div className={classes.label}>{data.label}</div>
+                </div>
                 <div className={classes.chipContainer}>
                   <Chip label={`${differential > 0 ? '+' : ''}${differential}`} className={classes.chip} />
                 </div>
-              </Grid>
+                <div className={classes.statusContainer}>
+                  <Box align="center">
+                    EV <br /> {round(data.calculated.EV, 1)}%
+                  </Box>
+                  <Box align="center">
+                    PV <br /> {round(data.calculated.PV, 1)}%
+                  </Box>
+                </div>
+              </Box>
             ) : (
               <div className={classes.name}>{data.label || <small>Double-click to edit</small>}</div>
             )}

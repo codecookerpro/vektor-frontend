@@ -1,3 +1,4 @@
+import { GOLDEN_RATIO } from 'utils/constants';
 import { keyMirror } from 'utils/helpers/utility';
 
 export const ELEMENT_TYPES = keyMirror({
@@ -12,8 +13,8 @@ export const GRAPH_PROPS = keyMirror({
 });
 
 export const NODE_PROPS = keyMirror({
-  width: 149,
-  height: 70,
+  width: 165,
+  height: Math.round(165 / GOLDEN_RATIO),
   label: 'Deliverable',
   marginX: 15,
   marginY: 15,

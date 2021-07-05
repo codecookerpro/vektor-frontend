@@ -1,5 +1,5 @@
 import { makeStyles } from '@material-ui/core/styles';
-import { GRAPH_PROPS } from './constants';
+import { GRAPH_PROPS, NODE_PROPS } from './constants';
 
 const useStyles = makeStyles((theme) => ({
   graphContent: {
@@ -46,8 +46,8 @@ const useStyles = makeStyles((theme) => ({
       border: '1.5px solid #4d84c0',
       borderRadius: '10px',
       background: '#fff',
-      width: '149px',
-      height: '70px',
+      width: NODE_PROPS.width,
+      height: NODE_PROPS.height,
     },
   },
 }));
