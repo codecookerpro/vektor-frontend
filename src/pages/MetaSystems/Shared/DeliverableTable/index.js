@@ -7,6 +7,7 @@ import VektorSubTableContainer from 'parts/Tables/VektorSubTableContainer';
 import { noop } from 'utils/constants';
 import moment from 'moment';
 import useFocusElement from 'utils/hooks/useFocusElement';
+import { round } from 'utils/helpers/utility';
 
 const mainColumns = [
   { id: 'dependency', label: 'Deliverable Dependancy', minWidth: 100 },
@@ -147,15 +148,15 @@ const DeliverableTable = ({ deliverables = [], editable = false, onRowChange = n
           disabled={isDisabled(idx)}
         />
       </TableCell>
-      <TableCell>{row.calculated.lapsed}</TableCell>
-      <TableCell>{row.calculated.differential}</TableCell>
-      <TableCell>{row.calculated.effort}</TableCell>
-      <TableCell>{row.calculated.EV}%</TableCell>
-      <TableCell>{row.calculated.PV}%</TableCell>
-      <TableCell>{row.calculated.weight}</TableCell>
-      <TableCell>{row.calculated.systemPV}%</TableCell>
-      <TableCell>{row.calculated.systemStatus}%</TableCell>
-      <TableCell>{row.calculated.systemEV}%</TableCell>
+      <TableCell>{round(row.calculated.lapsed, 2)}</TableCell>
+      <TableCell>{round(row.calculated.differential, 2)}</TableCell>
+      <TableCell>{round(row.calculated.effort, 2)}</TableCell>
+      <TableCell>{round(row.calculated.EV, 2)}%</TableCell>
+      <TableCell>{round(row.calculated.PV, 2)}%</TableCell>
+      <TableCell>{round(row.calculated.weight, 2)}</TableCell>
+      <TableCell>{round(row.calculated.systemPV, 2)}%</TableCell>
+      <TableCell>{round(row.calculated.systemStatus, 2)}%</TableCell>
+      <TableCell>{round(row.calculated.systemEV, 2)}%</TableCell>
       <TableCell>
         <IconButton aria-label="edit" onClick={() => handleEditButton(idx)}>
           {idx === editIndex ? <CheckCircle /> : <Edit />}
