@@ -1,4 +1,4 @@
-import React, { memo, useEffect } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Card, CardHeader, CardContent, TableCell, TableRow, Grid } from '@material-ui/core';
 
@@ -9,6 +9,7 @@ import setColumn from './setColumn';
 import { useFilter, usePagination, useUserPermission } from 'utils/hooks';
 import { getSOWs, setSelectedSOW } from 'redux/actions/sowAction';
 import { readMetaSystem } from 'redux/actions/metaSystem';
+import { SORT_DIRS } from 'utils/constants';
 
 const SowTable = () => {
   const dispatch = useDispatch();
@@ -23,16 +24,21 @@ const SowTable = () => {
   const { page, setPage, rowsPerPage, setRowsPerPage, pagination } = usePagination(sows);
   const [orgFilterComp, organizationFilter] = useFilter({ items: organizations, label: 'organization' });
   const [sysFilterComp, systemFilter] = useFilter({ items: systems, label: 'system' });
+  const [sortString, setSortString] = useState(null);
 
   useEffect(() => {
-    const filter = {
-      organization: organizationFilter || undefined,
-      metaSystem: systemFilter || undefined,
+    const params = {
+      filter: {
+        organization: organizationFilter || undefined,
+        metaSystem: systemFilter || undefined,
+      },
+      ...pagination,
+      sort: sortString || undefined,
     };
 
-    dispatch(getSOWs(filter, pagination));
+    dispatch(getSOWs(params));
     // eslint-disable-next-line
-  }, [page, rowsPerPage, organizationFilter, systemFilter]);
+  }, [page, rowsPerPage, organizationFilter, systemFilter, sortString]);
 
   // eslint-disable-next-line
   useEffect(() => dispatch(readMetaSystem()), []);
@@ -48,6 +54,10 @@ const SowTable = () => {
 
   const setSow = async (sow) => {
     await dispatch(setSelectedSOW(sow));
+  };
+
+  const handleSort = (col, dir) => {
+    setSortString(`${dir === SORT_DIRS.desc ? '-' : ''}${col}`);
   };
 
   return (
@@ -69,6 +79,7 @@ const SowTable = () => {
           setPage={setPage}
           rowsPerPage={rowsPerPage}
           setRowsPerPage={setRowsPerPage}
+          onSort={handleSort}
         >
           {sows.map((row) => (
             <TableRow key={row._id}>

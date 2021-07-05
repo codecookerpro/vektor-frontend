@@ -2,14 +2,9 @@ import * as sowAPI from 'services/api-sow';
 import TYPES from 'utils/constants/action-types';
 
 const getSOWs =
-  (filter = {}, pagination = {}) =>
+  (params = {}) =>
   async (dispatch, getState) => {
     try {
-      const params = {
-        skip: pagination.skip || 0,
-        limit: pagination.limit || 10,
-        filter,
-      };
       const response = await sowAPI.getSOWs(params);
       const { data = [] } = response;
       const {
