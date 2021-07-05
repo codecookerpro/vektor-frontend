@@ -31,13 +31,17 @@ const VektorTableHeader = ({ columns, onRequestSort, order, orderBy }) => {
             className={classes.label}
             sortDirection={orderBy === column.id ? order : false}
           >
-            <TableSortLabel
-              active={orderBy === column.id}
-              direction={orderBy === column.id ? order : SORT_DIRS.asc}
-              onClick={createSortHandler(column.id)}
-            >
-              {column.label}
-            </TableSortLabel>
+            {column.sortable ? (
+              <TableSortLabel
+                active={orderBy === column.id}
+                direction={orderBy === column.id ? order : SORT_DIRS.asc}
+                onClick={createSortHandler(column.id)}
+              >
+                {column.label}
+              </TableSortLabel>
+            ) : (
+              column.label
+            )}
           </TableCell>
         ))}
       </TableRow>

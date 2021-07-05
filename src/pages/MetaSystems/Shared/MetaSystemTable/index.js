@@ -10,12 +10,12 @@ import { useHistory } from 'react-router-dom';
 import { useTableSort } from 'utils/hooks';
 
 const columns = [
-  { id: 'name', label: 'Name', minWidth: 170 },
-  { id: 'mainSystem.calculated.totalPlannedHours', label: 'Total Planned Hours', minWidth: 100 },
-  { id: 'mainSystem.calculated.PV', label: 'PV', minWidth: 100 },
-  { id: 'mainSystem.calculated.status', label: 'Status', minWidth: 100 },
-  { id: 'mainSystem.calculated.totalWorkedHours', label: 'Effort', minWidth: 100 },
-  { id: 'mainSystem.calculated.EV', label: 'EV', minWidth: 100 },
+  { id: 'name', label: 'Name', minWidth: 170, sortable: true },
+  { id: 'mainSystem.calculated.totalPlannedHours', label: 'Total Planned Hours', minWidth: 100, sortable: true },
+  { id: 'mainSystem.calculated.PV', label: 'PV', minWidth: 100, sortable: true },
+  { id: 'mainSystem.calculated.status', label: 'Status', minWidth: 100, sortable: true },
+  { id: 'mainSystem.calculated.totalWorkedHours', label: 'Effort', minWidth: 100, sortable: true },
+  { id: 'mainSystem.calculated.EV', label: 'EV', minWidth: 100, sortable: true },
 ];
 
 const MetaSystemTable = ({ projectId = 0, records = [] }) => {
