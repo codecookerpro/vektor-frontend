@@ -1,23 +1,26 @@
-import React, { memo, useState, useMemo } from 'react';
+import React, { memo, useState, useMemo, useEffect } from 'react';
 import { Card, CardHeader, CardContent } from '@material-ui/core';
 import GoogleChart from 'react-google-charts';
 import { ColorButton } from 'components/UI/Buttons';
 
 import { deliverablesToGanttData } from './helper';
 import { GANTT_HEADER, GANTT_OPTIONS } from './constants';
+import { isEmpty } from 'utils/helpers/utility';
 
 const GanttChart = ({ deliverables }) => {
   const [toggled, toggleChart] = useState(false);
   const chartData = useMemo(() => deliverablesToGanttData(deliverables), [deliverables]);
   const chartHeight = useMemo(() => `${deliverables.length * 45}px`, [deliverables]);
+  const disabled = useMemo(() => isEmpty(chartData), [chartData]);
+  useEffect(() => disabled && toggleChart(false), [disabled]);
 
   return (
     <Card>
       <CardHeader
         title="Gantt Chart"
         action={
-          <ColorButton colour="lightGreen" level={300} onClick={() => toggleChart(!toggled)}>
-            {toggled ? 'Hide' : 'Show'}
+          <ColorButton colour="lightGreen" onClick={() => toggleChart(!toggled)} disabled={disabled}>
+            {disabled ? 'No data' : toggled ? 'Hide' : 'Show'}
           </ColorButton>
         }
       />

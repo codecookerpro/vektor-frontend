@@ -149,8 +149,8 @@ const useGraphLogic = ({ editable = false, deliverables = [], onGraphEvent = noo
   };
 
   useEffect(() => {
-    if (boardRef.current) {
-      setTimeout(() => {
+    setTimeout(() => {
+      if (boardRef.current) {
         const fullscreenButton = boardRef.current.querySelectorAll('.react-flow__controls-fitview')[0];
         const interactiveButton = boardRef.current.querySelectorAll('.react-flow__controls-interactive')[0];
 
@@ -163,8 +163,8 @@ const useGraphLogic = ({ editable = false, deliverables = [], onGraphEvent = noo
 
         fullscreenButton.addEventListener('click', handleFullscreen);
         window.addEventListener('keydown', handleEscapeFromFS);
-      });
-    }
+      }
+    });
     // eslint-disable-next-line
   }, [boardRef]);
 
