@@ -7,8 +7,8 @@ const createDefaultSorter = (column, dir) => (a, b) => {
     return 1;
   }
 
-  const v1 = get(a, column.split('.'));
-  const v2 = get(b, column.split('.'));
+  const v1 = get(a, column.split('.')) || '#';
+  const v2 = get(b, column.split('.')) || '#';
 
   if (v1 > v2) {
     return dir === SORT_DIRS.asc ? 1 : -1;
@@ -31,7 +31,7 @@ const useTableSort = (rows, sorter = createDefaultSorter) => {
   // eslint-disable-next-line
   const sortedRows = useMemo(() => rows.sort(sorter(sortCol, sortDir)), [sortCol, sortDir, rows]);
 
-  return { sortedRows, handleSort };
+  return { sortedRows, handleSort, sortCol, sortDir };
 };
 
 export default useTableSort;
