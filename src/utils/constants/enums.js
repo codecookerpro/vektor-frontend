@@ -40,3 +40,9 @@ export const ENTITY_NAME_TYPES = {
   user: 'User',
   workflow: 'Workflow',
 };
+
+export const SORT_DIRS = keyMirror({
+  none: null,
+  asc: null,
+  desc: null,
+});

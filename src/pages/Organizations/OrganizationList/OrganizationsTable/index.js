@@ -6,14 +6,15 @@ import LinkButton from 'components/UI/Buttons/LinkButton';
 import VektorTableContainer from 'parts/Tables/VektorTableContainer';
 import LINKS from 'utils/constants/links';
 import { setSelectedDepartments, setSelectedOrganization } from 'redux/actions/organizations';
-import { usePagination } from 'utils/hooks';
+import { usePagination, useTableSort } from 'utils/hooks';
 
-const columns = [{ id: 'name', label: 'Name', minWidth: 130 }];
+const columns = [{ id: 'name', label: 'Name', minWidth: 130, sortable: true }];
 
 const OrganizationsTable = () => {
   const dispatch = useDispatch();
   const organizations = useSelector((state) => state.organizations.results);
-  const { page, setPage, rowsPerPage, setRowsPerPage, pageRecords } = usePagination(organizations);
+  const { sortedRows, handleSort } = useTableSort(organizations);
+  const { page, setPage, rowsPerPage, setRowsPerPage, pageRecords } = usePagination(sortedRows);
 
   const clickHandler = (row) => {
     dispatch(setSelectedOrganization(row));
@@ -33,6 +34,7 @@ const OrganizationsTable = () => {
           setPage={setPage}
           rowsPerPage={rowsPerPage}
           setRowsPerPage={setRowsPerPage}
+          onSort={handleSort}
         >
           {pageRecords.map((row) => (
             <TableRow key={row._id}>

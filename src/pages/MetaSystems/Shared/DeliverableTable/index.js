@@ -8,39 +8,43 @@ import { noop } from 'utils/constants';
 import moment from 'moment';
 import useFocusElement from 'utils/hooks/useFocusElement';
 import { round } from 'utils/helpers/utility';
+import { useTableSort } from 'utils/hooks';
 
 const mainColumns = [
-  { id: 'dependency', label: 'Deliverable Dependancy', minWidth: 100 },
-  { id: 'predecessors', label: 'Predecessors', minWidth: 70 },
-  { id: 'plannedHours', label: 'Planned Hours', minWidth: 70 },
-  { id: 'workedHours', label: 'Worked Hours', minWidth: 70 },
-  { id: 'start', label: 'Start', minWidth: 120 },
-  { id: 'end', label: 'End', minWidth: 120 },
-  { id: 'completion', label: 'Completion', minWidth: 70 },
-  { id: 'status', label: 'status', minWidth: 70 },
-  { id: 'lapsed', label: 'lapsed', minWidth: 70 },
-  { id: 'differential', label: 'differential', minWidth: 70 },
-  { id: 'effort', label: 'effort', minWidth: 70 },
-  { id: 'EV', label: 'EV', minWidth: 70 },
-  { id: 'PV', label: 'PV', minWidth: 70 },
-  { id: 'weight', label: 'weight', minWidth: 70 },
-  { id: 'systemPV', label: 'System PV', minWidth: 70 },
-  { id: 'systemStatus', label: 'System Status', minWidth: 70 },
-  { id: 'systemEV', label: 'System EV', minWidth: 70 },
+  { id: 'name', label: 'Deliverable Dependancy', minWidth: 100, sortable: true },
+  { id: 'predecessors', label: 'Predecessors', minWidth: 70, sortable: false },
+  { id: 'plannedHours', label: 'Planned Hours', minWidth: 70, sortable: true },
+  { id: 'workedHours', label: 'Worked Hours', minWidth: 70, sortable: true },
+  { id: 'start', label: 'Start', minWidth: 120, sortable: true },
+  { id: 'end', label: 'End', minWidth: 120, sortable: true },
+  { id: 'completion', label: 'Completion', minWidth: 70, sortable: true },
+  { id: 'status', label: 'status', minWidth: 70, sortable: true },
+  { id: 'calculated.lapsed', label: 'lapsed', minWidth: 70, sortable: true },
+  { id: 'calculated.differential', label: 'differential', minWidth: 70, sortable: true },
+  { id: 'calculated.effort', label: 'effort', minWidth: 70, sortable: true },
+  { id: 'calculated.EV', label: 'EV', minWidth: 70, sortable: true },
+  { id: 'calculated.PV', label: 'PV', minWidth: 70, sortable: true },
+  { id: 'calculated.weight', label: 'weight', minWidth: 70, sortable: true },
+  { id: 'calculated.systemPV', label: 'System PV', minWidth: 70, sortable: true },
+  { id: 'calculated.systemStatus', label: 'System Status', minWidth: 70, sortable: true },
+  { id: 'calculated.systemEV', label: 'System EV', minWidth: 70, sortable: true },
 ];
 
 const DeliverableTable = ({ deliverables = [], editable = false, onRowChange = noop }) => {
   useFocusElement(deliverables);
 
+  const { sortedRows, handleSort } = useTableSort(deliverables);
   const [editData, setEditData] = useState({});
   const [editIndex, setEditIndex] = useState(-1);
   const columns = useMemo(() => {
+    let columns = [...mainColumns];
     if (editable) {
-      return [...mainColumns, { id: 'edit', label: '', minWidth: 70 }];
-    } else {
-      return mainColumns;
+      columns = [...columns, { id: 'edit', label: '', minWidth: 70 }];
     }
+
+    return columns.map((c) => ({ ...c, sortable: c.sortable && !editable }));
   }, [editable]);
+
   const handleFieldChange = ({ target: { value, name } }) => setEditData({ ...editData, [name]: value });
   const handleEditButton = (idx) => {
     if (editIndex === idx) {
@@ -52,7 +56,7 @@ const DeliverableTable = ({ deliverables = [], editable = false, onRowChange = n
     }
   };
   const getFieldValue = (idx, name) => {
-    const value = idx === editIndex ? editData[name] : deliverables[idx][name];
+    const value = idx === editIndex ? editData[name] : sortedRows[idx][name];
 
     if (['start', 'end', 'completion'].includes(name)) {
       return value ? moment(value).format('YYYY-MM-DD') : '';
@@ -191,8 +195,8 @@ const DeliverableTable = ({ deliverables = [], editable = false, onRowChange = n
     <Card>
       <CardHeader title="Deliverables" />
       <CardContent>
-        <VektorSubTableContainer columns={columns}>
-          {deliverables.map((row, idx) => (editable ? EditableRow(row, idx) : ReadOnlyRow(row, idx)))}
+        <VektorSubTableContainer columns={columns} onSort={handleSort}>
+          {sortedRows.map((row, idx) => (editable ? EditableRow(row, idx) : ReadOnlyRow(row, idx)))}
         </VektorSubTableContainer>
       </CardContent>
     </Card>

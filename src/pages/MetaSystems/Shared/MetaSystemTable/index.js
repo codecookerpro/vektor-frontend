@@ -7,18 +7,20 @@ import LinkButton from 'components/UI/Buttons/LinkButton';
 import VektorSubTableContainer from 'parts/Tables/VektorSubTableContainer';
 import LINKS from 'utils/constants/links';
 import { useHistory } from 'react-router-dom';
+import { useTableSort } from 'utils/hooks';
 
 const columns = [
-  { id: 'name', label: 'Name', minWidth: 170 },
-  { id: 'totalHours', label: 'Total Planned Hours', minWidth: 100 },
-  { id: 'pv', label: 'PV', minWidth: 100 },
-  { id: 'status', label: 'Status', minWidth: 100 },
-  { id: 'effort', label: 'Effort', minWidth: 100 },
-  { id: 'ev', label: 'EV', minWidth: 100 },
+  { id: 'name', label: 'Name', minWidth: 170, sortable: true },
+  { id: 'mainSystem.calculated.totalPlannedHours', label: 'Total Planned Hours', minWidth: 100, sortable: true },
+  { id: 'mainSystem.calculated.PV', label: 'PV', minWidth: 100, sortable: true },
+  { id: 'mainSystem.calculated.status', label: 'Status', minWidth: 100, sortable: true },
+  { id: 'mainSystem.calculated.totalWorkedHours', label: 'Effort', minWidth: 100, sortable: true },
+  { id: 'mainSystem.calculated.EV', label: 'EV', minWidth: 100, sortable: true },
 ];
 
 const MetaSystemTable = ({ projectId = 0, records = [] }) => {
   const history = useHistory();
+  const { sortedRows, handleSort } = useTableSort(records);
 
   return (
     <Card>
@@ -31,8 +33,8 @@ const MetaSystemTable = ({ projectId = 0, records = [] }) => {
         }
       />
       <CardContent>
-        <VektorSubTableContainer columns={columns}>
-          {records.map((row) => (
+        <VektorSubTableContainer columns={columns} onSort={handleSort}>
+          {sortedRows.map((row) => (
             <TableRow key={row._id} id={row._id}>
               <TableCell component="th" scope="row">
                 <LinkButton to={LINKS.EDIT_META_SYSTEM.HREF.replace(':systemId', row._id)}>{row.name}</LinkButton>
