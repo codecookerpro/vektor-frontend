@@ -1,7 +1,7 @@
 export const changeToString = (change) => {
   if (Array.isArray(change)) {
     if (change.length === 0) {
-      return 'emtpy array';
+      return 'empty array';
     } else if (typeof change[0] === 'object') {
       return `${change.length} objects`;
     } else {

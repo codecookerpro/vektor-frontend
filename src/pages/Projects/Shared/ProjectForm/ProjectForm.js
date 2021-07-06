@@ -8,6 +8,7 @@ import VektorTextField from 'components/UI/TextFields/VektorTextField';
 import FilterSelect from 'components/UI/Selects/FilterSelect';
 import UserTransfer from 'parts/UserTransfer';
 import { PROJECT_MODES } from 'pages/Projects/constants';
+import { round } from 'utils/helpers/utility';
 
 import { useProjectFrom, useVisibilityBooleans } from './helpers';
 import { PROJECT_DEFAULT_VALUES } from './constants';
@@ -153,6 +154,13 @@ const ProjectForm = ({ project = PROJECT_DEFAULT_VALUES, mode }) => {
                   disabled={isViewingMode}
                 />
               )}
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <Typography variant="body2" color="textPrimary" className={classes.description}>
+                Status
+                <br />
+                {round(project.status, 2)}%
+              </Typography>
             </Grid>
             <Grid item xs={12}>
               <UserTransfer

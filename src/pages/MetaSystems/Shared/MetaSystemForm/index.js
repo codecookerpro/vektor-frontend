@@ -29,6 +29,7 @@ import { EQUIPMENTS, EQUIPMENT_CATEGORIES, FORM_MODE, POPUP_TYPE, noop } from 'u
 import { createMetaSystem, updateMetaSystem, deleteMetaSystem, duplicateMetaSystem } from 'redux/actions/metaSystem';
 import { setPopup } from 'redux/actions/popupActions';
 import LINKS from 'utils/constants/links';
+import { round } from 'utils/helpers/utility';
 
 const useStyles = makeStyles((theme) => ({
   alert: {
@@ -72,6 +73,7 @@ const MetaSystemForm = ({ mode = FORM_MODE.view, system = {}, setFormMode = noop
   });
   const fieldsDisabled = mode === FORM_MODE.view;
   const calculated = system?.mainSystem?.calculated;
+  const status = system?.mainSystem?.status;
 
   const onSubmit = (data) => {
     const params = {
@@ -287,10 +289,10 @@ const MetaSystemForm = ({ mode = FORM_MODE.view, system = {}, setFormMode = noop
                   <TableBody>
                     <TableRow>
                       <TableCell>{calculated.totalPlannedHours}</TableCell>
-                      <TableCell>{calculated.PV}%</TableCell>
-                      <TableCell>{calculated.status}%</TableCell>
-                      <TableCell>{Math.round(calculated.totalWorkedHours / calculated.totalPlannedHours) * 100}%</TableCell>
-                      <TableCell>{calculated.EV}%</TableCell>
+                      <TableCell>{round(calculated.PV, 2)}%</TableCell>
+                      <TableCell>{round(status, 2)}%</TableCell>
+                      <TableCell>{round((calculated.totalWorkedHours / calculated.totalPlannedHours) * 100, 2)}%</TableCell>
+                      <TableCell>{round(calculated.EV, 2)}%</TableCell>
                     </TableRow>
                   </TableBody>
                 </Table>

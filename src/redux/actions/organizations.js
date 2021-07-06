@@ -19,7 +19,6 @@ const getOrganizations =
 
       const params = {
         skip: 0,
-        limit: 10000,
       };
       const { data = [] } = await organizationAPI.getOrganizations(params);
       await dispatch({
