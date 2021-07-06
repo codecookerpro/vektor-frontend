@@ -62,7 +62,7 @@ const WorkflowGraph = ({ editable, deliverables, onGraphEvent, differentialWeigh
           nodesDraggable={!dialogToggled && editable}
           paneMoveable={!dialogToggled}
           zoomOnDoubleClick={false}
-          nodesConnectable={true}
+          nodesConnectable={editable}
           ref={boardRef}
           className={classes.reactflow}
         >

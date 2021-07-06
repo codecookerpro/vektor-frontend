@@ -1,5 +1,5 @@
 import { makeStyles } from '@material-ui/core/styles';
-import { GRAPH_PROPS } from 'parts/WorkflowGraph/constants';
+import { GRAPH_PROPS, NODE_PROPS } from 'parts/WorkflowGraph/constants';
 
 export const useStyles = makeStyles((theme) => ({
   nodeContent: {
@@ -42,11 +42,35 @@ export const useStyles = makeStyles((theme) => ({
     color: theme.custom.palette.white,
   },
   chipContainer: {
-    top: 45,
+    top: NODE_PROPS.height - 25,
     left: 0,
     display: 'flex',
     position: 'absolute',
     justifyContent: 'center',
     width: '100%',
+  },
+  statusContainer: {
+    top: NODE_PROPS.height - 40,
+    left: 0,
+    display: 'flex',
+    position: 'absolute',
+    justifyContent: 'space-between',
+    width: '100%',
+    padding: '0px 5px',
+  },
+  labelContainer: {
+    top: 0,
+    left: 0,
+    display: 'flex',
+    position: 'absolute',
+    justifyContent: 'center',
+    width: '100%',
+    height: NODE_PROPS.height - 40,
+    padding: '0px 10px',
+  },
+  label: {
+    display: 'flex',
+    alignItems: 'center',
+    textAlign: 'center',
   },
 }));
