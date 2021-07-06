@@ -50,13 +50,14 @@ export const useStyles = makeStyles((theme) => ({
     width: '100%',
   },
   statusContainer: {
-    top: NODE_PROPS.height - 38,
+    top: NODE_PROPS.height - 37,
     left: 0,
     display: 'flex',
     position: 'absolute',
     justifyContent: 'space-between',
     width: '100%',
     padding: '0px 5px',
+    fontSize: '12px',
   },
   labelContainer: {
     top: 3,
