@@ -38,6 +38,25 @@ const CustomFlowNodeFactory = (tClass, sClass) =>
     }, [data, isRealNode]);
 
     const classes = useStyles({ diffColor });
+    const nodeLabel = useMemo(() => {
+      let { label } = data;
+      const tag = document.createElement('div');
+      tag.className = classes.checkOverflow;
+      document.body.appendChild(tag);
+
+      tag.innerHTML = label;
+      let overflowed = false;
+
+      while (tag.scrollHeight > tag.offsetHeight) {
+        label = label.slice(0, -1);
+        tag.innerHTML = label + '...';
+        overflowed = true;
+      }
+
+      document.body.removeChild(tag);
+
+      return label + (overflowed ? '...' : '');
+    }, [data, classes]);
 
     useEffect(() => {
       if (isRealNode === false) {
@@ -144,7 +163,7 @@ const CustomFlowNodeFactory = (tClass, sClass) =>
             {isRealNode ? (
               <Box>
                 <div className={classes.labelContainer}>
-                  <div className={classes.label}>{data.label}</div>
+                  <div className={classes.label}>{nodeLabel}</div>
                 </div>
                 <div className={classes.chipContainer}>
                   <Chip label={`${differential > 0 ? '+' : ''}${differential}`} className={classes.chip} />

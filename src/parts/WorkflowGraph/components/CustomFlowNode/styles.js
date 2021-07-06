@@ -59,7 +59,7 @@ export const useStyles = makeStyles((theme) => ({
     padding: '0px 5px',
   },
   labelContainer: {
-    top: 0,
+    top: 3,
     left: 0,
     display: 'flex',
     position: 'absolute',
@@ -72,5 +72,14 @@ export const useStyles = makeStyles((theme) => ({
     display: 'flex',
     alignItems: 'center',
     textAlign: 'center',
+    fontWeight: 'bold',
+  },
+  checkOverflow: {
+    position: 'absolute',
+    left: '-5000px',
+    top: '-5000px',
+    width: NODE_PROPS.width - 4,
+    height: NODE_PROPS.height - 40,
+    overflowY: 'auto',
   },
 }));
