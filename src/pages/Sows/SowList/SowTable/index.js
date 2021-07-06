@@ -14,18 +14,16 @@ const SowTable = () => {
   const dispatch = useDispatch();
   const sows = useSelector((state) => state.sows.results);
   const mappedSows = useEntryMapping(sows, [
+    { src: 'organization', tar: 'organization', by: 'organizations.results' },
     { src: 'project', tar: 'project', by: 'dashboards.projectList' },
     { src: 'metaSystem', tar: 'metaSystem', by: 'dashboards.metaSystemList' },
   ]);
-  const organizations = useSelector((state) => state.organizations.results);
-  const systems = useSelector((state) => state.dashboards.metaSystemList);
-
   const { isAdmin } = useUserPermission();
   const columns = setColumn(isAdmin);
 
   const { page, setPage, rowsPerPage, setRowsPerPage, pagination } = usePagination();
-  const [orgFilterComp, organizationFilter] = useFilter({ items: organizations, label: 'organization' });
-  const [sysFilterComp, systemFilter] = useFilter({ items: systems, label: 'system' });
+  const [orgFilterComp, organizationFilter] = useFilter({ by: 'organizations.results', label: 'organization' });
+  const [sysFilterComp, systemFilter] = useFilter({ by: 'dashboards.metaSystemList', label: 'system' });
   const [sortString, setSortString] = useState(null);
 
   useEffect(() => {
@@ -41,11 +39,6 @@ const SowTable = () => {
     dispatch(getSOWs(params));
     // eslint-disable-next-line
   }, [page, rowsPerPage, organizationFilter, systemFilter, sortString]);
-
-  const getOrganizationName = (_id) => {
-    const organization = organizations.find((item) => item._id === _id);
-    return organization?.name || '';
-  };
 
   const setSow = async (sow) => {
     await dispatch(setSelectedSOW(sow));
@@ -81,7 +74,7 @@ const SowTable = () => {
               {isAdmin && (
                 <TableCell component="th" scope="row">
                   <LinkButton to={LINKS.EDIT_SOW.HREF.replace(':id', row._id)} onClick={() => setSow(row)}>
-                    {getOrganizationName(row.organization)}
+                    {row.organization.name}
                   </LinkButton>
                 </TableCell>
               )}
