@@ -15,7 +15,6 @@ const getUsers =
 
       const params = {
         skip: 0,
-        limit: 10000,
       };
       const { data = [] } = await userAPI.getUsers(params);
       await dispatch({
