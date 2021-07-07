@@ -3,7 +3,7 @@ import { Handle, Position } from 'react-flow-renderer';
 import { Popper, Fade, Box, Button, Chip } from '@material-ui/core';
 import { NodeDialog } from './components';
 import CloseIcon from '@material-ui/icons/Close';
-import { IDENTIFIERS, HANDLE_TYPES, NODE_DIALOGS } from 'parts/WorkflowGraph/constants';
+import { IDENTIFIERS, HANDLE_TYPES, NODE_DIALOGS, NODE_PROPS } from 'parts/WorkflowGraph/constants';
 import { ColorButton } from 'components/UI/Buttons';
 import { useStyles } from './styles';
 import { COLORS } from 'parts/WorkflowGraph/constants';
@@ -38,6 +38,25 @@ const CustomFlowNodeFactory = (tClass, sClass) =>
     }, [data, isRealNode]);
 
     const classes = useStyles({ diffColor });
+    const nodeLabel = useMemo(() => {
+      let { label } = data;
+      const tag = document.createElement('div');
+      tag.className = classes.checkOverflow;
+      document.body.appendChild(tag);
+
+      tag.innerHTML = label;
+      let overflowed = false;
+
+      while (tag.clientHeight > NODE_PROPS.height - 40) {
+        label = label.split(' ').slice(0, -1).join(' ');
+        tag.innerHTML = label + '...';
+        overflowed = true;
+      }
+
+      document.body.removeChild(tag);
+
+      return label + (overflowed ? '...' : '');
+    }, [data, classes]);
 
     useEffect(() => {
       if (isRealNode === false) {
@@ -144,7 +163,7 @@ const CustomFlowNodeFactory = (tClass, sClass) =>
             {isRealNode ? (
               <Box>
                 <div className={classes.labelContainer}>
-                  <div className={classes.label}>{data.label}</div>
+                  <div className={classes.label}>{nodeLabel}</div>
                 </div>
                 <div className={classes.chipContainer}>
                   <Chip label={`${differential > 0 ? '+' : ''}${differential}`} className={classes.chip} />

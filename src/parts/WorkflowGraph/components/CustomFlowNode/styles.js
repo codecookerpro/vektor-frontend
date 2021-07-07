@@ -50,16 +50,17 @@ export const useStyles = makeStyles((theme) => ({
     width: '100%',
   },
   statusContainer: {
-    top: NODE_PROPS.height - 40,
+    top: NODE_PROPS.height - 37,
     left: 0,
     display: 'flex',
     position: 'absolute',
     justifyContent: 'space-between',
     width: '100%',
     padding: '0px 5px',
+    fontSize: '12px',
   },
   labelContainer: {
-    top: 0,
+    top: 3,
     left: 0,
     display: 'flex',
     position: 'absolute',
@@ -72,5 +73,12 @@ export const useStyles = makeStyles((theme) => ({
     display: 'flex',
     alignItems: 'center',
     textAlign: 'center',
+    fontWeight: 'bold',
+  },
+  checkOverflow: {
+    position: 'absolute',
+    left: '-5000px',
+    top: '-5000px',
+    width: NODE_PROPS.width - 23,
   },
 }));

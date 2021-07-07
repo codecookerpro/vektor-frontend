@@ -13,8 +13,8 @@ export const GRAPH_PROPS = keyMirror({
 });
 
 export const NODE_PROPS = keyMirror({
-  width: 165,
-  height: Math.round(165 / GOLDEN_RATIO),
+  width: 170,
+  height: Math.round(170 / GOLDEN_RATIO),
   label: 'Deliverable',
   marginX: 15,
   marginY: 15,
