@@ -48,10 +48,10 @@ const DashboardChart = ({ theme, data }) => {
   }, [phases, status]);
 
   const chartData = {
-    labels: ['Total', 'Complated'],
+    labels: ['Status', 'Remained'],
     datasets: [
       {
-        data: [status, 100 - status],
+        data: [Math.round(status), Math.floor(100 - status)],
         backgroundColor: [color, grey[200]],
         borderWidth: 5,
         borderColor: theme.palette.background.paper,
@@ -62,7 +62,7 @@ const DashboardChart = ({ theme, data }) => {
   return (
     <ChartWrapper>
       <DoughnutInner variant="h4">
-        <Typography variant="h4">{status}%</Typography>
+        <Typography variant="h4">{Math.round(status)}%</Typography>
       </DoughnutInner>
       <Doughnut data={chartData} options={DASHBOARD_CHART_OPTIONS} />
     </ChartWrapper>
