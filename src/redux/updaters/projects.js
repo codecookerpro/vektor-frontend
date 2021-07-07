@@ -44,12 +44,6 @@ export const fetchMetaSystemsUpdater = (state, { payload }) => ({
   metaSystems: updatePool(state.metaSystems, payload),
 });
 
-export const fetchMetaSystemsFilterUpdater = (state, { payload: { data, isLoading } }) => ({
-  ...state,
-  isMetaSystemsLoading: isLoading,
-  ...(data !== null && { metaSystemsFilter: data }),
-});
-
 export const createMetaSystemUpdater = (state, { payload }) => {
   const { project, _id } = payload;
   return {

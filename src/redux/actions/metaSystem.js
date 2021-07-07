@@ -2,11 +2,6 @@ import * as API from 'services/api-meta-system';
 import { exclude, isEmpty } from 'utils/helpers/utility';
 import ActionTypes from 'utils/constants/action-types';
 
-export const getMetaSystemsFilter = (data, isLoading = false) => ({
-  type: ActionTypes.FETCH_META_SYSTEMS_FILTER,
-  payload: { data, isLoading },
-});
-
 export const createMetaSystem = (params) => (dispatch, getState) => {
   API.createMetaSystem(params)
     .then(({ data }) => {
@@ -78,22 +73,6 @@ export const duplicateMetaSystem = (system) => ({
   type: ActionTypes.DUPLICATE_META_SYSTEM,
   payload: system,
 });
-
-export const fetchMetaSystemsFilter = (project) => async (dispatch) => {
-  dispatch(getMetaSystemsFilter(null, true));
-  const params = {
-    sort: 'name',
-    filter: { project },
-  };
-
-  const response = await API.getMetaSystems(params).catch((err) => console.error('[fetchMetaSystemsFilter] error => ', err));
-
-  if (response) {
-    const { data } = response;
-
-    dispatch(getMetaSystemsFilter(data));
-  }
-};
 
 export const updateDeliverables = (payload) => ({
   type: ActionTypes.UPDATE_DELIVERABLES,

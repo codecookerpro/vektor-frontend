@@ -13,7 +13,6 @@ const actionHandler = {
   [ActionTypes.UPDATE_META_SYSTEM]: updaters.updateMetaSystemUpdater,
   [ActionTypes.DUPLICATE_META_SYSTEM]: updaters.duplicateMetaSystemUpdater,
   [ActionTypes.UPDATE_DELIVERABLES]: updaters.updateDeliverablesUpdater,
-  [ActionTypes.FETCH_META_SYSTEMS_FILTER]: updaters.fetchMetaSystemsFilterUpdater,
 };
 
 const projectReducer = handleActions(actionHandler, updaters.INITIAL_STATE);
