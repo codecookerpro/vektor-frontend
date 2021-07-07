@@ -57,7 +57,6 @@ const schema = joi.object().keys({
   equipmentType: SELECT_VALID,
   equipmentName: STRING_INPUT_VALID,
   equipmentNumber: STRING_INPUT_VALID,
-  organization: SELECT_VALID,
   site: STRING_INPUT_VALID,
   productCode: STRING_INPUT_VALID,
 });
@@ -67,7 +66,7 @@ const MetaSystemForm = ({ mode = FORM_MODE.view, system = {}, setFormMode = noop
   const classes = useStyles();
   const history = useHistory();
   const dispatch = useDispatch();
-  const organizations = useSelector((state) => state.organizations.results);
+  const project = useSelector((state) => state.projects.results.find((p) => p._id === projectId));
   const { control, handleSubmit, errors } = useForm({
     resolver: joiResolver(schema),
   });
@@ -87,7 +86,7 @@ const MetaSystemForm = ({ mode = FORM_MODE.view, system = {}, setFormMode = noop
     };
 
     if (mode === FORM_MODE.create) {
-      dispatch(createMetaSystem({ ...params, project: projectId, organization: data.organization }));
+      dispatch(createMetaSystem({ ...params, project: projectId, organization: project.organization }));
       history.push(LINKS.EDIT_PROJECT.HREF.replace(':id', projectId));
     } else if (mode === FORM_MODE.update) {
       dispatch(updateMetaSystem({ ...params, _id: system._id }));
@@ -204,24 +203,6 @@ const MetaSystemForm = ({ mode = FORM_MODE.view, system = {}, setFormMode = noop
                   error={errors.productCode?.message}
                   control={control}
                   defaultValue={system.productCode}
-                />
-              </Grid>
-              <Grid item xs={12} sm={6} md={3}>
-                <Controller
-                  as={<FilterSelect />}
-                  fullWidth
-                  disabled={fieldsDisabled}
-                  name="organization"
-                  label="Organization"
-                  placeholder="Select Organization"
-                  items={organizations}
-                  keys={{
-                    label: 'name',
-                    value: '_id',
-                  }}
-                  error={errors.organization?.message}
-                  control={control}
-                  defaultValue={system.organization}
                 />
               </Grid>
               <Grid item xs={12} sm={6} md={3}>
