@@ -6,24 +6,24 @@ import LinkButton from 'components/UI/Buttons/LinkButton';
 import VektorTableContainer from 'parts/Tables/VektorTableContainer';
 import LINKS from 'utils/constants/links';
 import setColumn from './setColumn';
-import { useFilter, usePagination, useUserPermission } from 'utils/hooks';
+import { useEntryMapping, useFilter, usePagination, useUserPermission } from 'utils/hooks';
 import { getSOWs, setSelectedSOW } from 'redux/actions/sowAction';
-import { readMetaSystem } from 'redux/actions/metaSystem';
 import { SORT_DIRS } from 'utils/constants';
 
 const SowTable = () => {
   const dispatch = useDispatch();
   const sows = useSelector((state) => state.sows.results);
-  const organizations = useSelector((state) => state.organizations.results);
-  const projects = useSelector((state) => state.projects.results);
-  const systems = useSelector((state) => state.projects.metaSystems);
-
+  const mappedSows = useEntryMapping(sows, [
+    { src: 'organization', tar: 'organization', by: 'organizations.results' },
+    { src: 'project', tar: 'project', by: 'dashboards.projectList' },
+    { src: 'metaSystem', tar: 'metaSystem', by: 'dashboards.metaSystemList' },
+  ]);
   const { isAdmin } = useUserPermission();
   const columns = setColumn(isAdmin);
 
-  const { page, setPage, rowsPerPage, setRowsPerPage, pagination } = usePagination(sows);
-  const [orgFilterComp, organizationFilter] = useFilter({ items: organizations, label: 'organization' });
-  const [sysFilterComp, systemFilter] = useFilter({ items: systems, label: 'system' });
+  const { page, setPage, rowsPerPage, setRowsPerPage, pagination } = usePagination();
+  const [orgFilterComp, organizationFilter] = useFilter({ by: 'organizations.results', label: 'organization' });
+  const [sysFilterComp, systemFilter] = useFilter({ by: 'dashboards.metaSystemList', label: 'system' });
   const [sortString, setSortString] = useState(null);
 
   useEffect(() => {
@@ -39,18 +39,6 @@ const SowTable = () => {
     dispatch(getSOWs(params));
     // eslint-disable-next-line
   }, [page, rowsPerPage, organizationFilter, systemFilter, sortString]);
-
-  // eslint-disable-next-line
-  useEffect(() => dispatch(readMetaSystem()), []);
-
-  const getOrganizationName = (_id) => {
-    const organization = organizations.find((item) => item._id === _id);
-    return organization?.name || '';
-  };
-  const getProjectName = (_id) => {
-    const project = projects.find((item) => item._id === _id);
-    return project?.name || '';
-  };
 
   const setSow = async (sow) => {
     await dispatch(setSelectedSOW(sow));
@@ -81,12 +69,12 @@ const SowTable = () => {
           setRowsPerPage={setRowsPerPage}
           onSort={handleSort}
         >
-          {sows.map((row) => (
+          {mappedSows.map((row) => (
             <TableRow key={row._id}>
               {isAdmin && (
                 <TableCell component="th" scope="row">
                   <LinkButton to={LINKS.EDIT_SOW.HREF.replace(':id', row._id)} onClick={() => setSow(row)}>
-                    {getOrganizationName(row.organization)}
+                    {row.organization.name}
                   </LinkButton>
                 </TableCell>
               )}
@@ -99,9 +87,9 @@ const SowTable = () => {
                   </LinkButton>
                 )}
               </TableCell>
-              <TableCell>{row.metaSystem}</TableCell>
+              <TableCell>{row.metaSystem.name}</TableCell>
               <TableCell>{row?.initiationPhase?.contractName || '-'}</TableCell>
-              <TableCell>{getProjectName(row.project)}</TableCell>
+              <TableCell>{row.project.name}</TableCell>
               <TableCell>{row?.initiationPhase?.vendorName || '-'}</TableCell>
             </TableRow>
           ))}

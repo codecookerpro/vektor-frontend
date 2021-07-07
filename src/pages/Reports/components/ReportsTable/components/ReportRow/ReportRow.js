@@ -12,8 +12,8 @@ const ReportRow = ({ isAdmin, row, checkSelected, toggleHandler }) => {
       {isAdmin && <TableCell>{rest.organizationName || ''}</TableCell>}
       <TableCell>{rest.projectName || ''}</TableCell>
       <TableCell>{rest.projectNumber || ''}</TableCell>
-      <TableCell>{rest.projectManager || ''}</TableCell>
-      <TableCell>{rest.projectSupervisor || ''}</TableCell>
+      <TableCell>{rest.projectManager?.name || ''}</TableCell>
+      <TableCell>{rest.projectSupervisor?.name || ''}</TableCell>
       <TableCell>{rest.metaSystemName || ''}</TableCell>
       <TableCell>{rest.equipmentCategory || ''}</TableCell>
       <TableCell>{rest.equipmentName || ''}</TableCell>

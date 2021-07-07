@@ -25,6 +25,7 @@ const ActionTypes = keyMirror({
   // dashboard
   FETCH_DASHBOARDS: null,
   FETCH_REPORTS: null,
+  GET_FILTERING_DATA: null,
 
   // sows
   FETCH_SOWS: null,

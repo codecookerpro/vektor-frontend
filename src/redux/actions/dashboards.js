@@ -2,7 +2,7 @@ import TYPES from 'utils/constants/action-types';
 import * as dashboardAPI from 'services/api-dashboard';
 import { isEmpty } from 'utils/helpers/utility';
 
-const getDashboards =
+export const getDashboards =
   (refresh = false) =>
   async (dispatch, getState) => {
     try {
@@ -26,4 +26,9 @@ const getDashboards =
     }
   };
 
-export { getDashboards };
+export const getFilteringData = () => (dispatch) => {
+  dashboardAPI
+    .getFilteringData()
+    .then((data) => dispatch({ type: TYPES.GET_FILTERING_DATA, payload: data }))
+    .catch((error) => console.log('[getFilteringData] error => ', error));
+};

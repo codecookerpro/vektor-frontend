@@ -1,5 +1,4 @@
-import { getJQ } from 'services/axios';
+import { getJQ, get } from 'services/axios';
 
-const getDashboards = async (data) => await getJQ('dashboard', data);
-
-export { getDashboards };
+export const getDashboards = async (data) => await getJQ('dashboard', data);
+export const getFilteringData = async () => await get(['common', 'filtering-data']);

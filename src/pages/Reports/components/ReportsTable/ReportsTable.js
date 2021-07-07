@@ -6,11 +6,16 @@ import useUserPermissions from 'utils/hooks/useUserPermission';
 
 import { useReportsTableLogic } from './helpers';
 import { ReportsTableButtons, ReportRow } from './components';
+import { useEntryMapping } from 'utils/hooks';
 
 const ReportsTable = ({ filter }) => {
   const { isAdmin } = useUserPermissions();
   const { reports, columns, selectedItems, rowCounts, page, rowsPerPage, setPage, toggleHandler, checkSelected, setRowsPerPage, resetSelectedItems } =
     useReportsTableLogic(isAdmin, filter);
+  const mappedReports = useEntryMapping(reports, [
+    { src: 'projectManager', by: 'users.results' },
+    { src: 'projectSupervisor', by: 'users.results' },
+  ]);
 
   return (
     <Card>
@@ -24,7 +29,7 @@ const ReportsTable = ({ filter }) => {
           rowsPerPage={rowsPerPage}
           setRowsPerPage={setRowsPerPage}
         >
-          {reports.map((row) => (
+          {mappedReports.map((row) => (
             <ReportRow key={row._id} isAdmin={isAdmin} row={row} checkSelected={checkSelected} toggleHandler={toggleHandler} />
           ))}
         </VektorTableContainer>
