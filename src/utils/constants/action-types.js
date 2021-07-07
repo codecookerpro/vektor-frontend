@@ -43,7 +43,6 @@ const ActionTypes = keyMirror({
   UPDATE_META_SYSTEM: null,
   DUPLICATE_META_SYSTEM: null,
   UPDATE_DELIVERABLES: null,
-  FETCH_META_SYSTEMS_FILTER: null,
 
   // popup
   SET_POPUP: null,

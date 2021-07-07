@@ -1,14 +1,10 @@
-import { useEffect, useMemo } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-
-import { getMetaSystemsFilter, fetchMetaSystemsFilter } from 'redux/actions/metaSystem';
+import { useMemo } from 'react';
+import { useSelector } from 'react-redux';
 
 const useReportFiltersLogic = (isAdmin, filter, setFilter) => {
-  const dispatch = useDispatch();
-
-  const { projectsData, metaSystemsFilter, organizationsData, isMetaSystemsLoading } = useSelector(({ projects, organizations, auth }) => {
-    const { results: projectsData, metaSystemsFilter, isMetaSystemsLoading } = projects;
+  const { projectsData, metaSystemsFilter, organizationsData } = useSelector(({ projects, organizations, auth, dashboards }) => {
     const { results: organizationsData } = organizations;
+    const { metaSystemList: metaSystemsFilter, projectList: projectsData } = dashboards;
     const {
       currentUser: { organization: userOrganization },
     } = auth;
@@ -17,7 +13,6 @@ const useReportFiltersLogic = (isAdmin, filter, setFilter) => {
       userOrganization,
       projectsData,
       metaSystemsFilter,
-      isMetaSystemsLoading,
       organizationsData: [{ _id: '', name: '---' }, ...organizationsData],
     };
   });
@@ -26,19 +21,7 @@ const useReportFiltersLogic = (isAdmin, filter, setFilter) => {
 
     return [{ _id: '', name: '---' }, ...projects];
   }, [filter?.organization, isAdmin, projectsData]);
-  const metaSystems = useMemo(
-    () => [{ _id: '', name: isMetaSystemsLoading ? 'Please wait...' : '---' }, ...metaSystemsFilter],
-    [metaSystemsFilter, isMetaSystemsLoading]
-  );
-
-  useEffect(() => {
-    const { project } = filter;
-    if (project) {
-      dispatch(fetchMetaSystemsFilter(project));
-    } else {
-      dispatch(getMetaSystemsFilter([]));
-    }
-  }, [dispatch, filter]);
+  const metaSystems = useMemo(() => [{ _id: '', name: '---' }, ...metaSystemsFilter], [metaSystemsFilter]);
 
   const inputHandler = ({ target }) => {
     const { name, value } = target;
