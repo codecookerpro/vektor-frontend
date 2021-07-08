@@ -1,4 +1,5 @@
-import { memo, useState } from 'react';
+import { memo, useState, useMemo, useEffect } from 'react';
+import { useHistory, useLocation } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import { Table, TableBody, TableContainer } from '@material-ui/core';
 
@@ -13,9 +14,18 @@ const useStyles = makeStyles(() => ({
 }));
 
 const VektorTableContainer = ({ columns, rowCounts, page, setPage, rowsPerPage, setRowsPerPage, children, onSort = noop }) => {
+  const { search, pathname } = useLocation();
+  const history = useHistory();
+  const params = useMemo(() => new URLSearchParams(search), [search]);
+  const colOfUrl = useMemo(() => params.get('s__col'), [params]);
+  const dirOfUrl = useMemo(() => params.get('s__dir'), [params]);
+
   const classes = useStyles();
-  const [order, setOrder] = useState(SORT_DIRS.asc);
-  const [orderBy, setOrderBy] = useState(null);
+  const [order, setOrder] = useState(dirOfUrl || SORT_DIRS.asc);
+  const [orderBy, setOrderBy] = useState(colOfUrl);
+
+  // eslint-disable-next-line
+  useEffect(() => onSort(colOfUrl, dirOfUrl), []);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === SORT_DIRS.asc;
@@ -23,6 +33,10 @@ const VektorTableContainer = ({ columns, rowCounts, page, setPage, rowsPerPage, 
     setOrder(nextOrder);
     setOrderBy(property);
     onSort(property, nextOrder);
+
+    params.set('s__col', property);
+    params.set('s__dir', nextOrder);
+    history.replace(`${pathname}?${params.toString()}`);
   };
 
   return (

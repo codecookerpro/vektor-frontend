@@ -5,7 +5,7 @@ import { Card, CardHeader, CardContent, TableCell, TableRow, Grid } from '@mater
 import LinkButton from 'components/UI/Buttons/LinkButton';
 import VektorTableContainer from 'parts/Tables/VektorTableContainer';
 import LINKS from 'utils/constants/links';
-import { usePagination, useFilter, useTableSort } from 'utils/hooks';
+import { usePagination, useFilter, useTableSort, useEntryMapping } from 'utils/hooks';
 import { PERMISSIONS } from 'utils/constants';
 import useUserPermissions from 'utils/hooks/useUserPermission';
 
@@ -17,18 +17,17 @@ const columns = [
 
 const UsersTable = () => {
   const organizations = useSelector((state) => state.organizations.results);
-  const users = useSelector((state) =>
-    state.users.results.map((u) => ({ ...u, organizationName: organizations.find((item) => item._id === u.organization)?.name || '' }))
-  );
+  const users = useSelector((state) => state.users.results);
+  const mappedUsers = useEntryMapping(users, [{ src: 'organization', by: 'organizations.results' }]);
   const [orgFilterComponent, organizationFilter] = useFilter({ items: organizations, label: 'organization' });
   const [perFilterComponent, permissionFilter] = useFilter({ items: PERMISSIONS, label: 'permission', keys: { value: 'VALUE', label: 'LABEL' } });
   const { isAdmin } = useUserPermissions();
-  const { sortedRows: sortedUsers, handleSort, sortCol, sortDir } = useTableSort(users);
+  const { sortedRows: sortedUsers, handleSort } = useTableSort(mappedUsers);
 
   const filteredUsers = useMemo(() => {
-    let results = [...sortedUsers];
+    let results = sortedUsers;
     if (organizationFilter) {
-      results = results.filter((u) => u.organization === organizationFilter);
+      results = results.filter((u) => u.organization?._id === organizationFilter);
     }
 
     if (permissionFilter) {
@@ -37,7 +36,7 @@ const UsersTable = () => {
 
     return results;
     // eslint-disable-next-line
-  }, [organizationFilter, permissionFilter, sortCol, sortDir]);
+  }, [organizationFilter, permissionFilter, sortedUsers]);
 
   const { page, setPage, rowsPerPage, setRowsPerPage, pageRecords } = usePagination(filteredUsers);
 
@@ -68,7 +67,7 @@ const UsersTable = () => {
                 <LinkButton to={LINKS.EDIT_USER.HREF.replace(':id', row._id)}>{row.name || 'No Name'}</LinkButton>
               </TableCell>
               <TableCell>{row.email}</TableCell>
-              <TableCell>{row?.organization ? row?.organizationName : 'No Organization'}</TableCell>
+              <TableCell>{row?.organization?.name || 'No Organization'}</TableCell>
             </TableRow>
           ))}
         </VektorTableContainer>
