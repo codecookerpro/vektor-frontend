@@ -34,6 +34,7 @@ const ActionTypes = keyMirror({
 
   // projects
   FETCH_PROJECTS: null,
+  ADD_PROJECT: null,
   EDIT_PROJECT: null,
   DELETE_PROJECT: null,
   FETCH_SYSTEM_TRENDS: null,

@@ -4,6 +4,7 @@ import * as updaters from 'redux/updaters/projects';
 
 const actionHandler = {
   [ActionTypes.FETCH_PROJECTS]: updaters.fetchProjectsUpdater,
+  [ActionTypes.ADD_PROJECT]: updaters.addProjectUpdater,
   [ActionTypes.EDIT_PROJECT]: updaters.editProjectUpdater,
   [ActionTypes.DELETE_PROJECT]: updaters.deleteProjectUpdater,
   [ActionTypes.FETCH_SYSTEM_TRENDS]: updaters.fetchSystemTrendsUpdater,
