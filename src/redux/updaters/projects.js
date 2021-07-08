@@ -14,7 +14,12 @@ export const INITIAL_STATE = Object.freeze({
 export const fetchProjectsUpdater = (state, { payload }) => ({
   ...state,
   results: payload.data,
-  pagination: payload.pagination,
+  pagination: payload.pagination || state.pagination,
+});
+
+export const addProjectUpdater = (state, { payload }) => ({
+  ...state,
+  results: [payload, ...state.results],
 });
 
 export const editProjectUpdater = (state, { payload }) => {
