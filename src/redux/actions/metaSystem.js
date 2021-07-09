@@ -20,7 +20,7 @@ export const createMetaSystem = (params) => (dispatch, getState) => {
 };
 
 export const readMetaSystem =
-  ({ project = null, system = null } = {}, refresh = false) =>
+  ({ project = null, system = null, mainSystem = null } = {}, refresh = false) =>
   (dispatch, getState) => {
     const {
       projects: { metaSystems, metaSystemClone },
@@ -39,6 +39,7 @@ export const readMetaSystem =
       filter: {
         project: project || undefined,
         _id: system || undefined,
+        mainSystem: mainSystem || undefined,
       },
     };
 
