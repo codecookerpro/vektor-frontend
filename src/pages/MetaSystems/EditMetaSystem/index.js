@@ -18,13 +18,15 @@ import { isEmpty, restrict } from 'utils/helpers/utility';
 import TrendChart from '../Shared/TrendChart';
 
 const EditMetaSystem = () => {
-  const { systemId } = useParams();
+  const { systemId, mainSystemId } = useParams();
   const dispatch = useDispatch();
   const [formMode, setFormMode] = useState(FORM_MODE.view);
   const [initDlg, showInitDlg] = useState(false);
   const [selectDlg, showSelectDlg] = useState(false);
 
-  const metaSystem = useSelector((state) => state.projects.metaSystems.find((s) => s._id === systemId) || {});
+  const metaSystem = useSelector(
+    (state) => state.projects.metaSystems.find((s) => (systemId !== '_' && s._id === systemId) || s.mainSystem._id === mainSystemId) || {}
+  );
   const { title, editable } = useMemo(() => {
     const title = formMode === FORM_MODE.view ? 'View System' : LINKS.EDIT_META_SYSTEM.TITLE;
     const editable = formMode === FORM_MODE.update;
@@ -44,7 +46,7 @@ const EditMetaSystem = () => {
   );
 
   // eslint-disable-next-line
-  useEffect(() => dispatch(readMetaSystem({ system: systemId })), []);
+  useEffect(() => dispatch(readMetaSystem({ system: systemId !== '_' && systemId, mainSystem: mainSystemId })), []);
 
   useEffect(() => {
     if (isEmpty(metaSystem)) {

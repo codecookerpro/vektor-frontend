@@ -27,7 +27,7 @@ export const getLinkFromEvent = ({ mName, mId, nestedId, nestedName }) => {
       link = appendAnchorMark(LINKS.EDIT_SOW.HREF.replace(':id', mId), nestedId);
       break;
     case ENTITY_NAME_TYPES.system:
-      link = appendAnchorMark(LINKS.EDIT_META_SYSTEM.HREF.replace(':systemId', mId), nestedId);
+      link = appendAnchorMark(LINKS.EDIT_META_SYSTEM.HREF.replace(':systemId', '_').replace(':mainSystemId', mId), nestedId);
       break;
     case ENTITY_NAME_TYPES.user:
       link = appendAnchorMark(LINKS.EDIT_USER.HREF.replace(':id', mId), nestedId);
