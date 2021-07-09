@@ -24,8 +24,6 @@ const EditMetaSystem = () => {
   const [initDlg, showInitDlg] = useState(false);
   const [selectDlg, showSelectDlg] = useState(false);
 
-  console.log(systemId, mainSystemId);
-
   const metaSystem = useSelector(
     (state) => state.projects.metaSystems.find((s) => (systemId !== '_' && s._id === systemId) || s.mainSystem._id === mainSystemId) || {}
   );
