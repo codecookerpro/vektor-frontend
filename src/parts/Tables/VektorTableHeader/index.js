@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, useEffect, useRef } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { TableHead, TableCell, TableRow, TableSortLabel } from '@material-ui/core';
 import { SORT_DIRS } from 'utils/constants';
@@ -8,17 +8,35 @@ const useStyles = makeStyles(() => ({
     fontWeight: 'bold',
     textTransform: 'uppercase',
   },
+  sticky: (props) => ({
+    position: 'fixed',
+    top: props.stickyTop,
+    backgroundColor: 'white',
+    width: props.stickyWidth,
+    overflowX: 'hidden',
+    zIndex: 99999,
+  }),
 }));
 
-const VektorTableHeader = ({ columns, onRequestSort, order, orderBy }) => {
-  const classes = useStyles();
+const VektorTableHeader = ({ columns, onRequestSort, order, orderBy, sticky, scrollX, stickyTop, stickyWidth }) => {
+  const classes = useStyles({
+    stickyWidth,
+    stickyTop,
+  });
+  const ref = useRef(null);
 
   const createSortHandler = (columnId) => (event) => {
     onRequestSort(event, columnId);
   };
 
+  useEffect(() => {
+    if (sticky && ref.current) {
+      ref.current.scrollTo(scrollX, stickyTop);
+    }
+  });
+
   return (
-    <TableHead>
+    <TableHead ref={ref} className={sticky ? classes.sticky : ''}>
       <TableRow>
         {columns.map((column) => (
           <TableCell
