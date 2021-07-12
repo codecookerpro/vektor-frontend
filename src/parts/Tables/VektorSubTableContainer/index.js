@@ -11,7 +11,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const VektorSubTableContainer = ({ columns, children, onSort = noop, sticky }) => {
+const VektorSubTableContainer = ({ columns, children, onSort = noop, sticky = false }) => {
   const classes = useStyles();
   const [order, setOrder] = useState(SORT_DIRS.asc);
   const [orderBy, setOrderBy] = useState(null);
@@ -27,11 +27,7 @@ const VektorSubTableContainer = ({ columns, children, onSort = noop, sticky }) =
       const rect = tbodyRef.current.getBoundingClientRect();
       const theaderHeight = tableRef.current.children[0].clientHeight;
 
-      if (rect.y <= stickyTop + theaderHeight) {
-        setIsSticky(true);
-      } else {
-        setIsSticky(false);
-      }
+      setIsSticky(rect.y <= stickyTop + theaderHeight);
     }
   };
 
@@ -40,7 +36,9 @@ const VektorSubTableContainer = ({ columns, children, onSort = noop, sticky }) =
   };
 
   const handleTableResize = (e) => {
-    setStickyWidth(tableRef.current.parentElement.clientWidth);
+    if (tableRef.current) {
+      setStickyWidth(tableRef.current.parentElement.clientWidth);
+    }
   };
 
   const handleRequestSort = (event, property) => {
