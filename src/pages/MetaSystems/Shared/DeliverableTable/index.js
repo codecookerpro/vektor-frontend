@@ -195,7 +195,7 @@ const DeliverableTable = ({ deliverables = [], editable = false, onRowChange = n
     <Card>
       <CardHeader title="Deliverables" />
       <CardContent>
-        <VektorSubTableContainer columns={columns} onSort={handleSort}>
+        <VektorSubTableContainer columns={columns} onSort={handleSort} sticky={true}>
           {sortedRows.map((row, idx) => (editable ? EditableRow(row, idx) : ReadOnlyRow(row, idx)))}
         </VektorSubTableContainer>
       </CardContent>

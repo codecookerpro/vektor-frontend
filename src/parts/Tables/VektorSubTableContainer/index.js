@@ -1,4 +1,4 @@
-import { memo, useState } from 'react';
+import { memo, useState, useEffect, useRef } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Table, TableBody, TableContainer } from '@material-ui/core';
 
@@ -11,10 +11,35 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const VektorSubTableContainer = ({ columns, children, onSort = noop }) => {
+const VektorSubTableContainer = ({ columns, children, onSort = noop, sticky = false }) => {
   const classes = useStyles();
   const [order, setOrder] = useState(SORT_DIRS.asc);
   const [orderBy, setOrderBy] = useState(null);
+  const [isSticky, setIsSticky] = useState(false);
+  const [scrollX, setScrollX] = useState(0);
+  const [stickyWidth, setStickyWidth] = useState(0);
+  const [stickyTop, setStickyTop] = useState(0);
+  const tbodyRef = useRef(null);
+  const tableRef = useRef(null);
+
+  const handleScroll = (e) => {
+    if (tbodyRef.current) {
+      const rect = tbodyRef.current.getBoundingClientRect();
+      const theaderHeight = tableRef.current.children[0].clientHeight;
+
+      setIsSticky(rect.y <= stickyTop + theaderHeight);
+    }
+  };
+
+  const handleTableScroll = (e) => {
+    setScrollX(e.target.scrollLeft);
+  };
+
+  const handleTableResize = (e) => {
+    if (tableRef.current) {
+      setStickyWidth(tableRef.current.parentElement.clientWidth);
+    }
+  };
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === SORT_DIRS.asc;
@@ -24,11 +49,32 @@ const VektorSubTableContainer = ({ columns, children, onSort = noop }) => {
     onSort(property, nextOrder);
   };
 
+  // eslint-disable-next-line
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('resize', handleTableResize);
+
+    setStickyTop(window.document.getElementsByTagName('header')[0].clientHeight);
+    setStickyWidth(tableRef.current.parentElement.clientWidth);
+  });
+
   return (
-    <TableContainer>
-      <Table className={classes.table} aria-label="custom pagination table">
+    <TableContainer onScroll={handleTableScroll}>
+      <Table ref={tableRef} className={classes.table} aria-label="custom pagination table">
+        {sticky && isSticky && (
+          <VektorTableHeader
+            sticky={isSticky}
+            scrollX={scrollX}
+            stickyTop={stickyTop}
+            stickyWidth={stickyWidth}
+            columns={columns}
+            order={order}
+            orderBy={orderBy}
+            onRequestSort={handleRequestSort}
+          />
+        )}
         <VektorTableHeader columns={columns} order={order} orderBy={orderBy} onRequestSort={handleRequestSort} />
-        <TableBody>{children}</TableBody>
+        <TableBody ref={tbodyRef}>{children}</TableBody>
       </Table>
     </TableContainer>
   );
