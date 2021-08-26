@@ -16,7 +16,9 @@ const PhaseItem = ({ item, projectId, canDrag = true }) => {
       <CardContent className={classes.content} onClick={() => toggleDetail(true)}>
         <div>
           <Typography color="textPrimary">{item.name}</Typography>
-          <Typography color="textPrimary">{item.mainSystem.calculated.status}%</Typography>
+          <Typography color="textPrimary">
+            {item.mainSystem.calculated.status}% {item.equipmentNumber}#
+          </Typography>
         </div>
         <ContainedButton onClick={onClick}>Detail</ContainedButton>
       </CardContent>
