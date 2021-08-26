@@ -28,7 +28,11 @@ const DetailDialog = ({ open, onClose, metaSystem }) => {
 
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle>{metaSystem.name}</DialogTitle>
+      <DialogTitle>
+        {metaSystem.name}
+        <br />
+        <small>{metaSystem.equipmentNumber}#</small>
+      </DialogTitle>
       <DialogContent>
         <Grid container justify="space-between" spacing={1}>
           {details.map(({ name, color, label }, idx) => (
