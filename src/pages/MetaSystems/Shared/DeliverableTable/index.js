@@ -2,6 +2,9 @@ import React, { memo, useMemo, useState } from 'react';
 import { Card, CardHeader, CardContent, TableCell, TableRow, IconButton } from '@material-ui/core';
 import { TextField } from '@material-ui/core';
 import { Edit, CheckCircle } from '@material-ui/icons';
+import { FileText } from 'react-feather';
+import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from 'components/UI/VektorDialog';
+import { ColorButton } from 'components/UI/Buttons';
 
 import VektorSubTableContainer from 'parts/Tables/VektorSubTableContainer';
 import { noop } from 'utils/constants';
@@ -28,6 +31,7 @@ const mainColumns = [
   { id: 'calculated.systemPV', label: 'System PV', minWidth: 70, sortable: true },
   { id: 'calculated.systemStatus', label: 'System Status', minWidth: 70, sortable: true },
   { id: 'calculated.systemEV', label: 'System EV', minWidth: 70, sortable: true },
+  { id: 'note', label: '', minWidth: 70, sortable: false },
 ];
 
 const DeliverableTable = ({ deliverables = [], editable = false, onRowChange = noop }) => {
@@ -36,6 +40,8 @@ const DeliverableTable = ({ deliverables = [], editable = false, onRowChange = n
   const { sortedRows, handleSort } = useTableSort(deliverables);
   const [editData, setEditData] = useState({});
   const [editIndex, setEditIndex] = useState(-1);
+  const [toggledNoteDialog, setToggledNoteDialog] = useState(false);
+
   const columns = useMemo(() => {
     let columns = [...mainColumns];
     if (editable) {
@@ -64,6 +70,22 @@ const DeliverableTable = ({ deliverables = [], editable = false, onRowChange = n
       return value;
     }
   };
+  const toggleNoteDialog = (idx) => {
+    handleEditButton(idx);
+    setToggledNoteDialog(true);
+  };
+
+  const handleNoteSave = (e) => {
+    e.preventDefault();
+    onRowChange(editData);
+    setToggledNoteDialog(false);
+  };
+
+  const handleNoteClose = (e) => {
+    e.preventDefault();
+    setToggledNoteDialog(false);
+  };
+
   const getPredecessors = (row) => row.predecessors.map((pre) => deliverables.find((d) => d._id === pre).name).join(', ');
   const isDisabled = (idx) => idx !== editIndex && editIndex >= 0;
   const isReadOnly = (idx) => idx !== editIndex;
@@ -188,6 +210,9 @@ const DeliverableTable = ({ deliverables = [], editable = false, onRowChange = n
       <TableCell>{row.calculated.systemPV}%</TableCell>
       <TableCell>{row.calculated.systemStatus}%</TableCell>
       <TableCell>{row.calculated.systemEV}%</TableCell>
+      <TableCell>
+        <FileText color={row.note ? 'black' : 'lightgrey'} onClick={() => toggleNoteDialog(idx)} />
+      </TableCell>
     </TableRow>
   );
 
@@ -198,6 +223,31 @@ const DeliverableTable = ({ deliverables = [], editable = false, onRowChange = n
         <VektorSubTableContainer columns={columns} onSort={handleSort} sticky={true}>
           {sortedRows.map((row, idx) => (editable ? EditableRow(row, idx) : ReadOnlyRow(row, idx)))}
         </VektorSubTableContainer>
+        <Dialog open={toggledNoteDialog} onClose={handleNoteClose} fullWidth maxWidth="xs">
+          <DialogTitle>Deliverables Note Dialog</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              <TextField
+                multiline
+                rows={5}
+                name="note"
+                label="Deliverable Note"
+                fullWidth
+                variant="outlined"
+                value={editData?.note}
+                onChange={handleFieldChange}
+              />
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <ColorButton colour="red" autoFocus onClick={handleNoteSave}>
+              Save
+            </ColorButton>
+            <ColorButton colour="lightGreen" onClick={handleNoteClose}>
+              Cancel
+            </ColorButton>
+          </DialogActions>
+        </Dialog>
       </CardContent>
     </Card>
   );

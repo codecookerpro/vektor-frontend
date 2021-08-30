@@ -46,7 +46,7 @@ const EditMetaSystem = () => {
   );
 
   // eslint-disable-next-line
-  useEffect(() => dispatch(readMetaSystem({ system: systemId !== '_' && systemId, mainSystem: mainSystemId })), []);
+  useEffect(() => dispatch(readMetaSystem({ system: systemId !== '_' && systemId, mainSystem: mainSystemId !== '_' && mainSystemId })), []);
 
   useEffect(() => {
     if (isEmpty(metaSystem)) {
@@ -74,7 +74,9 @@ const EditMetaSystem = () => {
   };
   const handleRowChange = (data) => {
     const mainId = metaSystem.mainSystem._id;
-    dispatch(updateDeliverable({ ...restrict(data, ['_id', 'plannedHours', 'workedHours', 'start', 'end', 'completion', 'status']), mainId }));
+    dispatch(
+      updateDeliverable({ ...restrict(data, ['_id', 'plannedHours', 'workedHours', 'start', 'end', 'completion', 'status', 'note']), mainId })
+    );
   };
 
   return (

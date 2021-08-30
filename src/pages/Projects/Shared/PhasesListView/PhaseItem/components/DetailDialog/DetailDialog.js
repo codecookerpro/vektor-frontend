@@ -31,7 +31,7 @@ const DetailDialog = ({ open, onClose, metaSystem }) => {
   return (
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>
-        <LinkButton to={LINKS.EDIT_META_SYSTEM.HREF.replace(':systemId', metaSystem._id)} style={{ fontSize: 16 }}>
+        <LinkButton to={LINKS.EDIT_META_SYSTEM.HREF.replace(':systemId', metaSystem._id).replace(':mainSystemId', '_')} style={{ fontSize: 16 }}>
           {metaSystem.name}
         </LinkButton>
         <br />
