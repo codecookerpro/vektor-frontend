@@ -3,6 +3,8 @@ import { Dialog, DialogTitle, DialogContent, DialogActions } from 'components/UI
 import { Chip, Grid, Button } from '@material-ui/core';
 import { COLORS } from 'parts/WorkflowGraph/constants';
 import moment from 'moment';
+import LinkButton from 'components/UI/Buttons/LinkButton';
+import LINKS from 'utils/constants/links';
 
 const DetailDialog = ({ open, onClose, metaSystem }) => {
   const details = useMemo(
@@ -29,7 +31,9 @@ const DetailDialog = ({ open, onClose, metaSystem }) => {
   return (
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>
-        {metaSystem.name}
+        <LinkButton to={LINKS.EDIT_META_SYSTEM.HREF.replace(':systemId', metaSystem._id)} style={{ fontSize: 16 }}>
+          {metaSystem.name}
+        </LinkButton>
         <br />
         <small>{metaSystem.equipmentNumber}#</small>
       </DialogTitle>
