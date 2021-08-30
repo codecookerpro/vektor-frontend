@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, Grid, IconButton, Menu, MenuItem } from '@material-ui/core';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
-
+import moment from 'moment';
 import useStyles from './styles';
 import { usePhaseBoxLogic } from './helpers';
 
@@ -23,6 +23,14 @@ const PhaseBox = ({ phase, fields, onHeaderClick, onActionClick, phaseActions })
           className={onHeaderClick ? classes.cardHeader : ''}
           title={name}
           onClick={onHeaderClick}
+          subheader={
+            phase.start &&
+            phase.end && (
+              <div>
+                {moment(phase.start).format('DD/MM/YYYY')} - {moment(phase.end).format('DD/MM/YYYY')}
+              </div>
+            )
+          }
           action={
             isPhaseActions && (
               <>
