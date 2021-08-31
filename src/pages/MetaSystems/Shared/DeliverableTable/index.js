@@ -1,5 +1,5 @@
 import React, { memo, useMemo, useState } from 'react';
-import { Card, CardHeader, CardContent, TableCell, TableRow, IconButton } from '@material-ui/core';
+import { Card, CardHeader, CardContent, TableCell, TableRow, IconButton, Checkbox } from '@material-ui/core';
 import { TextField } from '@material-ui/core';
 import { Edit, CheckCircle } from '@material-ui/icons';
 import { FileText, BarChart2 } from 'react-feather';
@@ -60,7 +60,16 @@ const DeliverableTable = ({ deliverables = [], systemTrend = {}, departments = [
     return columns.map((c) => ({ ...c, sortable: c.sortable && !editable }));
   }, [editable]);
 
-  const handleFieldChange = ({ target: { value, name } }) => setEditData({ ...editData, [name]: value });
+  const handleFieldChange = ({ target: { value, name } }) => {
+    const updatedData = { ...editData, [name]: value };
+
+    if (name === 'department') {
+      updatedData.resource = [];
+    }
+
+    setEditData(updatedData);
+  };
+
   const handleEditButton = (idx) => {
     if (editIndex === idx) {
       setEditIndex(-1);
@@ -203,18 +212,25 @@ const DeliverableTable = ({ deliverables = [], systemTrend = {}, departments = [
       <TableCell>{round(row.calculated.systemStatus, 2)}%</TableCell>
       <TableCell>{round(row.calculated.systemEV, 2)}%</TableCell>
       <TableCell>
-        <VektorCheckbox onChange={(e) => handleFieldChange({ target: { name: 'activity', value: e.target.checked } })} disabled={isReadOnly(idx)} />
+        <VektorCheckbox
+          onChange={(e) => handleFieldChange({ target: { name: 'activity', value: e.target.checked } })}
+          checked={row.activity || false}
+          disabled={isReadOnly(idx)}
+        />
       </TableCell>
       <TableCell>
         <FilterSelect
           fullWidth
           placeholder="Select department"
           items={departments}
+          name="department"
           keys={{
             label: 'label',
             value: '_id',
           }}
           disabled={isReadOnly(idx)}
+          onChange={handleFieldChange}
+          value={getFieldValue(idx, 'department')}
         />
       </TableCell>
       <TableCell>
@@ -222,7 +238,7 @@ const DeliverableTable = ({ deliverables = [], systemTrend = {}, departments = [
           fullWidth
           multiple
           placeholder="Select users"
-          items={users}
+          items={users.filter((u) => u.department === getFieldValue(idx, 'department'))}
           name="resource"
           keys={{
             label: 'name',
@@ -265,9 +281,18 @@ const DeliverableTable = ({ deliverables = [], systemTrend = {}, departments = [
       <TableCell>{row.calculated.systemPV}%</TableCell>
       <TableCell>{row.calculated.systemStatus}%</TableCell>
       <TableCell>{row.calculated.systemEV}%</TableCell>
-      <TableCell>{row.activity ? 'Yes' : 'No'}</TableCell>
-      <TableCell>{row.resource}</TableCell>
+      <TableCell>
+        <Checkbox checked={row.activity} />
+      </TableCell>
       <TableCell>{departments.find((d) => d._id === row.department)?.label}</TableCell>
+      <TableCell>
+        {row.resource.map((uid) => (
+          <React.Fragment key={uid}>
+            <span>{users.find((u) => u._id === uid)?.name}</span>
+            <br />
+          </React.Fragment>
+        ))}
+      </TableCell>
       <TableCell>
         <IconButton onClick={() => toggleNoteDialog(idx)} style={{ padding: 0 }}>
           <FileText color={row.note ? 'black' : 'lightgrey'} />

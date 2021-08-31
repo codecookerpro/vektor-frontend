@@ -30,8 +30,7 @@ const EditMetaSystem = () => {
   const systemTrend = useSelector((state) =>
     state.projects.systemTrends[metaSystem.project]?.find((t) => t.metaSystem === systemId || t.system === mainSystemId)
   );
-  const projectOrganization = useSelector((state) => state.projects.results.find((p) => p._id === metaSystem.project)?.organization);
-  const departments = useSelector((state) => state.organizations.results.find((o) => o._id === projectOrganization)?.departments || []);
+  const departments = useSelector((state) => state.organizations.results.find((o) => o._id === metaSystem.organization)?.departments || []);
   const users = useSelector((state) => state.users.results);
 
   const { title, editable } = useMemo(() => {
@@ -82,7 +81,22 @@ const EditMetaSystem = () => {
   const handleRowChange = (data) => {
     const mainId = metaSystem.mainSystem._id;
     dispatch(
-      updateDeliverable({ ...restrict(data, ['_id', 'plannedHours', 'workedHours', 'start', 'end', 'completion', 'status', 'note']), mainId })
+      updateDeliverable({
+        ...restrict(data, [
+          '_id',
+          'plannedHours',
+          'workedHours',
+          'start',
+          'end',
+          'completion',
+          'status',
+          'note',
+          'department',
+          'activity',
+          'resource',
+        ]),
+        mainId,
+      })
     );
   };
 

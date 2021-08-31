@@ -55,7 +55,7 @@ const FilterSelect = React.forwardRef(
           renderValue={(value) =>
             multiple
               ? value.map((v) => items.find((item) => item[keys.value] === v)?.[keys.label]).join(', ')
-              : items.find((item) => item[keys.value] === value)?.label
+              : items.find((item) => item[keys.value] === value)?.[keys.label]
           }
           {...rest}
         >
