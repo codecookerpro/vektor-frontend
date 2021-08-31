@@ -1,12 +1,13 @@
 import React, { memo, useMemo, useState } from 'react';
-import { Card, CardHeader, CardContent, TableCell, TableRow, IconButton } from '@material-ui/core';
+import { Card, CardHeader, CardContent, TableCell, TableRow, IconButton, Checkbox } from '@material-ui/core';
 import { TextField } from '@material-ui/core';
 import { Edit, CheckCircle } from '@material-ui/icons';
 import { FileText, BarChart2 } from 'react-feather';
-import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from 'components/UI/VektorDialog';
+import { Dialog, DialogTitle, DialogContent, DialogActions } from 'components/UI/VektorDialog';
 import { ColorButton } from 'components/UI/Buttons';
 import Chart from 'react-google-charts';
 import { CHART_OPTIONS } from './constants';
+import FilterSelect from 'components/UI/Selects/FilterSelect';
 
 import VektorSubTableContainer from 'parts/Tables/VektorSubTableContainer';
 import { noop } from 'utils/constants';
@@ -14,6 +15,7 @@ import moment from 'moment';
 import useFocusElement from 'utils/hooks/useFocusElement';
 import { round } from 'utils/helpers/utility';
 import { useTableSort } from 'utils/hooks';
+import VektorCheckbox from 'components/UI/VektorCheckbox';
 
 const mainColumns = [
   { id: 'name', label: 'Deliverable Dependancy', minWidth: 100, sortable: true },
@@ -33,10 +35,13 @@ const mainColumns = [
   { id: 'calculated.systemPV', label: 'System PV', minWidth: 70, sortable: true },
   { id: 'calculated.systemStatus', label: 'System Status', minWidth: 70, sortable: true },
   { id: 'calculated.systemEV', label: 'System EV', minWidth: 70, sortable: true },
+  { id: 'activity', label: 'Activity', minWidth: 70, sortable: true },
+  { id: 'department', label: 'Department', minWidth: 70, sortable: true },
+  { id: 'resource', label: 'Resource', minWidth: 70, sortable: true },
   { id: 'note', label: '', minWidth: 70, sortable: false },
 ];
 
-const DeliverableTable = ({ deliverables = [], systemTrend = {}, editable = false, onRowChange = noop }) => {
+const DeliverableTable = ({ deliverables = [], systemTrend = {}, departments = [], users = [], editable = false, onRowChange = noop }) => {
   useFocusElement(deliverables);
 
   const { sortedRows, handleSort } = useTableSort(deliverables);
@@ -55,7 +60,16 @@ const DeliverableTable = ({ deliverables = [], systemTrend = {}, editable = fals
     return columns.map((c) => ({ ...c, sortable: c.sortable && !editable }));
   }, [editable]);
 
-  const handleFieldChange = ({ target: { value, name } }) => setEditData({ ...editData, [name]: value });
+  const handleFieldChange = ({ target: { value, name } }) => {
+    const updatedData = { ...editData, [name]: value };
+
+    if (name === 'department') {
+      updatedData.resource = [];
+    }
+
+    setEditData(updatedData);
+  };
+
   const handleEditButton = (idx) => {
     if (editIndex === idx) {
       setEditIndex(-1);
@@ -98,7 +112,6 @@ const DeliverableTable = ({ deliverables = [], systemTrend = {}, editable = fals
     const data = samples.map(({ date, deliverable: { EV, PV } }) => [moment(date).format('YYYY/MM/DD'), EV, PV]);
     setTrendChartData([labels, ...data]);
     setToggledTrendChart(true);
-    setTimeout(() => console.log(trendChartData));
   };
 
   const getPredecessors = (row) => row.predecessors.map((pre) => deliverables.find((d) => d._id === pre).name).join(', ');
@@ -199,6 +212,44 @@ const DeliverableTable = ({ deliverables = [], systemTrend = {}, editable = fals
       <TableCell>{round(row.calculated.systemStatus, 2)}%</TableCell>
       <TableCell>{round(row.calculated.systemEV, 2)}%</TableCell>
       <TableCell>
+        <VektorCheckbox
+          onChange={(e) => handleFieldChange({ target: { name: 'activity', value: e.target.checked } })}
+          checked={row.activity || false}
+          disabled={isReadOnly(idx)}
+        />
+      </TableCell>
+      <TableCell>
+        <FilterSelect
+          fullWidth
+          placeholder="Select department"
+          items={departments}
+          name="department"
+          keys={{
+            label: 'label',
+            value: '_id',
+          }}
+          disabled={isReadOnly(idx)}
+          onChange={handleFieldChange}
+          value={getFieldValue(idx, 'department')}
+        />
+      </TableCell>
+      <TableCell>
+        <FilterSelect
+          fullWidth
+          multiple
+          placeholder="Select users"
+          items={users.filter((u) => u.department === getFieldValue(idx, 'department'))}
+          name="resource"
+          keys={{
+            label: 'name',
+            value: '_id',
+          }}
+          disabled={isReadOnly(idx)}
+          onChange={handleFieldChange}
+          value={getFieldValue(idx, 'resource')}
+        />
+      </TableCell>
+      <TableCell>
         <IconButton aria-label="edit" onClick={() => handleEditButton(idx)}>
           {idx === editIndex ? <CheckCircle /> : <Edit />}
         </IconButton>
@@ -216,8 +267,10 @@ const DeliverableTable = ({ deliverables = [], systemTrend = {}, editable = fals
       <TableCell>{getFieldValue(idx, 'end')}</TableCell>
       <TableCell>{getFieldValue(idx, 'completion')}</TableCell>
       <TableCell>
-        {getFieldValue(idx, 'status')}%
-        <BarChart2 style={{ float: 'right', marginRight: 20 }} onClick={() => showTrendChart(row)} />
+        <span>{getFieldValue(idx, 'status')}%</span>
+        <IconButton style={{ float: 'right', padding: 0 }} onClick={() => showTrendChart(row)}>
+          <BarChart2 />
+        </IconButton>
       </TableCell>
       <TableCell>{row.calculated.lapsed}</TableCell>
       <TableCell>{row.calculated.differential}</TableCell>
@@ -229,7 +282,21 @@ const DeliverableTable = ({ deliverables = [], systemTrend = {}, editable = fals
       <TableCell>{row.calculated.systemStatus}%</TableCell>
       <TableCell>{row.calculated.systemEV}%</TableCell>
       <TableCell>
-        <FileText color={row.note ? 'black' : 'lightgrey'} onClick={() => toggleNoteDialog(idx)} />
+        <Checkbox checked={row.activity} />
+      </TableCell>
+      <TableCell>{departments.find((d) => d._id === row.department)?.label}</TableCell>
+      <TableCell>
+        {row.resource.map((uid) => (
+          <React.Fragment key={uid}>
+            <span>{users.find((u) => u._id === uid)?.name}</span>
+            <br />
+          </React.Fragment>
+        ))}
+      </TableCell>
+      <TableCell>
+        <IconButton onClick={() => toggleNoteDialog(idx)} style={{ padding: 0 }}>
+          <FileText color={row.note ? 'black' : 'lightgrey'} />
+        </IconButton>
       </TableCell>
     </TableRow>
   );
@@ -244,18 +311,16 @@ const DeliverableTable = ({ deliverables = [], systemTrend = {}, editable = fals
         <Dialog open={toggledNoteDialog} onClose={handleNoteClose} fullWidth maxWidth="xs">
           <DialogTitle>Deliverables Note Dialog</DialogTitle>
           <DialogContent>
-            <DialogContentText>
-              <TextField
-                multiline
-                rows={5}
-                name="note"
-                label="Deliverable Note"
-                fullWidth
-                variant="outlined"
-                value={editData?.note}
-                onChange={handleFieldChange}
-              />
-            </DialogContentText>
+            <TextField
+              multiline
+              rows={5}
+              name="note"
+              label="Deliverable Note"
+              fullWidth
+              variant="outlined"
+              value={editData?.note}
+              onChange={handleFieldChange}
+            />
           </DialogContent>
           <DialogActions>
             <ColorButton colour="red" autoFocus onClick={handleNoteSave}>
@@ -266,19 +331,17 @@ const DeliverableTable = ({ deliverables = [], systemTrend = {}, editable = fals
             </ColorButton>
           </DialogActions>
         </Dialog>
-        <Dialog open={toggledTrendChart} onClose={handleNoteClose} fullWidth maxWidth="md">
+        <Dialog open={toggledTrendChart} onClose={() => setToggledTrendChart(false)} fullWidth maxWidth="md">
           <DialogTitle>Deliverable Trend Chart</DialogTitle>
           <DialogContent>
-            <DialogContentText>
-              <Chart
-                width="100%"
-                height="600px"
-                chartType="LineChart"
-                loader={<div>Loading Chart</div>}
-                data={trendChartData}
-                options={CHART_OPTIONS}
-              />
-            </DialogContentText>
+            <Chart
+              width="100%"
+              height="600px"
+              chartType="LineChart"
+              loader={<div>Loading Chart</div>}
+              data={trendChartData}
+              options={CHART_OPTIONS}
+            />
           </DialogContent>
           <DialogActions>
             <ColorButton colour="lightGreen" onClick={() => setToggledTrendChart(false)}>

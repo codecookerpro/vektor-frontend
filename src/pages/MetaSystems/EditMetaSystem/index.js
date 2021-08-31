@@ -30,6 +30,8 @@ const EditMetaSystem = () => {
   const systemTrend = useSelector((state) =>
     state.projects.systemTrends[metaSystem.project]?.find((t) => t.metaSystem === systemId || t.system === mainSystemId)
   );
+  const departments = useSelector((state) => state.organizations.results.find((o) => o._id === metaSystem.organization)?.departments || []);
+  const users = useSelector((state) => state.users.results);
 
   const { title, editable } = useMemo(() => {
     const title = formMode === FORM_MODE.view ? 'View System' : LINKS.EDIT_META_SYSTEM.TITLE;
@@ -79,7 +81,22 @@ const EditMetaSystem = () => {
   const handleRowChange = (data) => {
     const mainId = metaSystem.mainSystem._id;
     dispatch(
-      updateDeliverable({ ...restrict(data, ['_id', 'plannedHours', 'workedHours', 'start', 'end', 'completion', 'status', 'note']), mainId })
+      updateDeliverable({
+        ...restrict(data, [
+          '_id',
+          'plannedHours',
+          'workedHours',
+          'start',
+          'end',
+          'completion',
+          'status',
+          'note',
+          'department',
+          'activity',
+          'resource',
+        ]),
+        mainId,
+      })
     );
   };
 
@@ -105,6 +122,8 @@ const EditMetaSystem = () => {
               editable={editable}
               deliverables={metaSystem.mainSystem.deliverables}
               systemTrend={systemTrend}
+              departments={departments}
+              users={users}
               onRowChange={handleRowChange}
             />
           </Grid>
