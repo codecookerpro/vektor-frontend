@@ -2,9 +2,11 @@ import React, { memo, useMemo, useState } from 'react';
 import { Card, CardHeader, CardContent, TableCell, TableRow, IconButton } from '@material-ui/core';
 import { TextField } from '@material-ui/core';
 import { Edit, CheckCircle } from '@material-ui/icons';
-import { FileText } from 'react-feather';
+import { FileText, BarChart2 } from 'react-feather';
 import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from 'components/UI/VektorDialog';
 import { ColorButton } from 'components/UI/Buttons';
+import Chart from 'react-google-charts';
+import { CHART_OPTIONS } from './constants';
 
 import VektorSubTableContainer from 'parts/Tables/VektorSubTableContainer';
 import { noop } from 'utils/constants';
@@ -34,13 +36,15 @@ const mainColumns = [
   { id: 'note', label: '', minWidth: 70, sortable: false },
 ];
 
-const DeliverableTable = ({ deliverables = [], editable = false, onRowChange = noop }) => {
+const DeliverableTable = ({ deliverables = [], systemTrend = {}, editable = false, onRowChange = noop }) => {
   useFocusElement(deliverables);
 
   const { sortedRows, handleSort } = useTableSort(deliverables);
   const [editData, setEditData] = useState({});
   const [editIndex, setEditIndex] = useState(-1);
   const [toggledNoteDialog, setToggledNoteDialog] = useState(false);
+  const [toggledTrendChart, setToggledTrendChart] = useState(false);
+  const [trendChartData, setTrendChartData] = useState([]);
 
   const columns = useMemo(() => {
     let columns = [...mainColumns];
@@ -84,6 +88,17 @@ const DeliverableTable = ({ deliverables = [], editable = false, onRowChange = n
   const handleNoteClose = (e) => {
     e.preventDefault();
     setToggledNoteDialog(false);
+  };
+
+  const showTrendChart = (deliverable) => {
+    const samples = systemTrend.samples
+      .map((s) => ({ ...s, deliverable: s.deliverables.find((d) => d.deliverable === deliverable._id) }))
+      .sort((a, b) => moment(a.date) > moment(b.date));
+    const labels = ['Date', `${deliverable.name} EV`, `${deliverable.name} PV`];
+    const data = samples.map(({ date, deliverable: { EV, PV } }) => [moment(date).format('YYYY/MM/DD'), EV, PV]);
+    setTrendChartData([labels, ...data]);
+    setToggledTrendChart(true);
+    setTimeout(() => console.log(trendChartData));
   };
 
   const getPredecessors = (row) => row.predecessors.map((pre) => deliverables.find((d) => d._id === pre).name).join(', ');
@@ -200,7 +215,10 @@ const DeliverableTable = ({ deliverables = [], editable = false, onRowChange = n
       <TableCell>{getFieldValue(idx, 'start')}</TableCell>
       <TableCell>{getFieldValue(idx, 'end')}</TableCell>
       <TableCell>{getFieldValue(idx, 'completion')}</TableCell>
-      <TableCell>{getFieldValue(idx, 'status')}%</TableCell>
+      <TableCell>
+        {getFieldValue(idx, 'status')}%
+        <BarChart2 style={{ float: 'right', marginRight: 20 }} onClick={() => showTrendChart(row)} />
+      </TableCell>
       <TableCell>{row.calculated.lapsed}</TableCell>
       <TableCell>{row.calculated.differential}</TableCell>
       <TableCell>{row.calculated.effort}</TableCell>
@@ -245,6 +263,26 @@ const DeliverableTable = ({ deliverables = [], editable = false, onRowChange = n
             </ColorButton>
             <ColorButton colour="lightGreen" onClick={handleNoteClose}>
               Cancel
+            </ColorButton>
+          </DialogActions>
+        </Dialog>
+        <Dialog open={toggledTrendChart} onClose={handleNoteClose} fullWidth maxWidth="md">
+          <DialogTitle>Deliverable Trend Chart</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              <Chart
+                width="100%"
+                height="600px"
+                chartType="LineChart"
+                loader={<div>Loading Chart</div>}
+                data={trendChartData}
+                options={CHART_OPTIONS}
+              />
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <ColorButton colour="lightGreen" onClick={() => setToggledTrendChart(false)}>
+              Close
             </ColorButton>
           </DialogActions>
         </Dialog>

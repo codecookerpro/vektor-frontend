@@ -27,6 +27,10 @@ const EditMetaSystem = () => {
   const metaSystem = useSelector(
     (state) => state.projects.metaSystems.find((s) => (systemId !== '_' && s._id === systemId) || s.mainSystem._id === mainSystemId) || {}
   );
+  const systemTrend = useSelector((state) =>
+    state.projects.systemTrends[metaSystem.project]?.find((t) => t.metaSystem === systemId || t.system === mainSystemId)
+  );
+
   const { title, editable } = useMemo(() => {
     const title = formMode === FORM_MODE.view ? 'View System' : LINKS.EDIT_META_SYSTEM.TITLE;
     const editable = formMode === FORM_MODE.update;
@@ -97,7 +101,12 @@ const EditMetaSystem = () => {
             <TrendChart title="Deliverable Trend Chart" projectId={metaSystem.project} systemId={metaSystem._id} />
           </Grid>
           <Grid item xs={12}>
-            <DeliverableTable editable={editable} deliverables={metaSystem.mainSystem.deliverables} onRowChange={handleRowChange} />
+            <DeliverableTable
+              editable={editable}
+              deliverables={metaSystem.mainSystem.deliverables}
+              systemTrend={systemTrend}
+              onRowChange={handleRowChange}
+            />
           </Grid>
         </Grid>
       )}
