@@ -3,7 +3,7 @@ import { Card, CardHeader, CardContent, TableCell, TableRow, IconButton } from '
 import { TextField } from '@material-ui/core';
 import { Edit, CheckCircle } from '@material-ui/icons';
 import { FileText, BarChart2 } from 'react-feather';
-import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from 'components/UI/VektorDialog';
+import { Dialog, DialogTitle, DialogContent, DialogActions } from 'components/UI/VektorDialog';
 import { ColorButton } from 'components/UI/Buttons';
 import Chart from 'react-google-charts';
 import { CHART_OPTIONS } from './constants';
@@ -98,7 +98,6 @@ const DeliverableTable = ({ deliverables = [], systemTrend = {}, editable = fals
     const data = samples.map(({ date, deliverable: { EV, PV } }) => [moment(date).format('YYYY/MM/DD'), EV, PV]);
     setTrendChartData([labels, ...data]);
     setToggledTrendChart(true);
-    setTimeout(() => console.log(trendChartData));
   };
 
   const getPredecessors = (row) => row.predecessors.map((pre) => deliverables.find((d) => d._id === pre).name).join(', ');
@@ -216,8 +215,10 @@ const DeliverableTable = ({ deliverables = [], systemTrend = {}, editable = fals
       <TableCell>{getFieldValue(idx, 'end')}</TableCell>
       <TableCell>{getFieldValue(idx, 'completion')}</TableCell>
       <TableCell>
-        {getFieldValue(idx, 'status')}%
-        <BarChart2 style={{ float: 'right', marginRight: 20 }} onClick={() => showTrendChart(row)} />
+        <span>{getFieldValue(idx, 'status')}%</span>
+        <IconButton style={{ float: 'right', padding: 0 }} onClick={() => showTrendChart(row)}>
+          <BarChart2 />
+        </IconButton>
       </TableCell>
       <TableCell>{row.calculated.lapsed}</TableCell>
       <TableCell>{row.calculated.differential}</TableCell>
@@ -229,7 +230,9 @@ const DeliverableTable = ({ deliverables = [], systemTrend = {}, editable = fals
       <TableCell>{row.calculated.systemStatus}%</TableCell>
       <TableCell>{row.calculated.systemEV}%</TableCell>
       <TableCell>
-        <FileText color={row.note ? 'black' : 'lightgrey'} onClick={() => toggleNoteDialog(idx)} />
+        <IconButton onClick={() => toggleNoteDialog(idx)} style={{ padding: 0 }}>
+          <FileText color={row.note ? 'black' : 'lightgrey'} />
+        </IconButton>
       </TableCell>
     </TableRow>
   );
@@ -244,18 +247,16 @@ const DeliverableTable = ({ deliverables = [], systemTrend = {}, editable = fals
         <Dialog open={toggledNoteDialog} onClose={handleNoteClose} fullWidth maxWidth="xs">
           <DialogTitle>Deliverables Note Dialog</DialogTitle>
           <DialogContent>
-            <DialogContentText>
-              <TextField
-                multiline
-                rows={5}
-                name="note"
-                label="Deliverable Note"
-                fullWidth
-                variant="outlined"
-                value={editData?.note}
-                onChange={handleFieldChange}
-              />
-            </DialogContentText>
+            <TextField
+              multiline
+              rows={5}
+              name="note"
+              label="Deliverable Note"
+              fullWidth
+              variant="outlined"
+              value={editData?.note}
+              onChange={handleFieldChange}
+            />
           </DialogContent>
           <DialogActions>
             <ColorButton colour="red" autoFocus onClick={handleNoteSave}>
@@ -266,19 +267,17 @@ const DeliverableTable = ({ deliverables = [], systemTrend = {}, editable = fals
             </ColorButton>
           </DialogActions>
         </Dialog>
-        <Dialog open={toggledTrendChart} onClose={handleNoteClose} fullWidth maxWidth="md">
+        <Dialog open={toggledTrendChart} onClose={() => setToggledTrendChart(false)} fullWidth maxWidth="md">
           <DialogTitle>Deliverable Trend Chart</DialogTitle>
           <DialogContent>
-            <DialogContentText>
-              <Chart
-                width="100%"
-                height="600px"
-                chartType="LineChart"
-                loader={<div>Loading Chart</div>}
-                data={trendChartData}
-                options={CHART_OPTIONS}
-              />
-            </DialogContentText>
+            <Chart
+              width="100%"
+              height="600px"
+              chartType="LineChart"
+              loader={<div>Loading Chart</div>}
+              data={trendChartData}
+              options={CHART_OPTIONS}
+            />
           </DialogContent>
           <DialogActions>
             <ColorButton colour="lightGreen" onClick={() => setToggledTrendChart(false)}>
