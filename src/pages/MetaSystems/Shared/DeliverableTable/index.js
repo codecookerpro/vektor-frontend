@@ -7,6 +7,7 @@ import { Dialog, DialogTitle, DialogContent, DialogActions } from 'components/UI
 import { ColorButton } from 'components/UI/Buttons';
 import Chart from 'react-google-charts';
 import { CHART_OPTIONS } from './constants';
+import FilterSelect from 'components/UI/Selects/FilterSelect';
 
 import VektorSubTableContainer from 'parts/Tables/VektorSubTableContainer';
 import { noop } from 'utils/constants';
@@ -14,6 +15,7 @@ import moment from 'moment';
 import useFocusElement from 'utils/hooks/useFocusElement';
 import { round } from 'utils/helpers/utility';
 import { useTableSort } from 'utils/hooks';
+import VektorCheckbox from 'components/UI/VektorCheckbox';
 
 const mainColumns = [
   { id: 'name', label: 'Deliverable Dependancy', minWidth: 100, sortable: true },
@@ -33,10 +35,13 @@ const mainColumns = [
   { id: 'calculated.systemPV', label: 'System PV', minWidth: 70, sortable: true },
   { id: 'calculated.systemStatus', label: 'System Status', minWidth: 70, sortable: true },
   { id: 'calculated.systemEV', label: 'System EV', minWidth: 70, sortable: true },
+  { id: 'activity', label: 'Activity', minWidth: 70, sortable: true },
+  { id: 'department', label: 'Department', minWidth: 70, sortable: true },
+  { id: 'resource', label: 'Resource', minWidth: 70, sortable: true },
   { id: 'note', label: '', minWidth: 70, sortable: false },
 ];
 
-const DeliverableTable = ({ deliverables = [], systemTrend = {}, editable = false, onRowChange = noop }) => {
+const DeliverableTable = ({ deliverables = [], systemTrend = {}, departments = [], users = [], editable = false, onRowChange = noop }) => {
   useFocusElement(deliverables);
 
   const { sortedRows, handleSort } = useTableSort(deliverables);
@@ -198,6 +203,37 @@ const DeliverableTable = ({ deliverables = [], systemTrend = {}, editable = fals
       <TableCell>{round(row.calculated.systemStatus, 2)}%</TableCell>
       <TableCell>{round(row.calculated.systemEV, 2)}%</TableCell>
       <TableCell>
+        <VektorCheckbox onChange={(e) => handleFieldChange({ target: { name: 'activity', value: e.target.checked } })} disabled={isReadOnly(idx)} />
+      </TableCell>
+      <TableCell>
+        <FilterSelect
+          fullWidth
+          placeholder="Select department"
+          items={departments}
+          keys={{
+            label: 'label',
+            value: '_id',
+          }}
+          disabled={isReadOnly(idx)}
+        />
+      </TableCell>
+      <TableCell>
+        <FilterSelect
+          fullWidth
+          multiple
+          placeholder="Select users"
+          items={users}
+          name="resource"
+          keys={{
+            label: 'name',
+            value: '_id',
+          }}
+          disabled={isReadOnly(idx)}
+          onChange={handleFieldChange}
+          value={getFieldValue(idx, 'resource')}
+        />
+      </TableCell>
+      <TableCell>
         <IconButton aria-label="edit" onClick={() => handleEditButton(idx)}>
           {idx === editIndex ? <CheckCircle /> : <Edit />}
         </IconButton>
@@ -229,6 +265,9 @@ const DeliverableTable = ({ deliverables = [], systemTrend = {}, editable = fals
       <TableCell>{row.calculated.systemPV}%</TableCell>
       <TableCell>{row.calculated.systemStatus}%</TableCell>
       <TableCell>{row.calculated.systemEV}%</TableCell>
+      <TableCell>{row.activity ? 'Yes' : 'No'}</TableCell>
+      <TableCell>{row.resource}</TableCell>
+      <TableCell>{departments.find((d) => d._id === row.department)?.label}</TableCell>
       <TableCell>
         <IconButton onClick={() => toggleNoteDialog(idx)} style={{ padding: 0 }}>
           <FileText color={row.note ? 'black' : 'lightgrey'} />

@@ -30,6 +30,9 @@ const EditMetaSystem = () => {
   const systemTrend = useSelector((state) =>
     state.projects.systemTrends[metaSystem.project]?.find((t) => t.metaSystem === systemId || t.system === mainSystemId)
   );
+  const projectOrganization = useSelector((state) => state.projects.results.find((p) => p._id === metaSystem.project)?.organization);
+  const departments = useSelector((state) => state.organizations.results.find((o) => o._id === projectOrganization)?.departments || []);
+  const users = useSelector((state) => state.users.results);
 
   const { title, editable } = useMemo(() => {
     const title = formMode === FORM_MODE.view ? 'View System' : LINKS.EDIT_META_SYSTEM.TITLE;
@@ -105,6 +108,8 @@ const EditMetaSystem = () => {
               editable={editable}
               deliverables={metaSystem.mainSystem.deliverables}
               systemTrend={systemTrend}
+              departments={departments}
+              users={users}
               onRowChange={handleRowChange}
             />
           </Grid>

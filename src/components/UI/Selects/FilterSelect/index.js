@@ -1,5 +1,5 @@
 import React, { memo } from 'react';
-import { MenuItem, Select, Typography } from '@material-ui/core';
+import { MenuItem, Select, Typography, ListItemText, Checkbox, Input } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 
@@ -25,7 +25,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const FilterSelect = React.forwardRef(
-  ({ label, placeholder, items, error, fullWidth = false, keys = { label: 'LABEL', value: 'VALUE' }, className, value, ...rest }, ref) => {
+  (
+    { label, placeholder, items, error, fullWidth = false, multiple = false, keys = { label: 'LABEL', value: 'VALUE' }, className, value, ...rest },
+    ref
+  ) => {
     const classes = useStyles();
 
     return (
@@ -45,8 +48,15 @@ const FilterSelect = React.forwardRef(
           labelId="demo-simple-select-placeholder-label-label-1"
           id={`demo-simple-select-placeholder-label-${value}`}
           displayEmpty
+          multiple={multiple}
           error={!!error}
-          value={value || ''}
+          input={<Input />}
+          value={value || (multiple ? [] : '')}
+          renderValue={(value) =>
+            multiple
+              ? value.map((v) => items.find((item) => item[keys.value] === v)?.[keys.label]).join(', ')
+              : items.find((item) => item[keys.value] === value)?.label
+          }
           {...rest}
         >
           {placeholder && (
@@ -57,7 +67,8 @@ const FilterSelect = React.forwardRef(
 
           {items.map((item, index) => (
             <MenuItem key={index} value={item[keys.value]}>
-              {item[keys.label]}
+              {multiple && <Checkbox checked={value?.includes(item[keys.value]) || false} />}
+              <ListItemText primary={item[keys.label]} />
             </MenuItem>
           ))}
         </Select>
