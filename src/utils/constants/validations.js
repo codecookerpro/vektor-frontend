@@ -28,10 +28,12 @@ const SELECT_VALID = joi.string().required().messages({
   'string.required': 'Please Select one.',
 });
 
+const STRING_EMPTY = joi.string().allow('');
+
 const INTEGER_VALID = joi.number().integer().min(1).messages({
   'number.integer': 'Please input number.',
   'number.min': 'This field should be more than one.',
   'number.base': 'Please specify a number.',
 });
 
-export { EMAIL_VALID, PASSWORD_VALID, STRING_INPUT_VALID, SELECT_VALID, INTEGER_VALID };
+export { EMAIL_VALID, PASSWORD_VALID, STRING_INPUT_VALID, SELECT_VALID, INTEGER_VALID, STRING_EMPTY };
