@@ -1,4 +1,4 @@
-import React, { memo, useState } from 'react';
+import React, { memo, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { useForm, Controller } from 'react-hook-form';
@@ -50,12 +50,21 @@ const UserForm = ({ user = {}, mode }) => {
   const [changePassword, setChangePassword] = useState(mode === FORM_MODE.create);
   const [selectPermission, setSelectPermission] = useState(user?.permissions || '');
   const [selectOrganization, setSelectOrganization] = useState(user?.organization || '');
-
-  const schema = setSchema(changePassword, selectPermission);
+  const [selectDepartment, setSelectDepartment] = useState(user?.department || '');
+  const departments = useMemo(() => organizations.find((o) => o._id === selectOrganization)?.departments || [], [organizations, selectOrganization]);
+  const schema = setSchema(changePassword, selectPermission, selectDepartment);
 
   const { control, handleSubmit, errors } = useForm({
     resolver: joiResolver(schema),
   });
+
+  useEffect(() => {
+    if (!departments.length) {
+      control.setValue('department', '');
+    } else {
+      control.setValue('department', user?.department);
+    }
+  }, [departments, control, user]);
 
   const onSubmit = async (data) => {
     changeLoadingStatus(true);
@@ -65,6 +74,7 @@ const UserForm = ({ user = {}, mode }) => {
         name: data.name,
         organization: data.organization,
         permissions: data.permissions,
+        department: data.department,
       };
       if (data.permissions === PERMISSION_TYPES.admin && selectOrganization) params.organization = selectOrganization;
       if (data.password) {
@@ -195,9 +205,28 @@ const UserForm = ({ user = {}, mode }) => {
                   }}
                   error={errors.organization?.message}
                   control={control}
+                  onClick={({ target }) => setSelectOrganization(target?.value)}
                   defaultValue={selectOrganization}
                 />
               )}
+            </Grid>
+            <Grid item xs={12} sm={6} md={3}>
+              <Controller
+                as={<FilterSelect />}
+                fullWidth
+                name="department"
+                label="Department"
+                placeholder="Select department"
+                items={departments}
+                keys={{
+                  label: 'label',
+                  value: '_id',
+                }}
+                error={errors.department?.message}
+                control={control}
+                onClick={({ target }) => setSelectDepartment(target?.value)}
+                defaultValue={selectDepartment}
+              />
             </Grid>
 
             {mode === FORM_MODE.update && (
