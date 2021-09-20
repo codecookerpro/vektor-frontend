@@ -26,9 +26,19 @@ const DashboardList = () => {
   const projects = useSelector((state) => state.dashboards.projectList);
   const [orgFilterComp, orgFilter] = useFilter({ by: 'organizations.results', label: 'organization' });
   const filteredProjects = useMemo(() => projects.filter((p) => !orgFilter || p.organization === orgFilter), [projects, orgFilter]);
-  const [projFilterComp, projFilter] = useFilter({ items: filteredProjects, label: 'project', multiple: true });
+  const [projFilterComp, projFilter] = useFilter({ items: filteredProjects, label: 'project', multiple: true, resetField: orgFilter });
   const filteredDashboards = useMemo(
-    () => dashboards.filter((d) => (!projFilter.length && (!orgFilter || d.organization === orgFilter)) || projFilter.includes(d._id)),
+    () =>
+      dashboards.filter((d) => {
+        if (orgFilter) {
+          if (projFilter.length) {
+            return projFilter.includes(d._id);
+          } else {
+            return d.organization === orgFilter;
+          }
+        }
+        return true;
+      }),
     [dashboards, projFilter, orgFilter]
   );
 

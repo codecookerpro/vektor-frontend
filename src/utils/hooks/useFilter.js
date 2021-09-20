@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { get } from 'lodash';
 import { useHistory, useLocation } from 'react-router-dom';
 
-const useFilter = ({ items = [], by = null, label, keys = { label: 'name', value: '_id' }, multiple = false }) => {
+const useFilter = ({ items = [], by = null, label, keys = { label: 'name', value: '_id' }, multiple = false, resetField = null }) => {
   const { search, pathname } = useLocation();
   const history = useHistory();
   const storeItems = useSelector((state) => by && get(state, by.split('.')));
@@ -13,20 +13,22 @@ const useFilter = ({ items = [], by = null, label, keys = { label: 'name', value
   const filterKey = useMemo(() => `f__${label}`, [label]);
   const entries = useMemo(() => (items.length ? items : by ? storeItems : []), [items, storeItems, by]);
   const param = params.get(filterKey);
-  const [value, setValue] = useState(multiple ? param?.split(',') || [] : param);
+  const [value, setValue] = useState(multiple ? (param ? param.split(',') : []) : param);
+  const [modified, setModified] = useState(false);
 
   const handleChange = useCallback(
     ({ target: { value } }) => {
       params.set(filterKey, value);
       history.replace(`${pathname}?${params.toString()}`);
       setValue(value);
+      setModified(true);
     },
     [filterKey, history, params, pathname]
   );
 
   const selectorProps = useMemo(
     () => ({
-      label: `By ${label}`,
+      label: `Filter by ${label}`,
       placeholder: `Select ${label}`,
       items: entries,
       keys,
@@ -38,13 +40,15 @@ const useFilter = ({ items = [], by = null, label, keys = { label: 'name', value
   );
 
   useEffect(() => {
-    setTimeout(() => {
+    if (modified && resetField) {
       params.set(filterKey, '');
       history.replace(`${pathname}?${params.toString()}`);
       setValue(multiple ? [] : null);
-    });
+    } else if (!modified) {
+      setModified(true);
+    }
     // eslint-disable-next-line
-  }, [entries]);
+  }, [resetField]);
 
   const component = useMemo(() => <FilterSelect {...selectorProps} />, [selectorProps]);
 
