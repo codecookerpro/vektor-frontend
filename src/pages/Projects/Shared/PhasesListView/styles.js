@@ -6,6 +6,8 @@ const useStyles = makeStyles(() => ({
     overflowX: 'auto',
     flexWrap: 'nowrap',
     maxWidth: 'calc(100vw - 331px)',
+    padding: 12,
+    margin: -12,
   },
   phaseContainer: {
     paddingTop: 12,
