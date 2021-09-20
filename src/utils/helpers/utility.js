@@ -47,3 +47,5 @@ export const round = (num, prec) => {
 
   return Math.round(num * Math.pow(10, prec)) / Math.pow(10, prec);
 };
+
+export const toArray = (data) => (Array.isArray(data) ? data : [data]);
