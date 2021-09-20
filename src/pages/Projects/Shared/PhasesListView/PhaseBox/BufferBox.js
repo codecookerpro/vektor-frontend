@@ -22,10 +22,10 @@ const BufferBox = ({ fields }) => {
 
   return (
     <div className={classes.root} ref={dropRef}>
-      <Card className={classes.card}>
+      <Card>
         <CardHeader title="Unassigned systems" action={toggleButton} />
         {toggled && (
-          <CardContent className={classes.content}>
+          <CardContent>
             <Grid container spacing={2}>
               {fields}
             </Grid>
