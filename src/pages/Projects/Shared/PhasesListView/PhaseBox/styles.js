@@ -7,6 +7,7 @@ const useStyles = makeStyles(() => ({
   card: {
     minWidth: 265,
     height: '100%',
+    boxShadow: 'none',
   },
   content: {
     minHeight: 300,
