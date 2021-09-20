@@ -214,7 +214,7 @@ const DeliverableTable = ({ deliverables = [], systemTrend = {}, departments = [
       <TableCell>
         <VektorCheckbox
           onChange={(e) => handleFieldChange({ target: { name: 'activity', value: e.target.checked } })}
-          checked={row.activity || false}
+          checked={getFieldValue(idx, 'activity')}
           disabled={isReadOnly(idx)}
         />
       </TableCell>
