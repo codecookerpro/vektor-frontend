@@ -11,7 +11,7 @@ const useStyles = makeStyles((theme) => ({
 
 const BufferBox = ({ fields }) => {
   const classes = useStyles();
-  const [toggleButton, , toggled] = useCardToggler({ defaultToggled: !!fields.length });
+  const [toggleButton, , toggled] = useCardToggler({ defaultToggled: true });
   const [, dropRef] = useDrop({
     accept: 'ITEM',
     collect: (monitor) => ({
