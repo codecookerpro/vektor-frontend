@@ -2,8 +2,8 @@ import { ColorButton } from 'components/UI/Buttons';
 import { useMemo, useState } from 'react';
 
 const useCardToggler = (options = {}) => {
-  const { disabled = false, showLabel = 'Show', hideLabel = 'Hide', color = 'lightGreen' } = options;
-  const [toggled, toggleCard] = useState(false);
+  const { disabled = false, showLabel = 'Show', hideLabel = 'Hide', color = 'lightGreen', defaultToggled = false } = options;
+  const [toggled, toggleCard] = useState(defaultToggled);
   const toggleButton = useMemo(
     () => (
       <ColorButton colour={color} onClick={() => toggleCard(!toggled)} disabled={disabled}>
