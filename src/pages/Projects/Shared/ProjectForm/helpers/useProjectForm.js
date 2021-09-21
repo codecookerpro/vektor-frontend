@@ -88,6 +88,7 @@ const useProjectFrom = (project, mode) => {
         }
       } else {
         dispatch(editProject(params));
+        history.push(LINKS.PROJECTS.HREF);
       }
     });
 
