@@ -18,7 +18,7 @@ import { useTableSort } from 'utils/hooks';
 import VektorCheckbox from 'components/UI/VektorCheckbox';
 
 const mainColumns = [
-  { id: 'name', label: 'Deliverable Dependancy', minWidth: 100, sortable: true },
+  { id: 'name', label: 'Deliverable', minWidth: 100, sortable: true },
   { id: 'predecessors', label: 'Predecessors', minWidth: 70, sortable: false },
   { id: 'plannedHours', label: 'Planned Hours', minWidth: 70, sortable: true },
   { id: 'workedHours', label: 'Worked Hours', minWidth: 70, sortable: true },
@@ -44,7 +44,8 @@ const mainColumns = [
 const DeliverableTable = ({ deliverables = [], systemTrend = {}, departments = [], users = [], editable = false, onRowChange = noop }) => {
   useFocusElement(deliverables);
 
-  const { sortedRows, handleSort } = useTableSort(deliverables);
+  const graphOrderRows = useMemo(() => deliverables.sort((a, b) => a.chartData.position.x - b.chartData.position.x), [deliverables]);
+  const { sortedRows, handleSort } = useTableSort(graphOrderRows);
   const [editData, setEditData] = useState({});
   const [editIndex, setEditIndex] = useState(-1);
   const [toggledNoteDialog, setToggledNoteDialog] = useState(false);

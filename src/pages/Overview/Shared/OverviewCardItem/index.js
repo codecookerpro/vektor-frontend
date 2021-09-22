@@ -2,7 +2,7 @@ import React, { memo } from 'react';
 import { Link } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import { ListItem } from '@material-ui/core';
-import { Edit, Plus, PlusSquare } from 'react-feather';
+import { Plus } from 'react-feather';
 import { LinkButton } from 'components/UI/Buttons';
 
 const useStyles = makeStyles((theme) => ({
@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const OverviewCardItem = ({ title, add, view, change }) => {
+const OverviewCardItem = ({ title, add, view }) => {
   const classes = useStyles();
 
   return (
@@ -49,18 +49,6 @@ const OverviewCardItem = ({ title, add, view, change }) => {
           <Link to={add} className={classes.blackLink}>
             <Plus className={classes.icon} />
             Add
-          </Link>
-        )}
-        {change && (
-          <Link to={change} className={classes.blueLink}>
-            <Edit className={classes.icon} />
-            Edit
-          </Link>
-        )}
-        {view && (
-          <Link to={view} className={classes.blueLink}>
-            <PlusSquare className={classes.icon} />
-            View
           </Link>
         )}
       </div>
