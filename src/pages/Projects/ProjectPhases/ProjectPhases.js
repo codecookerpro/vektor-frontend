@@ -70,11 +70,12 @@ const ProjectPhases = () => {
         <Grid item xs={12}>
           <DndProvider backend={HTML5Backend}>
             <Grid className={phasesContainer} container>
-              {phases.map(({ _id, orderIndex, name }, idx) => (
+              {phases.map(({ _id, orderIndex, name, status }, idx) => (
                 <Grid key={orderIndex} className={phaseContainer} item xs={12} sm={6} md={3}>
                   <PhaseBox
                     orderIndex={orderIndex}
                     phase={getPhaseComponent(orderIndex, idx, name, _id)}
+                    status={status}
                     phaseActions={isEditingVisible && ACTIONS_DATA}
                     fields={currentMetaSystems && returnItemsForColumn(_id)}
                     onActionClick={onActionClick}

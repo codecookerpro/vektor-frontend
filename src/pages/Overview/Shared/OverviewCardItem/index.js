@@ -1,7 +1,7 @@
 import React, { memo } from 'react';
 import { Link } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
-import { ListItem, Typography } from '@material-ui/core';
+import { ListItem } from '@material-ui/core';
 import { Edit, Plus, PlusSquare } from 'react-feather';
 import { LinkButton } from 'components/UI/Buttons';
 

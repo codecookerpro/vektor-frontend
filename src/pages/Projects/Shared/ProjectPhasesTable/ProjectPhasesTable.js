@@ -9,7 +9,7 @@ import { ACTIONS } from 'pages/Projects/constants';
 
 const columns = [
   { id: 'name', label: 'Name', minWidth: 170 },
-  { id: 'plannedComplete', label: 'Planned project % complete', minWidth: 100 },
+  { id: 'plannedComplete', label: 'project % complete', minWidth: 100 },
   { id: 'start', label: 'Start', minWidth: 100 },
   { id: 'end', label: 'End', minWidth: 100 },
   { id: 'edit', label: '', minWidth: 70 },
@@ -34,17 +34,7 @@ const ProjectPhasesTable = ({ activeAction, editingPhase, phases, onActionClick,
           {phases.map((phase, idx) => (
             <TableRow key={phase._id || phase.orderIndex}>
               <TableCell>{phase.name || ''}</TableCell>
-              <TableCell>
-                <TextField
-                  type="number"
-                  name="plannedValue"
-                  InputProps={{ inputProps: { min: '0', max: '100', step: '1' } }}
-                  onChange={({ target }) => onChangePhase(target, idx)}
-                  value={isEditingField(phase.orderIndex) ? editingPhase.plannedValue : phases[idx].plannedValue}
-                  disabled={!isEditing(phase.orderIndex)}
-                />
-                %
-              </TableCell>
+              <TableCell>{phase.status}%</TableCell>
               <TableCell>
                 <TextField
                   id="date"

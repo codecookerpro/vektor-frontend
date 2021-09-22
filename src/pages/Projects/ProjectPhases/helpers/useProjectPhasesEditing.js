@@ -5,12 +5,11 @@ import { useParams } from 'react-router-dom';
 import { readMetaSystem } from 'redux/actions/metaSystem';
 import { createProjectPhase, updateProjectPhase, deleteProjectPhase } from 'redux/actions/projects';
 import { ACTIONS } from 'pages/Projects/constants';
+import { round } from 'utils/helpers/utility';
 
 const useProjectPhasesEditing = () => {
   const dispatch = useDispatch();
   const { projectId } = useParams();
-
-  const [phases, setPhases] = useState([]);
   const [editingPhase, setEditingPhase] = useState(null);
   const [activeAction, setActiveAction] = useState('');
 
@@ -18,12 +17,22 @@ const useProjectPhasesEditing = () => {
   const project = useMemo(() => projects.find((item) => item._id === projectId), [projectId, projects]);
   const currentMetaSystems = useMemo(() => metaSystems.filter((m) => m.project === projectId), [projectId, metaSystems]);
   const isEditingHeader = (orderIndex) => editingPhase?.orderIndex === orderIndex && activeAction === ACTIONS.RENAME;
-
-  useEffect(() => {
-    if (Boolean(project)) {
-      setPhases(project.phases);
-    }
-  }, [project]);
+  const phases = useMemo(
+    () =>
+      (project?.phases || []).map((p) => {
+        const phaseSystems = currentMetaSystems.filter((m) => m.projectPhase === p._id);
+        if (phaseSystems.length) {
+          const sum = phaseSystems.reduce((acc, system) => acc + parseFloat(system.mainSystem.status), 0);
+          return {
+            ...p,
+            status: round(sum / phaseSystems.length, 2),
+          };
+        } else {
+          return { ...p, status: 0 };
+        }
+      }),
+    [project, currentMetaSystems]
+  );
 
   useEffect(() => {
     dispatch(readMetaSystem({ project: projectId }));
