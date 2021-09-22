@@ -1,4 +1,4 @@
-import React, { memo, useState, useEffect, useMemo } from 'react';
+import React, { memo, useMemo } from 'react';
 import { Box, Grid } from '@material-ui/core';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
@@ -8,34 +8,46 @@ import PhaseBox from './PhaseBox';
 import { getCondition } from './helpers';
 import useStyles from './styles';
 import BufferBox from './PhaseBox/BufferBox';
+import { round } from 'utils/helpers/utility';
 
 const PhasesListView = ({ project, metaSystems }) => {
   const classes = useStyles();
-  const [metasystems, setMetasystems] = useState([]);
-
-  useEffect(() => {
-    setMetasystems(metaSystems);
-  }, [metaSystems]);
+  const phases = useMemo(
+    () =>
+      (project?.phases || []).map((p) => {
+        const phaseSystems = metaSystems.filter((m) => m.projectPhase === p._id);
+        if (phaseSystems.length) {
+          const sum = phaseSystems.reduce((acc, system) => acc + parseFloat(system.mainSystem.status), 0);
+          return {
+            ...p,
+            status: round(sum / phaseSystems.length, 2),
+          };
+        } else {
+          return { ...p, status: 0 };
+        }
+      }),
+    [project, metaSystems]
+  );
 
   const returnItemsForColumn = (newProjectPhase) =>
-    metasystems
+    metaSystems
       .filter(({ projectPhase }) => getCondition(projectPhase, newProjectPhase))
       .map((ms) => (
         <Grid key={ms._id} item xs={12}>
-          <PhaseItem item={ms} projectId={project._id} setItems={setMetasystems} />
+          <PhaseItem item={ms} projectId={project._id} />
         </Grid>
       ));
 
   const unassignedSystems = useMemo(
     () =>
-      metasystems
+      metaSystems
         .filter(({ projectPhase }) => !projectPhase)
         .map((ms) => (
           <Grid key={ms._id} item xs={2}>
-            <PhaseItem item={ms} projectId={project._id} setItems={setMetasystems} />
+            <PhaseItem item={ms} projectId={project._id} />
           </Grid>
         )),
-    [metasystems, project]
+    [metaSystems, project]
   );
 
   return (
@@ -44,12 +56,11 @@ const PhasesListView = ({ project, metaSystems }) => {
         <BufferBox fields={unassignedSystems} />
       </Box>
       <Grid className={classes.container} container>
-        {project.phases.length > 0 &&
-          project.phases.map((phase) => (
-            <Grid className={classes.phaseContainer} key={phase._id} item xs={12} sm={6} md={3}>
-              <PhaseBox phase={phase} fields={returnItemsForColumn(phase._id)} />
-            </Grid>
-          ))}
+        {phases.map((phase) => (
+          <Grid className={classes.phaseContainer} key={phase._id} item xs={12} sm={6} md={3}>
+            <PhaseBox phase={phase} status={phase.status} fields={returnItemsForColumn(phase._id)} />
+          </Grid>
+        ))}
       </Grid>
     </DndProvider>
   );
