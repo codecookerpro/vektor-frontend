@@ -1,14 +1,25 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Card, CardContent, CardHeader, Grid, IconButton, Menu, MenuItem } from '@material-ui/core';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import moment from 'moment';
 import useStyles from './styles';
 import { usePhaseBoxLogic } from './helpers';
+import { useSelector } from 'react-redux';
+import { round } from 'utils/helpers/utility';
 
 const PhaseBox = ({ phase, fields, onHeaderClick, onActionClick, phaseActions }) => {
-  const { name, orderIndex, _id } = phase || {};
-
   const classes = useStyles();
+  const { name, orderIndex, _id } = phase || {};
+  const { metaSystems } = useSelector(({ projects }) => projects);
+  const phaseSystems = useMemo(() => metaSystems.filter((m) => m.projectPhase === _id), [_id, metaSystems]);
+  const status = useMemo(() => {
+    if (phaseSystems.length) {
+      const sum = phaseSystems.reduce((acc, system) => acc + parseFloat(system.mainSystem.status), 0);
+      return round(sum / phaseSystems.length, 2);
+    } else {
+      return 0;
+    }
+  }, [phaseSystems]);
   const { anchorEl, isPhaseActions, isOpen, dropRef, handleMenuClick, handleClose, handleActionClick } = usePhaseBoxLogic(
     _id,
     orderIndex,
@@ -21,7 +32,7 @@ const PhaseBox = ({ phase, fields, onHeaderClick, onActionClick, phaseActions })
       <Card className={classes.card} variant="outlined">
         <CardHeader
           className={onHeaderClick ? classes.cardHeader : ''}
-          title={name}
+          title={`${name} (Status ${status}%)`}
           onClick={onHeaderClick}
           subheader={
             phase.start &&
