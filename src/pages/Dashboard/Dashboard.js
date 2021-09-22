@@ -1,7 +1,9 @@
-import React, { memo, useEffect, useMemo } from 'react';
+import React, { memo, useCallback, useEffect, useMemo, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import { Box, Grid } from '@material-ui/core';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 
 import { getDashboards } from 'redux/actions/dashboards';
 import PageHeader from 'parts/PageHeader';
@@ -41,11 +43,26 @@ const DashboardList = () => {
       }),
     [dashboards, projFilter, orgFilter]
   );
+  const [cards, setCards] = useState(filteredDashboards);
+
+  const moveCard = useCallback(
+    (dragIndex, hoverIndex) => {
+      const dragCard = cards[dragIndex];
+      cards.splice(dragIndex, 1);
+      cards.splice(hoverIndex, 0, dragCard);
+      setCards(cards);
+    },
+    [cards]
+  );
 
   useEffect(() => {
     dispatch(getDashboards());
     // eslint-disable-next-line
   }, []);
+
+  useEffect(() => {
+    setTimeout(() => setCards(filteredDashboards));
+  }, [filteredDashboards]);
 
   return (
     <main className={classes.root}>
@@ -54,11 +71,14 @@ const DashboardList = () => {
         <Box>{orgFilterComp}</Box>
         <Box ml={4}>{projFilterComp}</Box>
       </Box>
-      <Grid container spacing={6}>
-        {filteredDashboards.map((data, index) => (
-          <DashboardCard data={data} key={index} />
-        ))}
-      </Grid>
+
+      <DndProvider backend={HTML5Backend}>
+        <Grid container spacing={6}>
+          {cards.map((data, index) => (
+            <DashboardCard data={data} id={data._id} key={data._id} index={index} moveCard={moveCard} />
+          ))}
+        </Grid>
+      </DndProvider>
     </main>
   );
 };
