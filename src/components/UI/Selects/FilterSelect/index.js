@@ -26,7 +26,19 @@ const useStyles = makeStyles((theme) => ({
 
 const FilterSelect = React.forwardRef(
   (
-    { label, placeholder, items, error, fullWidth = false, multiple = false, keys = { label: 'LABEL', value: 'VALUE' }, className, value, ...rest },
+    {
+      label,
+      placeholder,
+      items,
+      error,
+      fullWidth = false,
+      multiple = false,
+      nullable = false,
+      keys = { label: 'LABEL', value: 'VALUE' },
+      className,
+      value,
+      ...rest
+    },
     ref
   ) => {
     const classes = useStyles();
@@ -63,7 +75,7 @@ const FilterSelect = React.forwardRef(
           {...rest}
         >
           {placeholder && (
-            <MenuItem value="" disabled>
+            <MenuItem value="" disabled={!nullable}>
               {placeholder}
             </MenuItem>
           )}
