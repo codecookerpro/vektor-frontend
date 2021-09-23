@@ -3,7 +3,8 @@ import { Card, CardContent, CardHeader, Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 import { DashboardChart, DashboardTable, DetailCard } from './components';
-import { ColorButton } from 'components/UI/Buttons';
+import { ColorButton, LinkButton } from 'components/UI/Buttons';
+import LINKS from 'utils/constants/links';
 
 import { useRef } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
@@ -11,6 +12,10 @@ import { useDrag, useDrop } from 'react-dnd';
 const useStyles = makeStyles((theme) => ({
   card: {
     padding: theme.spacing(2, 0),
+  },
+  cardTitle: {
+    color: '#000',
+    fontSize: 16,
   },
   cardNoPhases: {
     padding: theme.spacing(2, 0),
@@ -91,7 +96,13 @@ const DashboardCard = ({ data, id, index, moveCard }) => {
       <Grid container spacing={6}>
         <Grid item xs={toggledDetail ? 4 : 12}>
           <Card mb={3} className={noPhases ? classes.cardNoPhases : classes.card}>
-            <CardHeader title={data.name} />
+            <CardHeader
+              title={
+                <LinkButton to={LINKS.EDIT_PROJECT.HREF.replace(':id', data._id)} className={classes.cardTitle}>
+                  {data.name}
+                </LinkButton>
+              }
+            />
             <CardContent className={classes.cardContent}>
               <DashboardChart data={data} />
               <DashboardTable phases={data.phases} />

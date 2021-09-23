@@ -36,7 +36,7 @@ const ProjectPhases = () => {
   const isEditingVisible = ALLOWED_ROLES.includes(permissions);
 
   const getPhaseComponent = useCallback(
-    (orderIndex, arrayIndex, name, _id) => {
+    (orderIndex, arrayIndex, name, _id, color) => {
       const nameComponent = isEditingHeader(orderIndex) ? (
         <div className={phaseHeader}>
           <TextField name="name" value={editingPhase.name} onChange={({ target }) => onChangePhase(target, arrayIndex)} autoFocus />
@@ -48,7 +48,7 @@ const ProjectPhases = () => {
         name
       );
 
-      return { name: nameComponent, orderIndex, _id };
+      return { name: nameComponent, orderIndex, _id, color };
     },
     [editingPhase?.name, isEditingHeader, onChangePhase, onCompleteEditing, phaseHeader]
   );
@@ -70,11 +70,12 @@ const ProjectPhases = () => {
         <Grid item xs={12}>
           <DndProvider backend={HTML5Backend}>
             <Grid className={phasesContainer} container>
-              {phases.map(({ _id, orderIndex, name }, idx) => (
+              {phases.map(({ _id, orderIndex, name, status, color }, idx) => (
                 <Grid key={orderIndex} className={phaseContainer} item xs={12} sm={6} md={3}>
                   <PhaseBox
                     orderIndex={orderIndex}
-                    phase={getPhaseComponent(orderIndex, idx, name, _id)}
+                    phase={getPhaseComponent(orderIndex, idx, name, _id, color)}
+                    status={status}
                     phaseActions={isEditingVisible && ACTIONS_DATA}
                     fields={currentMetaSystems && returnItemsForColumn(_id)}
                     onActionClick={onActionClick}

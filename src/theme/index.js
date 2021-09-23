@@ -5,7 +5,6 @@ import typography from './typography';
 import overrides from './overrides';
 import breakpoints from './breakpoints';
 import props from './props';
-import shadows from './shadows';
 
 const theme = createMuiTheme(
   {
@@ -14,7 +13,6 @@ const theme = createMuiTheme(
     overrides: overrides,
     props: props,
     typography: typography,
-    shadows: shadows,
     palette: variant.palette,
     custom: variant.custom,
   },

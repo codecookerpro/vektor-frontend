@@ -23,29 +23,11 @@ const useReportFiltersLogic = (isAdmin, filter, setFilter) => {
   }, [filter?.organization, isAdmin, projectsData]);
   const metaSystems = useMemo(() => [{ _id: '', name: '---' }, ...metaSystemsFilter], [metaSystemsFilter]);
 
-  const inputHandler = ({ target }) => {
-    const { name, value } = target;
-
-    switch (name) {
-      case 'organization':
-        setFilter(value ? { [name]: value } : {});
-        break;
-      case 'project':
-        setFilter(({ organization }) => ({
-          ...(organization && { organization }),
-          ...(value && { [name]: value }),
-        }));
-        break;
-      case 'metaSystem':
-        setFilter(({ organization, project }) => ({
-          project,
-          ...(organization && { organization }),
-          ...(value && { [name]: value }),
-        }));
-        break;
-      default:
-        break;
-    }
+  const inputHandler = ({ target: { name, value } }) => {
+    setFilter((filter) => ({
+      ...filter,
+      [name]: value,
+    }));
   };
 
   return {

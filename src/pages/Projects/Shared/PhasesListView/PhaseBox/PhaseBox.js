@@ -1,41 +1,64 @@
-import React from 'react';
-import { Card, CardContent, CardHeader, Grid, IconButton, Menu, MenuItem } from '@material-ui/core';
-import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { useParams } from 'react-router-dom';
+
+import { Card, CardContent, CardHeader, Grid, IconButton, Menu, MenuItem, Typography } from '@material-ui/core';
+import { MoreHoriz, Palette } from '@material-ui/icons';
 import moment from 'moment';
 import useStyles from './styles';
 import { usePhaseBoxLogic } from './helpers';
+import { ColorPicker } from 'material-ui-color';
+import { updateProjectPhase } from 'redux/actions/projects';
 
-const PhaseBox = ({ phase, fields, onHeaderClick, onActionClick, phaseActions }) => {
-  const { name, orderIndex, _id } = phase || {};
-
-  const classes = useStyles();
+const PhaseBox = ({ phase, status, fields, onHeaderClick, onActionClick, phaseActions }) => {
+  const dispatch = useDispatch();
+  const { id: project } = useParams();
+  const { name, orderIndex, _id, color: defaultColor } = phase || {};
+  const [color, setColor] = useState(defaultColor);
+  const classes = useStyles({ color });
   const { anchorEl, isPhaseActions, isOpen, dropRef, handleMenuClick, handleClose, handleActionClick } = usePhaseBoxLogic(
     _id,
     orderIndex,
     phaseActions,
     onActionClick
   );
+  const isNewPhase = Boolean(onHeaderClick);
+  const [colorPaletteOpened, setColorPaletteOpened] = useState(false);
+
+  const openColorPalette = () => {
+    setColor(defaultColor);
+    setColorPaletteOpened(true);
+  };
+
+  const closeColorPalette = () => {
+    dispatch(updateProjectPhase({ ...phase, mainId: project, color, status: undefined }));
+    setColorPaletteOpened(false);
+  };
+
+  const handleColorChange = (newColor) => {
+    setColor(`#${newColor.hex}`);
+  };
 
   return (
     <div className={classes.container} ref={dropRef}>
       <Card className={classes.card} variant="outlined">
         <CardHeader
-          className={onHeaderClick ? classes.cardHeader : ''}
-          title={name}
+          className={isNewPhase ? classes.cardHeader : ''}
+          title={isNewPhase ? name : `${name} (Status ${status}%)`}
           onClick={onHeaderClick}
           subheader={
             phase.start &&
             phase.end && (
-              <div>
+              <Typography color="inherit">
                 {moment(phase.start).format('DD/MM/YYYY')} - {moment(phase.end).format('DD/MM/YYYY')}
-              </div>
+              </Typography>
             )
           }
           action={
-            isPhaseActions && (
+            isPhaseActions ? (
               <>
                 <IconButton aria-label="settings" onClick={handleMenuClick}>
-                  <MoreHorizIcon />
+                  <MoreHoriz />
                 </IconButton>
                 <Menu id="fade-menu" anchorEl={anchorEl} keepMounted open={isOpen} onClose={handleClose}>
                   {phaseActions.map(({ title, action }, idx) => (
@@ -45,6 +68,15 @@ const PhaseBox = ({ phase, fields, onHeaderClick, onActionClick, phaseActions })
                   ))}
                 </Menu>
               </>
+            ) : (
+              isNewPhase === false &&
+              (colorPaletteOpened ? (
+                <ColorPicker hideTextfield openAtStart value={color} onChange={handleColorChange} onOpen={closeColorPalette} />
+              ) : (
+                <IconButton aria-label="color-palette" onClick={openColorPalette} color="inherit">
+                  <Palette color="inherit" />
+                </IconButton>
+              ))
             )
           }
         />

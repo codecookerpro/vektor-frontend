@@ -1,6 +1,6 @@
 import { makeStyles } from '@material-ui/core/styles';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   container: {
     height: '100%',
   },
@@ -8,6 +8,8 @@ const useStyles = makeStyles(() => ({
     minWidth: 265,
     height: '100%',
     boxShadow: 'none',
+    backgroundColor: (props) => props.color,
+    color: (props) => props.color && theme.palette.getContrastText(props.color),
   },
   content: {
     minHeight: 300,
