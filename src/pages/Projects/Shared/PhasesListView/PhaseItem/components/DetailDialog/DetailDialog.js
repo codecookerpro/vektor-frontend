@@ -40,8 +40,8 @@ const DetailDialog = ({ open, onClose, metaSystem }) => {
       <DialogContent>
         <Grid container justify="space-between" spacing={1}>
           {details.map(({ name, color, label }, idx) => (
-            <Grid item xs={12}>
-              <Box key={idx} display="flex" alignItems="center" justifyContent="space-between" mb={1}>
+            <Grid key={idx} item xs={12}>
+              <Box display="flex" alignItems="center" justifyContent="space-between" mb={1}>
                 <Typography item xs={8}>
                   {name}
                 </Typography>
