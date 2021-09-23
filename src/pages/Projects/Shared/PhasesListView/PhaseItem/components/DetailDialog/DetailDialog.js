@@ -1,6 +1,6 @@
 import React, { memo, useMemo } from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions } from 'components/UI/VektorDialog';
-import { Chip, Grid, Button } from '@material-ui/core';
+import { Chip, Grid, Button, Typography, Box } from '@material-ui/core';
 import { COLORS } from 'parts/WorkflowGraph/constants';
 import moment from 'moment';
 import LinkButton from 'components/UI/Buttons/LinkButton';
@@ -40,14 +40,14 @@ const DetailDialog = ({ open, onClose, metaSystem }) => {
       <DialogContent>
         <Grid container justify="space-between" spacing={1}>
           {details.map(({ name, color, label }, idx) => (
-            <React.Fragment key={idx}>
-              <Grid item xs={10}>
-                {name}
-              </Grid>
-              <Grid item xs={2} style={{ textAlign: 'center' }}>
+            <Grid key={idx} item xs={12}>
+              <Box display="flex" alignItems="center" justifyContent="space-between" mb={1}>
+                <Typography item xs={8}>
+                  {name}
+                </Typography>
                 <Chip label={label} style={{ background: color, color: 'white', borderRadius: 20, height: 20 }} />
-              </Grid>
-            </React.Fragment>
+              </Box>
+            </Grid>
           ))}
         </Grid>
       </DialogContent>
