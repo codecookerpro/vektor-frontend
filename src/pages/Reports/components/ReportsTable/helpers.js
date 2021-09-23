@@ -54,7 +54,21 @@ const useReportsTableLogic = (isAdmin, filter) => {
     let data = [];
 
     if (filterKeys.length > 0) {
-      data = filterKeys.reduce((acc, key) => [...acc.filter((r) => r[key] === filter[key])], filteredReports);
+      data = filterKeys.reduce(
+        (acc, key) =>
+          acc.filter((r) => {
+            const value = filter[key];
+            if (!value || value === r[key]) {
+              return true;
+            } else if (key === 'status') {
+              return value === 'completed' ? r.status === 100 : r.status < 100;
+            } else if (key === 'endDate') {
+              return moment(r.end, 'YYYY/MM/DD').isBetween(moment(value, 'MM/dd/yyyy'), moment());
+            }
+            return false;
+          }),
+        filteredReports
+      );
     } else {
       data = filteredReports;
     }

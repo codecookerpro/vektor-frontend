@@ -6,6 +6,9 @@ import useUserPermissions from 'utils/hooks/useUserPermission';
 
 import useStyles from './styles';
 import useReportFiltersLogic from './helpers';
+import { REPORT_STATUSES } from './constants';
+import { DatePicker } from '@material-ui/pickers';
+import VektorTextField from 'components/UI/TextFields/VektorTextField';
 
 const ReportFilters = ({ filter, setFilter }) => {
   const classes = useStyles();
@@ -51,6 +54,28 @@ const ReportFilters = ({ filter, setFilter }) => {
             value={filter?.metaSystem || ''}
             onChange={inputHandler}
             className={classes.input}
+          />
+          <FilterSelect
+            label="By Status"
+            placeholder="All statuses"
+            name="status"
+            items={REPORT_STATUSES}
+            nullable={true}
+            keys={{ label: 'name', value: '_id' }}
+            value={filter?.status || ''}
+            onChange={inputHandler}
+            className={classes.input}
+          />
+          <DatePicker
+            label="By End Date"
+            variant="inline"
+            format="MM/dd/yyyy"
+            value={filter?.endDate}
+            maxDate={new Date()}
+            onChange={(newValue) => {
+              inputHandler({ target: { name: 'endDate', value: newValue } });
+            }}
+            TextFieldComponent={VektorTextField}
           />
         </div>
       </CardContent>
