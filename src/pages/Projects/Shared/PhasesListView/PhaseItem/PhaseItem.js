@@ -25,7 +25,7 @@ const PhaseItem = ({ item, projectId, canDrag = true }) => {
     () => (
       <Paper elevation={4} style={{ padding: 8 }}>
         {item.mainSystem.deliverables.map((d) => (
-          <Typography>{d.note}</Typography>
+          <Typography key={d._id}>{d.note}</Typography>
         ))}
       </Paper>
     ),
