@@ -8,6 +8,10 @@ import { DASHBOARD_CHART_OPTIONS } from './constants';
 
 const ChartWrapper = styled.div`
   height: 150px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   position: relative;
 `;
 
@@ -64,7 +68,7 @@ const DashboardChart = ({ theme, data }) => {
       <DoughnutInner variant="h4">
         <Typography variant="h4">{Math.round(status)}%</Typography>
       </DoughnutInner>
-      <Doughnut data={chartData} options={DASHBOARD_CHART_OPTIONS} />
+      <Doughnut data={chartData} options={DASHBOARD_CHART_OPTIONS} width={200} height={150} />
     </ChartWrapper>
   );
 };
