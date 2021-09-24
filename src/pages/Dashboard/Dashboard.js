@@ -1,13 +1,17 @@
-import React, { memo, useEffect, useMemo } from 'react';
+import React, { memo, useEffect, useMemo, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import { Box, Grid } from '@material-ui/core';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+import { arrayMoveImmutable } from 'array-move';
 
-import { getDashboards } from 'redux/actions/dashboards';
 import PageHeader from 'parts/PageHeader';
-import { DashboardCard } from './components';
 import LINKS from 'utils/constants/links';
+import { getDashboards } from 'redux/actions/dashboards';
+import { DashboardCard } from './components';
 import { useFilter } from 'utils/hooks';
+import { editProject } from 'redux/actions/projects';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -29,23 +33,49 @@ const DashboardList = () => {
   const [projFilterComp, projFilter] = useFilter({ items: filteredProjects, label: 'project', multiple: true, resetField: orgFilter });
   const filteredDashboards = useMemo(
     () =>
-      dashboards.filter((d) => {
-        if (orgFilter) {
-          if (projFilter.length) {
-            return projFilter.includes(d._id);
-          } else {
-            return d.organization === orgFilter;
+      dashboards
+        .filter((d) => {
+          if (orgFilter) {
+            if (projFilter.length) {
+              return projFilter.includes(d._id);
+            } else {
+              return d.organization === orgFilter;
+            }
           }
-        }
-        return true;
-      }),
+          return true;
+        })
+        .sort((a, b) => a.orderIndex - b.orderIndex),
     [dashboards, projFilter, orgFilter]
   );
+  const [cards, setCards] = useState(filteredDashboards);
+
+  const moveCard = (dragId, hoverId) => {
+    setCards((cards) => {
+      const dragIndex = cards.findIndex((c) => c._id === dragId);
+      const hoverIndex = cards.findIndex((c) => c._id === hoverId);
+      return arrayMoveImmutable(cards, dragIndex, hoverIndex);
+    });
+  };
+
+  const handleDrop = () => {
+    cards
+      .map((c, idx) => ({ ...c, tmpOrderIndex: idx }))
+      .filter((c, idx) => c.orderIndex !== idx)
+      .forEach(({ _id, tmpOrderIndex }) => dispatch(editProject({ _id, orderIndex: tmpOrderIndex })));
+    setCards(cards.map((c, idx) => ({ ...c, orderIndex: idx })));
+  };
 
   useEffect(() => {
     dispatch(getDashboards());
     // eslint-disable-next-line
   }, []);
+
+  useEffect(() => {
+    setTimeout(() => {
+      const orderSum = filteredDashboards.reduce((sum, d) => sum + d.orderIndex, 0);
+      setCards(orderSum ? filteredDashboards : filteredDashboards.map((d, idx) => ({ ...d, orderIndex: idx })));
+    });
+  }, [filteredDashboards]);
 
   return (
     <main className={classes.root}>
@@ -54,11 +84,14 @@ const DashboardList = () => {
         <Box>{orgFilterComp}</Box>
         <Box ml={4}>{projFilterComp}</Box>
       </Box>
-      <Grid container spacing={6}>
-        {filteredDashboards.map((data, index) => (
-          <DashboardCard data={data} key={index} />
-        ))}
-      </Grid>
+
+      <DndProvider backend={HTML5Backend}>
+        <Grid container spacing={6}>
+          {cards.map((data) => (
+            <DashboardCard data={data} key={data._id} moveCard={moveCard} onDrop={handleDrop} />
+          ))}
+        </Grid>
+      </DndProvider>
     </main>
   );
 };
