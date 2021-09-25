@@ -50,11 +50,16 @@ export const fetchMetaSystemsUpdater = (state, { payload }) => ({
 });
 
 export const createMetaSystemUpdater = (state, { payload }) => {
-  const { project, _id } = payload;
+  const {
+    data: { project, _id },
+    autoCreatedSystems,
+  } = payload;
+  const autoIds = autoCreatedSystems.map((s) => s._id);
+
   return {
     ...state,
-    results: state.results.map((p) => (p._id === project ? { ...p, metaSystems: [...p.metaSystems, _id] } : p)),
-    metaSystems: [...state.metaSystems, payload],
+    results: state.results.map((p) => (p._id === project ? { ...p, metaSystems: [...p.metaSystems, _id, ...autoIds] } : p)),
+    metaSystems: [...state.metaSystems, payload.data, ...autoCreatedSystems],
     metaSystemClone: null,
   };
 };
