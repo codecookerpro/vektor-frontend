@@ -4,7 +4,7 @@ import ActionTypes from 'utils/constants/action-types';
 
 export const createMetaSystem = (params) => (dispatch, getState) => {
   API.createMetaSystem(params)
-    .then(({ data }) => {
+    .then(({ data, autoCreatedSystems }) => {
       const metaSystem = getState().projects.metaSystemClone;
 
       if (metaSystem) {
@@ -14,7 +14,7 @@ export const createMetaSystem = (params) => (dispatch, getState) => {
         dispatch(initDeliverables({ _id: data.mainSystem._id, deliverables: deliverables.map((d) => exclude(d, ['calculated'])) }));
       }
 
-      dispatch({ type: ActionTypes.CREATE_META_SYSTEM, payload: data });
+      dispatch({ type: ActionTypes.CREATE_META_SYSTEM, payload: { data, autoCreatedSystems } });
     })
     .catch((err) => console.error('[createMetaSystem] error => ', err));
 };

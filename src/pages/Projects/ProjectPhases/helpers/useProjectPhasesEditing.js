@@ -86,7 +86,7 @@ const useProjectPhasesEditing = () => {
     }
   };
 
-  const onChangePhase = ({ value, name }, index) => {
+  const onChangePhase = ({ value, name }) => {
     setEditingPhase((phase) => ({
       ...phase,
       [name]: value,
@@ -100,8 +100,9 @@ const useProjectPhasesEditing = () => {
       ...editingPhase,
       plannedValue,
       mainId: project._id,
+      id: undefined,
+      status: undefined,
     };
-    delete updatedPhase['id'];
 
     const isCompleted = await dispatch(updateProjectPhase(updatedPhase));
 
