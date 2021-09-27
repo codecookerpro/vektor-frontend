@@ -3,6 +3,7 @@ import FilterSelect from 'components/UI/Selects/FilterSelect';
 import { useSelector } from 'react-redux';
 import { get } from 'lodash';
 import { useHistory, useLocation } from 'react-router-dom';
+import pluralize from 'pluralize';
 
 const useFilter = ({ items = [], by = null, label, keys = { label: 'name', value: '_id' }, multiple = false, resetField = null }) => {
   const { search, pathname } = useLocation();
@@ -18,19 +19,24 @@ const useFilter = ({ items = [], by = null, label, keys = { label: 'name', value
 
   const handleChange = useCallback(
     ({ target: { value } }) => {
+      if (multiple && value.includes('')) {
+        value = [];
+      }
+
       params.set(filterKey, value);
       history.replace(`${pathname}?${params.toString()}`);
       setValue(value);
       setModified(true);
     },
-    [filterKey, history, params, pathname]
+    [filterKey, history, params, pathname, multiple]
   );
 
   const selectorProps = useMemo(
     () => ({
       label: `Filter by ${label}`,
-      placeholder: `Select ${label}`,
+      placeholder: `All ${pluralize(label)}`,
       items: entries,
+      nullable: true,
       keys,
       value,
       multiple,
