@@ -39,7 +39,7 @@ const PhaseItem = ({ item, projectId, canDrag = true }) => {
           <div>
             <Typography color="textPrimary">{item.name}</Typography>
             <Typography color="textPrimary">
-              {item.mainSystem.calculated.status}% {item.equipmentNumber}#
+              {item.mainSystem.status}% {item.equipmentNumber}
             </Typography>
           </div>
           <ContainedButton onClick={onClick}>Detail</ContainedButton>
