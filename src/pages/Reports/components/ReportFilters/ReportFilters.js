@@ -1,5 +1,6 @@
 import React, { memo } from 'react';
 import { Card, CardContent, Typography } from '@material-ui/core';
+import moment from 'moment';
 
 import FilterSelect from 'components/UI/Selects/FilterSelect';
 import useUserPermissions from 'utils/hooks/useUserPermission';
@@ -70,8 +71,9 @@ const ReportFilters = ({ filter, setFilter }) => {
             label="By End Date"
             variant="inline"
             format="MM/dd/yyyy"
-            value={filter?.endDate}
-            maxDate={new Date()}
+            value={filter?.endDate || null}
+            defaultValue={null}
+            maxDate={moment().add(2, 'weeks').toDate()}
             onChange={(newValue) => {
               inputHandler({ target: { name: 'endDate', value: newValue } });
             }}

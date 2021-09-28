@@ -1,5 +1,5 @@
 import React, { memo, useMemo, useState } from 'react';
-import { Card, CardHeader, CardContent, TableCell, TableRow, IconButton, Checkbox } from '@material-ui/core';
+import { Card, CardHeader, CardContent, TableCell, TableRow, IconButton, Checkbox, Button } from '@material-ui/core';
 import { TextField } from '@material-ui/core';
 import { Edit, CheckCircle } from '@material-ui/icons';
 import { FileText, BarChart2 } from 'react-feather';
@@ -41,13 +41,14 @@ const mainColumns = [
   { id: 'note', label: '', minWidth: 70, sortable: false },
 ];
 
-const DeliverableTable = ({ deliverables = [], systemTrend = {}, departments = [], users = [], editable = false, onRowChange = noop }) => {
+const DeliverableTable = ({ deliverables = [], systemTrend = {}, departments = [], users = [], onRowChange = noop }) => {
   useFocusElement(deliverables);
 
   const graphOrderRows = useMemo(() => deliverables.sort((a, b) => a.chartData.position.x - b.chartData.position.x), [deliverables]);
   const { sortedRows, handleSort } = useTableSort(graphOrderRows);
   const [editData, setEditData] = useState({});
   const [editIndex, setEditIndex] = useState(-1);
+  const [editable, setEditable] = useState(false);
   const [toggledNoteDialog, setToggledNoteDialog] = useState(false);
   const [toggledTrendChart, setToggledTrendChart] = useState(false);
   const [trendChartData, setTrendChartData] = useState([]);
@@ -304,7 +305,20 @@ const DeliverableTable = ({ deliverables = [], systemTrend = {}, departments = [
 
   return (
     <Card>
-      <CardHeader title="Deliverables" />
+      <CardHeader
+        title="Deliverables"
+        action={
+          editable ? (
+            <Button variant="contained" colour="default" onClick={() => setEditable(false)}>
+              CANCEL
+            </Button>
+          ) : (
+            <ColorButton variant="contained" colour="lightGreen" onClick={() => setEditable(true)}>
+              EDIT
+            </ColorButton>
+          )
+        }
+      />
       <CardContent>
         <VektorSubTableContainer columns={columns} onSort={handleSort} sticky={true}>
           {sortedRows.map((row, idx) => (editable ? EditableRow(row, idx) : ReadOnlyRow(row, idx)))}
