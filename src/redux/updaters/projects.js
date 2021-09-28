@@ -1,6 +1,5 @@
 import { restrict } from 'utils/helpers/utility';
-import { updatePool } from './helper';
-import _ from 'lodash';
+import { roundMetaSystem, updatePool } from './helper';
 
 export const INITIAL_STATE = Object.freeze({
   results: [],
@@ -47,31 +46,7 @@ export const deleteProjectUpdater = (state, { payload }) => {
 
 export const fetchMetaSystemsUpdater = (state, { payload }) => ({
   ...state,
-  metaSystems: updatePool(state.metaSystems, payload).map((s) => ({
-    ...s,
-    mainSystem: {
-      ...s.mainSystem,
-      status: _.round(s.mainSystem.status, 2),
-      deliverables: s.mainSystem.deliverables.map((d) => ({
-        ...d,
-        calculated: {
-          ...d.calculated,
-          weight: _.round(d.calculated.weight, 2),
-          EV: _.round(d.calculated.EV, 2),
-          PV: _.round(d.calculated.PV, 2),
-          systemEV: _.round(d.calculated.systemEV, 2),
-          systemPV: _.round(d.calculated.systemPV, 2),
-          systemStatus: _.round(d.calculated.systemStatus, 2),
-        },
-      })),
-      calculated: {
-        ...s.mainSystem.calculated,
-        EV: _.round(s.mainSystem.calculated.EV, 2),
-        PV: _.round(s.mainSystem.calculated.PV, 2),
-        effort: _.round(s.mainSystem.calculated.effort, 2),
-      },
-    },
-  })),
+  metaSystems: updatePool(state.metaSystems, payload).map(roundMetaSystem),
 });
 
 export const createMetaSystemUpdater = (state, { payload }) => {
@@ -139,6 +114,6 @@ export const updateDeliverablesUpdater = (state, { payload }) => {
   const { metaSystem } = payload;
   return {
     ...state,
-    metaSystems: state.metaSystems.map((ms) => (ms._id === metaSystem ? { ...ms, mainSystem: payload } : ms)),
+    metaSystems: state.metaSystems.map((ms) => (ms._id === metaSystem ? { ...ms, mainSystem: roundMetaSystem(payload) } : ms)),
   };
 };
