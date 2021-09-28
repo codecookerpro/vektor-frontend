@@ -119,7 +119,6 @@ const EditMetaSystem = () => {
           </Grid>
           <Grid item xs={12}>
             <DeliverableTable
-              editable={editable}
               deliverables={metaSystem.mainSystem.deliverables}
               systemTrend={systemTrend}
               departments={departments}
