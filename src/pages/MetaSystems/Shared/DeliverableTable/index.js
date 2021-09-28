@@ -37,7 +37,9 @@ const mainColumns = [
   { id: 'calculated.systemEV', label: 'System EV', minWidth: 70, sortable: true },
   { id: 'activity', label: 'Activity', minWidth: 70, sortable: true },
   { id: 'department', label: 'Department', minWidth: 70, sortable: true },
-  { id: 'resource', label: 'Resource', minWidth: 70, sortable: true },
+  { id: 'resource', label: 'Resource', minWidth: 70, sortable: false },
+  { id: 'approver', label: 'Approver', minWidth: 70, sortable: false },
+  { id: 'reviewer', label: 'Reviewer', minWidth: 70, sortable: false },
   { id: 'note', label: '', minWidth: 70, sortable: false },
 ];
 
@@ -252,6 +254,38 @@ const DeliverableTable = ({ deliverables = [], systemTrend = {}, departments = [
         />
       </TableCell>
       <TableCell>
+        <FilterSelect
+          fullWidth
+          placeholder="Select department"
+          items={departments}
+          multiple
+          name="approver"
+          keys={{
+            label: 'label',
+            value: '_id',
+          }}
+          disabled={isReadOnly(idx)}
+          onChange={handleFieldChange}
+          value={getFieldValue(idx, 'approver')}
+        />
+      </TableCell>
+      <TableCell>
+        <FilterSelect
+          fullWidth
+          placeholder="Select department"
+          items={departments}
+          multiple
+          name="reviewer"
+          keys={{
+            label: 'label',
+            value: '_id',
+          }}
+          disabled={isReadOnly(idx)}
+          onChange={handleFieldChange}
+          value={getFieldValue(idx, 'reviewer')}
+        />
+      </TableCell>
+      <TableCell>
         <IconButton aria-label="edit" onClick={() => handleEditButton(idx)}>
           {idx === editIndex ? <CheckCircle /> : <Edit />}
         </IconButton>
@@ -291,6 +325,22 @@ const DeliverableTable = ({ deliverables = [], systemTrend = {}, departments = [
         {row.resource.map((uid) => (
           <React.Fragment key={uid}>
             <span>{users.find((u) => u._id === uid)?.name}</span>
+            <br />
+          </React.Fragment>
+        ))}
+      </TableCell>
+      <TableCell>
+        {row.approver.map((depId) => (
+          <React.Fragment key={depId}>
+            <span>{departments.find((d) => d._id === depId)?.label}</span>
+            <br />
+          </React.Fragment>
+        ))}
+      </TableCell>
+      <TableCell>
+        {row.reviewer.map((depId) => (
+          <React.Fragment key={depId}>
+            <span>{departments.find((d) => d._id === depId)?.label}</span>
             <br />
           </React.Fragment>
         ))}

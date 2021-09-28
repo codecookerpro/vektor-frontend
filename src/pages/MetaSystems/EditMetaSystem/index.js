@@ -94,6 +94,8 @@ const EditMetaSystem = () => {
           'department',
           'activity',
           'resource',
+          'approver',
+          'reviewer',
         ]),
         mainId,
       })
