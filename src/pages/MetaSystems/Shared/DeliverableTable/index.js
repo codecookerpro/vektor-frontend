@@ -310,7 +310,7 @@ const DeliverableTable = ({ deliverables = [], systemTrend = {}, departments = [
         action={
           editable ? (
             <Button variant="contained" colour="default" onClick={() => setEditable(false)}>
-              CANCEL
+              DONE
             </Button>
           ) : (
             <ColorButton variant="contained" colour="lightGreen" onClick={() => setEditable(true)}>

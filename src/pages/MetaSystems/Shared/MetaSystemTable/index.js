@@ -1,7 +1,6 @@
 import React, { memo } from 'react';
 import { Card, CardHeader, CardContent, TableCell, TableRow } from '@material-ui/core';
 import { Plus } from 'react-feather';
-import ContainedButton from 'components/UI/Buttons/ContainedButton';
 
 import LinkButton from 'components/UI/Buttons/LinkButton';
 import VektorSubTableContainer from 'parts/Tables/VektorSubTableContainer';
@@ -9,6 +8,7 @@ import LINKS from 'utils/constants/links';
 import { useHistory } from 'react-router-dom';
 import { round } from 'utils/helpers/utility';
 import { useTableSort } from 'utils/hooks';
+import { ColorButton } from 'components/UI/Buttons';
 
 const columns = [
   { id: 'name', label: 'Name', minWidth: 170, sortable: true },
@@ -28,9 +28,13 @@ const MetaSystemTable = ({ projectId = 0, records = [] }) => {
       <CardHeader
         title="Systems"
         action={
-          <ContainedButton onClick={() => history.push(LINKS.ADD_META_SYSTEM.HREF.replace(':projectId', projectId))}>
-            <Plus /> Add Systems
-          </ContainedButton>
+          <ColorButton
+            colour="lightGreen"
+            onClick={() => history.push(LINKS.ADD_META_SYSTEM.HREF.replace(':projectId', projectId))}
+            startIcon={<Plus />}
+          >
+            Add Systems
+          </ColorButton>
         }
       />
       <CardContent>

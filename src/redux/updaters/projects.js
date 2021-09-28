@@ -57,6 +57,8 @@ export const fetchMetaSystemsUpdater = (state, { payload }) => ({
         calculated: {
           ...d.calculated,
           weight: _.round(d.calculated.weight, 2),
+          EV: _.round(d.calculated.EV, 2),
+          PV: _.round(d.calculated.PV, 2),
           systemEV: _.round(d.calculated.systemEV, 2),
           systemPV: _.round(d.calculated.systemPV, 2),
           systemStatus: _.round(d.calculated.systemStatus, 2),
