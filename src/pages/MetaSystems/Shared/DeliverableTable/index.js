@@ -1,21 +1,13 @@
 import React, { memo, useMemo, useState } from 'react';
-import { Card, CardHeader, CardContent, TableCell, TableRow, IconButton, Checkbox, Button } from '@material-ui/core';
-import { TextField } from '@material-ui/core';
-import { Edit, CheckCircle } from '@material-ui/icons';
-import { FileText, BarChart2 } from 'react-feather';
-import { Dialog, DialogTitle, DialogContent, DialogActions } from 'components/UI/VektorDialog';
+import { Card, CardHeader, CardContent, Button } from '@material-ui/core';
 import { ColorButton } from 'components/UI/Buttons';
-import Chart from 'react-google-charts';
-import { CHART_OPTIONS } from './constants';
-import FilterSelect from 'components/UI/Selects/FilterSelect';
 
 import VektorSubTableContainer from 'parts/Tables/VektorSubTableContainer';
 import { noop } from 'utils/constants';
 import moment from 'moment';
 import useFocusElement from 'utils/hooks/useFocusElement';
-import { round } from 'utils/helpers/utility';
 import { useTableSort } from 'utils/hooks';
-import VektorCheckbox from 'components/UI/VektorCheckbox';
+import { EditableRow, NoteDialog, ReadOnlyRow, TrendChartDialog } from './components';
 
 const mainColumns = [
   { id: 'name', label: 'Deliverable', minWidth: 100, sortable: true },
@@ -54,6 +46,35 @@ const DeliverableTable = ({ deliverables = [], systemTrend = {}, departments = [
   const [toggledNoteDialog, setToggledNoteDialog] = useState(false);
   const [toggledTrendChart, setToggledTrendChart] = useState(false);
   const [trendChartData, setTrendChartData] = useState([]);
+  const renderRows = useMemo(() => {
+    if (editable) {
+      return sortedRows.map((row, idx) => ({
+        ...row,
+        ...(idx === editIndex && editData),
+        predecessors: row.predecessors.map((pre) => deliverables.find((d) => d._id === pre).name).join(', '),
+        start: row.start && moment(row.start).format('YYYY-MM-DD'),
+        end: row.end && moment(row.end).format('YYYY-MM-DD'),
+        completion: row.completion && moment(row.completion).format('YYYY-MM-DD'),
+      }));
+    } else {
+      return sortedRows
+        .map((row, idx) => ({
+          ...row,
+          ...(idx === editIndex && editData),
+          predecessors: row.predecessors.map((pre) => deliverables.find((d) => d._id === pre).name).join(', '),
+          department: departments.find((d) => d._id === row.department)?.label,
+          resource: row.resource.map((uid) => users.find((u) => u._id === uid)?.name),
+          approver: row.approver.map((did) => departments.find((d) => d._id === did)?.label),
+          reviewer: row.reviewer.map((did) => departments.find((d) => d._id === did)?.label),
+        }))
+        .map((row) => ({
+          ...row,
+          start: row.start && moment(row.start).format('YYYY-MM-DD'),
+          end: row.end && moment(row.end).format('YYYY-MM-DD'),
+          completion: row.completion && moment(row.completion).format('YYYY-MM-DD'),
+        }));
+    }
+  }, [sortedRows, editIndex, editData, editable, deliverables, departments, users]);
 
   const columns = useMemo(() => {
     let columns = [...mainColumns];
@@ -64,7 +85,7 @@ const DeliverableTable = ({ deliverables = [], systemTrend = {}, departments = [
     return columns.map((c) => ({ ...c, sortable: c.sortable && !editable }));
   }, [editable]);
 
-  const handleFieldChange = ({ target: { value, name } }) => {
+  const handleCellChange = ({ target: { value, name } }) => {
     const updatedData = { ...editData, [name]: value };
 
     if (name === 'department') {
@@ -83,28 +104,18 @@ const DeliverableTable = ({ deliverables = [], systemTrend = {}, departments = [
       setEditData(deliverables[idx]);
     }
   };
-  const getFieldValue = (idx, name) => {
-    const value = idx === editIndex ? editData[name] : sortedRows[idx][name];
 
-    if (['start', 'end', 'completion'].includes(name)) {
-      return value ? moment(value).format('YYYY-MM-DD') : '';
-    } else {
-      return value;
-    }
-  };
   const toggleNoteDialog = (idx) => {
     handleEditButton(idx);
     setToggledNoteDialog(true);
   };
 
-  const handleNoteSave = (e) => {
-    e.preventDefault();
+  const handleNoteSave = () => {
     onRowChange(editData);
     setToggledNoteDialog(false);
   };
 
-  const handleNoteClose = (e) => {
-    e.preventDefault();
+  const handleNoteClose = () => {
     setToggledNoteDialog(false);
   };
 
@@ -118,240 +129,9 @@ const DeliverableTable = ({ deliverables = [], systemTrend = {}, departments = [
     setToggledTrendChart(true);
   };
 
-  const getPredecessors = (row) => row.predecessors.map((pre) => deliverables.find((d) => d._id === pre).name).join(', ');
-  const isDisabled = (idx) => idx !== editIndex && editIndex >= 0;
-  const isReadOnly = (idx) => idx !== editIndex;
-  const EditableRow = (row, idx) => (
-    <TableRow key={row._id}>
-      <TableCell>{getFieldValue(idx, 'name')}</TableCell>
-      <TableCell>{getPredecessors(row)}</TableCell>
-      <TableCell>
-        <TextField
-          type="number"
-          name="plannedHours"
-          InputProps={{
-            readOnly: isReadOnly(idx),
-            inputProps: { min: '0', max: '100', step: '1' },
-          }}
-          onChange={handleFieldChange}
-          value={getFieldValue(idx, 'plannedHours')}
-          disabled={isDisabled(idx)}
-        />
-      </TableCell>
-      <TableCell>
-        <TextField
-          type="number"
-          name="workedHours"
-          InputProps={{
-            readOnly: isReadOnly(idx),
-            inputProps: { min: '0', max: '100', step: '1' },
-          }}
-          onChange={handleFieldChange}
-          value={getFieldValue(idx, 'workedHours')}
-          disabled={isDisabled(idx)}
-        />
-      </TableCell>
-      <TableCell>
-        <TextField
-          id="start"
-          name="start"
-          type="date"
-          value={getFieldValue(idx, 'start')}
-          onChange={handleFieldChange}
-          InputLabelProps={{
-            shrink: true,
-            readOnly: isReadOnly(idx),
-          }}
-          disabled={isDisabled(idx)}
-        />
-      </TableCell>
-      <TableCell>
-        <TextField
-          id="end"
-          name="end"
-          type="date"
-          value={getFieldValue(idx, 'end')}
-          onChange={handleFieldChange}
-          InputLabelProps={{
-            shrink: true,
-            readOnly: isReadOnly(idx),
-          }}
-          disabled={isDisabled(idx)}
-        />
-      </TableCell>
-      <TableCell>
-        <TextField
-          id="completion"
-          name="completion"
-          type="date"
-          value={getFieldValue(idx, 'completion')}
-          onChange={handleFieldChange}
-          InputLabelProps={{
-            shrink: true,
-            readOnly: isReadOnly(idx),
-          }}
-          disabled={isDisabled(idx)}
-        />
-      </TableCell>
-      <TableCell>
-        <TextField
-          type="number"
-          name="status"
-          InputProps={{
-            readOnly: isReadOnly(idx),
-            inputProps: { min: '0', max: '100', step: '1' },
-          }}
-          onChange={handleFieldChange}
-          value={getFieldValue(idx, 'status')}
-          disabled={isDisabled(idx)}
-        />
-      </TableCell>
-      <TableCell>{round(row.calculated.lapsed, 2)}</TableCell>
-      <TableCell>{round(row.calculated.differential, 2)}</TableCell>
-      <TableCell>{round(row.calculated.effort, 2)}</TableCell>
-      <TableCell>{round(row.calculated.EV, 2)}%</TableCell>
-      <TableCell>{round(row.calculated.PV, 2)}%</TableCell>
-      <TableCell>{round(row.calculated.weight, 2)}</TableCell>
-      <TableCell>{round(row.calculated.systemPV, 2)}%</TableCell>
-      <TableCell>{round(row.calculated.systemStatus, 2)}%</TableCell>
-      <TableCell>{round(row.calculated.systemEV, 2)}%</TableCell>
-      <TableCell>
-        <VektorCheckbox
-          onChange={(e) => handleFieldChange({ target: { name: 'activity', value: e.target.checked } })}
-          checked={getFieldValue(idx, 'activity')}
-          disabled={isReadOnly(idx)}
-        />
-      </TableCell>
-      <TableCell>
-        <FilterSelect
-          fullWidth
-          placeholder="Select department"
-          items={departments}
-          name="department"
-          keys={{
-            label: 'label',
-            value: '_id',
-          }}
-          disabled={isReadOnly(idx)}
-          onChange={handleFieldChange}
-          value={getFieldValue(idx, 'department')}
-        />
-      </TableCell>
-      <TableCell>
-        <FilterSelect
-          fullWidth
-          multiple
-          placeholder="Select users"
-          items={users.filter((u) => u.department === getFieldValue(idx, 'department'))}
-          name="resource"
-          keys={{
-            label: 'name',
-            value: '_id',
-          }}
-          disabled={isReadOnly(idx)}
-          onChange={handleFieldChange}
-          value={getFieldValue(idx, 'resource')}
-        />
-      </TableCell>
-      <TableCell>
-        <FilterSelect
-          fullWidth
-          placeholder="Select department"
-          items={departments}
-          multiple
-          name="approver"
-          keys={{
-            label: 'label',
-            value: '_id',
-          }}
-          disabled={isReadOnly(idx)}
-          onChange={handleFieldChange}
-          value={getFieldValue(idx, 'approver')}
-        />
-      </TableCell>
-      <TableCell>
-        <FilterSelect
-          fullWidth
-          placeholder="Select department"
-          items={departments}
-          multiple
-          name="reviewer"
-          keys={{
-            label: 'label',
-            value: '_id',
-          }}
-          disabled={isReadOnly(idx)}
-          onChange={handleFieldChange}
-          value={getFieldValue(idx, 'reviewer')}
-        />
-      </TableCell>
-      <TableCell>
-        <IconButton aria-label="edit" onClick={() => handleEditButton(idx)}>
-          {idx === editIndex ? <CheckCircle /> : <Edit />}
-        </IconButton>
-      </TableCell>
-    </TableRow>
-  );
-
-  const ReadOnlyRow = (row, idx) => (
-    <TableRow key={row._id} id={row._id}>
-      <TableCell>{getFieldValue(idx, 'name')}</TableCell>
-      <TableCell>{getPredecessors(row)}</TableCell>
-      <TableCell>{getFieldValue(idx, 'plannedHours')}</TableCell>
-      <TableCell>{getFieldValue(idx, 'workedHours')}</TableCell>
-      <TableCell>{getFieldValue(idx, 'start')}</TableCell>
-      <TableCell>{getFieldValue(idx, 'end')}</TableCell>
-      <TableCell>{getFieldValue(idx, 'completion')}</TableCell>
-      <TableCell>
-        <span>{getFieldValue(idx, 'status')}%</span>
-        <IconButton style={{ float: 'right', padding: 0 }} onClick={() => showTrendChart(row)}>
-          <BarChart2 />
-        </IconButton>
-      </TableCell>
-      <TableCell>{row.calculated.lapsed}</TableCell>
-      <TableCell>{row.calculated.differential}</TableCell>
-      <TableCell>{row.calculated.effort}</TableCell>
-      <TableCell>{row.calculated.EV}%</TableCell>
-      <TableCell>{row.calculated.PV}%</TableCell>
-      <TableCell>{row.calculated.weight}</TableCell>
-      <TableCell>{row.calculated.systemPV}%</TableCell>
-      <TableCell>{row.calculated.systemStatus}%</TableCell>
-      <TableCell>{row.calculated.systemEV}%</TableCell>
-      <TableCell>
-        <Checkbox checked={row.activity} />
-      </TableCell>
-      <TableCell>{departments.find((d) => d._id === row.department)?.label}</TableCell>
-      <TableCell>
-        {row.resource.map((uid) => (
-          <React.Fragment key={uid}>
-            <span>{users.find((u) => u._id === uid)?.name}</span>
-            <br />
-          </React.Fragment>
-        ))}
-      </TableCell>
-      <TableCell>
-        {row.approver.map((depId) => (
-          <React.Fragment key={depId}>
-            <span>{departments.find((d) => d._id === depId)?.label}</span>
-            <br />
-          </React.Fragment>
-        ))}
-      </TableCell>
-      <TableCell>
-        {row.reviewer.map((depId) => (
-          <React.Fragment key={depId}>
-            <span>{departments.find((d) => d._id === depId)?.label}</span>
-            <br />
-          </React.Fragment>
-        ))}
-      </TableCell>
-      <TableCell>
-        <IconButton onClick={() => toggleNoteDialog(idx)} style={{ padding: 0 }}>
-          <FileText color={row.note ? 'black' : 'lightgrey'} />
-        </IconButton>
-      </TableCell>
-    </TableRow>
-  );
+  const handleChartClose = () => {
+    setToggledTrendChart(false);
+  };
 
   return (
     <Card>
@@ -371,49 +151,24 @@ const DeliverableTable = ({ deliverables = [], systemTrend = {}, departments = [
       />
       <CardContent>
         <VektorSubTableContainer columns={columns} onSort={handleSort} sticky={true}>
-          {sortedRows.map((row, idx) => (editable ? EditableRow(row, idx) : ReadOnlyRow(row, idx)))}
+          {renderRows.map((row, idx) =>
+            editable ? (
+              <EditableRow
+                key={row._id}
+                data={row}
+                editable={idx === editIndex}
+                departments={departments}
+                users={users}
+                onCellChange={handleCellChange}
+                onEdit={() => handleEditButton(idx)}
+              />
+            ) : (
+              <ReadOnlyRow key={row._id} data={row} onNoteButtonClick={() => toggleNoteDialog(idx)} onChartButtonClick={() => showTrendChart(row)} />
+            )
+          )}
         </VektorSubTableContainer>
-        <Dialog open={toggledNoteDialog} onClose={handleNoteClose} fullWidth maxWidth="xs">
-          <DialogTitle>Deliverables Note Dialog</DialogTitle>
-          <DialogContent>
-            <TextField
-              multiline
-              rows={5}
-              name="note"
-              label="Deliverable Note"
-              fullWidth
-              variant="outlined"
-              value={editData?.note}
-              onChange={handleFieldChange}
-            />
-          </DialogContent>
-          <DialogActions>
-            <ColorButton colour="red" autoFocus onClick={handleNoteSave}>
-              Save
-            </ColorButton>
-            <ColorButton colour="lightGreen" onClick={handleNoteClose}>
-              Cancel
-            </ColorButton>
-          </DialogActions>
-        </Dialog>
-        <Dialog open={toggledTrendChart} onClose={() => setToggledTrendChart(false)} fullWidth maxWidth="md">
-          <DialogTitle>Deliverable Trend Chart</DialogTitle>
-          <DialogContent>
-            <Chart
-              width="100%"
-              height="600px"
-              chartType="LineChart"
-              loader={<div>Loading Chart</div>}
-              data={trendChartData}
-              options={CHART_OPTIONS}
-            />
-          </DialogContent>
-          <DialogActions>
-            <ColorButton colour="lightGreen" onClick={() => setToggledTrendChart(false)}>
-              Close
-            </ColorButton>
-          </DialogActions>
-        </Dialog>
+        <NoteDialog open={toggledNoteDialog} onChange={handleCellChange} onSave={handleNoteSave} onClose={handleNoteClose} data={editData} />
+        <TrendChartDialog open={toggledTrendChart} chartData={trendChartData} onClose={handleChartClose} />
       </CardContent>
     </Card>
   );
