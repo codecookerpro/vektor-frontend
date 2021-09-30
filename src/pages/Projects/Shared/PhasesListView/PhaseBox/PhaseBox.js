@@ -1,20 +1,46 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
-import { Card, CardContent, CardHeader, Grid, IconButton, Menu, MenuItem, Typography } from '@material-ui/core';
-import { MoreHoriz, Palette } from '@material-ui/icons';
-import moment from 'moment';
-import useStyles from './styles';
+import { Box, Card, CardContent, CardHeader, Grid, IconButton, Menu, MenuItem, Typography } from '@material-ui/core';
+import { Add, MoreHoriz, Palette, Remove } from '@material-ui/icons';
+import { makeStyles } from '@material-ui/core/styles';
 import { usePhaseBoxLogic } from './helpers';
 import { ColorPicker } from 'material-ui-color';
 import { updateProjectPhase } from 'redux/actions/projects';
+import PhaseItem from '../PhaseItem';
+import moment from 'moment';
 
-const PhaseBox = ({ phase, status, fields, onHeaderClick, onActionClick, phaseActions }) => {
+const useStyles = makeStyles((theme) => ({
+  container: {
+    height: '100%',
+  },
+  card: {
+    minWidth: 265,
+    height: '100%',
+    boxShadow: 'none',
+    backgroundColor: (props) => props.color,
+    color: (props) => props.color && theme.palette.getContrastText(props.color),
+  },
+  content: {
+    minHeight: 400,
+    display: 'flex',
+  },
+  cardHeader: {
+    cursor: 'pointer',
+    transition: '0.5s',
+    '&:hover': {
+      background: 'gray',
+    },
+  },
+}));
+
+const PhaseBox = ({ phase, status, systems, onHeaderClick, onActionClick, phaseActions }) => {
   const dispatch = useDispatch();
   const { id: project } = useParams();
   const { name, orderIndex, _id, color: defaultColor } = phase || {};
   const [color, setColor] = useState(defaultColor);
+  const [expanded, setExpanded] = useState(false);
   const classes = useStyles({ color });
   const { anchorEl, isPhaseActions, isOpen, dropRef, handleMenuClick, handleClose, handleActionClick } = usePhaseBoxLogic(
     _id,
@@ -24,6 +50,8 @@ const PhaseBox = ({ phase, status, fields, onHeaderClick, onActionClick, phaseAc
   );
   const isNewPhase = Boolean(onHeaderClick);
   const [colorPaletteOpened, setColorPaletteOpened] = useState(false);
+  const completeSystems = useMemo(() => systems.filter((s) => s.mainSystem.status > 50), [systems]);
+  const incompleteSystems = useMemo(() => systems.filter((s) => s.mainSystem.status <= 50), [systems]);
 
   const openColorPalette = () => {
     setColor(defaultColor);
@@ -37,6 +65,10 @@ const PhaseBox = ({ phase, status, fields, onHeaderClick, onActionClick, phaseAc
 
   const handleColorChange = (newColor) => {
     setColor(`#${newColor.hex}`);
+  };
+
+  const handleExpand = () => {
+    setExpanded((expanded) => !expanded);
   };
 
   return (
@@ -81,8 +113,31 @@ const PhaseBox = ({ phase, status, fields, onHeaderClick, onActionClick, phaseAc
           }
         />
         <CardContent className={classes.content}>
-          <Grid container spacing={3}>
-            {fields}
+          <Grid container direction="column" justify="space-between" spacing={3}>
+            <Grid item container spacing={3}>
+              {incompleteSystems.map((sys) => (
+                <Grid key={sys._id} item xs={12}>
+                  <PhaseItem item={sys} />
+                </Grid>
+              ))}
+            </Grid>
+            <Grid item container spacing={3}>
+              <Grid item xs={12} container>
+                <Box width="calc(100% + 32px)" color="inherit" borderTop="1.5px solid" mx={-4} />
+                <Box display="flex" alignItems="center" justifyContent="space-between" flex={1}>
+                  <Typography>Completed ({completeSystems.length})</Typography>
+                  <IconButton color="inherit" onClick={handleExpand}>
+                    {expanded ? <Remove color="inherit" /> : <Add color="inherit" />}
+                  </IconButton>
+                </Box>
+              </Grid>
+              {expanded &&
+                completeSystems.map((sys) => (
+                  <Grid key={sys._id} item xs={12}>
+                    <PhaseItem item={sys} />
+                  </Grid>
+                ))}
+            </Grid>
           </Grid>
         </CardContent>
       </Card>

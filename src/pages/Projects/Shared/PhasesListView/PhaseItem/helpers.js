@@ -7,7 +7,7 @@ import LINKS from 'utils/constants/links';
 import useUserPermissions from 'utils/hooks/useUserPermission';
 import { ALLOWED_ROLES } from './constants';
 
-const usePhaseItemLogic = (item, projectId, canDrag) => {
+const usePhaseItemLogic = (item, canDrag) => {
   const dispatch = useDispatch();
   const history = useHistory();
 
