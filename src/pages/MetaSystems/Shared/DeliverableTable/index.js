@@ -1,39 +1,13 @@
 import React, { memo, useMemo, useState } from 'react';
 import { Card, CardHeader, CardContent, Button } from '@material-ui/core';
 import { ColorButton } from 'components/UI/Buttons';
+import moment from 'moment';
 
 import VektorSubTableContainer from 'parts/Tables/VektorSubTableContainer';
-import { noop } from 'utils/constants';
-import moment from 'moment';
-import useFocusElement from 'utils/hooks/useFocusElement';
-import { useTableSort } from 'utils/hooks';
+import { useTableSort, useFocusElement } from 'utils/hooks';
 import { EditableRow, NoteDialog, ReadOnlyRow, TrendChartDialog } from './components';
-
-const mainColumns = [
-  { id: 'name', label: 'Deliverable', minWidth: 100, sortable: true },
-  { id: 'predecessors', label: 'Predecessors', minWidth: 70, sortable: false },
-  { id: 'plannedHours', label: 'Planned Hours', minWidth: 70, sortable: true },
-  { id: 'workedHours', label: 'Worked Hours', minWidth: 70, sortable: true },
-  { id: 'start', label: 'Start', minWidth: 120, sortable: true },
-  { id: 'end', label: 'End', minWidth: 120, sortable: true },
-  { id: 'completion', label: 'Completion', minWidth: 70, sortable: true },
-  { id: 'status', label: 'status', minWidth: 70, sortable: true },
-  { id: 'calculated.lapsed', label: 'lapsed', minWidth: 70, sortable: true },
-  { id: 'calculated.differential', label: 'differential', minWidth: 70, sortable: true },
-  { id: 'calculated.effort', label: 'effort', minWidth: 70, sortable: true },
-  { id: 'calculated.EV', label: 'EV', minWidth: 70, sortable: true },
-  { id: 'calculated.PV', label: 'PV', minWidth: 70, sortable: true },
-  { id: 'calculated.weight', label: 'weight', minWidth: 70, sortable: true },
-  { id: 'calculated.systemPV', label: 'System PV', minWidth: 70, sortable: true },
-  { id: 'calculated.systemStatus', label: 'System Status', minWidth: 70, sortable: true },
-  { id: 'calculated.systemEV', label: 'System EV', minWidth: 70, sortable: true },
-  { id: 'activity', label: 'Activity', minWidth: 70, sortable: true },
-  { id: 'department', label: 'Department', minWidth: 70, sortable: true },
-  { id: 'resource', label: 'Resource', minWidth: 70, sortable: false },
-  { id: 'approver', label: 'Approver', minWidth: 70, sortable: false },
-  { id: 'reviewer', label: 'Reviewer', minWidth: 70, sortable: false },
-  { id: 'note', label: '', minWidth: 70, sortable: false },
-];
+import { DELIVERABLE_TABLE_COLUMNS } from './constants';
+import { noop } from 'utils/constants';
 
 const DeliverableTable = ({ deliverables = [], systemTrend = {}, departments = [], users = [], onRowChange = noop }) => {
   useFocusElement(deliverables);
@@ -77,9 +51,11 @@ const DeliverableTable = ({ deliverables = [], systemTrend = {}, departments = [
   }, [sortedRows, editIndex, editData, editable, deliverables, departments, users]);
 
   const columns = useMemo(() => {
-    let columns = [...mainColumns];
+    let columns = [...DELIVERABLE_TABLE_COLUMNS];
     if (editable) {
       columns = [...columns, { id: 'edit', label: '', minWidth: 70 }];
+    } else {
+      columns = [...columns, { id: 'note', label: '', minWidth: 70, sortable: false }];
     }
 
     return columns.map((c) => ({ ...c, sortable: c.sortable && !editable }));
@@ -167,7 +143,15 @@ const DeliverableTable = ({ deliverables = [], systemTrend = {}, departments = [
             )
           )}
         </VektorSubTableContainer>
-        <NoteDialog open={toggledNoteDialog} onChange={handleCellChange} onSave={handleNoteSave} onClose={handleNoteClose} data={editData} />
+        <NoteDialog
+          open={toggledNoteDialog}
+          title={editData.name}
+          departments={departments}
+          onChange={handleCellChange}
+          onSave={handleNoteSave}
+          onClose={handleNoteClose}
+          data={editData}
+        />
         <TrendChartDialog open={toggledTrendChart} chartData={trendChartData} onClose={handleChartClose} />
       </CardContent>
     </Card>

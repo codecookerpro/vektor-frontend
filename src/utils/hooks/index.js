@@ -6,3 +6,4 @@ export { default as useUserPermission } from './useUserPermission';
 export { default as useTableSort } from './useTableSort';
 export { default as useEntryMapping } from './useEntryMapping';
 export { default as useCardToggler } from './useCardToggler';
+export { default as useFocusElement } from './useFocusElement';

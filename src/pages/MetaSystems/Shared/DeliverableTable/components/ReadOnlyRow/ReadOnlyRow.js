@@ -13,7 +13,7 @@ const ReadOnlyRow = ({ data, onNoteButtonClick, onChartButtonClick }) => (
     <TableCell>{data.completion}</TableCell>
     <TableCell>
       <span>{data.status}%</span>
-      <IconButton style={{ float: 'right', padding: 0 }} onClick={onChartButtonClick}>
+      <IconButton style={{ float: 'right', margin: -12 }} onClick={onChartButtonClick}>
         <BarChart2 />
       </IconButton>
     </TableCell>

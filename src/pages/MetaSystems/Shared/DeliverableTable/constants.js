@@ -10,3 +10,28 @@ export const CHART_OPTIONS = {
     slantedText: true,
   },
 };
+
+export const DELIVERABLE_TABLE_COLUMNS = [
+  { id: 'name', label: 'Deliverable', minWidth: 100, sortable: true },
+  { id: 'predecessors', label: 'Predecessors', minWidth: 70, sortable: false },
+  { id: 'plannedHours', label: 'Planned Hours', minWidth: 70, sortable: true },
+  { id: 'workedHours', label: 'Worked Hours', minWidth: 70, sortable: true },
+  { id: 'start', label: 'Start', minWidth: 120, sortable: true },
+  { id: 'end', label: 'End', minWidth: 120, sortable: true },
+  { id: 'completion', label: 'Completion', minWidth: 70, sortable: true },
+  { id: 'status', label: 'status', minWidth: 70, sortable: true },
+  { id: 'calculated.lapsed', label: 'lapsed', minWidth: 70, sortable: true },
+  { id: 'calculated.differential', label: 'differential', minWidth: 70, sortable: true },
+  { id: 'calculated.effort', label: 'effort', minWidth: 70, sortable: true },
+  { id: 'calculated.EV', label: 'EV', minWidth: 70, sortable: true },
+  { id: 'calculated.PV', label: 'PV', minWidth: 70, sortable: true },
+  { id: 'calculated.weight', label: 'weight', minWidth: 70, sortable: true },
+  { id: 'calculated.systemPV', label: 'System PV', minWidth: 70, sortable: true },
+  { id: 'calculated.systemStatus', label: 'System Status', minWidth: 70, sortable: true },
+  { id: 'calculated.systemEV', label: 'System EV', minWidth: 70, sortable: true },
+  { id: 'activity', label: 'Activity', minWidth: 70, sortable: true },
+  { id: 'department', label: 'Department', minWidth: 70, sortable: true },
+  { id: 'resource', label: 'Resource', minWidth: 70, sortable: false },
+  { id: 'approver', label: 'Approver', minWidth: 70, sortable: false },
+  { id: 'reviewer', label: 'Reviewer', minWidth: 70, sortable: false },
+];

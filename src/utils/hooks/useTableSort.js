@@ -19,7 +19,7 @@ const createDefaultSorter = (column, dir) => (a, b) => {
   }
 };
 
-const useTableSort = (rows, sorter = createDefaultSorter) => {
+const useTableSort = (rows = [], sorter = createDefaultSorter) => {
   const [sortCol, setSortColumn] = useState(null);
   const [sortDir, setSortDir] = useState(SORT_DIRS.none);
 
