@@ -14,6 +14,7 @@ const actionHandler = {
   [ActionTypes.UPDATE_META_SYSTEM]: updaters.updateMetaSystemUpdater,
   [ActionTypes.DUPLICATE_META_SYSTEM]: updaters.duplicateMetaSystemUpdater,
   [ActionTypes.UPDATE_DELIVERABLES]: updaters.updateDeliverablesUpdater,
+  [ActionTypes.UPDATE_DELIVERABLE_NOTES]: updaters.updateDeliverableNotesUpdater,
 };
 
 const projectReducer = handleActions(actionHandler, updaters.INITIAL_STATE);

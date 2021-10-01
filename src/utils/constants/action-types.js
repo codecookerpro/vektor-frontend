@@ -44,6 +44,7 @@ const ActionTypes = keyMirror({
   UPDATE_META_SYSTEM: null,
   DUPLICATE_META_SYSTEM: null,
   UPDATE_DELIVERABLES: null,
+  UPDATE_DELIVERABLE_NOTES: null,
 
   // popup
   SET_POPUP: null,

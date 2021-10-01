@@ -1,5 +1,5 @@
 import { restrict } from 'utils/helpers/utility';
-import { roundMetaSystem, updatePool } from './helper';
+import { roundMainSystem, updatePool } from './helper';
 
 export const INITIAL_STATE = Object.freeze({
   results: [],
@@ -46,7 +46,7 @@ export const deleteProjectUpdater = (state, { payload }) => {
 
 export const fetchMetaSystemsUpdater = (state, { payload }) => ({
   ...state,
-  metaSystems: updatePool(state.metaSystems, payload).map(roundMetaSystem),
+  metaSystems: updatePool(state.metaSystems, payload).map((meta) => ({ ...meta, mainSystem: roundMainSystem(meta.mainSystem) })),
 });
 
 export const createMetaSystemUpdater = (state, { payload }) => {
@@ -114,6 +114,21 @@ export const updateDeliverablesUpdater = (state, { payload }) => {
   const { metaSystem } = payload;
   return {
     ...state,
-    metaSystems: state.metaSystems.map((ms) => (ms._id === metaSystem ? { ...ms, mainSystem: roundMetaSystem(payload) } : ms)),
+    metaSystems: state.metaSystems.map((ms) => (ms._id === metaSystem ? { ...ms, mainSystem: roundMainSystem(payload) } : ms)),
+  };
+};
+
+export const updateDeliverableNotesUpdater = (state, { payload: { mainId, deliverable, notes } }) => {
+  console.log(mainId, deliverable, notes);
+  return {
+    ...state,
+    metaSystems: state.metaSystems.map((ms) =>
+      ms.mainSystem._id === mainId
+        ? {
+            ...ms,
+            mainSystem: { ...ms.mainSystem, deliverables: ms.mainSystem.deliverables.map((d) => (d._id === deliverable ? { ...d, notes } : d)) },
+          }
+        : ms
+    ),
   };
 };

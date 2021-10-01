@@ -90,10 +90,11 @@ const EditMetaSystem = () => {
           'end',
           'completion',
           'status',
-          'note',
           'department',
           'activity',
           'resource',
+          'approver',
+          'reviewer',
         ]),
         mainId,
       })
@@ -120,6 +121,7 @@ const EditMetaSystem = () => {
           <Grid item xs={12}>
             <DeliverableTable
               deliverables={metaSystem.mainSystem.deliverables}
+              mainSystem={metaSystem.mainSystem._id}
               systemTrend={systemTrend}
               departments={departments}
               users={users}

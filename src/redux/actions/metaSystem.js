@@ -80,6 +80,11 @@ export const updateDeliverables = (payload) => ({
   payload,
 });
 
+export const updateDeliverableNotes = (mainId, deliverable, notes) => ({
+  type: ActionTypes.UPDATE_DELIVERABLE_NOTES,
+  payload: { mainId, deliverable, notes },
+});
+
 export const initDeliverables = (params) => (dispatch) => {
   API.initDeliverables(params)
     .then(({ data }) => dispatch(updateDeliverables(data)))
@@ -96,6 +101,18 @@ export const updateDeliverable = (params) => (dispatch) => {
   API.updateDeliverable(params)
     .then(({ data }) => dispatch(updateDeliverables(data)))
     .catch((err) => console.error('[updateDeliverable] error => ', err));
+};
+
+export const createDeliverableNote = (params) => (dispatch) => {
+  API.createDeliverableNote(params)
+    .then(({ data }) => dispatch(updateDeliverableNotes(params.mainId, params._id, data)))
+    .catch((err) => console.error('[createDeliverableNote] error => ', err));
+};
+
+export const updateDeliverableNote = (params) => (dispatch) => {
+  API.updateDeliverableNote(params)
+    .then(({ data }) => dispatch(updateDeliverableNotes(params.mainId, params._id, data)))
+    .catch((err) => console.error('[updateDeliverableNote] error => ', err));
 };
 
 export const deleteDeliverable = (params) => (dispatch) => {
