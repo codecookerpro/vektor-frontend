@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux';
 import PageHeader from 'parts/PageHeader';
 import LINKS from 'utils/constants/links';
 import ProjectPhasesTable from '../Shared/ProjectPhasesTable';
-import PhaseBox from '../Shared/PhasesListView/PhaseBox';
+import DetailBox from '../Shared/PhasesListView/PhaseBox/DetailBox';
 import PhaseItem from '../Shared/PhasesListView/PhaseItem';
 
 import { ACTIONS_DATA, ALLOWED_ROLES } from './constants';
@@ -72,7 +72,7 @@ const ProjectPhases = () => {
             <Grid className={phasesContainer} container>
               {phases.map(({ _id, orderIndex, name, status, color }, idx) => (
                 <Grid key={orderIndex} className={phaseContainer} item xs={12} sm={6} md={3}>
-                  <PhaseBox
+                  <DetailBox
                     orderIndex={orderIndex}
                     phase={getPhaseComponent(orderIndex, idx, name, _id, color)}
                     status={status}
@@ -84,7 +84,7 @@ const ProjectPhases = () => {
               ))}
               {isEditingVisible && (
                 <Grid className={phaseContainer} item xs={12} sm={6} md={3}>
-                  <PhaseBox phase={{ name: '+ Add new phase' }} onHeaderClick={onHeaderClick} />
+                  <DetailBox phase={{ name: '+ Add new phase' }} onHeaderClick={onHeaderClick} />
                 </Grid>
               )}
             </Grid>
