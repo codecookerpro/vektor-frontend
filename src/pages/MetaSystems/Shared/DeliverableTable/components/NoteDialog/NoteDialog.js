@@ -1,45 +1,32 @@
-import { Box, Checkbox, IconButton, Menu, MenuItem, TableCell, TableRow, TextField } from '@material-ui/core';
-import { DatePicker } from '@material-ui/pickers';
-import { CheckCircle, Delete, Edit, MoreVert } from '@material-ui/icons';
-import { ColorButton } from 'components/UI/Buttons';
-import moment from 'moment';
-import FilterSelect from 'components/UI/Selects/FilterSelect';
-import VektorCheckbox from 'components/UI/VektorCheckbox';
-import { Dialog, DialogTitle, DialogContent, DialogActions } from 'components/UI/VektorDialog';
-import VektorSubTableContainer from 'parts/Tables/VektorSubTableContainer';
+import { Box, IconButton, Menu, MenuItem } from '@material-ui/core';
+import { MoreVert } from '@material-ui/icons';
+import { Dialog, DialogTitle, DialogContent } from 'components/UI/VektorDialog';
 import { useEffect, useMemo, useState } from 'react';
 import { useTableSort } from 'utils/hooks';
-import { NOTE_TABLE_COLUMNS, NOTE_TYPES } from './constants';
+import DeliverableNotesTable from 'parts/DeliverableNotesTable';
 
-const NoteDialog = ({ title, open, onClose, onSave, notes = [], departments }) => {
+const DEFAULT_NOTE_DATA = { type: '', description: '', date: null, resource: [], status: false };
+
+const NoteDialog = ({ title, open, onClose, onCreate, onUpdate, notes = [], users }) => {
   const [rows, setRows] = useState(notes);
   const { sortedRows, handleSort } = useTableSort(rows);
   const [editIndex, setEditIndex] = useState(-1);
-  const [editData, setEditData] = useState({ type: '', description: '', date: null, resource: [], status: false });
+  const [editData, setEditData] = useState({});
   const [anchorEl, setAnchorEl] = useState(null);
 
   // eslint-disable-next-line
-  const renderRows = useMemo(() => {
-    return sortedRows
-      .map((r, idx) => ({
-        ...r,
-        ...(idx === editIndex && editData),
-        editable: idx === editIndex,
-      }))
-      .map((r) =>
-        r.editable
-          ? r
-          : {
-              ...r,
-              type: NOTE_TYPES.find((n) => n.value === r.type)?.label,
-              date: moment(r.date).format('DD/MM/YYYY'),
-              resource: departments
-                .filter((d) => r.resource?.includes(d._id))
-                .map((d) => d.label)
-                .join(','),
-            }
-      );
-  });
+  const renderRows = useMemo(() =>
+    sortedRows.map((r, idx) => ({
+      ...r,
+      ...(idx === editIndex && editData),
+      editable: idx === editIndex,
+    }))
+  );
+
+  const handleEditCell = (idx) => {
+    setEditData(sortedRows[idx]);
+    setEditIndex(idx);
+  };
 
   const handleCellChange = ({ target: { name, value } }) => {
     setEditData({ ...editData, [name]: value });
@@ -48,16 +35,22 @@ const NoteDialog = ({ title, open, onClose, onSave, notes = [], departments }) =
   const handleSaveNote = () => {
     setRows(rows.map((r, idx) => (idx === editIndex ? { ...r, ...editData } : r)));
     setEditIndex(-1);
+
+    if (editData._id) {
+      onUpdate({ ...editData, noteId: editData._id });
+    } else {
+      onCreate(editData);
+    }
   };
 
   const handleNewNote = () => {
     setAnchorEl(null);
     setEditData({});
+    setRows([...rows, DEFAULT_NOTE_DATA]);
     setEditIndex(rows.length);
-    setRows([...rows, { type: '', description: '', date: null, resource: [], status: false }]);
   };
 
-  const removeNote = (removeIdx) => {
+  const handleRemoveNote = (removeIdx) => {
     setRows((rows) => rows.filter((_, idx) => idx !== removeIdx));
   };
 
@@ -91,87 +84,17 @@ const NoteDialog = ({ title, open, onClose, onSave, notes = [], departments }) =
         </Box>
       </DialogTitle>
       <DialogContent>
-        <VektorSubTableContainer columns={NOTE_TABLE_COLUMNS} onSort={handleSort}>
-          {renderRows.map(({ _id, type, description, date, resource, status, editable }, idx) =>
-            editable ? (
-              <TableRow key={_id}>
-                <TableCell>
-                  <FilterSelect
-                    placeholder="Select Type"
-                    items={NOTE_TYPES}
-                    name="type"
-                    keys={{
-                      label: 'label',
-                      value: 'value',
-                    }}
-                    onChange={handleCellChange}
-                    value={type}
-                  />
-                </TableCell>
-                <TableCell>
-                  <TextField name="description" value={description} onChange={handleCellChange} />
-                </TableCell>
-                <TableCell>
-                  <DatePicker
-                    name="date"
-                    value={date || null}
-                    format="dd/MM/yyyy"
-                    onChange={(date) => handleCellChange({ target: { name: 'date', value: date } })}
-                  />
-                </TableCell>
-                <TableCell>
-                  <FilterSelect
-                    placeholder="Select Resource"
-                    items={departments}
-                    multiple
-                    name="resource"
-                    keys={{
-                      label: 'label',
-                      value: '_id',
-                    }}
-                    onChange={handleCellChange}
-                    value={resource}
-                  />
-                </TableCell>
-                <TableCell>
-                  <VektorCheckbox checked={status} onChange={(e) => handleCellChange({ target: { name: 'status', value: e.target.checked } })} />
-                </TableCell>
-                <TableCell>
-                  <IconButton onClick={handleSaveNote}>
-                    <CheckCircle />
-                  </IconButton>
-                </TableCell>
-              </TableRow>
-            ) : (
-              <TableRow>
-                <TableCell>{type}</TableCell>
-                <TableCell>{description}</TableCell>
-                <TableCell>{date}</TableCell>
-                <TableCell>{resource}</TableCell>
-                <TableCell>
-                  <Checkbox checked={status} />
-                </TableCell>
-                <TableCell>
-                  <IconButton onClick={() => setEditIndex(idx)}>
-                    <Edit />
-                  </IconButton>
-                  <IconButton onClick={() => removeNote(idx)}>
-                    <Delete />
-                  </IconButton>
-                </TableCell>
-              </TableRow>
-            )
-          )}
-        </VektorSubTableContainer>
+        <DeliverableNotesTable
+          editable
+          rows={renderRows}
+          users={users}
+          onEdit={handleEditCell}
+          onCellChange={handleCellChange}
+          onRemove={handleRemoveNote}
+          onSort={handleSort}
+          onSave={handleSaveNote}
+        />
       </DialogContent>
-      <DialogActions>
-        <ColorButton colour="red" autoFocus onClick={onSave}>
-          Save
-        </ColorButton>
-        <ColorButton colour="lightGreen" onClick={onClose}>
-          Cancel
-        </ColorButton>
-      </DialogActions>
     </Dialog>
   );
 };

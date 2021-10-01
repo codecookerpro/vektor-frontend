@@ -4,7 +4,6 @@ export const NOTE_TABLE_COLUMNS = [
   { id: 'date', label: 'Date', minWidth: 100, sortable: true },
   { id: 'resource', label: 'Resource', minWidth: 100, sortable: true },
   { id: 'status', label: 'Status', minWidth: 50, sortable: true },
-  { id: 'edit_button', label: '', minWidth: 50, sortable: false },
 ];
 
 export const NOTE_TYPES = [

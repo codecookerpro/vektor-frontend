@@ -56,7 +56,7 @@ const ReadOnlyRow = ({ data, onNoteButtonClick, onChartButtonClick }) => (
     </TableCell>
     <TableCell>
       <IconButton onClick={onNoteButtonClick} style={{ margin: -12 }}>
-        <FileText color={data.note ? 'black' : 'lightgrey'} />
+        <FileText color={data.notes.length ? 'black' : 'lightgrey'} />
       </IconButton>
     </TableCell>
   </TableRow>

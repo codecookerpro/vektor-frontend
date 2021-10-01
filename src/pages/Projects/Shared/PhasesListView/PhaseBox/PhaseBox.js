@@ -50,8 +50,8 @@ const PhaseBox = ({ phase, status, systems, onHeaderClick, onActionClick, phaseA
   );
   const isNewPhase = Boolean(onHeaderClick);
   const [colorPaletteOpened, setColorPaletteOpened] = useState(false);
-  const completeSystems = useMemo(() => systems.filter((s) => s.mainSystem.status > 50), [systems]);
-  const incompleteSystems = useMemo(() => systems.filter((s) => s.mainSystem.status <= 50), [systems]);
+  const completeSystems = useMemo(() => systems.filter((s) => s.mainSystem.status === 100), [systems]);
+  const incompleteSystems = useMemo(() => systems.filter((s) => s.mainSystem.status < 100), [systems]);
 
   const openColorPalette = () => {
     setColor(defaultColor);
@@ -133,7 +133,7 @@ const PhaseBox = ({ phase, status, systems, onHeaderClick, onActionClick, phaseA
               </Grid>
               {expanded &&
                 completeSystems.map((sys) => (
-                  <Grid key={sys._id} item xs={12}>
+                  <Grid key={sys._id} item xs={12} style={{ opacity: 0.5 }}>
                     <PhaseItem item={sys} />
                   </Grid>
                 ))}

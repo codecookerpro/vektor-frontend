@@ -33,3 +33,11 @@ export const deleteDeliverable = async (params) => {
 export const updateDeliverablePositions = async (params) => {
   return await put(['metasystems', 'systems', 'positioning'], params);
 };
+
+export const createDeliverableNote = async (params) => {
+  return await post(['metasystems', 'systems', 'nested', 'notes'], params);
+};
+
+export const updateDeliverableNote = async (params) => {
+  return await put(['metasystems', 'systems', 'nested', 'notes'], params);
+};

@@ -117,3 +117,18 @@ export const updateDeliverablesUpdater = (state, { payload }) => {
     metaSystems: state.metaSystems.map((ms) => (ms._id === metaSystem ? { ...ms, mainSystem: roundMainSystem(payload) } : ms)),
   };
 };
+
+export const updateDeliverableNotesUpdater = (state, { payload: { mainId, deliverable, notes } }) => {
+  console.log(mainId, deliverable, notes);
+  return {
+    ...state,
+    metaSystems: state.metaSystems.map((ms) =>
+      ms.mainSystem._id === mainId
+        ? {
+            ...ms,
+            mainSystem: { ...ms.mainSystem, deliverables: ms.mainSystem.deliverables.map((d) => (d._id === deliverable ? { ...d, notes } : d)) },
+          }
+        : ms
+    ),
+  };
+};

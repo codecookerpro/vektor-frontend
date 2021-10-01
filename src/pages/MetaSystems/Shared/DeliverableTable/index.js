@@ -1,4 +1,5 @@
 import React, { memo, useMemo, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { Card, CardHeader, CardContent, Button } from '@material-ui/core';
 import { ColorButton } from 'components/UI/Buttons';
 import moment from 'moment';
@@ -8,10 +9,12 @@ import { useTableSort, useFocusElement } from 'utils/hooks';
 import { EditableRow, NoteDialog, ReadOnlyRow, TrendChartDialog } from './components';
 import { DELIVERABLE_TABLE_COLUMNS } from './constants';
 import { noop } from 'utils/constants';
+import { createDeliverableNote, updateDeliverableNote } from 'redux/actions/metaSystem';
 
-const DeliverableTable = ({ deliverables = [], systemTrend = {}, departments = [], users = [], onRowChange = noop }) => {
+const DeliverableTable = ({ deliverables = [], mainSystem, systemTrend = {}, departments = [], users = [], onRowChange = noop }) => {
   useFocusElement(deliverables);
 
+  const dispatch = useDispatch();
   const graphOrderRows = useMemo(() => deliverables.sort((a, b) => a.chartData.position.x - b.chartData.position.x), [deliverables]);
   const { sortedRows, handleSort } = useTableSort(graphOrderRows);
   const [editData, setEditData] = useState({});
@@ -55,7 +58,7 @@ const DeliverableTable = ({ deliverables = [], systemTrend = {}, departments = [
     if (editable) {
       columns = [...columns, { id: 'edit', label: '', minWidth: 70 }];
     } else {
-      columns = [...columns, { id: 'note', label: '', minWidth: 70, sortable: false }];
+      columns = [...columns, { id: 'notes', label: '', minWidth: 70, sortable: false }];
     }
 
     return columns.map((c) => ({ ...c, sortable: c.sortable && !editable }));
@@ -86,13 +89,17 @@ const DeliverableTable = ({ deliverables = [], systemTrend = {}, departments = [
     setToggledNoteDialog(true);
   };
 
-  const handleNoteSave = () => {
-    onRowChange(editData);
-    setToggledNoteDialog(false);
+  const handleNoteUpdate = (note) => {
+    dispatch(updateDeliverableNote({ ...note, mainId: mainSystem, _id: editData._id }));
+  };
+
+  const handleNoteCreate = (note) => {
+    dispatch(createDeliverableNote({ ...note, mainId: mainSystem, _id: editData._id }));
   };
 
   const handleNoteClose = () => {
     setToggledNoteDialog(false);
+    setEditIndex(-1);
   };
 
   const showTrendChart = (deliverable) => {
@@ -146,11 +153,12 @@ const DeliverableTable = ({ deliverables = [], systemTrend = {}, departments = [
         <NoteDialog
           open={toggledNoteDialog}
           title={editData.name}
-          departments={departments}
+          users={users.filter((u) => u.organization === editData.department)}
           onChange={handleCellChange}
-          onSave={handleNoteSave}
+          onUpdate={handleNoteUpdate}
+          onCreate={handleNoteCreate}
           onClose={handleNoteClose}
-          data={editData}
+          notes={editData.notes}
         />
         <TrendChartDialog open={toggledTrendChart} chartData={trendChartData} onClose={handleChartClose} />
       </CardContent>
