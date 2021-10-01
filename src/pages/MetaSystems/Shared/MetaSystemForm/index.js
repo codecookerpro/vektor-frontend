@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React, { memo, useEffect } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useForm, Controller } from 'react-hook-form';
@@ -30,6 +30,7 @@ import { createMetaSystem, updateMetaSystem, deleteMetaSystem, duplicateMetaSyst
 import { setPopup } from 'redux/actions/popupActions';
 import LINKS from 'utils/constants/links';
 import { round } from 'utils/helpers/utility';
+import { getProjects } from 'redux/actions/projects';
 
 const useStyles = makeStyles((theme) => ({
   alert: {
@@ -53,6 +54,7 @@ const useStyles = makeStyles((theme) => ({
 
 const schema = joi.object().keys({
   name: STRING_INPUT_VALID,
+  resource: SELECT_VALID,
   equipmentCategory: SELECT_VALID,
   equipmentType: SELECT_VALID,
   equipmentName: STRING_INPUT_VALID,
@@ -67,6 +69,7 @@ const MetaSystemForm = ({ mode = FORM_MODE.view, system = {}, setFormMode = noop
   const history = useHistory();
   const dispatch = useDispatch();
   const project = useSelector((state) => state.projects.results.find((p) => p._id === projectId));
+  const users = useSelector((state) => state.users.results.filter((u) => u.organization === project?.organization));
   const { control, handleSubmit, errors } = useForm({
     resolver: joiResolver(schema),
   });
@@ -77,6 +80,7 @@ const MetaSystemForm = ({ mode = FORM_MODE.view, system = {}, setFormMode = noop
   const onSubmit = (data) => {
     const params = {
       name: data.name,
+      resource: data.resource,
       equipmentCategory: data.equipmentCategory,
       equipmentType: data.equipmentType,
       equipmentName: data.equipmentName,
@@ -112,6 +116,9 @@ const MetaSystemForm = ({ mode = FORM_MODE.view, system = {}, setFormMode = noop
     history.push(LINKS.ADD_META_SYSTEM.HREF.replace(':projectId', system.project));
   };
 
+  // eslint-disable-next-line
+  useEffect(() => dispatch(getProjects({ filter: { _id: projectId } })), []);
+
   return (
     <>
       <Card>
@@ -121,7 +128,7 @@ const MetaSystemForm = ({ mode = FORM_MODE.view, system = {}, setFormMode = noop
           </Typography>
           <form noValidate className={classes.form}>
             <Grid container spacing={6}>
-              <Grid item xs={12} sm={6} md={4}>
+              <Grid item xs={6} sm={3} md={3}>
                 <Controller
                   as={<VektorTextField />}
                   fullWidth
@@ -135,7 +142,23 @@ const MetaSystemForm = ({ mode = FORM_MODE.view, system = {}, setFormMode = noop
                   defaultValue={system.name || ''}
                 />
               </Grid>
-              <Grid item xs={12} sm={6} md={4}>
+              <Grid item xs={6} sm={3} md={3}>
+                <Controller
+                  as={<FilterSelect />}
+                  fullWidth
+                  disabled={fieldsDisabled}
+                  id="resource"
+                  name="resource"
+                  label="Resource"
+                  placeholder="Select User"
+                  items={users}
+                  keys={{ value: '_id', label: 'label' }}
+                  error={errors.resource?.message}
+                  control={control}
+                  defaultValue={system.resource || ''}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6} md={3}>
                 <Controller
                   as={<FilterSelect />}
                   fullWidth
@@ -149,7 +172,7 @@ const MetaSystemForm = ({ mode = FORM_MODE.view, system = {}, setFormMode = noop
                   defaultValue={system.equipmentCategory || EQUIPMENT_CATEGORIES[0].VALUE}
                 />
               </Grid>
-              <Grid item xs={12} sm={6} md={4}>
+              <Grid item xs={12} sm={6} md={3}>
                 <Controller
                   as={<FilterSelect />}
                   fullWidth

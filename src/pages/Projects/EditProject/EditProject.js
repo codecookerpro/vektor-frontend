@@ -20,7 +20,7 @@ const EditProject = () => {
   return (
     <>
       <PageHeader
-        title={LINKS.EDIT_PROJECT.TITLE}
+        title={project?.name}
         links={NAV_LINKS}
         leftElement={<ContainedButton onClick={onClickButton(LINKS.PROJECT_HISTORY.HREF)}>History</ContainedButton>}
       />

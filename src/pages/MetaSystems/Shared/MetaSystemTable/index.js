@@ -42,7 +42,11 @@ const MetaSystemTable = ({ projectId = 0, records = [] }) => {
           {sortedRows.map((row) => (
             <TableRow key={row._id} id={row._id}>
               <TableCell component="th" scope="row">
-                <LinkButton to={LINKS.EDIT_META_SYSTEM.HREF.replace(':systemId', row._id).replace(':mainSystemId', row.mainSystem._id)}>
+                <LinkButton
+                  to={LINKS.EDIT_META_SYSTEM.HREF.replace(':systemId', row._id)
+                    .replace(':mainSystemId', row.mainSystem._id)
+                    .replace(':projectId', projectId)}
+                >
                   {row.name}
                 </LinkButton>
               </TableCell>
