@@ -33,7 +33,7 @@ const DeliverableNotesTable = ({ rows, editable = false, users = [], onCellChang
                 />
               </TableCell>
               <TableCell>
-                <TextField multiline maxRows={3} name="description" value={description} onChange={onCellChange} />
+                <TextField multiline name="description" value={description} onChange={onCellChange} />
               </TableCell>
               <TableCell>
                 <DatePicker

@@ -5,7 +5,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useTableSort } from 'utils/hooks';
 import DeliverableNotesTable from 'parts/DeliverableNotesTable';
 
-const DEFAULT_NOTE_DATA = { type: '', description: '', date: null, resource: [], status: false };
+const DEFAULT_NOTE_DATA = { type: 'ACTION', description: 'Description', date: new Date(), resource: [], status: false };
 
 const NoteDialog = ({ title, open, onClose, onCreate, onUpdate, notes = [], users }) => {
   const [rows, setRows] = useState(notes);
