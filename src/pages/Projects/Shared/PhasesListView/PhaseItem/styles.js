@@ -11,6 +11,12 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     padding: `${theme.spacing(2)}px !important`,
   },
+  header: {
+    padding: '8px 8px 0px 8px',
+  },
+  noteFlag: {
+    margin: -12,
+  },
 }));
 
 export default useStyles;

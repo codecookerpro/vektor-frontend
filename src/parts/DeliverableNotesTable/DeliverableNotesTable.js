@@ -33,7 +33,7 @@ const DeliverableNotesTable = ({ rows, editable = false, users = [], onCellChang
                 />
               </TableCell>
               <TableCell>
-                <TextField name="description" value={description} onChange={onCellChange} />
+                <TextField multiline maxRows={3} name="description" value={description} onChange={onCellChange} />
               </TableCell>
               <TableCell>
                 <DatePicker
@@ -67,13 +67,13 @@ const DeliverableNotesTable = ({ rows, editable = false, users = [], onCellChang
               </TableCell>
             </TableRow>
           ) : (
-            <TableRow>
+            <TableRow key={_id}>
               <TableCell>{NOTE_TYPES.find((t) => t.value === type).label}</TableCell>
-              <TableCell>{description}</TableCell>
+              <TableCell style={{ overflowWrap: 'anywhere', width: 300 }}>{description}</TableCell>
               <TableCell>{moment(date).format('DD/MM/YYYY')}</TableCell>
               <TableCell>
                 {resource.map((user) => (
-                  <Typography>{users.find((u) => u._id === user)?.label}</Typography>
+                  <Typography>{users.find((u) => u._id === user)?.name}</Typography>
                 ))}
               </TableCell>
               <TableCell>
