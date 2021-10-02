@@ -16,9 +16,10 @@ import { FORM_MODE } from 'utils/constants';
 import { initDeliverables, readMetaSystem, updateDeliverable } from 'redux/actions/metaSystem';
 import { isEmpty, restrict } from 'utils/helpers/utility';
 import TrendChart from '../Shared/TrendChart';
+import { getProjects } from 'redux/actions/projects';
 
 const EditMetaSystem = () => {
-  const { systemId, mainSystemId } = useParams();
+  const { projectId, systemId, mainSystemId } = useParams();
   const dispatch = useDispatch();
   const [formMode, setFormMode] = useState(FORM_MODE.view);
   const [initDlg, showInitDlg] = useState(false);
@@ -27,32 +28,31 @@ const EditMetaSystem = () => {
   const metaSystem = useSelector(
     (state) => state.projects.metaSystems.find((s) => (systemId !== '_' && s._id === systemId) || s.mainSystem._id === mainSystemId) || {}
   );
+  const project = useSelector((state) => state.projects.results.find((p) => p._id === projectId));
   const systemTrend = useSelector((state) =>
     state.projects.systemTrends[metaSystem.project]?.find((t) => t.metaSystem === systemId || t.system === mainSystemId)
   );
   const departments = useSelector((state) => state.organizations.results.find((o) => o._id === metaSystem.organization)?.departments || []);
   const users = useSelector((state) => state.users.results);
-
-  const { title, editable } = useMemo(() => {
-    const title = formMode === FORM_MODE.view ? 'View System' : LINKS.EDIT_META_SYSTEM.TITLE;
-    const editable = formMode === FORM_MODE.update;
-    return { title, editable };
-  }, [formMode]);
+  const editable = useMemo(() => formMode === FORM_MODE.update, [formMode]);
 
   const NAV_LINKS = useMemo(
     () => [
       LINKS.PROJECT_MANAGEMENT,
       LINKS.PROJECTS,
       {
-        TITLE: LINKS.EDIT_PROJECT.TITLE,
+        TITLE: project?.name,
         HREF: LINKS.EDIT_PROJECT.HREF.replace(':id', metaSystem.project),
       },
     ],
-    [metaSystem]
+    [metaSystem, project]
   );
 
-  // eslint-disable-next-line
-  useEffect(() => dispatch(readMetaSystem({ system: systemId !== '_' && systemId, mainSystem: mainSystemId !== '_' && mainSystemId })), []);
+  useEffect(() => {
+    dispatch(readMetaSystem({ system: systemId !== '_' && systemId, mainSystem: mainSystemId !== '_' && mainSystemId }));
+    dispatch(getProjects({ filter: { _id: projectId } }));
+    // eslint-disable-next-line
+  }, []);
 
   useEffect(() => {
     if (isEmpty(metaSystem)) {
@@ -103,7 +103,7 @@ const EditMetaSystem = () => {
 
   return (
     <>
-      <PageHeader title={title} links={NAV_LINKS} />
+      <PageHeader title={metaSystem.name} links={NAV_LINKS} />
       {isEmpty(metaSystem) || (
         <Grid container spacing={6}>
           <Grid item xs={12}>

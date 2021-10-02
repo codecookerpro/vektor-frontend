@@ -35,7 +35,9 @@ const usePhaseItemLogic = (item, canDrag) => {
   });
 
   const onClick = () => {
-    history.push(LINKS.EDIT_META_SYSTEM.HREF.replace(':systemId', item._id).replace(':mainSystemId', '_'));
+    history.push(
+      LINKS.EDIT_META_SYSTEM.HREF.replace(':systemId', item._id).replace(':mainSystemId', item.mainSystem._id).replace(':projectId', item.project)
+    );
   };
 
   return {

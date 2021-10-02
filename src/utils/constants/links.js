@@ -95,7 +95,7 @@ const LINKS = Object.freeze({
   },
   EDIT_META_SYSTEM: {
     TITLE: 'Edit System',
-    HREF: '/project-management/meta-system/edit/:systemId/:mainSystemId',
+    HREF: '/project-management/projects/edit/:projectId/meta-system/edit/:systemId/:mainSystemId',
   },
   DELIVERABLE_TREND_CHART: {
     TITLE: 'Deliverable Trend Chart',
