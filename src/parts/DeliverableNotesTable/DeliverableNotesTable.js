@@ -1,14 +1,14 @@
 import { useMemo } from 'react';
 import { Box, Checkbox, IconButton, TableCell, TableRow, TextField, Typography } from '@material-ui/core';
 import { DatePicker } from '@material-ui/pickers';
-import { CheckCircle, Delete, Edit } from '@material-ui/icons';
+import { Cancel, CheckCircle, Delete, Edit } from '@material-ui/icons';
 import FilterSelect from 'components/UI/Selects/FilterSelect';
 import VektorCheckbox from 'components/UI/VektorCheckbox';
 import VektorSubTableContainer from 'parts/Tables/VektorSubTableContainer';
 import { NOTE_TABLE_COLUMNS, NOTE_TYPES } from './constants';
 import moment from 'moment';
 
-const DeliverableNotesTable = ({ rows, editable = false, users = [], onCellChange, onEdit, onRemove, onSort, onSave }) => {
+const DeliverableNotesTable = ({ rows, editable = false, users = [], onCellChange, onEdit, onRemove, onRemoveConfirm, onSort, onSave, onCancel }) => {
   const columns = useMemo(
     () => (editable ? NOTE_TABLE_COLUMNS.concat({ id: 'edit_button', label: '', minWidth: 50, sortable: false }) : NOTE_TABLE_COLUMNS),
     [editable]
@@ -16,7 +16,7 @@ const DeliverableNotesTable = ({ rows, editable = false, users = [], onCellChang
   return (
     <Box mb={6}>
       <VektorSubTableContainer columns={columns} onSort={onSort}>
-        {rows.map(({ _id, type, description, date, resource, status, editable: rowEditable }, idx) =>
+        {rows.map(({ _id, type, description, date, resource, status, editable: rowEditable, removable }, idx) =>
           rowEditable ? (
             <TableRow key={_id}>
               <TableCell>
@@ -64,6 +64,9 @@ const DeliverableNotesTable = ({ rows, editable = false, users = [], onCellChang
                 <IconButton onClick={onSave}>
                   <CheckCircle />
                 </IconButton>
+                <IconButton onClick={onCancel}>
+                  <Cancel />
+                </IconButton>
               </TableCell>
             </TableRow>
           ) : (
@@ -72,22 +75,33 @@ const DeliverableNotesTable = ({ rows, editable = false, users = [], onCellChang
               <TableCell style={{ overflowWrap: 'anywhere', width: 300 }}>{description}</TableCell>
               <TableCell>{moment(date).format('DD/MM/YYYY')}</TableCell>
               <TableCell>
-                {resource.map((user) => (
-                  <Typography>{users.find((u) => u._id === user)?.name}</Typography>
+                {resource.map((userId) => (
+                  <Typography key={userId}>{users.find((u) => u._id === userId)?.name}</Typography>
                 ))}
               </TableCell>
               <TableCell>
                 <Checkbox checked={status} />
               </TableCell>
-              {editable && (
+              {removable ? (
                 <TableCell>
-                  <IconButton onClick={() => onEdit(idx)}>
-                    <Edit />
+                  <IconButton onClick={onRemoveConfirm}>
+                    <CheckCircle />
                   </IconButton>
-                  <IconButton onClick={() => onRemove(idx)}>
-                    <Delete />
+                  <IconButton onClick={onCancel}>
+                    <Cancel />
                   </IconButton>
                 </TableCell>
+              ) : (
+                editable && (
+                  <TableCell>
+                    <IconButton onClick={() => onEdit(idx)}>
+                      <Edit />
+                    </IconButton>
+                    <IconButton onClick={() => onRemove(idx)}>
+                      <Delete />
+                    </IconButton>
+                  </TableCell>
+                )
               )}
             </TableRow>
           )

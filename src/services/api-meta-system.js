@@ -41,3 +41,7 @@ export const createDeliverableNote = async (params) => {
 export const updateDeliverableNote = async (params) => {
   return await put(['metasystems', 'systems', 'nested', 'notes'], params);
 };
+
+export const deleteDeliverableNote = async (params) => {
+  return await del(['metasystems', 'systems', 'nested', 'notes'], params);
+};
