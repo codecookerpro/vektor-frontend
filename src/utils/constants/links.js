@@ -153,7 +153,7 @@ const LINKS = Object.freeze({
     ROLES: [PERMISSION_TYPES.admin],
   },
   EDIT_USER: {
-    TITLE: 'New User',
+    TITLE: 'Edit User',
     HREF: '/user-management/users/edit/:id',
   },
   USER_HISTORY: {
