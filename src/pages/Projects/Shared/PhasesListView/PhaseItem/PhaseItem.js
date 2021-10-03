@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { Box, Card, CardContent, CardHeader, IconButton, Typography } from '@material-ui/core';
+import { Box, Card, CardContent, CardHeader, IconButton, Link, Typography } from '@material-ui/core';
 import { useSelector } from 'react-redux';
 
 import { DetailDialog, NotesDialog } from './components';
@@ -8,6 +8,7 @@ import usePhaseItemLogic from './helpers';
 import { Flag, Person } from '@material-ui/icons';
 import { CHECKED_FLAG_COLOR, UNCHECKED_FLAG_COLOR } from './constants';
 import { ColorButton } from 'components/UI/Buttons';
+import LINKS from 'utils/constants/links';
 
 const PhaseItem = ({ item, canDrag = true }) => {
   const { isDragging, dragRef, onClick } = usePhaseItemLogic(item, canDrag);
@@ -44,7 +45,9 @@ const PhaseItem = ({ item, canDrag = true }) => {
             title={
               <Box display="flex" alignItems="center">
                 <Person color="primary" />
-                <Typography>{users.find((u) => u._id === item.resource)?.name}</Typography>
+                <Link underline="hover" color="inherit" variant="body2" href={LINKS.EDIT_USER.HREF.replace(':id', item.resource)}>
+                  {users.find((u) => u._id === item.resource)?.name}
+                </Link>
               </Box>
             }
           />

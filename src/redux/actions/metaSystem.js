@@ -115,6 +115,12 @@ export const updateDeliverableNote = (params) => (dispatch) => {
     .catch((err) => console.error('[updateDeliverableNote] error => ', err));
 };
 
+export const deleteDeliverableNote = (params) => (dispatch) => {
+  API.deleteDeliverableNote(params)
+    .then(({ data }) => dispatch(updateDeliverableNotes(params.mainId, params._id, data)))
+    .catch((err) => console.error('[deleteDeliverableNote] error => ', err));
+};
+
 export const deleteDeliverable = (params) => (dispatch) => {
   API.deleteDeliverable(params)
     .then(({ data }) => dispatch(updateDeliverables(data)))

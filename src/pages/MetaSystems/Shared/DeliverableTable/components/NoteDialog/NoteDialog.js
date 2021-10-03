@@ -1,16 +1,14 @@
-import { Box, IconButton, Menu, MenuItem } from '@material-ui/core';
+import { useMemo, useState } from 'react';
+import { Box, IconButton, Menu, MenuItem, Divider } from '@material-ui/core';
 import { MoreVert } from '@material-ui/icons';
 import { Dialog, DialogTitle, DialogContent } from 'components/UI/VektorDialog';
-import { useEffect, useMemo, useState } from 'react';
 import { useTableSort } from 'utils/hooks';
 import DeliverableNotesTable from 'parts/DeliverableNotesTable';
 
-const DEFAULT_NOTE_DATA = { type: 'ACTION', description: 'Description', date: new Date(), resource: [], status: false };
-
-const NoteDialog = ({ title, open, onClose, onCreate, onUpdate, notes = [], users }) => {
-  const [rows, setRows] = useState(notes);
-  const { sortedRows, handleSort } = useTableSort(rows);
+const NoteDialog = ({ title, open, onClose, onCreate, onUpdate, onDelete, notes = [], users }) => {
+  const { sortedRows, handleSort } = useTableSort(notes);
   const [editIndex, setEditIndex] = useState(-1);
+  const [removeIndex, setRemoveIndex] = useState(-1);
   const [editData, setEditData] = useState({});
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -20,12 +18,23 @@ const NoteDialog = ({ title, open, onClose, onCreate, onUpdate, notes = [], user
       ...r,
       ...(idx === editIndex && editData),
       editable: idx === editIndex,
+      removable: idx === removeIndex,
     }))
   );
+
+  const handleCloseMenu = () => {
+    setAnchorEl(null);
+  };
+
+  const handleCloseAll = (e) => {
+    setAnchorEl(null);
+    onClose(e);
+  };
 
   const handleEditCell = (idx) => {
     setEditData(sortedRows[idx]);
     setEditIndex(idx);
+    setRemoveIndex(-1);
   };
 
   const handleCellChange = ({ target: { name, value } }) => {
@@ -33,29 +42,29 @@ const NoteDialog = ({ title, open, onClose, onCreate, onUpdate, notes = [], user
   };
 
   const handleSaveNote = () => {
-    setRows(rows.map((r, idx) => (idx === editIndex ? { ...r, ...editData } : r)));
     setEditIndex(-1);
-
-    if (editData._id) {
-      onUpdate({ ...editData, noteId: editData._id });
-    } else {
-      onCreate(editData);
-    }
+    onUpdate({ ...editData, noteId: editData._id });
   };
 
   const handleNewNote = () => {
     setAnchorEl(null);
-    setEditData({});
-    setRows([...rows, DEFAULT_NOTE_DATA]);
-    setEditIndex(rows.length);
+    onCreate({ type: 'ACTION', description: 'Description', date: new Date(), resource: [], status: false });
   };
 
   const handleRemoveNote = (removeIdx) => {
-    setRows((rows) => rows.filter((_, idx) => idx !== removeIdx));
+    setRemoveIndex(removeIdx);
+    setEditIndex(-1);
   };
 
-  // eslint-disable-next-line
-  useEffect(() => setRows(notes), [open]);
+  const handleRemoveConfirm = () => {
+    onDelete(sortedRows.find((_, idx) => idx === removeIndex)?._id);
+    setRemoveIndex(-1);
+  };
+
+  const handleCancel = () => {
+    setEditIndex(-1);
+    setRemoveIndex(-1);
+  };
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="lg">
@@ -77,9 +86,11 @@ const NoteDialog = ({ title, open, onClose, onCreate, onUpdate, notes = [], user
               horizontal: 'right',
               vertical: 'top',
             }}
-            onClose={() => setAnchorEl(null)}
+            onClose={handleCloseMenu}
           >
             <MenuItem onClick={handleNewNote}>Add New Note</MenuItem>
+            <Divider />
+            <MenuItem onClick={handleCloseAll}>Close</MenuItem>
           </Menu>
         </Box>
       </DialogTitle>
@@ -91,8 +102,10 @@ const NoteDialog = ({ title, open, onClose, onCreate, onUpdate, notes = [], user
           onEdit={handleEditCell}
           onCellChange={handleCellChange}
           onRemove={handleRemoveNote}
+          onRemoveConfirm={handleRemoveConfirm}
           onSort={handleSort}
           onSave={handleSaveNote}
+          onCancel={handleCancel}
         />
       </DialogContent>
     </Dialog>
