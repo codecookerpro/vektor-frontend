@@ -52,7 +52,7 @@ const PhaseBox = ({ phase, status, systems, onHeaderClick, onActionClick, phaseA
       <Card className={classes.card} variant="outlined">
         <CardHeader
           className={isNewPhase ? classes.cardHeader : ''}
-          title={isNewPhase || typeof name === 'object' ? name : `${name} (Status ${status}%)`}
+          title={isNewPhase || typeof name === 'object' ? name : `${name} (Status ${Math.round(status)}%)`}
           onClick={onHeaderClick}
           subheader={
             phase.start &&

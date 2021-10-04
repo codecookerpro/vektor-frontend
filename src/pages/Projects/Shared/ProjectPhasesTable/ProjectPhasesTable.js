@@ -34,7 +34,7 @@ const ProjectPhasesTable = ({ activeAction, editingPhase, phases, onActionClick,
           {phases.map((phase, idx) => (
             <TableRow key={phase._id || phase.orderIndex}>
               <TableCell>{phase.name || ''}</TableCell>
-              <TableCell>{phase.status}%</TableCell>
+              <TableCell>{Math.round(phase.status)}%</TableCell>
               <TableCell>
                 <TextField
                   id="date"

@@ -85,12 +85,12 @@ const EditableRow = ({ data, departments, users, editable, onEdit, onCellChange 
     <TableCell>{data.calculated.lapsed}</TableCell>
     <TableCell>{data.calculated.differential}</TableCell>
     <TableCell>{data.calculated.effort}</TableCell>
-    <TableCell>{data.calculated.EV}%</TableCell>
-    <TableCell>{data.calculated.PV}%</TableCell>
-    <TableCell>{data.calculated.weight}</TableCell>
-    <TableCell>{data.calculated.systemPV}%</TableCell>
-    <TableCell>{data.calculated.systemStatus}%</TableCell>
-    <TableCell>{data.calculated.systemEV}%</TableCell>
+    <TableCell>{Math.round(data.calculated.EV)}%</TableCell>
+    <TableCell>{Math.round(data.calculated.PV)}%</TableCell>
+    <TableCell>{Math.round(data.calculated.weight)}</TableCell>
+    <TableCell>{Math.round(data.calculated.systemPV)}%</TableCell>
+    <TableCell>{Math.round(data.calculated.systemStatus)}%</TableCell>
+    <TableCell>{Math.round(data.calculated.systemEV)}%</TableCell>
     <TableCell>
       <VektorCheckbox
         onChange={(e) => onCellChange({ target: { name: 'activity', value: e.target.checked } })}
