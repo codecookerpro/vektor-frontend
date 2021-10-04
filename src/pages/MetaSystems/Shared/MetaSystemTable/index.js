@@ -6,7 +6,6 @@ import LinkButton from 'components/UI/Buttons/LinkButton';
 import VektorSubTableContainer from 'parts/Tables/VektorSubTableContainer';
 import LINKS from 'utils/constants/links';
 import { useHistory } from 'react-router-dom';
-import { round } from 'utils/helpers/utility';
 import { useTableSort } from 'utils/hooks';
 import { ColorButton } from 'components/UI/Buttons';
 
@@ -51,10 +50,10 @@ const MetaSystemTable = ({ projectId = 0, records = [] }) => {
                 </LinkButton>
               </TableCell>
               <TableCell>{row.mainSystem.calculated.totalPlannedHours}</TableCell>
-              <TableCell>{round(row.mainSystem.calculated.PV, 2)}%</TableCell>
-              <TableCell>{round(row.mainSystem.status, 2)}%</TableCell>
+              <TableCell>{Math.round(row.mainSystem.calculated.PV)}%</TableCell>
+              <TableCell>{Math.round(row.mainSystem.status)}%</TableCell>
               <TableCell>{row.mainSystem.calculated.totalWorkedHours}</TableCell>
-              <TableCell>{round(row.mainSystem.calculated.EV, 2)}%</TableCell>
+              <TableCell>{Math.round(row.mainSystem.calculated.EV)}%</TableCell>
             </TableRow>
           ))}
         </VektorSubTableContainer>

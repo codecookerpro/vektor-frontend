@@ -63,7 +63,7 @@ const PhaseItem = ({ item, canDrag = true }) => {
               <Typography color="textPrimary">{item.name}</Typography>
             </Box>
             <Typography color="textPrimary">
-              {item.mainSystem.status}% {item.equipmentNumber}
+              {Math.round(item.mainSystem.status)}% {item.equipmentNumber}
             </Typography>
           </div>
           <ColorButton colour="lightGreen" onClick={onClick}>

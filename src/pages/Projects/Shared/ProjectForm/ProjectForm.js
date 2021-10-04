@@ -8,7 +8,6 @@ import VektorTextField from 'components/UI/TextFields/VektorTextField';
 import FilterSelect from 'components/UI/Selects/FilterSelect';
 import UserTransfer from 'parts/UserTransfer';
 import { PROJECT_MODES } from 'pages/Projects/constants';
-import { round } from 'utils/helpers/utility';
 
 import { useProjectFrom, useVisibilityBooleans } from './helpers';
 import { PROJECT_DEFAULT_VALUES } from './constants';
@@ -159,7 +158,7 @@ const ProjectForm = ({ project = PROJECT_DEFAULT_VALUES, mode }) => {
               <Typography variant="body2" color="textPrimary" className={classes.description}>
                 Status
                 <br />
-                {round(project.status, 2)}%
+                {Math.round(project.status)}%
               </Typography>
             </Grid>
             <Grid item xs={12}>

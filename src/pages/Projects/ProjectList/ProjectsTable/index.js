@@ -6,7 +6,6 @@ import VektorChip from 'components/VektorChip';
 import LinkButton from 'components/UI/Buttons/LinkButton';
 import VektorTableContainer from 'parts/Tables/VektorTableContainer';
 import LINKS from 'utils/constants/links';
-import { round } from 'utils/helpers/utility';
 
 import { useFilter, useUserPermission, usePagination } from 'utils/hooks';
 import { getProjects } from 'redux/actions/projects';
@@ -54,7 +53,7 @@ const ProjectsTable = () => {
               <TableCell>
                 {row?.finished ? <VektorChip label="Finished" color="success" /> : <VektorChip label="Not Finished" color="error" />}
               </TableCell>
-              <TableCell>{round(row.status, 2)}%</TableCell>
+              <TableCell>{Math.round(row.status)}%</TableCell>
             </TableRow>
           ))}
         </VektorTableContainer>

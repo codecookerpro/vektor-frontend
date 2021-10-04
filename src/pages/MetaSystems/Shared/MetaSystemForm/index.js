@@ -29,7 +29,6 @@ import { EQUIPMENTS, EQUIPMENT_CATEGORIES, FORM_MODE, POPUP_TYPE, noop } from 'u
 import { createMetaSystem, updateMetaSystem, deleteMetaSystem, duplicateMetaSystem } from 'redux/actions/metaSystem';
 import { setPopup } from 'redux/actions/popupActions';
 import LINKS from 'utils/constants/links';
-import { round } from 'utils/helpers/utility';
 import { getProjects } from 'redux/actions/projects';
 
 const useStyles = makeStyles((theme) => ({
@@ -293,10 +292,10 @@ const MetaSystemForm = ({ mode = FORM_MODE.view, system = {}, setFormMode = noop
                   <TableBody>
                     <TableRow>
                       <TableCell>{calculated.totalPlannedHours}</TableCell>
-                      <TableCell>{round(calculated.PV, 2)}%</TableCell>
-                      <TableCell>{round(status, 2)}%</TableCell>
-                      <TableCell>{round((calculated.totalWorkedHours / calculated.totalPlannedHours) * 100, 2)}%</TableCell>
-                      <TableCell>{round(calculated.EV, 2)}%</TableCell>
+                      <TableCell>{Math.round(calculated.PV)}%</TableCell>
+                      <TableCell>{Math.round(status)}%</TableCell>
+                      <TableCell>{Math.round((calculated.totalWorkedHours / calculated.totalPlannedHours) * 100)}%</TableCell>
+                      <TableCell>{Math.round(calculated.EV)}%</TableCell>
                     </TableRow>
                   </TableBody>
                 </Table>

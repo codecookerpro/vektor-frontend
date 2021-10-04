@@ -12,7 +12,7 @@ const ReadOnlyRow = ({ data, onNoteButtonClick, onChartButtonClick }) => (
     <TableCell>{data.end}</TableCell>
     <TableCell>{data.completion}</TableCell>
     <TableCell>
-      <span>{data.status}%</span>
+      <span>{Math.round(data.status)}%</span>
       <IconButton style={{ float: 'right', margin: -12 }} onClick={onChartButtonClick}>
         <BarChart2 />
       </IconButton>
@@ -20,12 +20,12 @@ const ReadOnlyRow = ({ data, onNoteButtonClick, onChartButtonClick }) => (
     <TableCell>{data.calculated.lapsed}</TableCell>
     <TableCell>{data.calculated.differential}</TableCell>
     <TableCell>{data.calculated.effort}</TableCell>
-    <TableCell>{data.calculated.EV}%</TableCell>
-    <TableCell>{data.calculated.PV}%</TableCell>
+    <TableCell>{Math.round(data.calculated.EV)}%</TableCell>
+    <TableCell>{Math.round(data.calculated.PV)}%</TableCell>
     <TableCell>{data.calculated.weight}</TableCell>
-    <TableCell>{data.calculated.systemPV}%</TableCell>
-    <TableCell>{data.calculated.systemStatus}%</TableCell>
-    <TableCell>{data.calculated.systemEV}%</TableCell>
+    <TableCell>{Math.round(data.calculated.systemPV)}%</TableCell>
+    <TableCell>{Math.round(data.calculated.systemStatus)}%</TableCell>
+    <TableCell>{Math.round(data.calculated.systemEV)}%</TableCell>
     <TableCell>
       <Checkbox checked={data.activity} />
     </TableCell>

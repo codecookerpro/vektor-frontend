@@ -7,7 +7,7 @@ import { IDENTIFIERS, HANDLE_TYPES, NODE_DIALOGS, NODE_PROPS } from 'parts/Workf
 import { ColorButton } from 'components/UI/Buttons';
 import { useStyles } from './styles';
 import { COLORS } from 'parts/WorkflowGraph/constants';
-import { isEmpty, round } from 'utils/helpers/utility';
+import { isEmpty } from 'utils/helpers/utility';
 import moment from 'moment';
 
 const CustomFlowNodeFactory = (tClass, sClass) =>
@@ -170,10 +170,10 @@ const CustomFlowNodeFactory = (tClass, sClass) =>
                 </div>
                 <div className={classes.statusContainer}>
                   <Box align="center">
-                    EV <br /> {round(data.calculated.EV, 1)}%
+                    EV <br /> {Math.round(data.calculated.EV)}%
                   </Box>
                   <Box align="center">
-                    PV <br /> {round(data.calculated.PV, 1)}%
+                    PV <br /> {Math.round(data.calculated.PV)}%
                   </Box>
                 </div>
               </Box>
