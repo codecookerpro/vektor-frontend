@@ -1,12 +1,13 @@
 import React, { memo, useMemo } from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions } from 'components/UI/VektorDialog';
-import { Chip, Grid, Button, Typography, Box } from '@material-ui/core';
+import { Chip, Grid, Button, Typography, Box, useTheme } from '@material-ui/core';
 import { COLORS } from 'parts/WorkflowGraph/constants';
 import moment from 'moment';
 import LinkButton from 'components/UI/Buttons/LinkButton';
 import LINKS from 'utils/constants/links';
 
 const DetailDialog = ({ open, onClose, metaSystem }) => {
+  const theme = useTheme();
   const details = useMemo(
     () =>
       metaSystem.mainSystem.deliverables.map(({ name, start, end, calculated }) => {
@@ -40,7 +41,7 @@ const DetailDialog = ({ open, onClose, metaSystem }) => {
           {metaSystem.name}
         </LinkButton>
         <br />
-        <small>{metaSystem.equipmentNumber}#</small>
+        <small>{metaSystem.equipmentNumber}</small>
       </DialogTitle>
       <DialogContent>
         <Grid container justify="space-between" spacing={1}>
@@ -50,7 +51,10 @@ const DetailDialog = ({ open, onClose, metaSystem }) => {
                 <Typography item xs={8}>
                   {name}
                 </Typography>
-                <Chip label={label} style={{ background: color, color: 'white', borderRadius: 20, height: 20 }} />
+                <Chip
+                  label={label}
+                  style={{ background: color, color: theme.palette.getContrastText(color), borderRadius: 20, height: 20, minWidth: 45 }}
+                />
               </Box>
             </Grid>
           ))}
