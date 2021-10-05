@@ -1,5 +1,5 @@
 import React, { memo } from 'react';
-import { MenuItem, Select, Typography, ListItemText, Checkbox, Input } from '@material-ui/core';
+import { MenuItem, Select, Typography, ListItemText, Checkbox, Input, Box } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 
@@ -44,7 +44,7 @@ const FilterSelect = React.forwardRef(
     const classes = useStyles();
 
     return (
-      <div
+      <Box
         className={clsx(classes.root, className, {
           [classes.fullWidth]: fullWidth,
         })}
@@ -93,7 +93,7 @@ const FilterSelect = React.forwardRef(
             {error}
           </Typography>
         )}
-      </div>
+      </Box>
     );
   }
 );
