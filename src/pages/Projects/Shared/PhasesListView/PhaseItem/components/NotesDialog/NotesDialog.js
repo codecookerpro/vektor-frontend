@@ -1,6 +1,6 @@
 import React, { memo } from 'react';
 import { Dialog, DialogTitle, DialogContent } from 'components/UI/VektorDialog';
-import { IconButton, Typography, Box } from '@material-ui/core';
+import { IconButton, Box } from '@material-ui/core';
 import { Close } from '@material-ui/icons';
 import DeliverableNotesTable from 'parts/DeliverableNotesTable';
 
@@ -25,8 +25,7 @@ const DetailDialog = ({ open, deliverables, users, onClose }) => (
       {deliverables.map((d) =>
         d.notes.length ? (
           <Box p={4}>
-            <Typography variant="h4">{d.name}</Typography>
-            <DeliverableNotesTable rows={d.notes} key={d._id} users={users} />
+            <DeliverableNotesTable title={d.name} notes={d.notes} key={d._id} users={users} />
           </Box>
         ) : null
       )}
