@@ -41,7 +41,7 @@ const DetailDialog = ({ open, onClose, metaSystem }) => {
           {metaSystem.name}
         </LinkButton>
         <br />
-        <small>{metaSystem.equipmentNumber}#</small>
+        <small>{metaSystem.equipmentNumber}</small>
       </DialogTitle>
       <DialogContent>
         <Grid container justify="space-between" spacing={1}>

@@ -81,7 +81,7 @@ export const GRAPH_EVENTS = keyMirror({
 });
 
 export const COLORS = {
-  green: '#00ff00',
+  green: '#008000',
   yellow: '#ffff00',
   red: '#ff0000',
 };
