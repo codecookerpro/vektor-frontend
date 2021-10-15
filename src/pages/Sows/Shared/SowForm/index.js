@@ -44,6 +44,7 @@ const SowForm = ({ mode }) => {
   const onSubmit = async (data) => {
     const { name, metaSystem } = data;
     const arraySystemProject = metaSystem.split('/');
+
     if (isEmpty(sow)) {
       const organization = isOrganizationVisible ? data.organization : defaultOrganization;
       const params = {
@@ -59,7 +60,7 @@ const SowForm = ({ mode }) => {
       const params = {
         _id,
         name,
-        organization,
+        organization: organization._id,
         metaSystem: arraySystemProject[0],
         project: arraySystemProject[1],
         ...notRequiredField,

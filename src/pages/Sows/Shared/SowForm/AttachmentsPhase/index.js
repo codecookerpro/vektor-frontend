@@ -8,7 +8,7 @@ import { addSOWFile, getSOWFile, removeSOWFile } from 'redux/actions/sowAction';
 const AttachmentsPhase = ({ sow = {}, title }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const filterAttachment = sow?.attachments.filter((file) => file.phase === title.parentPhase);
+  const filterAttachment = sow?.attachments?.filter((file) => file.phase === title.parentPhase);
 
   const onChange = (e) => {
     const params = {

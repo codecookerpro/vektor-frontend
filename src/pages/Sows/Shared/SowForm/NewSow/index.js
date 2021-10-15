@@ -86,11 +86,11 @@ const NewSow = ({ mode, sow = {}, control, errors, isOrganizationVisible }) => {
               name="metaSystem"
               label="System"
               placeholder="Select system"
-              keys={{ label: 'name', value: 'id' }}
+              keys={{ label: 'name', value: '_id' }}
               items={filterSystems}
               error={errors.metaSystem?.message}
               control={control}
-              defaultValue={`${sow?.metaSystem}/${sow?.project}` || ''}
+              defaultValue={`${sow?.metaSystem?._id}/${sow?.project?._id}` || ''}
               disabled={!filterSystems.length}
             />
           </Grid>
