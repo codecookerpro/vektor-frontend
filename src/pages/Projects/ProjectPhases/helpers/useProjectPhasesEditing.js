@@ -6,6 +6,7 @@ import { readMetaSystem } from 'redux/actions/metaSystem';
 import { createProjectPhase, updateProjectPhase, deleteProjectPhase } from 'redux/actions/projects';
 import { ACTIONS } from 'pages/Projects/constants';
 import { round } from 'utils/helpers/utility';
+import moment from 'moment';
 
 const useProjectPhasesEditing = () => {
   const dispatch = useDispatch();
@@ -86,10 +87,10 @@ const useProjectPhasesEditing = () => {
     }
   };
 
-  const onChangePhase = ({ value, name }) => {
+  const onChangePhase = ({ type, value, name }) => {
     setEditingPhase((phase) => ({
       ...phase,
-      [name]: value,
+      [name]: type === 'date' ? moment(value).toISOString() : value,
     }));
   };
 
