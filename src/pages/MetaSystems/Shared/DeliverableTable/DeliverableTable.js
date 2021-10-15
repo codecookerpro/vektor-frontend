@@ -101,6 +101,15 @@ const DeliverableTable = ({ deliverables = [], mainSystem, systemTrend = {}, dep
     dispatch(updateDeliverableNote({ ...note, mainId: mainSystem, _id: editData._id }));
   };
 
+  const handleFinishEditing = () => {
+    if (editIndex >= 0) {
+      onRowChange(editData);
+    }
+
+    setEditable(false);
+    setEditIndex(-1);
+  };
+
   const handleNoteCreate = (note) => {
     dispatch(createDeliverableNote({ ...note, mainId: mainSystem, _id: editData._id }));
   };
@@ -134,7 +143,7 @@ const DeliverableTable = ({ deliverables = [], mainSystem, systemTrend = {}, dep
         title="Deliverables"
         action={
           editable ? (
-            <Button variant="contained" colour="default" onClick={() => setEditable(false)}>
+            <Button variant="contained" colour="default" onClick={handleFinishEditing}>
               DONE
             </Button>
           ) : (
