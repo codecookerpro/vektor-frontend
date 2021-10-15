@@ -4,7 +4,7 @@ import { IconButton, Box } from '@material-ui/core';
 import { Close } from '@material-ui/icons';
 import DeliverableNotesTable from 'parts/DeliverableNotesTable';
 
-const DetailDialog = ({ open, deliverables, users, onClose }) => (
+const NotesDialog = ({ open, deliverables, users, onClose }) => (
   <Dialog open={open} onClose={onClose} maxWidth="lg" fullWidth>
     <DialogTitle>
       Deliverable Notes
@@ -24,8 +24,8 @@ const DetailDialog = ({ open, deliverables, users, onClose }) => (
     <DialogContent dividers>
       {deliverables.map((d) =>
         d.notes.length ? (
-          <Box p={4}>
-            <DeliverableNotesTable title={d.name} notes={d.notes} key={d._id} users={users} />
+          <Box p={4} key={d._id}>
+            <DeliverableNotesTable title={d.name} notes={d.notes} users={users} />
           </Box>
         ) : null
       )}
@@ -33,4 +33,4 @@ const DetailDialog = ({ open, deliverables, users, onClose }) => (
   </Dialog>
 );
 
-export default memo(DetailDialog);
+export default memo(NotesDialog);

@@ -25,14 +25,18 @@ const DeliverableTable = ({ deliverables = [], mainSystem, systemTrend = {}, dep
   const [trendChartData, setTrendChartData] = useState([]);
   const renderRows = useMemo(() => {
     if (editable) {
-      return sortedRows.map((row, idx) => ({
-        ...row,
-        ...(idx === editIndex && editData),
-        predecessors: row.predecessors.map((pre) => deliverables.find((d) => d._id === pre).name).join(', '),
-        start: row.start && moment(row.start).format('YYYY-MM-DD'),
-        end: row.end && moment(row.end).format('YYYY-MM-DD'),
-        completion: row.completion && moment(row.completion).format('YYYY-MM-DD'),
-      }));
+      return sortedRows
+        .map((row, idx) => ({
+          ...row,
+          ...(idx === editIndex && editData),
+          predecessors: row.predecessors.map((pre) => deliverables.find((d) => d._id === pre).name).join(', '),
+        }))
+        .map((row) => ({
+          ...row,
+          start: row.start && moment(row.start).format('YYYY-MM-DD'),
+          end: row.end && moment(row.end).format('YYYY-MM-DD'),
+          completion: row.completion && moment(row.completion).format('YYYY-MM-DD'),
+        }));
     } else {
       return sortedRows
         .map((row, idx) => ({
