@@ -1,10 +1,12 @@
+import moment from 'moment';
+
 const inputHandler = (event, setNotRequiredField, title) => {
-  const { value, name } = event.target;
+  const { value, name, type } = event.target;
   setNotRequiredField((prev) => ({
     ...prev,
     [title.value]: {
       ...prev[title.value],
-      [name]: value,
+      [name]: type === 'date' ? moment(value).toISOString() : value,
     },
   }));
 };
