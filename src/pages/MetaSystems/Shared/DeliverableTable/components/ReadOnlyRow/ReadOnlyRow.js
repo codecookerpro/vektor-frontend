@@ -1,6 +1,7 @@
 import React from 'react';
 import { TableCell, TableRow, IconButton, Checkbox } from '@material-ui/core';
 import { FileText, BarChart2 } from 'react-feather';
+import _ from 'lodash';
 
 const ReadOnlyRow = ({ data, onNoteButtonClick, onChartButtonClick }) => (
   <TableRow id={data._id}>
@@ -12,20 +13,20 @@ const ReadOnlyRow = ({ data, onNoteButtonClick, onChartButtonClick }) => (
     <TableCell>{data.end}</TableCell>
     <TableCell>{data.completion}</TableCell>
     <TableCell>
-      <span>{Math.round(data.status)}%</span>
+      <span>{_.round(data.status)}%</span>
       <IconButton style={{ float: 'right', margin: -12 }} onClick={onChartButtonClick}>
         <BarChart2 />
       </IconButton>
     </TableCell>
-    <TableCell>{data.calculated.lapsed}</TableCell>
-    <TableCell>{data.calculated.differential}</TableCell>
-    <TableCell>{data.calculated.effort}</TableCell>
-    <TableCell>{Math.round(data.calculated.EV)}%</TableCell>
-    <TableCell>{Math.round(data.calculated.PV)}%</TableCell>
-    <TableCell>{data.calculated.weight}</TableCell>
-    <TableCell>{Math.round(data.calculated.systemPV)}%</TableCell>
-    <TableCell>{Math.round(data.calculated.systemStatus)}%</TableCell>
-    <TableCell>{Math.round(data.calculated.systemEV)}%</TableCell>
+    <TableCell>{_.round(data.calculated.lapsed, 2)}</TableCell>
+    <TableCell>{_.round(data.calculated.differential, 2)}</TableCell>
+    <TableCell>{_.round(data.calculated.effort, 2)}</TableCell>
+    <TableCell>{_.round(data.calculated.EV)}%</TableCell>
+    <TableCell>{_.round(data.calculated.PV)}%</TableCell>
+    <TableCell>{_.round(data.calculated.weight, 2)}</TableCell>
+    <TableCell>{_.round(data.calculated.systemPV)}%</TableCell>
+    <TableCell>{_.round(data.calculated.systemStatus)}%</TableCell>
+    <TableCell>{_.round(data.calculated.systemEV)}%</TableCell>
     <TableCell>
       <Checkbox checked={data.activity} />
     </TableCell>
