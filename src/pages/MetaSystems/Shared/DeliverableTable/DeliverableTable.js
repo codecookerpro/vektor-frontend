@@ -68,7 +68,11 @@ const DeliverableTable = ({ deliverables = [], mainSystem, systemTrend = {}, dep
     return columns.map((c) => ({ ...c, sortable: c.sortable && !editable }));
   }, [editable]);
 
-  const handleCellChange = ({ target: { value, name } }) => {
+  const handleCellChange = ({ target: { type, value, name } }) => {
+    if (type === 'date') {
+      value = moment(value).toISOString();
+    }
+
     const updatedData = { ...editData, [name]: value };
 
     if (name === 'department') {
