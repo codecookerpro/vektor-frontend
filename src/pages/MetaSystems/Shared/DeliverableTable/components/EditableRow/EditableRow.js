@@ -2,6 +2,7 @@ import { TableCell, TableRow, IconButton, TextField } from '@material-ui/core';
 import FilterSelect from 'components/UI/Selects/FilterSelect';
 import { Edit, CheckCircle } from '@material-ui/icons';
 import VektorCheckbox from 'components/UI/VektorCheckbox';
+import _ from 'lodash';
 
 const EditableRow = ({ data, departments, users, editable, onEdit, onCellChange }) => (
   <TableRow key={data._id}>
@@ -78,19 +79,19 @@ const EditableRow = ({ data, departments, users, editable, onEdit, onCellChange 
           inputProps: { min: '0', max: '100', step: '1' },
         }}
         onChange={onCellChange}
-        value={data.status}
+        value={_.round(data.status)}
         disabled={!editable}
       />
     </TableCell>
-    <TableCell>{data.calculated.lapsed}</TableCell>
-    <TableCell>{data.calculated.differential}</TableCell>
-    <TableCell>{data.calculated.effort}</TableCell>
-    <TableCell>{Math.round(data.calculated.EV)}%</TableCell>
-    <TableCell>{Math.round(data.calculated.PV)}%</TableCell>
-    <TableCell>{Math.round(data.calculated.weight)}</TableCell>
-    <TableCell>{Math.round(data.calculated.systemPV)}%</TableCell>
-    <TableCell>{Math.round(data.calculated.systemStatus)}%</TableCell>
-    <TableCell>{Math.round(data.calculated.systemEV)}%</TableCell>
+    <TableCell>{_.round(data.calculated.lapsed, 2)}</TableCell>
+    <TableCell>{_.round(data.calculated.differential, 2)}</TableCell>
+    <TableCell>{_.round(data.calculated.effort, 2)}</TableCell>
+    <TableCell>{_.round(data.calculated.EV)}%</TableCell>
+    <TableCell>{_.round(data.calculated.PV)}%</TableCell>
+    <TableCell>{_.round(data.calculated.weight)}</TableCell>
+    <TableCell>{_.round(data.calculated.systemPV)}%</TableCell>
+    <TableCell>{_.round(data.calculated.systemStatus)}%</TableCell>
+    <TableCell>{_.round(data.calculated.systemEV)}%</TableCell>
     <TableCell>
       <VektorCheckbox
         onChange={(e) => onCellChange({ target: { name: 'activity', value: e.target.checked } })}
